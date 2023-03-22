@@ -29,11 +29,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -43,10 +42,13 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafVillagerRegistry {
 
+    public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, IceAndFire.MODID);
+    public static final RegistryObject<PoiType> SCRIBE_POI = POI_TYPES.register("scribe", () -> new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
+    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", SCRIBE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
+
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
     private static final Holder<StructureProcessorList> HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
-    public static PoiType LECTERN_POI;
-    public static VillagerProfession SCRIBE;
 
     private static StructureProcessorList genVillageHouseProcessor() {
         RuleProcessor mossify = new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockMatchTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.defaultBlockState())));
@@ -66,22 +68,6 @@ public class IafVillagerRegistry {
             }
         }
 
-    }
-
-    private static StructurePoolElement createWorkstation(String name) {
-        return StructurePoolElement.legacy(new ResourceLocation("iceandfire", name).toString()).apply(StructureTemplatePool.Projection.RIGID);
-    }
-
-    @SubscribeEvent
-    public static void registerPointOfInterests(final RegistryEvent.Register<PoiType> event) {
-        //event.getRegistry().register(LECTERN_POI = new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1).setRegistryName(IceAndFire.MODID, "scribe"));
-        DeferredRegister<PoiType> register = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
-        register.register("scribe", () -> new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
-    }
-
-    @SubscribeEvent
-    public static void registerVillagerProfessions(final RegistryEvent.Register<VillagerProfession> event) {
-        event.getRegistry().register(SCRIBE = new VillagerProfession("scribe", LECTERN_POI, ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN).setRegistryName(IceAndFire.MODID, "scribe"));
     }
 
     public static void addScribeTrades(Int2ObjectMap<List<VillagerTrades.ItemListing>> trades) {

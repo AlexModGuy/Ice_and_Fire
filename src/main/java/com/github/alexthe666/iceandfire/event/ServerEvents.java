@@ -633,7 +633,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onVillagerTrades(VillagerTradesEvent event) {
-        if (event.getType() == IafVillagerRegistry.SCRIBE) {
+        if (event.getType() == IafVillagerRegistry.SCRIBE.get()) {
             IafVillagerRegistry.addScribeTrades(event.getTrades());
         }
     }
