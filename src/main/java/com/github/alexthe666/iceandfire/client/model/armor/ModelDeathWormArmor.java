@@ -21,8 +21,9 @@ public class ModelDeathWormArmor extends ArmorModelBase {
     public ModelPart spineR2;
     public ModelPart spineL1;
     public ModelPart spineL2;
-    private static final ModelPart INNER_MODEL = createMesh(LayerDefinitions.INNER_ARMOR_DEFORMATION, 0.0F).getRoot().bake(64, 64);
-    private static final ModelPart OUTER_MODEL = createMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0.0F).getRoot().bake(64, 64);
+    // TODO: Make the inner model and outer model separate/ make them use normal minecraft armor dimensions while still looking good
+    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
 
     public ModelDeathWormArmor(ModelPart modelPart) {
         super(modelPart);
