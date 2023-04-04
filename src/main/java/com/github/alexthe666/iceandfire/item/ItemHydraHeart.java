@@ -34,20 +34,25 @@ public class ItemHydraHeart extends Item {
         if (entity instanceof PlayerEntity && itemSlot >= 0 && itemSlot <= 8) {
             double healthPercentage = ((PlayerEntity) entity).getHealth() / Math.max(1, ((PlayerEntity) entity).getMaxHealth());
             if (healthPercentage < 1.0D) {
-                int level = 0;
-                if (healthPercentage < 0.25D) {
-                    level = 3;
-                } else if (healthPercentage < 0.5D) {
-                    level = 2;
-                } else if (healthPercentage < 0.75D) {
-                    level = 1;
-                }
+                int level = getLevelForPotionEffect(healthPercentage);
                 //Consider using EffectInstance.combine
                 if (!((PlayerEntity) entity).isPotionActive(Effects.REGENERATION) || ((PlayerEntity) entity).getActivePotionEffect(Effects.REGENERATION).getAmplifier() < level)
                     ((PlayerEntity) entity).addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, level, true, false));
             }
             //In hotbar
         }
+    }
+
+    public int getLevelForPotionEffect(double healthPercentage){
+        int level =0;
+        if (healthPercentage < 0.25D) {
+            level = 3;
+        } else if (healthPercentage < 0.5D) {
+            level = 2;
+        } else if (healthPercentage < 0.75D) {
+            level = 1;
+        }
+        return level;
     }
 
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

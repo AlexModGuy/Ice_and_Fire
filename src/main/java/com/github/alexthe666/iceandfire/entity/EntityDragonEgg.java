@@ -5,12 +5,19 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.block.BlockEggInIce;
+import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,6 +26,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -30,7 +38,11 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static com.github.alexthe666.iceandfire.entity.DragonType.*;
 
 public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromStatues, IDeadMob {
 
@@ -128,7 +140,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
         super.tick();
         if (!world.isRemote()) {
             this.setAir(200);
-            getEggType().dragonType.updateEggCondition(this);
+            updateEggCondition();
         }
     }
 
@@ -216,5 +228,85 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public boolean isMobDead() {
         return true;
+    }
+
+    public void updateEggCondition() {
+
+        BlockPos pos = new BlockPos(getPositionVec());
+        if (getEggType().dragonType == FIRE) {
+            if (world.getBlockState(pos).getMaterial() == Material.FIRE) {
+                setDragonAge(getDragonAge() + 1);
+            }
+            if (getDragonAge() > IafConfig.dragonEggTime) {
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                EntityFireDragon dragon = new EntityFireDragon(world);
+                if (hasCustomName()) {
+                    dragon.setCustomName(getCustomName());
+                }
+                dragon.setVariant(getEggType().ordinal());
+                dragon.setGender(getRNG().nextBoolean());
+                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setHunger(50);
+                if (!world.isRemote) {
+                    world.addEntity(dragon);
+                }
+                if (hasCustomName()) {
+                    dragon.setCustomName(getCustomName());
+                }
+                dragon.setTamed(true);
+                dragon.setOwnerId(getOwnerId());
+                world.playSound(getPosX(), getPosY() + getEyeHeight(), getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, getSoundCategory(), 2.5F, 1.0F, false);
+                world.playSound(getPosX(), getPosY() + getEyeHeight(), getPosZ(), IafSoundRegistry.EGG_HATCH, getSoundCategory(), 2.5F, 1.0F, false);
+                remove();
+            }
+        }
+        if (getEggType().dragonType == ICE) {
+            if (world.getBlockState(pos).getMaterial() == Material.WATER && getRNG().nextInt(500) == 0) {
+                world.setBlockState(pos, IafBlockRegistry.EGG_IN_ICE.getDefaultState());
+                world.playSound(getPosX(), getPosY() + getEyeHeight(), getPosZ(), SoundEvents.BLOCK_GLASS_BREAK, getSoundCategory(), 2.5F, 1.0F, false);
+                if (world.getBlockState(pos).getBlock() instanceof BlockEggInIce) {
+                    ((TileEntityEggInIce) world.getTileEntity(pos)).type = getEggType();
+                    ((TileEntityEggInIce) world.getTileEntity(pos)).ownerUUID = getOwnerId();
+                }
+                remove();
+            }
+        }
+        if (getEggType().dragonType == LIGHTNING) {
+            boolean flag;
+            BlockPos.Mutable blockpos$pooledmutable = new BlockPos.Mutable(getPosX(), getPosY(), getPosZ()) ;
+            flag = world.isRainingAt(blockpos$pooledmutable) || world.isRainingAt(blockpos$pooledmutable.setPos(getPosX(), getPosY() + (double)size.height, getPosZ()));
+            if (world.canSeeSky(getPosition().up()) && flag) {
+                setDragonAge(getDragonAge() + 1);
+            }
+            if (getDragonAge() > IafConfig.dragonEggTime) {
+                EntityLightningDragon dragon = new EntityLightningDragon(world);
+                if (hasCustomName()) {
+                    dragon.setCustomName(getCustomName());
+                }
+                dragon.setVariant(getEggType().ordinal() - 8);
+                dragon.setGender(getRNG().nextBoolean());
+                dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                dragon.setHunger(50);
+                if (!world.isRemote) {
+                    world.addEntity(dragon);
+                }
+                if (hasCustomName()) {
+                    dragon.setCustomName(getCustomName());
+                }
+                dragon.setTamed(true);
+                dragon.setOwnerId(getOwnerId());
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(world);
+                lightningboltentity.setPosition(getPosX(), getPosY(), getPosZ());
+                lightningboltentity.setEffectOnly(true);
+                if(!world.isRemote){
+                    world.addEntity(lightningboltentity);
+                }
+                world.playSound(getPosX(), getPosY() + getEyeHeight(), getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, getSoundCategory(), 2.5F, 1.0F, false);
+                world.playSound(getPosX(), getPosY() + getEyeHeight(), getPosZ(), IafSoundRegistry.EGG_HATCH, getSoundCategory(), 2.5F, 1.0F, false);
+                remove();
+
+
+            }
+        }
     }
 }

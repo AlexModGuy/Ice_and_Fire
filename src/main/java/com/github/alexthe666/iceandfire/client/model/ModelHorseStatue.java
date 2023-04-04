@@ -13,4 +13,5 @@ public class ModelHorseStatue extends HorseModel {
     public void setRotationAngles(AbstractHorseEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
+
 }

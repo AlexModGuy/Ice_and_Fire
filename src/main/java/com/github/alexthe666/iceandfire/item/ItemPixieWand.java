@@ -24,7 +24,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemPixieWand extends Item {
-
     public ItemPixieWand() {
         super(new Item.Properties().group(IceAndFire.TAB_ITEMS).maxStackSize(1).maxDamage(500));
         this.setRegistryName(IceAndFire.MODID, "pixie_wand");
@@ -35,7 +34,8 @@ public class ItemPixieWand extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         boolean flag = playerIn.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemStackIn) > 0;
-        ItemStack itemstack = this.findAmmo(playerIn);
+        Ammo ammo = new Ammo();
+        ItemStack itemstack = ammo.findAmmo(playerIn);
         playerIn.setActiveHand(hand);
         playerIn.swingArm(hand);
         if (!itemstack.isEmpty() || flag) {
@@ -54,7 +54,7 @@ public class ItemPixieWand extends Item {
             d3 = d3 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
             d4 = d4 + playerIn.getRNG().nextGaussian() * 0.007499999832361937D * inaccuracy;
             EntityPixieCharge charge = new EntityPixieCharge(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn, playerIn,
-                d2, d3, d4);
+                    d2, d3, d4);
             charge.setPosition(playerIn.getPosX(), playerIn.getPosY() + 1, playerIn.getPosZ());
             if (!worldIn.isRemote) {
                 worldIn.addEntity(charge);
@@ -71,28 +71,6 @@ public class ItemPixieWand extends Item {
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.PlayerEntity player) {
         int enchant = net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
         return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST;
-    }
-
-    private ItemStack findAmmo(PlayerEntity player) {
-        if (this.isAmmo(player.getHeldItem(Hand.OFF_HAND))) {
-            return player.getHeldItem(Hand.OFF_HAND);
-        } else if (this.isAmmo(player.getHeldItem(Hand.MAIN_HAND))) {
-            return player.getHeldItem(Hand.MAIN_HAND);
-        } else {
-            for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = player.inventory.getStackInSlot(i);
-
-                if (this.isAmmo(itemstack)) {
-                    return itemstack;
-                }
-            }
-
-            return ItemStack.EMPTY;
-        }
-    }
-
-    protected boolean isAmmo(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() == IafItemRegistry.PIXIE_DUST;
     }
 
 
