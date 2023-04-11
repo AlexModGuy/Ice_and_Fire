@@ -384,7 +384,7 @@ public class ServerConfig {
         this.ghostMaxHealth = buildDouble(builder, "Ghost Max Health", "all", 30F, 1.0F, 10000.0F, "Maximum ghost health.");
         this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
         this.ghostSpawnFromPlayerDeaths = buildBoolean(builder, "Ghost Spawn from PvP deaths", "all", true, "True if ghosts can rarely spawn from brutal PvP deaths.");
-        this.villagerHouseWeight = buildInt(builder, "Villager Scribe House Weight", "all", 22, 0, 10000, "Villager Scribe House generation weight. Lower = lower chance to spawn");
+        this.villagerHouseWeight = buildInt(builder, "Villager Scribe House Weight", "all", 5, 0, 10000, "Villager Scribe House generation weight. Lower = lower chance to spawn");
 
         this.allowAttributeOverriding = buildBoolean(builder, "Allow Attribute Overriding", "all", true, "Allows attributes for mobs to be overridden via the config file. One might want to disable this if other mods are enabled that change mob attributes e.g armor, health etc...");
         builder.pop();
