@@ -19,6 +19,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonBow;
 import com.github.alexthe666.iceandfire.item.ItemDragonHorn;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
+import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -30,6 +31,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -39,6 +41,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = IceAndFire.MODID)
 public class IafClientSetup {
@@ -124,6 +129,15 @@ public class IafClientSetup {
         event.registerBlockEntityRenderer(IafTileEntityRegistry.DREAD_PORTAL.get(), RenderDreadPortal::new);
         event.registerBlockEntityRenderer(IafTileEntityRegistry.DREAD_SPAWNER.get(), RenderDreadSpawner::new);
         event.registerBlockEntityRenderer(IafTileEntityRegistry.GHOST_CHEST.get(), RenderGhostChest::new);
+
+        // TODO: Remove in future releases
+        // This has been implemented because some mods don't know how to properly register things
+        if (Sheets.getBannerMaterial(IafRecipeRegistry.PATTERN_DREAD) == null)
+        {
+            IceAndFire.LOGGER.error("Some mod(s) you're using incorrectly registers things! This WILL break other mods banner patterns. Ice and fire will attempt to fix things so the game doesn't crash");
+            Sheets.BANNER_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createBannerMaterial));
+            Sheets.SHIELD_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createShieldMaterial));
+        }
     }
 
     @SubscribeEvent
