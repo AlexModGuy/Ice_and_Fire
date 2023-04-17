@@ -1252,6 +1252,10 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
             }
         }
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
     }
 
 }

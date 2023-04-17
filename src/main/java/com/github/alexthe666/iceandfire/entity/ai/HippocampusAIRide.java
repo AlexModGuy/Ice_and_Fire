@@ -57,4 +57,9 @@ public class HippocampusAIRide extends Goal {
         }
         dragon.getMoveControl().setWantedPosition(x, y, z, speed);
     }
+
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return super.requiresUpdateEveryTick();
+    }
 }

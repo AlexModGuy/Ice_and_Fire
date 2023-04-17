@@ -1037,6 +1037,11 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         public boolean canUse() {
             return this.mob.isOnGround() && super.canUse() && ((EntityAmphithere) this.mob).canMove();
         }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
     }
 
     class AIFlyWander extends Goal {
@@ -1081,6 +1086,10 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 }
             }
         }
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
     }
 
     class AIFlyCircle extends Goal {
@@ -1124,6 +1133,10 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
                 }
             }
+        }
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
         }
     }
 
