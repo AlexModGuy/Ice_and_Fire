@@ -4,16 +4,16 @@ package com.github.alexthe666.iceandfire.config.biome;
 import com.github.alexthe666.citadel.Citadel;
 import com.google.gson.*;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biome.SpawnBiomeData {
 
@@ -44,6 +44,25 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
         return this;
     }
 
+    @Deprecated
+    public boolean matches(Biome biomeIn) {
+        return this.matches(Biome.BiomeCategory.NONE, biomeIn.getRegistryName());
+    }
+
+    public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
+        for (List<SpawnBiomeEntry> all : biomes) {
+            boolean overall = true;
+            for (SpawnBiomeEntry cond : all) {
+                if (!cond.matches(category, registryName)) {
+                    overall = false;
+                }
+            }
+            if (overall) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
         for (List<SpawnBiomeEntry> all : biomes) {
@@ -96,7 +115,8 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
 
         public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
             if(type.isDepreciated()){
-                Citadel.LOGGER.warn("biome config: BIOME_DICT is no longer valid in 1.18+. Please use BIOME_TAG instead.");
+                // TODO: 1.19
+                Citadel.LOGGER.debug("biome config: BIOME_DICT is no longer fully supported in 1.18+. They will only work for structures.");
                 return false;
             }else{
                 if(type == BiomeEntryType.BIOME_TAG){
@@ -119,6 +139,30 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
                     }
                     return negate;
                 }
+            }
+        }
+        public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
+            if (this.type == BiomeEntryType.BIOME_DICT) {
+                ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, registryName);
+                List<? extends String> biomeTypes = BiomeDictionary.getTypes(biomeKey).stream().map((t) -> {
+                    return t.toString().toLowerCase(Locale.ROOT);
+                }).toList();
+                if (biomeTypes.contains(this.value)) {
+                    return !this.negate;
+                } else {
+                    return this.negate;
+                }
+            }
+            else if (this.type == BiomeEntryType.BIOME_CATEGORY) {
+                if (category.getName().toLowerCase(Locale.ROOT).equals(this.value)) {
+                    return !this.negate;
+                } else {
+                    return this.negate;
+                }
+            } else if (registryName.toString().equals(this.value)) {
+                return !this.negate;
+            } else {
+                return this.negate;
             }
         }
     }

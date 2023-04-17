@@ -103,7 +103,6 @@ public class IceAndFire {
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         PROXY.init();
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::onServerStarting);
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
 
         modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
@@ -133,14 +132,13 @@ public class IceAndFire {
         modBus.addListener(this::setupClient);
     }
 
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onServerStarting(ServerAboutToStartEvent event) {
+    public static void onServerAboutToStart(ServerAboutToStartEvent event) {
         var biomes = event.getServer().registryAccess().ownedRegistryOrThrow(ForgeRegistries.BIOMES.getRegistryKey());
 
         // Create configured structure feature tags
-        DataGenerators.createResources(biomes);
-
-        event.getServer().reloadResources(event.getServer().getPackRepository().getSelectedIds());
+        //DataGenerators.createResources(biomes);
 
         event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
             reloadSources(biomes, levelStem.generator());

@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.gson.JsonObject;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
@@ -32,11 +36,38 @@ public class DataGenerators {
     @SubscribeEvent
     public static void addPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.SERVER_DATA) {
+            // Hacky workaround to avoid reloading datapacks
+            // FIXME: Won't work in 1.19.2
+            createResources(ForgeRegistries.BIOMES.getKeys().stream().map(ForgeRegistries.BIOMES::getHolder).filter(Optional::isPresent).map(Optional::get));
             event.addRepositorySource((packConsumer, packConstructor) -> {
                 Pack pack = Pack.create(IceAndFire.MODID + ":data", true, () -> resources, packConstructor, Pack.Position.TOP, PackSource.DEFAULT);
                 packConsumer.accept(pack);
             });
         }
+    }
+
+    @Deprecated(since = "1.19.2", forRemoval = true)
+    public static void createResources(Stream<Holder<Biome>> biomeStream) {
+        HashMap<TagKey<?>, Tag.Builder> builders = new HashMap<>();
+        builders.put(IafWorldRegistry.HAS_MAUSOLEUM, Tag.Builder.tag());
+        builders.put(IafWorldRegistry.HAS_GRAVEYARD, Tag.Builder.tag());
+        builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, Tag.Builder.tag());
+
+        biomeStream.forEach(biomeReference -> {
+            if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, biomeReference.value())) {
+                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(biomeReference.value().getRegistryName(), "forge");
+            }
+            if (BiomeConfig.test(BiomeConfig.graveyardBiomes, biomeReference.value())) {
+                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(biomeReference.value().getRegistryName(), "forge");
+            }
+            if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeReference.value())) {
+                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(biomeReference.value().getRegistryName(), "forge");
+            }
+        });
+
+        addBiomeTag("has_structure/mausoleum.json", builders.get(IafWorldRegistry.HAS_MAUSOLEUM));
+        addBiomeTag("has_structure/graveyard.json", builders.get(IafWorldRegistry.HAS_GRAVEYARD));
+        addBiomeTag("has_structure/gorgon_temple.json", builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE));
     }
 
     public static void createResources(Registry<Biome> biomes) {
@@ -63,7 +94,7 @@ public class DataGenerators {
     }
 
     static void addBiomeTag(String location, Tag.Builder builder) {
-        resources.add(new ResourceLocation(IceAndFire.MODID,"tags/worldgen/biome/" + location), builder.serializeToJson());
+        resources.add(new ResourceLocation(IceAndFire.MODID, "tags/worldgen/biome/" + location), builder.serializeToJson());
     }
 
     public static class PackResources implements net.minecraft.server.packs.PackResources {

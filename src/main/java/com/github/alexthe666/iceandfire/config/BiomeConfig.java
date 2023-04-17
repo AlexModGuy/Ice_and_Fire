@@ -84,4 +84,13 @@ public class BiomeConfig {
         }
         return biomeConfigValues.get(spawns.getKey()).matches(biome, biome.value().getRegistryName());
     }
+
+    @Deprecated(since = "1.19.2", forRemoval = true)
+    public static boolean test(Pair<String, IafSpawnBiomeData> spawns, Biome biome) {
+        if (!init) {
+            init();
+        }
+        return biomeConfigValues.get(spawns.getKey()).matches(biome);
+    }
+
 }
