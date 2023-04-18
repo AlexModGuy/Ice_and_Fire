@@ -275,7 +275,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
-            this.setYRot(passenger.getYRot());
+            this.setYBodyRot(passenger.getYRot());
         }
         double ymod1 = this.onLandProgress * -0.02;
         passenger.setPos(this.getX(), this.getY() + 0.6F + ymod1, this.getZ());
