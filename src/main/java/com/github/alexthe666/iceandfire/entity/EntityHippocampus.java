@@ -797,7 +797,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         @Override
         public void tick() {
             if (this.hippo.isVehicle()) {
-                double flySpeed = 0.8F * hippo.getRideSpeedModifier();
+                double flySpeed = hippo.getRideSpeedModifier() * this.hippo.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 Vec3 dragonVec = hippo.position();
                 Vec3 moveVec = new Vec3(wantedX, wantedY, wantedZ);
                 Vec3 normalized = moveVec.subtract(dragonVec).normalize();
