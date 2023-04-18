@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -102,7 +103,27 @@ public class IafEntityRegistry {
 
     public static void setup() {
     }
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        event.getRegistry().register(SEA_SERPENT);
+        event.getRegistry().register(SIREN);
+        event.getRegistry().register(HIPPOCAMPUS);
+        event.getRegistry().register(TROLL);
+        event.getRegistry().register(AMPHITHERE);
+        event.getRegistry().register(HIPPOGRYPH);
+        event.getRegistry().register(GHOST);
+        event.getRegistry().register(GHOST_SWORD);
+        event.getRegistry().register(HYDRA);
+        event.getRegistry().register(DREAD_THRALL);
+        event.getRegistry().register(DREAD_GHOUL);
+        event.getRegistry().register(DREAD_BEAST);
+        event.getRegistry().register(DREAD_SCUTTLER);
+        event.getRegistry().register(DREAD_LICH);
+        event.getRegistry().register(DREAD_KNIGHT);
+        event.getRegistry().register(DREAD_HORSE);
 
+
+    }
     @SubscribeEvent
     public static void bakeAttributes(EntityAttributeCreationEvent creationEvent) {
         creationEvent.put(DRAGON_EGG.get(), EntityDragonEgg.bakeAttributes().create());
