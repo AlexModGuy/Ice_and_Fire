@@ -158,6 +158,48 @@ public class IFChainBuffer {
     }
 
     /**
+     * Calculates the flap amounts for the given entity (Z axis)
+     *
+     * @param maxAngle       the furthest this ChainBuffer can wave
+     * @param bufferTime     the time it takes to wave this buffer in ticks
+     * @param angleDecrement the angle to decrement by for each model piece
+     * @param divisor        the amount to divide the wave amount by
+     * @param entity         the entity with this ChainBuffer
+     */
+    public void calculateChainFlapBufferHead(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
+        this.prevYawVariation = this.yawVariation;
+
+        if (!compareDouble(entity.yHeadRotO, entity.yHeadRot) && Mth.abs(this.yawVariation) < maxAngle) {
+            this.yawVariation += Mth.clamp((entity.yHeadRot - entity.yHeadRotO) / divisor, -maxAngle, maxAngle);
+            if (entity instanceof IFlapable && Math.abs(entity.yHeadRot - entity.yHeadRotO) > 15D) {
+                ((IFlapable) entity).flapWings();
+            }
+        }
+        if (this.yawVariation > angleDecrement) {
+            if (this.yawTimer > bufferTime) {
+                this.yawVariation -= angleDecrement;
+                if (Mth.abs(this.yawVariation) < angleDecrement) {
+                    this.yawVariation = 0.0F;
+                    this.yawTimer = 0;
+                }
+            } else {
+                this.yawTimer++;
+            }
+        } else if (this.yawVariation < -1F * angleDecrement) {
+            if (this.yawTimer > bufferTime) {
+                this.yawVariation += angleDecrement;
+                if (Mth.abs(this.yawVariation) < angleDecrement) {
+                    this.yawVariation = 0.0F;
+                    this.yawTimer = 0;
+                }
+            } else {
+                this.yawTimer++;
+            }
+        }
+    }
+
+
+    /**
      * Calculates the swing amounts for the given entity (Y axis)
      *
      * @param maxAngle       the furthest this ChainBuffer can swing

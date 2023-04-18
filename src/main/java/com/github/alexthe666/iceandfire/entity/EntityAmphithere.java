@@ -303,8 +303,8 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger) && this.isTame()) {
-            this.setYRot(passenger.getYRot());
-            //renderYawOffset = rotationYaw;
+            this.setYBodyRot(passenger.getYRot());
+            this.setYHeadRot(passenger.getYHeadRot());
         }
         if (!this.level.isClientSide && !this.isTame() && passenger instanceof Player && this.getAnimation() == NO_ANIMATION && random.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
@@ -413,7 +413,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.setFlying(true);
         }
         if (this.getControllingPassenger() != null && this.isFlying() && !this.onGround) {
-            this.setXRot(this.getControllingPassenger().getXRot() / 2);
 
             if (this.getControllingPassenger().getXRot() > 25 && this.getDeltaMovement().y > -1.0F) {
                 this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.1D, this.getDeltaMovement().z);
@@ -478,10 +477,15 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         if (flapTicks > 0) {
             flapTicks--;
         }
-        yBodyRot = getYRot();
         if (level.isClientSide) {
             if (!onGround) {
-                roll_buffer.calculateChainFlapBuffer(this.isVehicle() ? 55 : 90, 1, 10F, 0.5F, this);
+                if (this.isVehicle())
+                    roll_buffer.calculateChainFlapBufferHead(40, 1, 2F, 0.5F, this);
+                else {
+                    yBodyRot = getYRot();
+                    roll_buffer.calculateChainFlapBuffer(70, 1, 2F, 0.5F, this);
+
+                }
                 pitch_buffer.calculateChainPitchBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);

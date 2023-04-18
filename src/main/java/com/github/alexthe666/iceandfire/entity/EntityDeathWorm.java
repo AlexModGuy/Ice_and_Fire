@@ -387,8 +387,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
-            yBodyRot = getYRot();
-            this.setYRot(passenger.getYRot());
+            this.setYBodyRot(passenger.getYRot());
             float radius = -0.5F * this.getScale();
             float angle = (0.01745329251F * this.yBodyRot);
             double extraX = radius * Mth.sin((float) (Math.PI + angle));
