@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
+import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -1751,7 +1752,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (isControlledByLocalInstance() && useFlyingPathFinder() && !level.isClientSide) {
+        if (useFlyingPathFinder() && !level.isClientSide) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
@@ -1998,7 +1999,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return false;
+        return super.isControlledByLocalInstance();
     }
 
     @Override
@@ -2011,15 +2012,368 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
     }
 
+
+    public boolean allowLocalMotionControl = true;
+    public boolean allowMousePitchControl = true;
+    protected boolean gliding = false;
+    protected float glidingSpeedBonus = 0;
+
     @Override
-    public void travel(@NotNull Vec3 Vector3d) {
+    public void travel(@NotNull Vec3 pTravelVector) {
         if (this.getAnimation() == ANIMATION_SHAKEPREY || !this.canMove() && !this.isVehicle() || this.isOrderedToSit()) {
             if (this.getNavigation().getPath() != null) {
                 this.getNavigation().stop();
             }
-            Vector3d = new Vec3(0, 0, 0);
+            pTravelVector = new Vec3(0, 0, 0);
         }
-        super.travel(Vector3d);
+        // Player riding controls
+        if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider()) {
+            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+            if (rider == null) {
+                super.travel(pTravelVector);
+                return;
+            }
+
+            // Flying control, include flying through waterfalls
+            if (isHovering() || isFlying()) {
+                double forward = rider.zza;
+                double strafing = rider.xxa;
+                double vertical = isGoingUp() ? 1.0d :
+                        isGoingDown() ? -1.0d : 0;
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                // Try to match the old riding system's speed
+                float airSpeedModifier = (float) (1.8f * getFlightSpeedModifier() * 3);
+                // Apply speed mod
+                speed *= airSpeedModifier;
+                // Set flag for logic and animation
+                if (forward > 0) {
+                    this.setFlying(true);
+                    this.setHovering(false);
+                }
+                // Rider controlled tackling
+                if (this.isAttacking() && this.getXRot() > -5 && this.getDeltaMovement().length() > 1.0d) {
+                    this.setTackling(true);
+//                } else if (this.getXRot() > 10 && this.getDeltaMovement().length() > 1.0d) {
+//                    this.setDiving(true);
+                    // Todo: diving animation here
+                } else {
+                    this.setTackling(false);
+                }
+
+                gliding = allowMousePitchControl && rider.isSprinting();
+                if (!gliding) {
+                    // Mouse controlled yaw
+                    glidingSpeedBonus -= glidingSpeedBonus * 0.02d;
+                    // Slower on going astern
+                    forward *= rider.zza > 0 ? 1.0f : 0.5f;
+                    // Slower on going sideways
+                    strafing *= 0.4f;
+                    if (isGoingUp()) {
+                        vertical = 0.5f;
+                    } else if (isGoingDown()) {
+                        vertical = -0.5f;
+                    }
+                    // Damp the vertical motion so the dragon's head is more responsive to the control
+                    else if (isControlledByLocalInstance()) {
+                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
+                    }
+                } else {
+                    // Mouse controlled yaw and pitch
+                    speed *= 1.5f;
+                    strafing *= 0.2f;
+                    // Diving is faster
+                    glidingSpeedBonus = (float) Mth.clamp(glidingSpeedBonus + this.getDeltaMovement().y * -0.05d, -0.8d, 1.5d);
+                    speed += glidingSpeedBonus;
+                    // Speed bonus damping
+                    glidingSpeedBonus -= glidingSpeedBonus * 0.02d;
+                    // Try to match the moving vector to the rider's look vector
+                    forward = Mth.abs(Mth.cos(this.getXRot() * ((float) Math.PI / 180F)));
+                    vertical = Mth.abs(Mth.sin(this.getXRot() * ((float) Math.PI / 180F)));
+                    // Pitch is still responsive to spacebar and x key
+                    if (isGoingUp()) {
+                        vertical = Math.max(vertical, 0.5);
+                    } else if (isGoingDown()) {
+                        vertical = Math.min(vertical, -0.5);
+                    }
+                    // X rotation takes minus on looking upward
+                    else if (this.getXRot() < 0) {
+                        vertical *= 1;
+                    } else if (this.getXRot() > 0) {
+                        vertical *= -1;
+                    } else if (isControlledByLocalInstance()) {
+                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
+                    }
+                }
+
+                if (this.isControlledByLocalInstance()) {
+                    // Vanilla friction on Y axis is smaller, which will influence terminal speed for climbing and diving
+                    // use same friction coefficient on all axis simplifies how travel vector is computed
+                    this.flyingSpeed = speed * 0.1F;
+                    this.setSpeed(speed);
+
+                    this.moveRelative(flyingSpeed, new Vec3(strafing, vertical, forward));
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(new Vec3(0.9, 0.9, 0.9)));
+
+                    this.calculateEntityAnimation(this, false);
+                } else {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+                this.tryCheckInsideBlocks();
+                this.updatePitch(this.yOld - this.getY());
+                return;
+            }
+            // In water move control, for those that can't
+            else if (isInWater() || isInLava()) {
+                double forward = rider.zza;
+                double strafing = rider.xxa;
+                double vertical = isGoingUp() ? 1.0d :
+                        isGoingDown() ? -1.0d : 0;
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+                this.flyingSpeed = speed * 0.1F;
+                this.setSpeed(speed);
+                // Vanilla in water behavior includes float on water and moving very slow
+                super.travel(pTravelVector.add(strafing, vertical, forward));
+                return;
+            }
+            // Walking control
+            else {
+                double forward = rider.zza;
+                double strafing = rider.xxa;
+                // Inherit y motion for dropping
+                double vertical = pTravelVector.y;
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+                float groundSpeedModifier = 0.7f;
+                speed *= groundSpeedModifier;
+
+                forward *= rider.zza > 0 ? 1.0f : 0.3f;
+                strafing *= 0.1f;
+
+                if (this.isControlledByLocalInstance()) {
+                    this.flyingSpeed = speed * 0.1F;
+                    this.setSpeed(speed);
+                    // Vanilla walking behavior includes going up steps
+                    super.travel(new Vec3(strafing, vertical, forward));
+                } else {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+                this.tryCheckInsideBlocks();
+                this.updatePitch(this.yOld - this.getY());
+                return;
+            }
+        }
+        // No rider move control
+        else {
+            super.travel(pTravelVector);
+        }
+    }
+
+    /**
+     * Update dragon pitch for the server on {@link IafDragonLogic#updateDragonServer()} <br>
+     * For some reason the {@link LivingEntity#yo} failed to update the pitch properly when the movement is handled by client.
+     * Use {@link LivingEntity#yOld} instead will properly update the pitch on server.
+     * @param verticalDelta vertical distance from last update
+     */
+    protected void updatePitch(final double verticalDelta) {
+        if (this.isOverAir() && !this.isPassenger()) {
+            if (!this.isHovering()) {
+                this.incrementDragonPitch((float) (verticalDelta) * 10);
+            }
+            this.setDragonPitch(Mth.clamp(this.getDragonPitch(), -60, 40));
+            final float plateau = 2;
+            final float planeDist = (float) ((Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().z)) * 6F);
+            if (this.getDragonPitch() > plateau) {
+                //down
+                //this.motionY -= 0.2D;
+                this.decrementDragonPitch(planeDist * Math.abs(this.getDragonPitch()) / 90);
+            }
+            if (this.getDragonPitch() < -plateau) {//-2
+                //up
+                this.incrementDragonPitch(planeDist * Math.abs(this.getDragonPitch()) / 90);
+            }
+            if (this.getDragonPitch() > 2F) {
+                this.decrementDragonPitch(1);
+            } else if (this.getDragonPitch() < -2F) {
+                this.incrementDragonPitch(1);
+            }
+            if (this.getControllingPassenger() == null && this.getDragonPitch() < -45 && planeDist < 3) {
+                if (this.isFlying() && !this.isHovering()) {
+                    this.setHovering(true);
+                }
+            }
+        } else {
+            this.setDragonPitch(0);
+        }
+    }
+
+    /**
+     * Rider logic from {@link IafDragonLogic#updateDragonServer()} <br>
+     * Updates when rider is onboard
+     */
+    public void updateRider() {
+        this.ticksStill = 0;
+        this.hoverTicks = 0;
+        this.flyTicks = 0;
+
+        Entity controllingPassenger = this.getControllingPassenger();
+
+        if (controllingPassenger instanceof Player rider) {
+            if (this.isGoingUp()) {
+                if (!this.isFlying() && !this.isHovering()) {
+                    // Update spacebar tick for take off
+                    this.spacebarTicks += 2;
+                }
+            } else if (this.isDismounting()) {
+                if (this.isFlying() || this.isHovering()) {
+                    // If the rider decided to dismount in air, try to follow
+                    this.setCommand(2);
+                }
+            }
+            // Update spacebar ticks and take off
+            if (this.spacebarTicks > 0) {
+                this.spacebarTicks--;
+            }
+            // Hold spacebar 1 sec to take off
+            if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+                if (!this.isInWater()) {
+                    this.setHovering(true);
+                    this.spacebarTicks = 0;
+                }
+            }
+
+            if (isFlying() || isHovering()) {
+                if (rider.zza > 0) {
+                    this.setFlying(true);
+                    this.setHovering(false);
+                } else {
+                    this.setFlying(false);
+                    this.setHovering(true);
+                }
+                // Dragon landing
+                if (!this.isOverAir() && this.isGoingDown() && !this.isInWater()) {
+                    this.setFlying(false);
+                    this.setHovering(false);
+                }
+            }
+            // Fly into terrain
+            if (this.isFlying() && this.getDragonPitch() > 20 && !this.isOverAir()) {
+                this.setHovering(false);
+                this.setFlying(false);
+            }
+            // Dragon tackle attack
+            if (this.isTackling()) {
+                // Todo: tackling too low will cause animation to disappear
+                this.tacklingTicks++;
+                if (this.tacklingTicks == 40) {
+                    this.tacklingTicks = 0;
+                }
+                if (!this.isFlying() && this.isOnGround()) {
+                    this.tacklingTicks = 0;
+                    this.setTackling(false);
+                }
+                // Todo: problem with friendly fire to tamed horses
+                List<Entity> victims = this.level.getEntities(this, this.getBoundingBox().expandTowards(2.0D, 2.0D, 2.0D), potentialVictim -> (
+                        potentialVictim != rider
+                                && potentialVictim instanceof LivingEntity
+                ));
+                victims.forEach(victim -> {
+                    logic.attackTarget(victim, rider, this.getDragonStage() * 3);
+                });
+            }
+            // Dragon breathe attack
+            if (this.isStriking() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
+                this.setBreathingFire(true);
+                this.riderShootFire(this.getControllingPassenger());
+                this.fireStopTicks = 10;
+            }
+            // Dragon bite attack
+            if (this.isAttacking() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
+                LivingEntity target = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
+                if (this.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
+                    this.setAnimation(EntityDragonBase.ANIMATION_BITE);
+                }
+                if (target != null && !DragonUtils.hasSameOwner(this, target)) {
+                    logic.attackTarget(target, rider instanceof Player ? (Player) rider : null, (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                }
+            }
+            // Shift key to dismount
+            if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
+                if (this.getControllingPassenger() instanceof LivingEntity)
+                    MiscProperties.setDismountedDragon((LivingEntity) this.getControllingPassenger(), true);
+                this.getControllingPassenger().stopRiding();
+            }
+            // Reset attack target when being ridden
+            if (this.getTarget() != null && !this.getPassengers().isEmpty() && this.getOwner() != null && this.getPassengers().contains(this.getOwner())) {
+                this.setTarget(null);
+            }
+            // Stop flying when hit the water, but waterfalls do not block flying
+            if (this.getFeetBlockState().getFluidState().isSource() && this.isInWater() && !this.isGoingUp()) {
+                this.setFlying(false);
+                this.setHovering(false);
+            }
+        } else if (controllingPassenger instanceof EntityDreadQueen) {
+            // Original logic involves riding
+            Player ridingPlayer = this.getRidingPlayer();
+            if (ridingPlayer != null) {
+                if (this.isGoingUp()) {
+                    if (!this.isFlying() && !this.isHovering()) {
+                        this.spacebarTicks += 2;
+                    }
+                } else if (this.isDismounting()) {
+                    if (this.isFlying() || this.isHovering()) {
+                        this.setDeltaMovement(this.getDeltaMovement().add(0, -0.04, 0));
+                        this.setFlying(false);
+                        this.setHovering(false);
+                    }
+                }
+            }
+            if (!this.isDismounting() && (this.isFlying() || this.isHovering())) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.01, 0));
+            }
+            if (this.isStriking() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
+                this.setBreathingFire(true);
+                this.riderShootFire(this.getControllingPassenger());
+                this.fireStopTicks = 10;
+            }
+            if (this.isAttacking() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
+                LivingEntity target = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
+                if (this.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
+                    this.setAnimation(EntityDragonBase.ANIMATION_BITE);
+                }
+                if (target != null && !DragonUtils.hasSameOwner(this, target)) {
+                    logic.attackTarget(target, ridingPlayer, (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                }
+            }
+            if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
+                if (this.getControllingPassenger() instanceof LivingEntity)
+                    MiscProperties.setDismountedDragon((LivingEntity) this.getControllingPassenger(), true);
+                this.getControllingPassenger().stopRiding();
+            }
+            if (this.isFlying()) {
+                if (!this.isHovering() && this.getControllingPassenger() != null && !this.isOnGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) < 0.1F) {
+                    this.setHovering(true);
+                    this.setFlying(false);
+                }
+            } else {
+                if (this.isHovering() && this.getControllingPassenger() != null && !this.isOnGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) > 0.1F) {
+                    this.setFlying(true);
+                    this.usingGroundAttack = false;
+                    this.setHovering(false);
+                }
+            }
+            if (this.spacebarTicks > 0) {
+                this.spacebarTicks--;
+            }
+            if (this.spacebarTicks > 20 && this.getOwner() != null && this.getPassengers().contains(this.getOwner()) && !this.isFlying() && !this.isHovering()) {
+                this.setHovering(true);
+            }
+
+            if (this.isVehicle() && !this.isOverAir() && this.isFlying() && !this.isHovering() && this.flyTicks > 40) {
+                this.setFlying(false);
+            }
+        }
     }
 
     @Override
