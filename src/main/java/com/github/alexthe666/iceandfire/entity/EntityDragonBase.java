@@ -293,7 +293,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DragonAIRide<>(this));
+//        this.goalSelector.addGoal(0, new DragonAIRide<>(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new DragonAIMate(this, 1.0D));
         this.goalSelector.addGoal(3, new DragonAIReturnToRoost(this, 1.0D));
@@ -1013,7 +1013,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean useFlyingPathFinder() {
-        return isFlying();
+        return isFlying() && this.getControllingPassenger() == null;
     }
 
     public void setGender(boolean male) {
@@ -1751,7 +1751,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (useFlyingPathFinder() && !level.isClientSide) {
+        if (isControlledByLocalInstance() && useFlyingPathFinder() && !level.isClientSide) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
