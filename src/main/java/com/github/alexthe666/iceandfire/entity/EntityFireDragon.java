@@ -15,11 +15,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -253,6 +256,56 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected ItemLike getHeartItem() {
         return IafItemRegistry.FIRE_DRAGON_HEART.get();
+    }
+
+
+    @Override
+    public void travel(@NotNull Vec3 pTravelVector) {
+        if (this.isInLava() || this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
+            if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
+                // Ice dragons swim faster
+                this.moveRelative(this.getSpeed(), pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.7D));
+                if (this.getTarget() == null) {
+                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+                }
+            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
+                LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+                Vec3 travelVector = new Vec3(
+                        rider.xxa,
+                        isGoingUp() ? 1.0d :
+                                isGoingDown() ? -1.0d : 0,
+                        rider.zza
+                );
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.3f;
+                this.setSpeed(speed);
+
+                if (this.isControlledByLocalInstance()) {
+                    this.moveRelative(this.getSpeed(), travelVector);
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+
+                    Vec3 currentMotion = this.getDeltaMovement();
+                    if (this.horizontalCollision) {
+                        currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                    }
+                    this.setDeltaMovement(currentMotion.scale(0.7D));
+                    if (this.getTarget() == null) {
+//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+                    }
+
+                    this.calculateEntityAnimation(this, false);
+                } else {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+                this.tryCheckInsideBlocks();
+            } else {
+                super.travel(pTravelVector);
+            }
+        } else {
+            super.travel(pTravelVector);
+        }
     }
 
     @Override
