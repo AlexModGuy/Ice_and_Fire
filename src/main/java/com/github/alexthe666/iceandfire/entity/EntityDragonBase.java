@@ -1753,7 +1753,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (useFlyingPathFinder() && !level.isClientSide) {
+        if (useFlyingPathFinder() && !level.isClientSide && isControlledByLocalInstance()) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
@@ -2276,7 +2276,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.setHovering(true);
                 }
                 // Hitting terrain with big angle of attack
-                if (this.isFlying() && rider.getXRot() > 10 && !this.isOverAir()) {
+                if (!this.isOverAir() && this.isFlying() && rider.getXRot() > 10 && !this.isInWater()) {
                     this.setHovering(false);
                     this.setFlying(false);
                 }

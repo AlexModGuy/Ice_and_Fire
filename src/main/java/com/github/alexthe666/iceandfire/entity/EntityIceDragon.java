@@ -248,9 +248,8 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.setSwimming(false);
             }
         }
-        if (!level.isClientSide && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
+        if (!level.isClientSide && this.getControllingPassenger() == null && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.2D, 0.0D));
-
         }
         if (swimCycle < 48) {
             swimCycle += 2;
@@ -667,7 +666,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public boolean useFlyingPathFinder() {
-        return this.isFlying() || this.isInMaterialWater();
+        return (this.isFlying() || this.isInMaterialWater()) && this.getControllingPassenger() == null;
     }
 
     @Override
