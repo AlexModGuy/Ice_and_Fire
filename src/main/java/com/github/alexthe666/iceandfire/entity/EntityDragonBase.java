@@ -48,6 +48,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -2027,6 +2028,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             pTravelVector = new Vec3(0, 0, 0);
         }
         // Player riding controls
+        // Note: when motion is handled by the client no server side setDeltaMovement() should be called
+        // otherwise the movement will halt
         if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider()) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
             if (rider == null) {
@@ -2038,11 +2041,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             if (isHovering() || isFlying()) {
                 double forward = rider.zza;
                 double strafing = rider.xxa;
-                double vertical = isGoingUp() ? 1.0d :
-                        isGoingDown() ? -1.0d : 0;
+                double vertical = 0;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-                // Try to match the old riding system's speed
-                float airSpeedModifier = (float) (1.8f * getFlightSpeedModifier() * 3);
+                // Bigger difference in speed for young and elder dragons
+                // Todo: use age in days for quicker compute?
+                float airSpeedModifier = (float) (5.2f + 1.0f * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
                 // Apply speed mod
                 speed *= airSpeedModifier;
                 // Set flag for logic and animation
@@ -2063,37 +2066,38 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 gliding = allowMousePitchControl && rider.isSprinting();
                 if (!gliding) {
                     // Mouse controlled yaw
-                    glidingSpeedBonus -= glidingSpeedBonus * 0.02d;
+                    speed += glidingSpeedBonus;
                     // Slower on going astern
                     forward *= rider.zza > 0 ? 1.0f : 0.5f;
                     // Slower on going sideways
                     strafing *= 0.4f;
-                    if (isGoingUp()) {
-                        vertical = 0.5f;
-                    } else if (isGoingDown()) {
-                        vertical = -0.5f;
+                    if (isGoingUp() && !isGoingDown()) {
+                        vertical = 1f;
+                    } else if (isGoingDown() && !isGoingUp()) {
+                        vertical = -1f;
                     }
                     // Damp the vertical motion so the dragon's head is more responsive to the control
                     else if (isControlledByLocalInstance()) {
-                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
+//                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
                     }
                 } else {
                     // Mouse controlled yaw and pitch
                     speed *= 1.5f;
-                    strafing *= 0.2f;
+                    strafing *= 0.1f;
                     // Diving is faster
+                    // Todo: a new and better algorithm much like elytra flying
                     glidingSpeedBonus = (float) Mth.clamp(glidingSpeedBonus + this.getDeltaMovement().y * -0.05d, -0.8d, 1.5d);
                     speed += glidingSpeedBonus;
-                    // Speed bonus damping
-                    glidingSpeedBonus -= glidingSpeedBonus * 0.02d;
                     // Try to match the moving vector to the rider's look vector
                     forward = Mth.abs(Mth.cos(this.getXRot() * ((float) Math.PI / 180F)));
                     vertical = Mth.abs(Mth.sin(this.getXRot() * ((float) Math.PI / 180F)));
                     // Pitch is still responsive to spacebar and x key
-                    if (isGoingUp()) {
+                    if (isGoingUp() && !isGoingDown()) {
                         vertical = Math.max(vertical, 0.5);
-                    } else if (isGoingDown()) {
+                    } else if (isGoingDown() && !isGoingUp()) {
                         vertical = Math.min(vertical, -0.5);
+                    } else if (isGoingUp() && isGoingDown()) {
+                        vertical = 0;
                     }
                     // X rotation takes minus on looking upward
                     else if (this.getXRot() < 0) {
@@ -2101,9 +2105,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     } else if (this.getXRot() > 0) {
                         vertical *= -1;
                     } else if (isControlledByLocalInstance()) {
-                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
+//                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
                     }
                 }
+                // Speed bonus damping
+                glidingSpeedBonus -= glidingSpeedBonus * 0.01d;
 
                 if (this.isControlledByLocalInstance()) {
                     // Vanilla friction on Y axis is smaller, which will influence terminal speed for climbing and diving
@@ -2114,6 +2120,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.moveRelative(flyingSpeed, new Vec3(strafing, vertical, forward));
                     this.move(MoverType.SELF, this.getDeltaMovement());
                     this.setDeltaMovement(this.getDeltaMovement().multiply(new Vec3(0.9, 0.9, 0.9)));
+
+                    Vec3 currentMotion = this.getDeltaMovement();
+                    if (this.horizontalCollision) {
+                        currentMotion = new Vec3(currentMotion.x, 0.1D, currentMotion.z);
+                    }
+                    this.setDeltaMovement(currentMotion);
 
                     this.calculateEntityAnimation(this, false);
                 } else {
@@ -2127,11 +2139,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             else if (isInWater() || isInLava()) {
                 double forward = rider.zza;
                 double strafing = rider.xxa;
-                double vertical = isGoingUp() ? 1.0d :
-                        isGoingDown() ? -1.0d : 0;
+                double vertical = 0;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 
-                this.flyingSpeed = speed * 0.1F;
+                if (isGoingUp() && !isGoingDown()) {
+                    vertical = 0.5f;
+                } else if (isGoingDown() && !isGoingUp()) {
+                    vertical = -0.5f;
+                }
+
+                this.flyingSpeed = speed;
                 this.setSpeed(speed);
                 // Vanilla in water behavior includes float on water and moving very slow
                 super.travel(pTravelVector.add(strafing, vertical, forward));
@@ -2145,15 +2162,21 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 double vertical = pTravelVector.y;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 
-                float groundSpeedModifier = 0.7f;
+                float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
                 speed *= groundSpeedModifier;
-
-                forward *= rider.zza > 0 ? 1.0f : 0.3f;
-                strafing *= 0.1f;
+                // Try to match the original riding speed
+                forward *= speed;
+                // Faster sprint
+                forward *= rider.isSprinting() ? 1.2f : 1.0f;
+                // Slower going back
+                forward *= rider.zza > 0 ? 1.0f : 0.2f;
+                // Slower going sideway
+                strafing *= 0.05f;
 
                 if (this.isControlledByLocalInstance()) {
                     this.flyingSpeed = speed * 0.1F;
                     this.setSpeed(speed);
+
                     // Vanilla walking behavior includes going up steps
                     super.travel(new Vec3(strafing, vertical, forward));
                 } else {
@@ -2240,9 +2263,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 if (!this.isInWater()) {
                     this.setHovering(true);
                     this.spacebarTicks = 0;
+
+                    this.glidingSpeedBonus = 0;
                 }
             }
-
             if (isFlying() || isHovering()) {
                 if (rider.zza > 0) {
                     this.setFlying(true);
@@ -2251,17 +2275,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.setFlying(false);
                     this.setHovering(true);
                 }
+                // Hitting terrain with big angle of attack
+                if (this.isFlying() && rider.getXRot() > 10 && !this.isOverAir()) {
+                    this.setHovering(false);
+                    this.setFlying(false);
+                }
                 // Dragon landing
                 if (!this.isOverAir() && this.isGoingDown() && !this.isInWater()) {
                     this.setFlying(false);
                     this.setHovering(false);
                 }
             }
-            // Fly into terrain
-            if (this.isFlying() && this.getDragonPitch() > 20 && !this.isOverAir()) {
-                this.setHovering(false);
-                this.setFlying(false);
-            }
+
             // Dragon tackle attack
             if (this.isTackling()) {
                 // Todo: tackling too low will cause animation to disappear
@@ -2374,6 +2399,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.setFlying(false);
             }
         }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pMotion) {
+        super.setDeltaMovement(pMotion);
     }
 
     @Override
