@@ -324,6 +324,22 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
+    public void onInsideBubbleColumn(boolean pDownwards) {
+        // Disable bubble column drag for elder dragons
+        if (this.getDragonStage() < 2) {
+            super.onInsideBubbleColumn(pDownwards);
+        }
+    }
+
+    @Override
+    public void onAboveBubbleCol(boolean pDownwards) {
+        // Disable bubble column drag for elder dragons
+        if (this.getDragonStage() < 2) {
+            super.onInsideBubbleColumn(pDownwards);
+        }
+    }
+
+    @Override
     public void travel(Vec3 pTravelVector) {
         if (this.isInWater() || this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
@@ -332,21 +348,35 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
                 if (this.getTarget() == null) {
-                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
                 }
             } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
                 LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                // Bigger difference in speed for young and elder dragons
+                float waterSpeedMod =  (float) (0.42f + 0.1 * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
+                speed *= waterSpeedMod;
+                speed *= rider.isSprinting() ? 1.5f : 1.0f;
+
+                float vertical = 0f;
+                if (isGoingUp() && !isGoingDown()) {
+                    vertical = 1f;
+                } else if (isGoingDown() && !isGoingUp()) {
+                    vertical = -1f;
+                } else if (isGoingUp() && isGoingDown() && isControlledByLocalInstance()) {
+                    // Try floating
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.5f, 1.0f));
+                }
+
                 Vec3 travelVector = new Vec3(
                         rider.xxa,
-                        isGoingUp() ? 1.0d :
-                                isGoingDown() ? -1.0d : 0,
+                        vertical,
                         rider.zza
                 );
-                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.3f;
-                this.setSpeed(speed);
-
                 if (this.isControlledByLocalInstance()) {
+                    this.setSpeed(speed);
+
                     this.moveRelative(this.getSpeed(), travelVector);
                     this.move(MoverType.SELF, this.getDeltaMovement());
 
