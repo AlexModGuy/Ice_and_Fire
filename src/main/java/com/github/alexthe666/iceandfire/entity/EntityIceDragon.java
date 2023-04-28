@@ -334,7 +334,7 @@ public class EntityIceDragon extends EntityDragonBase {
     public void onAboveBubbleCol(boolean pDownwards) {
         // Disable bubble column drag for elder dragons
         if (this.getDragonStage() < 2) {
-            super.onInsideBubbleColumn(pDownwards);
+            super.onAboveBubbleCol(pDownwards);
         }
     }
 
