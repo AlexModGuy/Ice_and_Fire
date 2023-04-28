@@ -2149,9 +2149,15 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
 
                 this.flyingSpeed = speed;
+                // Float in water for those can't swim is done in LivingEntity#aiStep on server side
+                // Leave this handled by both side before we have a better solution
                 this.setSpeed(speed);
+                // Overwrite the zza in setSpeed
+                this.setZza((float) forward);
                 // Vanilla in water behavior includes float on water and moving very slow
+                // in lava behavior includes moving slow and sink
                 super.travel(pTravelVector.add(strafing, vertical, forward));
+
                 return;
             }
             // Walking control
