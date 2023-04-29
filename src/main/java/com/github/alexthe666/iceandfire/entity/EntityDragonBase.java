@@ -2013,6 +2013,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
     }
 
+    @Override
+    public boolean isInWater() {
+        return super.isInWater() && this.getFluidHeight(FluidTags.WATER) > Mth.floor(this.getDragonStage() / 2.0f);
+    }
 
     public boolean allowLocalMotionControl = true;
     public boolean allowMousePitchControl = true;
@@ -2030,6 +2034,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Player riding controls
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
+        // Todo: move wrongly fix
         if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider()) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
             if (rider == null) {
@@ -2044,7 +2049,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 double vertical = 0;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 // Bigger difference in speed for young and elder dragons
-                // Todo: use age in days for quicker compute?
+//                float airSpeedModifier = (float) (5.2f + 1.0f * Mth.map(Math.min(this.getAgeInDays(), 125), 0, 125, 0f, 1.5f));
                 float airSpeedModifier = (float) (5.2f + 1.0f * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
                 // Apply speed mod
                 speed *= airSpeedModifier;
@@ -2135,7 +2140,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.updatePitch(this.yOld - this.getY());
                 return;
             }
-            // In water move control, for those that can't
+            // In water move control, for those that can't swim
             else if (isInWater() || isInLava()) {
                 double forward = rider.zza;
                 double strafing = rider.xxa;
