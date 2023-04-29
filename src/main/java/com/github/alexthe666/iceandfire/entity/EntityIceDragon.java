@@ -340,7 +340,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public void travel(Vec3 pTravelVector) {
-        if (this.isInWater() || this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
+        if (this.isInWater()) {
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
                 // Ice dragons swim faster
                 this.moveRelative(this.getSpeed(), pTravelVector);
@@ -380,6 +380,7 @@ public class EntityIceDragon extends EntityDragonBase {
                     this.move(MoverType.SELF, this.getDeltaMovement());
 
                     Vec3 currentMotion = this.getDeltaMovement();
+                    // Todo: when the y coordinate is an integer there's a chance of getting the moved wrongly error and stuck
                     if (this.horizontalCollision) {
                         currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
                     }
@@ -397,6 +398,40 @@ public class EntityIceDragon extends EntityDragonBase {
                 super.travel(pTravelVector);
             }
 
+        } else if (this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
+            // Movement when walking on the water, mainly used for not slowing down when jumping out of water
+            // Todo: the water and ashore part is still messy
+            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+            double forward = rider.zza;
+            double strafing = rider.xxa;
+            // Inherit y motion for dropping
+            double vertical = pTravelVector.y;
+            float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+            float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
+            speed *= groundSpeedModifier;
+            // Try to match the original riding speed
+            forward *= speed;
+            // Faster sprint
+            forward *= rider.isSprinting() ? 1.2f : 1.0f;
+            // Slower going back
+            forward *= rider.zza > 0 ? 1.0f : 0.2f;
+            // Slower going sideway
+            strafing *= 0.05f;
+
+            if (this.isControlledByLocalInstance()) {
+                this.flyingSpeed = speed * 0.1F;
+                this.setSpeed(speed);
+
+                // Vanilla walking behavior includes going up steps
+                super.travel(new Vec3(strafing, vertical, forward));
+            } else {
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+            this.tryCheckInsideBlocks();
+            this.updatePitch(this.yOld - this.getY());
+            return;
         } else {
             super.travel(pTravelVector);
         }
