@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.world.gen.mixin;
+package com.github.alexthe666.iceandfire.mixin.world.gen;
 
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.server.level.WorldGenRegion;

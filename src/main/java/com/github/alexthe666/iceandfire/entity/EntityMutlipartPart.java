@@ -281,4 +281,17 @@ public abstract class EntityMutlipartPart extends Entity {
     public boolean shouldContinuePersisting() {
         return isAddedToWorld() || this.isRemoved();
     }
+
+    public final int MAX_RECURSIVE_PARENT = 10;
+    @Nullable
+    public LivingEntity getRootParent() {
+        Entity rootParent = this.getParent();
+//        while ((rootParent instanceof EntityMutlipartPart)) {
+//            rootParent = ((EntityMutlipartPart) rootParent).getParent();
+//        }
+        for (int i = 0; i < MAX_RECURSIVE_PARENT && (rootParent instanceof EntityMutlipartPart); i++) {
+            rootParent = ((EntityMutlipartPart) rootParent).getParent();
+        }
+        return rootParent instanceof LivingEntity ? (LivingEntity) rootParent : null;
+    }
 }
