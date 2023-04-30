@@ -1720,13 +1720,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
+    public float getStepHeight() {
+        return Math.max(1.2F, 1.2F + (Math.min(this.getAgeInDays(), 125) - 25) * 1.8F / 100F);
+    }
+
+    @Override
     public void tick() {
         super.tick();
         refreshDimensions();
         updateParts();
         this.prevDragonPitch = getDragonPitch();
         level.getProfiler().push("dragonLogic");
-        this.maxUpStep = 1.2F;
+        this.maxUpStep = getStepHeight();
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
