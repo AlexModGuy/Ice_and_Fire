@@ -21,6 +21,7 @@ import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import com.github.alexthe666.iceandfire.message.MessageDragonSetBurnBlock;
 import com.github.alexthe666.iceandfire.message.MessageStartRidingMob;
+import com.github.alexthe666.iceandfire.message.MessageSyncEffects;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.IPassabilityNavigator;
@@ -555,6 +556,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void openInventory(Player player) {
         if (!this.level.isClientSide)
             NetworkHooks.openGui((ServerPlayer) player, getMenuProvider());
+        else {
+            IceAndFire.sendMSGToServer(new MessageSyncEffects(this));
+        }
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
