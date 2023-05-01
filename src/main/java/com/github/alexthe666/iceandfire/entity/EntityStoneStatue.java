@@ -2,22 +2,27 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
+import com.github.alexthe666.iceandfire.entity.util.IResurrectable;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues {
+public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromStatues, IResurrectable {
 
     private static final EntityDataAccessor<String> TRAPPED_ENTITY_TYPE = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<CompoundTag> TRAPPED_ENTITY_DATA = SynchedEntityData.defineId(EntityStoneStatue.class, EntityDataSerializers.COMPOUND_TAG);
@@ -58,6 +63,57 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         statue.setTrappedScale(parent.getScale());
 
         return statue;
+    }
+
+    @Override
+    public boolean canResurrectBy(ItemStack itemStack) {
+        return itemStack.getItem() == Items.TOTEM_OF_UNDYING
+                && !itemStack.isEmpty();
+    }
+
+    @Override
+    public boolean resurrect() {
+        // from ItemDragonHorn
+        EntityType<?> entityType = EntityType.byString(this.getTrappedEntityTypeString()).orElse(null);
+        if (entityType != null) {
+            Entity entity = entityType.create(this.level);
+            if (entity instanceof LivingEntity livingEntity) {
+                CompoundTag compoundTag = this.getTrappedTag();
+//                getTrappedTag().putInt("id", entityType.);
+                livingEntity.load(compoundTag);
+                //Still needed to allow for intercompatibility
+                if (compoundTag.contains("UUID")) {
+                    livingEntity.setUUID(compoundTag.getUUID("UUID"));
+                }
+
+                entity.absMoveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
+                if (this.level.addFreshEntity(entity)) {
+                    livingEntity.setHealth((float) Math.ceil(this.getMaxHealth() / 20.0f));
+                    livingEntity.removeAllEffects();
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
+//        dragon.addPotionEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
+                    livingEntity.level.broadcastEntityEvent(this, (byte) 35);
+
+                    this.remove(RemovalReason.DISCARDED);
+
+                    try {
+                        IceAndFire.LOGGER.debug("Trapped tag for %s:".formatted(this.getTrappedTag().get("UUID")));
+                        IceAndFire.LOGGER.debug(String.format("%s", this.getTrappedTag()));
+                        CompoundTag tag = new CompoundTag();
+                        entity.save(tag);
+                        IceAndFire.LOGGER.debug("Constructed tag for %s:".formatted(tag.get("UUID")));
+                        IceAndFire.LOGGER.debug(String.format("%s", tag));
+                    } catch (Exception ignored) {
+
+                    }
+
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

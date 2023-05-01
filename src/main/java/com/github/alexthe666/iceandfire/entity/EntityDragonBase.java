@@ -90,7 +90,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener {
+public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener, IResurrectable {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
     protected static final EntityDataAccessor<Boolean> SWIMMING = SynchedEntityData.defineId(EntityDragonBase.class, EntityDataSerializers.BOOLEAN);
@@ -2009,6 +2009,43 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public boolean isImmobile() {
         return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
+    }
+
+    @Override
+    public boolean canResurrectBy(ItemStack itemStack) {
+        return this.isMobDead()
+                && !this.isSkeletal()
+                && this.getDeathStage() == 0
+                && itemStack.getItem() == Items.TOTEM_OF_UNDYING
+                && !itemStack.isEmpty();
+    }
+
+    @Override
+    public boolean resurrect() {
+        int deathStage = this.getDeathStage();
+
+        if (deathStage == 0) {
+            this.setHealth((float) Math.ceil(this.getMaxHealth() / 20.0f));
+            this.removeAllEffects();
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
+            this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
+            this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
+            this.level.broadcastEntityEvent(this, (byte) 35);
+
+            this.setDeathStage(0);
+            this.setModelDead(false);
+            this.setNoAi(false);
+
+            return true;
+        }
+        // this will allow skinned dragon resurrection
+//        else if (deathStage > 0 && deathStage <= 2) {
+////            util.spawnParticleForce(dragon.world, ParticleTypes.HAPPY_VILLAGER, )
+//            this.level.broadcastEntityEvent(this, (byte) 35);
+//            this.setDeathStage(deathStage - 1);
+//            return true;
+//        }
+        return false;
     }
 
     @Override

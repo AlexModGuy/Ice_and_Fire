@@ -8,10 +8,7 @@ import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.props.*;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import com.github.alexthe666.iceandfire.message.MessageSwingArm;
@@ -28,6 +25,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.CombatTracker;
@@ -35,6 +33,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.WitherSkeleton;
@@ -447,8 +446,42 @@ public class ServerEvents {
         }
     }
 
+    private int allowTrigger = 1;
+    @SubscribeEvent
+    public void onEntityInteractSpecific(PlayerInteractEvent.EntityInteractSpecific event) {
+        // A workaround for double event fire
+        // This workaround may cause this event fires later than the interact event below
+        if (!event.getEntity().level.isClientSide) {
+            if (allowTrigger <= 0) {
+                return;
+            } else {
+                --allowTrigger;
+            }
+        }
+
+        Player player = event.getPlayer();
+        ItemStack itemStack = player.getItemInHand(event.getHand());
+        Entity target = event.getTarget();
+        if (target instanceof IResurrectable resurrectable && resurrectable.canResurrectBy(itemStack)) {
+            if (resurrectable.resurrect() && !itemStack.isEmpty()) {
+                itemStack.shrink(resurrectable.getResurrectCost());
+//                // Resurrect taming
+//                if (target instanceof TamableAnimal tamableAnimal) {
+//                    tamableAnimal.tame(player);
+//                } else if (target instanceof AbstractHorse abstractHorse) {
+//                    abstractHorse.tameWithName(player);
+//                }
+
+                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCanceled(true);
+            }
+        }
+    }
+
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        // A workaround for double event fire
+        allowTrigger = 1;
         // Handle chain removal
         if (event.getTarget() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) event.getTarget();
