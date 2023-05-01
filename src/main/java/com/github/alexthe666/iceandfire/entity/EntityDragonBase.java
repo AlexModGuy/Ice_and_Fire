@@ -90,7 +90,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener, IResurrectable {
+public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener, IResurrectable, IBlacklistedFromStatues {
 
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
     protected static final EntityDataAccessor<Boolean> SWIMMING = SynchedEntityData.defineId(EntityDragonBase.class, EntityDataSerializers.BOOLEAN);
@@ -2009,6 +2009,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public boolean isImmobile() {
         return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();
+    }
+
+    @Override
+    public boolean canBeTurnedToStone() {
+        return this.getAgeInDays() < 95;
     }
 
     @Override
