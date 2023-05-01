@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
+import com.github.alexthe666.iceandfire.message.MessageSyncEffects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
@@ -33,6 +34,10 @@ public class GuiDragon extends EffectRenderingInventoryScreen<ContainerDragon> {
     public GuiDragon(ContainerDragon dragonInv, Inventory playerInv, Component name) {
         super(dragonInv, playerInv, name);
         this.imageHeight = 214;
+
+        if (IceAndFire.PROXY.getReferencedMob() instanceof LivingEntity livingEntity) {
+            IceAndFire.sendMSGToServer(new MessageSyncEffects(livingEntity));
+        }
     }
 
     @Override

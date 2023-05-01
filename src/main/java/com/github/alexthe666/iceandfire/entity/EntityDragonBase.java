@@ -556,9 +556,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void openInventory(Player player) {
         if (!this.level.isClientSide)
             NetworkHooks.openGui((ServerPlayer) player, getMenuProvider());
-        else {
-            IceAndFire.sendMSGToServer(new MessageSyncEffects(this));
-        }
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
