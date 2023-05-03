@@ -2423,13 +2423,28 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void move(@NotNull MoverType typeIn, @NotNull Vec3 pos) {
+    public void move(@NotNull MoverType pType, @NotNull Vec3 pPos) {
         if (this.isOrderedToSit() && !this.isVehicle()) {
-            pos = new Vec3(0, pos.y(), 0);
+            pPos = new Vec3(0, pPos.y(), 0);
         }
-        super.move(typeIn, pos);
+
+        if (this.isVehicle()) {
+            // When riding, the server side movement check is performed in ServerGamePacketListenerImpl#handleMoveVehicle
+            // for some reason the vehicle's Y position is subtracted by 1.0E-6D before the check
+            // this sometimes will cause movement check to fail when the vehicle Y position is an integer and is approaching a stair
+            // resulting the move wrongly message in server console when going upstairs and stuck movements
+            if (isControlledByLocalInstance()) {
+                super.move(pType, pPos);
+            } else {
+                // compensation especially for the move call in server side
+                super.move(pType, pPos.add(0, 1.0E-6D, 0));
+            }
+        } else {
+            super.move(pType, pPos);
+        }
 
     }
+
 
     public void updateCheckPlayer() {
         final double checkLength = this.getBoundingBox().getSize() * 3;
