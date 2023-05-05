@@ -2434,6 +2434,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             // this sometimes will cause movement check to fail when the vehicle Y position is an integer and is approaching a stair
             // resulting the move wrongly message in server console when going upstairs and stuck movements
             if (isControlledByLocalInstance()) {
+                // This is how EntityDragonBase#breakBlock handles movement when breaking blocks
+                // it's done by server, however client does not fire server side events, so breakBlock() here won't work
+                // slow down all movement when collided is simpler
+                if (horizontalCollision) {
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
+                }
                 super.move(pType, pPos);
             } else {
                 // compensation especially for the move call in server side
