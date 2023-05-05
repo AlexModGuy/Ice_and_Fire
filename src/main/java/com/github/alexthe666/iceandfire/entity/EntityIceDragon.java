@@ -341,6 +341,7 @@ public class EntityIceDragon extends EntityDragonBase {
     @Override
     public void travel(Vec3 pTravelVector) {
         if (this.isInWater()) {
+            // In water special
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
                 // Ice dragons swim faster
                 this.moveRelative(this.getSpeed(), pTravelVector);
@@ -398,7 +399,10 @@ public class EntityIceDragon extends EntityDragonBase {
                 super.travel(pTravelVector);
             }
 
-        } else if (this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
+        }
+        // Not in water special
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+                && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
             // Movement when walking on the water, mainly used for not slowing down when jumping out of water
             // Todo: the water and ashore part is still messy
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
@@ -430,7 +434,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.setDeltaMovement(Vec3.ZERO);
             }
             this.tryCheckInsideBlocks();
-            this.updatePitch(this.yOld - this.getY());
+//            this.updatePitch(this.yOld - this.getY());
             return;
         } else {
             super.travel(pTravelVector);

@@ -272,6 +272,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     public void travel(@NotNull Vec3 pTravelVector) {
         if (this.isInLava()) {
+            // In lava special
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
                 // Ice dragons swim faster
                 this.moveRelative(this.getSpeed(), pTravelVector);
@@ -327,7 +328,10 @@ public class EntityFireDragon extends EntityDragonBase {
             } else {
                 super.travel(pTravelVector);
             }
-        } else if (this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
+        }
+        // Not in lava special
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+                && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
             double forward = rider.zza;
@@ -357,7 +361,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 this.setDeltaMovement(Vec3.ZERO);
             }
             this.tryCheckInsideBlocks();
-            this.updatePitch(this.yOld - this.getY());
+//            this.updatePitch(this.yOld - this.getY());
             return;
         } else {
             super.travel(pTravelVector);
