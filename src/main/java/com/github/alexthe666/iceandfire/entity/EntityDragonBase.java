@@ -2445,6 +2445,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 // compensation especially for the move call in server side
                 super.move(pType, pPos.add(0, 1.0E-6D, 0));
             }
+            // Set no gravity flag to prevent getting kicked by flight disabled servers
+            if (this.isHovering() || this.isFlying()) {
+                this.setNoGravity(true);
+            } else {
+                this.setNoGravity(false);
+            }
+
         } else {
             super.move(pType, pPos);
         }
