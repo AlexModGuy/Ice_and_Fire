@@ -188,18 +188,24 @@ public class ClientEvents {
         }
     }
 
+    // TODO: add this to client side config
+    public final boolean AUTO_ADAPT_3RD_PERSON = true;
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-        if (IafConfig.dragonAuto3rdPerson) {
-            if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
-                EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
-                if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
+
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
+            EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
+            if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
+                if (AUTO_ADAPT_3RD_PERSON) {
+                    // Auto adjust 3rd person camera's according to dragon's size
+                    IceAndFire.PROXY.setDragon3rdPersonView(2);
+                }
+                if (IafConfig.dragonAuto3rdPerson) {
                     if (event.isDismounting()) {
                         Minecraft.getInstance().options.setCameraType(CameraType.values()[IceAndFire.PROXY.getPreviousViewType()]);
                     } else {
                         IceAndFire.PROXY.setPreviousViewType(Minecraft.getInstance().options.getCameraType().ordinal());
                         Minecraft.getInstance().options.setCameraType(CameraType.values()[1]);
-                        IceAndFire.PROXY.setDragon3rdPersonView(2);
                     }
                 }
             }
