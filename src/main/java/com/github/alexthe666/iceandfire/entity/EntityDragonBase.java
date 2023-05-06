@@ -2430,20 +2430,32 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         if (this.isVehicle()) {
             // When riding, the server side movement check is performed in ServerGamePacketListenerImpl#handleMoveVehicle
-            // for some reason the vehicle's Y position is subtracted by 1.0E-6D before the check
-            // this sometimes will cause movement check to fail when the vehicle Y position is an integer and is approaching a stair
-            // resulting the move wrongly message in server console when going upstairs and stuck movements
+            // the server uses (motion.y - 1.0E-6D) and Entity#collide to determine whether the entity is onGround
+            // however for unknown reason this causes move wrongly when going upstairs
             if (isControlledByLocalInstance()) {
                 // This is how EntityDragonBase#breakBlock handles movement when breaking blocks
                 // it's done by server, however client does not fire server side events, so breakBlock() here won't work
-                // slow down all movement when collided is simpler
+                // slow down all movement when collided is simpler and will match server side movement checks
                 if (horizontalCollision) {
                     this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
                 }
                 super.move(pType, pPos);
             } else {
+                // A temporary fix fox movement checks
                 // compensation especially for the move call in server side
                 super.move(pType, pPos.add(0, 1.0E-6D, 0));
+                // Correct the Entity#onGround flags
+                // TODO: a less expensive and better fix for move wrongly
+                Vec3 vec3 = this.collide(pPos);
+                this.verticalCollision = pPos.y != vec3.y;
+                this.verticalCollisionBelow = this.verticalCollision && pPos.y < 0.0D;
+                if (this.horizontalCollision) {
+                    this.minorHorizontalCollision = this.isHorizontalCollisionMinor(vec3);
+                } else {
+                    this.minorHorizontalCollision = false;
+                }
+
+                this.onGround = this.verticalCollision && pPos.y < 0.0D;
             }
             // Set no gravity flag to prevent getting kicked by flight disabled servers
             if (this.isHovering() || this.isFlying()) {
