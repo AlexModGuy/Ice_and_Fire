@@ -316,9 +316,6 @@ public class EntityFireDragon extends EntityDragonBase {
                         currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
                     }
                     this.setDeltaMovement(currentMotion.scale(0.7D));
-                    if (this.getTarget() == null) {
-//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
-                    }
 
                     this.calculateEntityAnimation(this, false);
                 } else {
@@ -329,7 +326,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 super.travel(pTravelVector);
             }
         }
-        // Not in lava special
+        // Over lava special
         else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
                 && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
@@ -343,7 +340,7 @@ public class EntityFireDragon extends EntityDragonBase {
             float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
             speed *= groundSpeedModifier;
             // Try to match the original riding speed
-            forward *= speed;
+//            forward *= speed;
             // Faster sprint
             forward *= rider.isSprinting() ? 1.2f : 1.0f;
             // Slower going back
@@ -357,6 +354,12 @@ public class EntityFireDragon extends EntityDragonBase {
 
                 // Vanilla walking behavior includes going up steps
                 super.travel(new Vec3(strafing, vertical, forward));
+
+                Vec3 currentMotion = this.getDeltaMovement();
+                if (this.horizontalCollision) {
+                    currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                }
+                this.setDeltaMovement(currentMotion.scale(0.7D));
             } else {
                 this.setDeltaMovement(Vec3.ZERO);
             }

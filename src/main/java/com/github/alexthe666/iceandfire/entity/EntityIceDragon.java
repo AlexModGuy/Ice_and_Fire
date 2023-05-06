@@ -381,14 +381,10 @@ public class EntityIceDragon extends EntityDragonBase {
                     this.move(MoverType.SELF, this.getDeltaMovement());
 
                     Vec3 currentMotion = this.getDeltaMovement();
-                    // Todo: when the y coordinate is an integer there's a chance of getting the moved wrongly error and stuck
                     if (this.horizontalCollision) {
                         currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
                     }
                     this.setDeltaMovement(currentMotion.scale(0.9D));
-                    if (this.getTarget() == null) {
-//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
-                    }
 
                     this.calculateEntityAnimation(this, false);
                 } else {
@@ -400,11 +396,10 @@ public class EntityIceDragon extends EntityDragonBase {
             }
 
         }
-        // Not in water special
+        // Over water special
         else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
                 && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
             // Movement when walking on the water, mainly used for not slowing down when jumping out of water
-            // Todo: the water and ashore part is still messy
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
             double forward = rider.zza;
@@ -416,7 +411,7 @@ public class EntityIceDragon extends EntityDragonBase {
             float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
             speed *= groundSpeedModifier;
             // Try to match the original riding speed
-            forward *= speed;
+//            forward *= speed;
             // Faster sprint
             forward *= rider.isSprinting() ? 1.2f : 1.0f;
             // Slower going back
@@ -430,6 +425,12 @@ public class EntityIceDragon extends EntityDragonBase {
 
                 // Vanilla walking behavior includes going up steps
                 super.travel(new Vec3(strafing, vertical, forward));
+
+                Vec3 currentMotion = this.getDeltaMovement();
+                if (this.horizontalCollision) {
+                    currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                }
+                this.setDeltaMovement(currentMotion.scale(1.0D));
             } else {
                 this.setDeltaMovement(Vec3.ZERO);
             }
