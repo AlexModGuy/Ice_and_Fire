@@ -2620,6 +2620,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
+    public Vec3 getDismountLocationForPassenger(LivingEntity pPassenger) {
+        return this.getRiderPosition().add(0, pPassenger.getBbHeight(), 0);
+    }
+
+    @Override
     public void kill() {
         this.remove(RemovalReason.KILLED);
         this.setDeathStage(this.getAgeInDays() / 5);
