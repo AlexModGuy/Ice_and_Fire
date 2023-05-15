@@ -2217,6 +2217,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
      */
     protected void updatePitch(final double verticalDelta) {
         if (this.isOverAir() && !this.isPassenger()) {
+            // Update the pitch when in air, and stepping up many blocks
             if (!this.isHovering()) {
                 this.incrementDragonPitch((float) (verticalDelta) * 10);
             }
@@ -2243,7 +2244,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
             }
         } else {
-            this.setDragonPitch(0);
+            // Damp the pitch once on ground
+            if (Mth.abs(this.getDragonPitch()) < 1) {
+                this.setDragonPitch(0);
+            } else {
+                this.setDragonPitch(this.getDragonPitch() / 1.5f);
+            }
         }
     }
 
@@ -2595,27 +2601,81 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.level.clip(new ClipContext(Vector3d, Vector3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
     }
 
+    /**
+     * Provide rider position deltas for a dragon of certain size <br>
+     * These methods use quadratic regression on data below to provide a smooth transition on the position <br>
+     * Stage 3 / 50 Days / 1200000 Ticks / Render size 7.0 / Scale 2.45      | XZ 1.5    Y 0.0 <br>
+     * Stage 4 / 75 Days / 1800000 Ticks / Render size 12.5 / Scale 4.375    | XZ 2.9    Y 1.6 <br>
+     * Stage 5 / 100 Days / 2400000 Ticks / Render size 20.0 / Scale 7.0     | XZ 5.2    Y 3.8 <br>
+     * Stage 5 / 125 Days / 3000000 Ticks / Render size 30.0 / Scale 7.0     | XZ 8.8    Y 7.4 <br>
+     * @return rider's vertical position delta, in blocks
+     * @see EntityDragonBase#getRideHorizontalBase()
+     */
+    protected float getRideHeightBase() {
+        return 0.002237889819f*Mth.square(getRenderSize()) + 0.233137174f*getRenderSize() + -1.717904311f;
+    }
+
+    /**
+     * Provide a rough horizontal distance of rider's hitbox
+     * @return rider's horizontal position delta, in blocks
+     * @see EntityDragonBase#getRideHeightBase()
+     */
+    protected float getRideHorizontalBase() {
+        return 0.00336283f*Mth.square(getRenderSize()) + 0.1934242516f*getRenderSize() + -0.02622133882f;
+    }
+
     public Vec3 getRiderPosition() {
-        final float sitProg = this.sitProgress * 0.015F;
-        final float deadProg = this.modelDeadProgress * -0.02F;
-        final float hoverProg = this.hoverProgress * 0.03F;
-        final float flyProg = this.flyProgress * 0.01F;
-        final float sleepProg = this.sleepProgress * -0.025F;
-        final float extraAgeScale = this.getScale() * 0.2F;
-        float pitchX = 0F;
+        // The old position is seems to be given by a series compute of magic numbers
+        // So I replace the number with an even more magical yet better one I tuned
+        // The rider's hitbox and pov is now closer to its model, and less model clipping in first person
+        // Todo: a better way of computing rider position, and a more dynamic one that changes according to dragon's animation
+
+        float extraXZ = 0;
+        float extraY = 0;
+
+        // Extra delta when going up and down
+        float pitchXZ = 0F;
         float pitchY = 0F;
         final float dragonPitch = getDragonPitch();
         if (dragonPitch > 0) {
-            pitchX = Math.min(dragonPitch / 90, 0.3F);
-            pitchY = -(dragonPitch / 90) * 2F;
+            pitchXZ = Math.min(dragonPitch / 90, 0.2F);
+            pitchY = -(dragonPitch / 90) * 0.6F;
         } else if (dragonPitch < 0) {//going up
-            pitchY = (dragonPitch / 90) * 0.1F;
-            pitchX = Math.max(dragonPitch / 90, -0.7F);
+            pitchXZ = Math.max(dragonPitch / 90, -0.5F);
+            pitchY = (dragonPitch / 90) * 0.03F;
         }
-        final float xzMod = (0.15F + pitchX) * getRenderSize() + extraAgeScale;
-        final float headPosX = (float) (getX() + (xzMod) * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
-        final float headPosY = (float) (getY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + extraAgeScale);
-        final float headPosZ = (float) (getZ() + (xzMod) * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
+//        float extraY = (pitchY + sitProg + hoverProg + deadProg + sleepProg + flyProg) * getRenderSize();
+        extraXZ += pitchXZ * getRenderSize();
+        extraY += pitchY * getRenderSize();
+
+        // Extra delta when moving
+        // The linear part of the tuning
+        final float linearFactor = Mth.map(Math.max(this.getAgeInDays() - 50, 0), 0, 75, 0, 1);
+        if (this.getControllingPassenger() instanceof LivingEntity rider) {
+            // Extra height when rider and the dragon look upwards, this will reduce model clipping
+            if (rider.getXRot() < 0) {
+                extraY += Mth.map(rider.getXRot(), 60, -40, -0.1, 0.1);
+            }
+            if (this.isHovering() || this.isFlying()) {
+                // Extra height when flying, reduces model clipping since dragon has a bigger amplitude when flying/hovering
+                extraY += 1.1f * linearFactor;
+                extraY += getRideHeightBase() * 0.6f;
+            } else {
+                // Extra height when walking, reduces model clipping
+                if (rider.zza > 0) {
+                    extraY += 1.1f * linearFactor;
+                    extraY += getRideHeightBase() * 0.1f;
+                }
+            }
+        }
+
+        final float xzMod = getRideHorizontalBase() + extraXZ;
+//        final float xzMod = (0.15F + pitchXZ) * getRenderSize() + extraAgeScale;
+        final float yMod = getRideHeightBase() + extraY;
+        final float headPosX = (float) (getX() + xzMod * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
+//        final float headPosY = (float) (getY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + this.getScale() * 0.2F);
+        final float headPosY = (float) (getY() + yMod);
+        final float headPosZ = (float) (getZ() + xzMod * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
         return new Vec3(headPosX, headPosY, headPosZ);
     }
 
