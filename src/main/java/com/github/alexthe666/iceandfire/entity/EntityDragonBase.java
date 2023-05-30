@@ -2258,13 +2258,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
      * Updates when rider is onboard
      */
     public void updateRider() {
-        this.ticksStill = 0;
-        this.hoverTicks = 0;
-        this.flyTicks = 0;
-
         Entity controllingPassenger = this.getControllingPassenger();
 
         if (controllingPassenger instanceof Player rider) {
+            this.ticksStill = 0;
+            this.hoverTicks = 0;
+            this.flyTicks = 0;
+
             if (this.isGoingUp()) {
                 if (!this.isFlying() && !this.isHovering()) {
                     // Update spacebar tick for take off
@@ -2471,6 +2471,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
 
         } else {
+            // The flight mgr is not ready for noGravity
+            this.setNoGravity(false);
             super.move(pType, pPos);
         }
 
