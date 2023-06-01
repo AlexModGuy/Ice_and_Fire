@@ -2613,6 +2613,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return 0.00336283f*Mth.square(getRenderSize()) + 0.1934242516f*getRenderSize() + -0.02622133882f;
     }
 
+    // For slowly raise rider position
+    protected float riderWalkingExtraY = 0;
     public Vec3 getRiderPosition() {
         // The old position is seems to be given by a series compute of magic numbers
         // So I replace the number with an even more magical yet better one I tuned
@@ -2652,9 +2654,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             } else {
                 // Extra height when walking, reduces model clipping
                 if (rider.zza > 0) {
-                    extraY += 1.1f * linearFactor;
-                    extraY += getRideHeightBase() * 0.1f;
+                    final float MAX_RAISE_HEIGHT = 1.1f * linearFactor + getRideHeightBase() * 0.1f;
+                    riderWalkingExtraY = Math.min(MAX_RAISE_HEIGHT, riderWalkingExtraY + 0.1f);
+                } else {
+                    riderWalkingExtraY = Math.max(0, riderWalkingExtraY - 0.15f);
                 }
+                extraY += riderWalkingExtraY;
             }
         }
 
