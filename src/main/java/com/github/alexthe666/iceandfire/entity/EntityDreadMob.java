@@ -38,7 +38,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
     public static Entity necromancyEntity(LivingEntity entity) {
         Entity lichSummoned = null;
         if (entity.getCreatureAttribute() == CreatureAttribute.ARTHROPOD) {
-            lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), entity.world);
+            lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, entity.world);
             float readInScale = (entity.getWidth() / 1.5F);
             if (entity.world instanceof IServerWorld) {
                 ((EntityDreadScuttler) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
@@ -47,7 +47,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             return lichSummoned;
         }
         if (entity instanceof ZombieEntity || entity instanceof IHumanoid) {
-            lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), entity.world);
+            lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, entity.world);
             float readInScale = (entity.getWidth() / 0.6F);
             if (entity.world instanceof IServerWorld) {
                 ((EntityDreadGhoul) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
@@ -56,7 +56,7 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             return lichSummoned;
         }
         if (entity.getCreatureAttribute() == CreatureAttribute.UNDEAD || entity instanceof AbstractSkeletonEntity || entity instanceof PlayerEntity) {
-            lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), entity.world);
+            lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, entity.world);
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
             if (entity.world instanceof IServerWorld) {
                 thrall.onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);
@@ -71,11 +71,11 @@ public class EntityDreadMob extends MonsterEntity implements IDreadMob {
             return thrall;
         }
         if (entity instanceof AbstractHorseEntity) {
-            lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE.get(), entity.world);
+            lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE, entity.world);
             return lichSummoned;
         }
         if (entity instanceof AnimalEntity) {
-            lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), entity.world);
+            lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, entity.world);
             float readInScale = (entity.getWidth() / 1.2F);
             if (entity.world instanceof IServerWorld) {
                 ((EntityDreadBeast) lichSummoned).onInitialSpawn((IServerWorld) entity.world, entity.world.getDifficultyForLocation(entity.getPosition()), SpawnReason.MOB_SUMMONED, null, null);

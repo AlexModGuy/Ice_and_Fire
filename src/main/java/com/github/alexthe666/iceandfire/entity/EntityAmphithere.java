@@ -903,7 +903,7 @@ public class EntityAmphithere extends TameableEntity implements ISyncMount, IAni
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageableEntity) {
-        EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE.get(), world);
+        EntityAmphithere amphithere = new EntityAmphithere(IafEntityRegistry.AMPHITHERE, world);
         amphithere.setVariant(this.getVariant());
         return amphithere;
     }

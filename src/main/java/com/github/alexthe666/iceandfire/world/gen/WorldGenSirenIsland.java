@@ -44,7 +44,7 @@ public class WorldGenSirenIsland extends Feature<NoFeatureConfig> {
     }
 
     private void spawnSiren(IServerWorld worldIn, Random rand, BlockPos position) {
-        EntitySiren siren = new EntitySiren(IafEntityRegistry.SIREN.get(), worldIn.getWorld());
+        EntitySiren siren = new EntitySiren(IafEntityRegistry.SIREN, worldIn.getWorld());
         siren.setSinging(true);
         siren.setHairColor(rand.nextInt(2));
         siren.setSingingPose(rand.nextInt(2));

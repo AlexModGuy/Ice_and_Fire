@@ -90,7 +90,7 @@ public class EntityTroll extends MonsterEntity implements IAnimatedEntity, IVill
 
     public static boolean canTrollSpawnOn(EntityType<? extends MobEntity> typeIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isValidLightLevel(worldIn, pos, randomIn)
-            && canSpawnOn(IafEntityRegistry.TROLL.get(), worldIn, reason, pos, randomIn);
+            && canSpawnOn(IafEntityRegistry.TROLL, worldIn, reason, pos, randomIn);
     }
 
     public static AttributeModifierMap.MutableAttribute bakeAttributes() {

@@ -33,7 +33,7 @@ public class SpawnSeaSerpent extends Feature<NoFeatureConfig> {
         if (IafConfig.spawnSeaSerpents && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && rand.nextInt(IafConfig.seaSerpentSpawnChance + 1) == 0) {
             BlockPos pos = oceanPos.add(rand.nextInt(10) - 5, rand.nextInt(30), rand.nextInt(10) - 5);
             if (worldIn.getFluidState(pos).getFluid() == Fluids.WATER) {
-                EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.get().create(worldIn.getWorld());
+                EntitySeaSerpent serpent = IafEntityRegistry.SEA_SERPENT.create(worldIn.getWorld());
                 serpent.onWorldSpawn(rand);
                 serpent.setLocationAndAngles(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0);
                 worldIn.addEntity(serpent);

@@ -63,7 +63,7 @@ public class EntityHippogryphEgg extends EggEntity {
         }
 
         if (!this.world.isRemote) {
-            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH.get(), this.world);
+            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH, this.world);
             hippogryph.setGrowingAge(-24000);
             hippogryph.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
             if (itemstack != null) {

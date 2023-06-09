@@ -526,7 +526,7 @@ public class EntityHippocampus extends TameableEntity implements ISyncMount, IAn
     @Override
     public AgeableEntity createChild(ServerWorld serverWorld, AgeableEntity ageable) {
         if (ageable instanceof EntityHippocampus) {
-            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS.get(), this.world);
+            EntityHippocampus hippo = new EntityHippocampus(IafEntityRegistry.HIPPOCAMPUS, this.world);
             hippo.setVariant(this.getRNG().nextBoolean() ? this.getVariant() : ((EntityHippocampus) ageable).getVariant());
             return hippo;
         }

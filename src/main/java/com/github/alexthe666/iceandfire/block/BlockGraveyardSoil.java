@@ -45,7 +45,7 @@ public class BlockGraveyardSoil extends Block {
                 int checkRange = 32;
                 int k = worldIn.getEntitiesWithinAABB(EntityGhost.class, (new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).grow(checkRange)).size();
                 if(k < 10){
-                    EntityGhost ghost = IafEntityRegistry.GHOST.get().create(worldIn);
+                    EntityGhost ghost = IafEntityRegistry.GHOST.create(worldIn);
                     ghost.setPositionAndRotation(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F,
                         ThreadLocalRandom.current().nextFloat() * 360F, 0);
                     if (!worldIn.isRemote) {

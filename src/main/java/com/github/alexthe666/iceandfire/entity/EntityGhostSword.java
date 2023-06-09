@@ -47,7 +47,7 @@ public class EntityGhostSword extends AbstractArrowEntity {
     }
 
     public EntityGhostSword(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
-        this(IafEntityRegistry.GHOST_SWORD.get(), worldIn);
+        this(IafEntityRegistry.GHOST_SWORD, worldIn);
     }
 
     @Override

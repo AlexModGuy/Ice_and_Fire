@@ -306,13 +306,13 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     private MobEntity getRandomNewMinion() {
         float chance = rand.nextFloat();
         if (chance > 0.5F) {
-            return new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), world);
+            return new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL, world);
         } else if (chance > 0.35F) {
-            return new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), world);
+            return new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL, world);
         } else if (chance > 0.15F) {
-            return new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), world);
+            return new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST, world);
         } else {
-            return new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), world);
+            return new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER, world);
         }
     }
 

@@ -32,7 +32,7 @@ repositories {
 def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
 def build_id = System.getenv("BUILD_ID")
 
-version = '2.1.12-1.16.5'
+version = '2.1.13-1.16.5'
 
 if (build_snapshot) {
     version += '-SNAPSHOT'
@@ -140,7 +140,7 @@ jar {
         attributes([
                 "Specification-Title": "iceandfire",
                 "Specification-Vendor": "alexthe667",
-                "Specification-Version": "2.1.11", // We are version 1 of ourselves
+                "Specification-Version": "2.1.13", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"alexthe667",

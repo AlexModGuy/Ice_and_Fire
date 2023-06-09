@@ -44,7 +44,7 @@ public class ItemGhostSword extends SwordItem {
             totalDmg += modifier.getAmount();
         }
         playerEntity.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.world, playerEntity,
+        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD, playerEntity.world, playerEntity,
             totalDmg * 0.5F);
         Vector3d vector3d = playerEntity.getLook(1.0F);
         Vector3f vector3f = new Vector3f(vector3d);

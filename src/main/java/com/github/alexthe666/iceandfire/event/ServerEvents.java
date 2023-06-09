@@ -381,7 +381,7 @@ public class ServerEvents {
                 }
                 if (flag) {
                     World world = event.getEntityLiving().world;
-                    EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
+                    EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
                     ghost.copyLocationAndAnglesFrom(event.getEntityLiving());
                     if (!world.isRemote) {
                         ghost.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(event.getEntityLiving().getPosition()), SpawnReason.SPAWNER, null, null);

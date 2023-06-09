@@ -34,7 +34,7 @@ public class TileEntityGhostChest extends ChestTileEntity {
     public void openInventory(PlayerEntity player) {
         super.openInventory(player);
         if (this.world.getDifficulty() != Difficulty.PEACEFUL) {
-            EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
+            EntityGhost ghost = IafEntityRegistry.GHOST.create(world);
             ghost.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F,
                 ThreadLocalRandom.current().nextFloat() * 360F, 0);
             if (!this.world.isRemote) {

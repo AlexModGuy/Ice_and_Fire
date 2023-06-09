@@ -75,14 +75,14 @@ public class DreadRuinProcessor extends StructureProcessor {
     private EntityType getRandomMobForMobSpawner(Random random) {
         float rand = random.nextFloat();
         if (rand < 0.3D) {
-            return IafEntityRegistry.DREAD_THRALL.get();
+            return IafEntityRegistry.DREAD_THRALL;
         } else if (rand < 0.5D) {
-            return IafEntityRegistry.DREAD_GHOUL.get();
+            return IafEntityRegistry.DREAD_GHOUL;
         } else if (rand < 0.7D) {
-            return IafEntityRegistry.DREAD_BEAST.get();
+            return IafEntityRegistry.DREAD_BEAST;
         } else if (rand < 0.85D) {
-            return IafEntityRegistry.DREAD_SCUTTLER.get();
+            return IafEntityRegistry.DREAD_SCUTTLER;
         }
-        return IafEntityRegistry.DREAD_KNIGHT.get();
+        return IafEntityRegistry.DREAD_KNIGHT;
     }
 }
