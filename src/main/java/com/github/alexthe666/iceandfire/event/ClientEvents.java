@@ -161,14 +161,14 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onPreRenderLiving(RenderLivingEvent.Pre event) {
-        if (shouldCancelRender(event.getEntity())) {
+        if (shouldCancelRender(event.getEntity()) && event.isCancelable()) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public void onPostRenderLiving(RenderLivingEvent.Post event) {
-        if (shouldCancelRender(event.getEntity())) {
+        if (shouldCancelRender(event.getEntity()) && event.isCancelable()) {
             event.setCanceled(true);
         }
         LivingEntity entity = event.getEntity();
