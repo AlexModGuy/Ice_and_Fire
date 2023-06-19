@@ -1359,7 +1359,10 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (circumventSizeCheck) {
             return isPassable(pos, false, parent) && isPassable(pos.up(), true, parent);
         } else {
-            Direction facingDir = getXZFacing(parentPos, pos).rotateY();
+            Direction facingDir = getXZFacing(parentPos, pos);
+            if (facingDir == Direction.DOWN || facingDir == Direction.UP)
+                return false;
+            facingDir = facingDir.rotateY();
             for (int i = 0; i <= entitySizeXZ; i++) {
                 for (int j = 0; j <= entitySizeY; j++) {
                     if (!isPassable(pos.offset(facingDir, i).up(j), false, parent)) {
@@ -1378,7 +1381,10 @@ public abstract class AbstractPathJob implements Callable<Path> {
         if (circumventSizeCheck) {
             return isPassable(pos, true, parent);
         } else {
-            Direction facingDir = getXZFacing(parentPos, pos).rotateY();
+            Direction facingDir = getXZFacing(parentPos, pos);
+            if (facingDir == Direction.DOWN || facingDir == Direction.UP)
+                return false;
+            facingDir = facingDir.rotateY();
             for (int i = 0; i <= entitySizeXZ; i++) {
                 for (int j = 0; j <= entitySizeY; j++) {
                     if (!isPassable(pos.offset(facingDir, i).up(j), false, parent) || pos.getY() <= parentPos.getY()) {
