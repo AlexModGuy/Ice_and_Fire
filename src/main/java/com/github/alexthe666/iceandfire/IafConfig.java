@@ -22,13 +22,6 @@ public class IafConfig {
     public static boolean generateDragonRoosts = true;
     public static int generateDragonRoostChance = 360;
     public static int dragonDenGoldAmount = 4;
-    public static boolean useDimensionBlackList = true;
-    public static List<? extends String> featureWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
-    public static List<? extends String> featureBlacklistedDimensions = Lists.newArrayList("minecraft:nether", "minecraft:the_end");
-    public static List<? extends String> dragonWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
-    public static List<? extends String> dragonBlacklistedDimensions = Lists.newArrayList("minecraft:the_nether", "minecraft:the_end");
-    public static List<? extends String> mobWhitelistedDimensions = Lists.newArrayList("minecraft:overworld");
-    public static List<? extends String> mobBlacklistedDimensions = Lists.newArrayList("minecraft:the_nether", "minecraft:the_end");
     public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
     public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
     public static boolean blacklistBreakBlocksIsWhiteList = false;
@@ -326,13 +319,6 @@ public class IafConfig {
             dangerousWorldGenSeparationLimit = ConfigHolder.SERVER.dangerousWorldGenSeparationLimit.get();
             blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
             noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
-            useDimensionBlackList = ConfigHolder.SERVER.useDimensionBlackList.get();
-            dragonWhitelistedDimensions = ConfigHolder.SERVER.dragonWhitelistDimensions.get();
-            dragonBlacklistedDimensions = ConfigHolder.SERVER.dragonBlacklistDimensions.get();
-            featureWhitelistedDimensions = ConfigHolder.SERVER.featureWhitelistDimensions.get();
-            featureBlacklistedDimensions = ConfigHolder.SERVER.featureBlacklistDimensions.get();
-            mobWhitelistedDimensions = ConfigHolder.SERVER.mobWhitelistDimensions.get();
-            mobBlacklistedDimensions = ConfigHolder.SERVER.mobBlacklistDimensions.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
             hippogryphFlightSpeedMod = ConfigHolder.SERVER.hippogryphFlightSpeedMod.get();
             hippocampusSwimSpeedMod = ConfigHolder.SERVER.hippocampusSwimSpeedMod.get();

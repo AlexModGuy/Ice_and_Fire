@@ -33,9 +33,6 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
-            return false;
-        }
         if (!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }

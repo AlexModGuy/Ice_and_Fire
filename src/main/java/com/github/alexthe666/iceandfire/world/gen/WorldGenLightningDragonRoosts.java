@@ -41,9 +41,6 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
-            return false;
-        }
         if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }

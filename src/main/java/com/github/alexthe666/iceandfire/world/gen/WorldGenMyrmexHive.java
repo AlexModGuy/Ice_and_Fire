@@ -68,9 +68,6 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         Random rand = context.random();
         BlockPos pos = context.origin();
         if (!small) {
-            if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
-                return false;
-            }
             if (!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)) {
                 return false;
             }
