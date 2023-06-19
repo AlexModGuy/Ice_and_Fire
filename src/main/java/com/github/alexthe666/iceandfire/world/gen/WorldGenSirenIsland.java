@@ -30,9 +30,6 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
-            return false;
-        }
         if (!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }

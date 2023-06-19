@@ -308,79 +308,12 @@ public class IafWorldRegistry {
         BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
     }
 
-
     public static boolean isFarEnoughFromSpawn(LevelAccessor world, BlockPos pos) {
         LevelData spawnPoint = world.getLevelData();
         BlockPos spawnRelative = new BlockPos(spawnPoint.getXSpawn(), pos.getY(), spawnPoint.getYSpawn());
 
         boolean spawnCheck = !spawnRelative.closerThan(pos, IafConfig.dangerousWorldGenDistanceLimit);
         return spawnCheck;
-    }
-
-    public static boolean isDimensionListedForFeatures(ServerLevelAccessor world) {
-        ResourceLocation name = world.getLevel().dimension().location();
-        if (name == null) {
-            return false;
-        }
-        if (IafConfig.useDimensionBlackList) {
-            for (String blacklisted : IafConfig.featureBlacklistedDimensions) {
-                if (name.toString().equals(blacklisted)) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            for (String whitelist : IafConfig.featureWhitelistedDimensions) {
-                if (name.toString().equals(whitelist)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public static boolean isDimensionListedForDragons(ServerLevelAccessor world) {
-        ResourceLocation name = world.getLevel().dimension().location();
-        if (name == null) {
-            return false;
-        }
-        if (IafConfig.useDimensionBlackList) {
-            for (String blacklisted : IafConfig.dragonBlacklistedDimensions) {
-                if (name.toString().equals(blacklisted)) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            for (String whitelist : IafConfig.dragonWhitelistedDimensions) {
-                if (name.toString().equals(whitelist)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public static boolean isDimensionListedForMobs(ServerLevelAccessor world) {
-        ResourceLocation name = world.getLevel().dimension().location();
-        if (name == null) {
-            return false;
-        }
-        if (IafConfig.useDimensionBlackList) {
-            for (String blacklisted : IafConfig.mobBlacklistedDimensions) {
-                if (name.toString().equals(blacklisted)) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            for (String whitelist : IafConfig.mobWhitelistedDimensions) {
-                if (name.toString().equals(whitelist)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
     public static boolean isFarEnoughFromDangerousGen(ServerLevelAccessor world, BlockPos pos) {

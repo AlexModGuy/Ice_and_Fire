@@ -44,9 +44,6 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
         Random rand = context.random();
         BlockPos position = context.origin();
         ChunkGenerator generator = context.chunkGenerator();
-        if (!IafWorldRegistry.isDimensionListedForFeatures(worldIn)) {
-            return false;
-        }
         if (!IafConfig.generateHydraCaves || rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }

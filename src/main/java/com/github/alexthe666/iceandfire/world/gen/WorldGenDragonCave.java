@@ -54,9 +54,6 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafWorldRegistry.isDimensionListedForDragons(worldIn)) {
-            return false;
-        }
         if (!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }

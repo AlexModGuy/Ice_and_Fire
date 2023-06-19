@@ -122,9 +122,6 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         if (IafConfig.trollSpawnCheckChance > 0) {
             rngCheck = this.getRandom().nextInt(IafConfig.trollSpawnCheckChance) == 0;
         }
-        if (worldIn instanceof ServerLevelAccessor && !IafWorldRegistry.isDimensionListedForMobs((ServerLevelAccessor) level)) {
-            return false;
-        }
         return rngCheck && pos.getY() < heightAt.getY() - 10 && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 

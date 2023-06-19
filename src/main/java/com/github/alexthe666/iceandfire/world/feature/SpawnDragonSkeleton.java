@@ -28,9 +28,7 @@ public class SpawnDragonSkeleton extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafWorldRegistry.isDimensionListedForMobs(worldIn)) {
-            return false;
-        }
+
         position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position.offset(8, 0, 8));
 
         if (IafConfig.generateDragonSkeletons) {
