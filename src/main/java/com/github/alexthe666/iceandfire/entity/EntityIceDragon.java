@@ -16,12 +16,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -30,6 +33,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -244,9 +248,8 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.setSwimming(false);
             }
         }
-        if (!level.isClientSide && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
+        if (!level.isClientSide && this.getControllingPassenger() == null && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.2D, 0.0D));
-
         }
         if (swimCycle < 48) {
             swimCycle += 2;
@@ -320,19 +323,124 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    public void travel(Vec3 travelVector) {
-        if (this.isEffectiveAi() && this.isInWater()) {
-            this.moveRelative(this.getSpeed(), travelVector);
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
-            if (this.getTarget() == null) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
-            }
-        } else {
-            super.travel(travelVector);
+    public void onInsideBubbleColumn(boolean pDownwards) {
+        // Disable bubble column drag for elder dragons
+        if (this.getDragonStage() < 2) {
+            super.onInsideBubbleColumn(pDownwards);
         }
     }
 
+    @Override
+    public void onAboveBubbleCol(boolean pDownwards) {
+        // Disable bubble column drag for elder dragons
+        if (this.getDragonStage() < 2) {
+            super.onAboveBubbleCol(pDownwards);
+        }
+    }
+
+    @Override
+    public void travel(Vec3 pTravelVector) {
+        if (this.isInWater()) {
+            // In water special
+            if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
+                // Ice dragons swim faster
+                this.moveRelative(this.getSpeed(), pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+                if (this.getTarget() == null) {
+//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+                }
+            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
+                LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                // Bigger difference in speed for young and elder dragons
+                float waterSpeedMod =  (float) (0.42f + 0.1 * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
+                speed *= waterSpeedMod;
+                speed *= rider.isSprinting() ? 1.5f : 1.0f;
+
+                float vertical = 0f;
+                if (isGoingUp() && !isGoingDown()) {
+                    vertical = 1f;
+                } else if (isGoingDown() && !isGoingUp()) {
+                    vertical = -1f;
+                } else if (isGoingUp() && isGoingDown() && isControlledByLocalInstance()) {
+                    // Try floating
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.5f, 1.0f));
+                }
+
+                Vec3 travelVector = new Vec3(
+                        rider.xxa,
+                        vertical,
+                        rider.zza
+                );
+                if (this.isControlledByLocalInstance()) {
+                    this.setSpeed(speed);
+
+                    this.moveRelative(this.getSpeed(), travelVector);
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+
+                    Vec3 currentMotion = this.getDeltaMovement();
+                    if (this.horizontalCollision) {
+                        currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                    }
+                    this.setDeltaMovement(currentMotion.scale(0.9D));
+
+                    this.calculateEntityAnimation(this, false);
+                } else {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+                this.tryCheckInsideBlocks();
+            } else {
+                super.travel(pTravelVector);
+            }
+
+        }
+        // Over water special
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+                && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
+            // Movement when walking on the water, mainly used for not slowing down when jumping out of water
+            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+            double forward = rider.zza;
+            double strafing = rider.xxa;
+            // Inherit y motion for dropping
+            double vertical = pTravelVector.y;
+            float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+            float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
+            speed *= groundSpeedModifier;
+            // Try to match the original riding speed
+//            forward *= speed;
+            // Faster sprint
+            forward *= rider.isSprinting() ? 1.2f : 1.0f;
+            // Slower going back
+            forward *= rider.zza > 0 ? 1.0f : 0.2f;
+            // Slower going sideway
+            strafing *= 0.05f;
+
+            if (this.isControlledByLocalInstance()) {
+                this.flyingSpeed = speed * 0.1F;
+                this.setSpeed(speed);
+
+                // Vanilla walking behavior includes going up steps
+                super.travel(new Vec3(strafing, vertical, forward));
+
+                Vec3 currentMotion = this.getDeltaMovement();
+                if (this.horizontalCollision) {
+                    currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                }
+                this.setDeltaMovement(currentMotion.scale(1.0D));
+            } else {
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+            this.tryCheckInsideBlocks();
+//            this.updatePitch(this.yOld - this.getY());
+            return;
+        } else {
+            super.travel(pTravelVector);
+        }
+    }
 
     @Override
     public ResourceLocation getDeadLootTable() {
@@ -598,7 +706,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public boolean useFlyingPathFinder() {
-        return this.isFlying() || this.isInMaterialWater();
+        return (this.isFlying() || this.isInMaterialWater()) && this.getControllingPassenger() == null;
     }
 
     @Override

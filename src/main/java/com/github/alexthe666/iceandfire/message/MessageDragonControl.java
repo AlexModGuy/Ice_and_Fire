@@ -74,7 +74,9 @@ public class MessageDragonControl {
                             if (dragon.isOwnedBy(player)) {
                                 dragon.setControlState(message.controlState);
                             }
-                            dragon.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+                            // The riding setPos is performed in Entity#move
+                            // Extra setPos will cause server side movement check to fail, resulting move wrongly msg
+//                            dragon.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
                         } else if (entity instanceof EntityHippogryph) {
                             EntityHippogryph hippo = (EntityHippogryph) entity;
                             if (hippo.isOwnedBy(player)) {

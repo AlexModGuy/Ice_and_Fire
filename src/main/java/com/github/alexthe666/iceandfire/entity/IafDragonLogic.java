@@ -31,90 +31,12 @@ public class IafDragonLogic {
     logic done exclusively on server.
     */
     public void updateDragonServer() {
-        Player ridingPlayer = dragon.getRidingPlayer();
-        if (ridingPlayer != null) {
-            if (dragon.isGoingUp()) {
-                if (!dragon.isFlying() && !dragon.isHovering()) {
-                    dragon.spacebarTicks += 2;
-                }
-            } else if (dragon.isDismounting()) {
-                if (dragon.isFlying() || dragon.isHovering()) {
-                    dragon.setDeltaMovement(dragon.getDeltaMovement().add(0, -0.04, 0));
-                    dragon.setFlying(false);
-                    dragon.setHovering(false);
-                }
-            }
-        }
-        if (!dragon.isDismounting() && (dragon.isFlying() || dragon.isHovering())) {
-            dragon.setDeltaMovement(dragon.getDeltaMovement().add(0, 0.01, 0));
-        }
-        if (dragon.isStriking() && dragon.getControllingPassenger() != null && dragon.getDragonStage() > 1) {
-            dragon.setBreathingFire(true);
-            dragon.riderShootFire(dragon.getControllingPassenger());
-            dragon.fireStopTicks = 10;
-        }
-        if (dragon.isAttacking() && dragon.getControllingPassenger() != null && dragon.getControllingPassenger() instanceof Player) {
-            LivingEntity target = DragonUtils.riderLookingAtEntity(dragon, (Player) dragon.getControllingPassenger(), dragon.getDragonStage() + (dragon.getBoundingBox().maxX - dragon.getBoundingBox().minX));
-            if (dragon.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
-                dragon.setAnimation(EntityDragonBase.ANIMATION_BITE);
-            }
-            if (target != null && !DragonUtils.hasSameOwner(dragon, target)) {
-                attackTarget(target, ridingPlayer, (int) dragon.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-            }
-        }
-        if (dragon.getControllingPassenger() != null && dragon.getControllingPassenger().isShiftKeyDown()) {
-            if (dragon.getControllingPassenger() instanceof LivingEntity)
-                MiscProperties.setDismountedDragon((LivingEntity) dragon.getControllingPassenger(), true);
-            dragon.getControllingPassenger().stopRiding();
-        }
-        if (dragon.isFlying()) {
-            if (!dragon.isHovering() && dragon.getControllingPassenger() != null && !dragon.isOnGround() && Math.max(Math.abs(dragon.getDeltaMovement().x()), Math.abs(dragon.getDeltaMovement().z())) < 0.1F) {
-                dragon.setHovering(true);
-                dragon.setFlying(false);
-            }
-        } else {
-            if (dragon.isHovering() && dragon.getControllingPassenger() != null && !dragon.isOnGround() && Math.max(Math.abs(dragon.getDeltaMovement().x()), Math.abs(dragon.getDeltaMovement().z())) > 0.1F) {
-                dragon.setFlying(true);
-                dragon.usingGroundAttack = false;
-                dragon.setHovering(false);
-            }
-        }
-        if (dragon.spacebarTicks > 0) {
-            dragon.spacebarTicks--;
-        }
-        if (dragon.spacebarTicks > 20 && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner()) && !dragon.isFlying() && !dragon.isHovering()) {
-            dragon.setHovering(true);
-        }
-        if (dragon.isOverAir() && !dragon.isPassenger()) {
-            final double ydist = dragon.yo - dragon.getY();//down 0.4 up -0.38
-            if (!dragon.isHovering()) {
-                dragon.incrementDragonPitch((float) (ydist) * 10);
-            }
-            dragon.setDragonPitch(Mth.clamp(dragon.getDragonPitch(), -60, 40));
-            final float plateau = 2;
-            final float planeDist = (float) ((Math.abs(dragon.getDeltaMovement().x) + Math.abs(dragon.getDeltaMovement().z)) * 6F);
-            if (dragon.getDragonPitch() > plateau) {
-                //down
-                //this.motionY -= 0.2D;
-                dragon.decrementDragonPitch(planeDist * Math.abs(dragon.getDragonPitch()) / 90);
-            }
-            if (dragon.getDragonPitch() < -plateau) {//-2
-                //up
-                dragon.incrementDragonPitch(planeDist * Math.abs(dragon.getDragonPitch()) / 90);
-            }
-            if (dragon.getDragonPitch() > 2F) {
-                dragon.decrementDragonPitch(1);
-            } else if (dragon.getDragonPitch() < -2F) {
-                dragon.incrementDragonPitch(1);
-            }
-            if (dragon.getDragonPitch() < -45 && planeDist < 3) {
-                if (dragon.isFlying() && !dragon.isHovering()) {
-                    dragon.setHovering(true);
-                }
-            }
-        } else {
-            dragon.setDragonPitch(0);
-        }
+        // Update dragon rider
+        dragon.updateRider();
+
+        // Update dragon pitch
+        dragon.updatePitch(dragon.yo - dragon.getY());
+
         if (dragon.lookingForRoostAIFlag && dragon.getLastHurtByMob() != null || dragon.isSleeping()) {
             dragon.lookingForRoostAIFlag = false;
         }
@@ -140,9 +62,6 @@ public class IafDragonLogic {
         if (dragon.isOrderedToSit() && dragon.getControllingPassenger() != null) {
             dragon.setOrderedToSit(false);
         }
-        if (dragon.isVehicle() && !dragon.isOverAir() && dragon.isFlying() && !dragon.isHovering() && dragon.flyTicks > 40) {
-            dragon.setFlying(false);
-        }
         if (dragon.blockBreakCounter <= 0) {
             dragon.blockBreakCounter = IafConfig.dragonBreakBlockCooldown;
         }
@@ -165,7 +84,7 @@ public class IafDragonLogic {
         } else {
             dragon.ticksStill = 0;
         }
-        if (dragon.isTackling() && !dragon.isFlying() && dragon.isOnGround()) {
+        if (dragon.getControllingPassenger() == null && dragon.isTackling() && !dragon.isFlying() && dragon.isOnGround()) {
             dragon.tacklingTicks++;
             if (dragon.tacklingTicks == 40) {
                 dragon.tacklingTicks = 0;
@@ -176,6 +95,7 @@ public class IafDragonLogic {
         if (dragon.getRandom().nextInt(500) == 0 && !dragon.isModelDead() && !dragon.isSleeping()) {
             dragon.roar();
         }
+        // In air tackle attack
         if (dragon.isFlying() && dragon.getTarget() != null) {
             if (dragon.airAttack == IafDragonAttacks.Air.TACKLE)
                 dragon.setTackling(true);
@@ -184,14 +104,14 @@ public class IafDragonLogic {
                 if (dragon.getBoundingBox().expandTowards(2.0D, 2.0D, 2.0D).intersects(dragon.getTarget().getBoundingBox())) {
                     dragon.usingGroundAttack = true;
                     dragon.randomizeAttacks();
-                    attackTarget(dragon.getTarget(), ridingPlayer, dragon.getDragonStage() * 3);
+                    attackTarget(dragon.getTarget(), null, dragon.getDragonStage() * 3);
                     dragon.setFlying(false);
                     dragon.setHovering(false);
                 }
             }
         }
 
-        if (dragon.isTackling() && (dragon.getTarget() == null || dragon.airAttack != IafDragonAttacks.Air.TACKLE)) {
+        if (dragon.getControllingPassenger() == null && dragon.isTackling() && (dragon.getTarget() == null || dragon.airAttack != IafDragonAttacks.Air.TACKLE)) {
             dragon.setTackling(false);
             dragon.randomizeAttacks();
         }
@@ -216,7 +136,7 @@ public class IafDragonLogic {
             dragon.setFlying(false);
             dragon.setHovering(false);
         }
-        if (ridingPlayer == null) {
+        if (dragon.getControllingPassenger() == null) {
             if ((dragon.useFlyingPathFinder() || dragon.isHovering()) && dragon.navigatorType != 1) {
                 dragon.switchNavigator(1);
             }
@@ -225,10 +145,11 @@ public class IafDragonLogic {
                 dragon.switchNavigator(2);
             }
         }
-        if (!dragon.useFlyingPathFinder() && !dragon.isHovering() && dragon.navigatorType != 0) {
+        if (dragon.getControllingPassenger() == null && !dragon.useFlyingPathFinder() && !dragon.isHovering() && dragon.navigatorType != 0) {
             dragon.switchNavigator(0);
         }
-        if (!dragon.isOverAir() && dragon.doesWantToLand() && (dragon.isFlying() || dragon.isHovering()) && !dragon.isInWater()) {
+        // Dragon landing
+        if (dragon.getControllingPassenger() == null && !dragon.isOverAir() && dragon.doesWantToLand() && (dragon.isFlying() || dragon.isHovering()) && !dragon.isInWater()) {
             dragon.setFlying(false);
             dragon.setHovering(false);
         }
@@ -245,7 +166,8 @@ public class IafDragonLogic {
             if (dragon.isSleeping()) {
                 dragon.setHovering(false);
             }
-            if (dragon.doesWantToLand() && !dragon.isOnGround() && !dragon.isInWater()) {
+            // Slowly land the hovering dragon
+            if (dragon.getControllingPassenger() == null && dragon.doesWantToLand() && !dragon.isOnGround() && !dragon.isInWater()) {
                 dragon.setDeltaMovement(dragon.getDeltaMovement().add(0, -0.25, 0));
             } else {
                 if ((dragon.getControllingPassenger() == null || dragon.getControllingPassenger() instanceof EntityDreadQueen) && !dragon.isBeyondHeight()) {
@@ -295,9 +217,6 @@ public class IafDragonLogic {
             }
         }
         if (dragon.getTarget() != null) {
-            if (!dragon.getPassengers().isEmpty() && dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
-                dragon.setTarget(null);
-            }
             if (!DragonUtils.isAlive(dragon.getTarget())) {
                 dragon.setTarget(null);
             }
@@ -343,8 +262,10 @@ public class IafDragonLogic {
             }
             if (dragon.airAttack == IafDragonAttacks.Air.TACKLE && (dragon.horizontalCollision || dragon.isOnGround())) {
                 dragon.usingGroundAttack = true;
-                dragon.setFlying(false);
-                dragon.setHovering(false);
+                if (dragon.getControllingPassenger() == null) {
+                    dragon.setFlying(false);
+                    dragon.setHovering(false);
+                }
             }
             if (dragon.usingGroundAttack) {
                 dragon.airAttack = IafDragonAttacks.Air.TACKLE;

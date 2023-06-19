@@ -15,15 +15,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -253,6 +258,117 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected ItemLike getHeartItem() {
         return IafItemRegistry.FIRE_DRAGON_HEART.get();
+    }
+
+    @Override
+    protected float getBlockSpeedFactor() {
+        // Disable soul sand slow down
+        if (this.onSoulSpeedBlock()) {
+            return this.getDragonStage() >= 2 ? 1.0f : 0.8f;
+        }
+        return super.getBlockSpeedFactor();
+    }
+
+    @Override
+    public void travel(@NotNull Vec3 pTravelVector) {
+        if (this.isInLava()) {
+            // In lava special
+            if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
+                // Ice dragons swim faster
+                this.moveRelative(this.getSpeed(), pTravelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.7D));
+                if (this.getTarget() == null) {
+//                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+                }
+            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
+                LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                // Bigger difference in speed for young and elder dragons
+                float lavaSpeedMod = (float) (0.28f + 0.1 * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
+                speed *= lavaSpeedMod;
+                speed *= rider.isSprinting() ? 1.4f : 1.0f;
+
+                float vertical = 0f;
+                if (isGoingUp() && !isGoingDown()) {
+                    vertical = 0.8f;
+                } else if (isGoingDown() && !isGoingUp()) {
+                    vertical = -0.8f;
+                } else if (isGoingUp() && isGoingDown() && isControlledByLocalInstance()) {
+                    // Try floating
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.3f, 1.0f));
+                }
+
+                Vec3 travelVector = new Vec3(
+                        rider.xxa,
+                        vertical,
+                        rider.zza
+                );
+                if (this.isControlledByLocalInstance()) {
+                    this.setSpeed(speed);
+
+                    this.moveRelative(this.getSpeed(), travelVector);
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+
+                    Vec3 currentMotion = this.getDeltaMovement();
+                    if (this.horizontalCollision) {
+                        currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                    }
+                    this.setDeltaMovement(currentMotion.scale(0.7D));
+
+                    this.calculateEntityAnimation(this, false);
+                } else {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+                this.tryCheckInsideBlocks();
+            } else {
+                super.travel(pTravelVector);
+            }
+        }
+        // Over lava special
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+                && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
+            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+
+            double forward = rider.zza;
+            double strafing = rider.xxa;
+            // Inherit y motion for dropping
+            double vertical = pTravelVector.y;
+            float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
+            float groundSpeedModifier = (float) (1.8F * this.getFlightSpeedModifier());
+            speed *= groundSpeedModifier;
+            // Try to match the original riding speed
+//            forward *= speed;
+            // Faster sprint
+            forward *= rider.isSprinting() ? 1.2f : 1.0f;
+            // Slower going back
+            forward *= rider.zza > 0 ? 1.0f : 0.2f;
+            // Slower going sideway
+            strafing *= 0.05f;
+
+            if (this.isControlledByLocalInstance()) {
+                this.flyingSpeed = speed * 0.1F;
+                this.setSpeed(speed);
+
+                // Vanilla walking behavior includes going up steps
+                super.travel(new Vec3(strafing, vertical, forward));
+
+                Vec3 currentMotion = this.getDeltaMovement();
+                if (this.horizontalCollision) {
+                    currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                }
+                this.setDeltaMovement(currentMotion.scale(0.7D));
+            } else {
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+            this.tryCheckInsideBlocks();
+//            this.updatePitch(this.yOld - this.getY());
+            return;
+        } else {
+            super.travel(pTravelVector);
+        }
     }
 
     @Override

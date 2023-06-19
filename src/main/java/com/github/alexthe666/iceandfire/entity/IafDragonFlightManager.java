@@ -299,7 +299,12 @@ public class IafDragonFlightManager {
 
         @Override
         public void tick() {
-            //FIXME: Dragon movement needs to be completely redone to account for weird friction stuff
+            if (dragon instanceof EntityDragonBase theDragon && theDragon.getControllingPassenger() != null) {
+                // New ride system doesn't need move controller
+                // The flight move control is disabled here, the walking move controller will stay Operation.WAIT so nothing will happen too
+                return;
+            }
+
             double flySpeed = speedModifier * speedMod() * 3;
             Vec3 dragonVec = dragon.position();
             Vec3 moveVec = new Vec3(wantedX, wantedY, wantedZ);
