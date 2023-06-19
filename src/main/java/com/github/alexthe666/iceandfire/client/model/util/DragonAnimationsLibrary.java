@@ -44,15 +44,9 @@ public class DragonAnimationsLibrary {
      * @see #registerSingle(IEnumDragonPoses, IEnumDragonModelTypes)
      */
     public static void register(IEnumDragonPoses[] poses, IEnumDragonModelTypes[] modelTypes) {
-        // Improve registration speed by loading files asynchronously
-        List<CompletableFuture<?>> futures = new ArrayList<>();
-        for (IEnumDragonPoses p : poses)
-            futures.add(CompletableFuture.runAsync(() -> {
-                    for (IEnumDragonModelTypes m : modelTypes)
-                        registerSingle(p, m, IceAndFire.MODID);
-                }
-            ));
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).join();
+        for(IEnumDragonPoses p : poses)
+            for(IEnumDragonModelTypes m : modelTypes)
+                registerSingle(p, m, IceAndFire.MODID);
     }
 
     /**
@@ -64,15 +58,9 @@ public class DragonAnimationsLibrary {
      * @see #registerSingle(IEnumDragonPoses, IEnumDragonModelTypes, String)
      */
     public static void register(IEnumDragonPoses[] poses, IEnumDragonModelTypes[] modelTypes, String modID) {
-        // Improve registration speed by loading files asynchronously
-        List<CompletableFuture<?>> futures = new ArrayList<>(poses.length);
-        for (IEnumDragonPoses p : poses)
-            futures.add(CompletableFuture.runAsync(() -> {
-                    for (IEnumDragonModelTypes m : modelTypes)
-                        registerSingle(p, m, modID);
-                }
-            ));
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).join();
+        for(IEnumDragonPoses p : poses)
+            for(IEnumDragonModelTypes m : modelTypes)
+                registerSingle(p, m, modID);
     }
 
     /**
