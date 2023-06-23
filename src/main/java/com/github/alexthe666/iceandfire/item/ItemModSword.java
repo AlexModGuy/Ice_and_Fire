@@ -27,7 +27,7 @@ public class ItemModSword extends SwordItem implements DragonSteelOverrides<Item
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return IafConfig.dragonsteelBaseDurability;
+        return isDragonsteel(getTier()) ? IafConfig.dragonsteelBaseDurability : getTier().getUses();
     }
 
     @Override

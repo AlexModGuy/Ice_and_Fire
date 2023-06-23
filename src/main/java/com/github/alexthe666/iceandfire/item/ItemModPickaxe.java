@@ -47,7 +47,7 @@ public class ItemModPickaxe extends PickaxeItem implements DragonSteelOverrides<
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return IafConfig.dragonsteelBaseDurability;
+        return isDragonsteel(getTier()) ? IafConfig.dragonsteelBaseDurability : getTier().getUses();
     }
 
     @Override

@@ -47,7 +47,7 @@ public class ItemModHoe extends HoeItem implements DragonSteelOverrides<ItemModH
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return IafConfig.dragonsteelBaseDurability;
+        return isDragonsteel(getTier()) ? IafConfig.dragonsteelBaseDurability : getTier().getUses();
     }
 
     @Override
