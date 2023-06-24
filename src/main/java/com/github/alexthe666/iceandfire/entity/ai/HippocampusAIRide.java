@@ -60,6 +60,6 @@ public class HippocampusAIRide extends Goal {
 
     @Override
     public boolean requiresUpdateEveryTick() {
-        return super.requiresUpdateEveryTick();
+        return true;
     }
 }
