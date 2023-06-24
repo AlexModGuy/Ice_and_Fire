@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -59,14 +61,32 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         }
         isMale = rand.nextBoolean();
         ChunkPos chunkPos = worldIn.getChunk(position).getPos();
+
+
+        int j = 40;
+        // Update the position so it doesn't go above the ocean floor
+        for(int k = 0; k < 20; ++k) {
+            for(int l = 0; l < 20; ++l) {
+                j = Math.min(j, worldIn.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, position.getX() + k, position.getZ() + l));
+            }
+        }
+
+        // Offset the position randomly
+        j -= 20;
+        j -= rand.nextInt(30);
+
+        // If the cave generation point is too low
+        if (j < worldIn.getMinBuildHeight() + 20) {
+            return false;
+        }
         // Center the position at the "middle" of the chunk
-        position = new BlockPos((chunkPos.x << 4) + 8, 20 + rand.nextInt(20), (chunkPos.z << 4) + 8);
+        position = new BlockPos((chunkPos.x << 4) + 8, j, (chunkPos.z << 4) + 8);
         int dragonAge = 75 + rand.nextInt(50);
         int radius = (int) (dragonAge * 0.2F) + rand.nextInt(4);
         generateCave(worldIn, radius, 3, position, rand);
         EntityDragonBase dragon = createDragon(worldIn, rand, position, dragonAge);
         worldIn.addFreshEntity(dragon);
-        return false;
+        return true;
     }
 
     public void generateCave(LevelAccessor worldIn, int radius, int amount, BlockPos center, Random rand) {
