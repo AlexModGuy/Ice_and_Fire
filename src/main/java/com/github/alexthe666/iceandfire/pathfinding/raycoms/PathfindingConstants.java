@@ -16,8 +16,6 @@ public class PathfindingConstants {
     public static final BlockPos BLOCKPOS_SOUTH       = new BlockPos(0, 0, 1);
     public static final BlockPos BLOCKPOS_EAST        = new BlockPos(1, 0, 0);
     public static final BlockPos BLOCKPOS_WEST        = new BlockPos(-1, 0, 0);
-    public static final int      MAX_Y                = 256;
-    public static final int      MIN_Y                = 0;
 
     /**
      * Distance which is considered to be on one side of the fence/glasspane/wall etc.
