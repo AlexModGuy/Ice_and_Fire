@@ -34,7 +34,8 @@ public class DefaultBiomes {
             /*.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);*/
-
+    public static final IafSpawnBiomeData FIREDRAGON_CAVE = FIREDRAGON_ROOST
+                    .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 5);
     public static final IafSpawnBiomeData ICEDRAGON_ROOST = new IafSpawnBiomeData()
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_ICY.location().toString()"icy", 0) This category doesn't seem to exist anymore
@@ -48,6 +49,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:wintry_forest", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:wintry_lowlands", 6);
 
+    public static final IafSpawnBiomeData ICEDRAGON_CAVE = ICEDRAGON_ROOST
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/ice_caves", 7);
+
     public static final IafSpawnBiomeData LIGHTNING_ROOST = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_JUNGLE.location().toString(), 0)
@@ -59,6 +63,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:savanna_badlands", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:savanna_slopes", 5);
 
+    public static final IafSpawnBiomeData LIGHTNING_CAVE = ICEDRAGON_ROOST;
     public static final IafSpawnBiomeData VERY_HOT = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HOT_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:shrubland", 1)
@@ -185,6 +190,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "ocean", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "ocean", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "river", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "beach", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "beach", 0);
 

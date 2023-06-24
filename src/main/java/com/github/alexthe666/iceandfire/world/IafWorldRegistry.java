@@ -247,7 +247,6 @@ public class IafWorldRegistry {
                 PlacementUtils.HEIGHTMAP);
 
 
-
         FIRE_DRAGON_ROOST_CF = registerSimple.apply("fire_dragon_roost", FIRE_DRAGON_ROOST.get());
         ICE_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());
         LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("lightning_dragon_roost", LIGHTNING_DRAGON_ROOST.get());
@@ -288,8 +287,7 @@ public class IafWorldRegistry {
         return BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "%s:%s".formatted(IceAndFire.MODID, name), structure.get().configured(DUMMY_CONFIG, biomeTag, false));
     }
 
-    public static void registerStructureConfiguredFeatures()
-    {
+    public static void registerStructureConfiguredFeatures() {
 
         GORGON_TEMPLE_CF = registerConfiguredStructureFeature("gorgon_temple", GORGON_TEMPLE, HAS_GORGON_TEMPLE);
         MAUSOLEUM_CF = registerConfiguredStructureFeature("mausoleum", MAUSOLEUM, HAS_MAUSOLEUM);
@@ -331,6 +329,7 @@ public class IafWorldRegistry {
     }
 
     public static HashMap<String, Boolean> LOADED_FEATURES;
+
     static {
         LOADED_FEATURES = new HashMap<String, Boolean>();
         LOADED_FEATURES.put("FIRE_LILY_CF", false);
@@ -363,6 +362,7 @@ public class IafWorldRegistry {
     }
 
     public static Set<BiomeGenerationSettings> processed = new HashSet();
+
     public static void addFeatures(Holder<Biome> biomeHolder) {
         // In vanilla we need to do this for BiomeSource as well, however terralith makes that unnecassary
         // So we avoid adding them twice here to not get feature cycle order crashes
@@ -401,36 +401,37 @@ public class IafWorldRegistry {
             LOADED_FEATURES.put("AMETHYST_ORE_CF", true);
         }
 
-        if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biomeHolder)) {
-            if (IafConfig.generateDragonRoosts) {
+        if (IafConfig.generateDragonRoosts) {
+            if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biomeHolder)) {
                 generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FIRE_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("FIRE_DRAGON_ROOST_CF", true);
+
             }
-            if (IafConfig.generateDragonDens) {
-                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
-                LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", true);
-            }
-        }
-        if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biomeHolder)) {
-            if (IafConfig.generateDragonRoosts) {
+            if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biomeHolder)) {
                 generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, LIGHTNING_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("LIGHTNING_DRAGON_ROOST_CF", true);
             }
-            if (IafConfig.generateDragonDens) {
-                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
-                LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", true);
-            }
-        }
-        if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biomeHolder)) {
-            if (IafConfig.generateDragonRoosts) {
+            if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biomeHolder)) {
                 generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ICE_DRAGON_ROOST_CF);
                 LOADED_FEATURES.put("ICE_DRAGON_ROOST_CF", true);
             }
-            if (IafConfig.generateDragonDens) {
+        }
+
+        if (IafConfig.generateDragonDens) {
+            if (safelyTestBiome(BiomeConfig.fireDragonCaveBiomes, biomeHolder)) {
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, FIRE_DRAGON_CAVE_CF);
+                LOADED_FEATURES.put("FIRE_DRAGON_CAVE_CF", true);
+            }
+            if (safelyTestBiome(BiomeConfig.lightningDragonCaveBiomes, biomeHolder)) {
+                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, LIGHTNING_DRAGON_CAVE_CF);
+                LOADED_FEATURES.put("LIGHTNING_DRAGON_CAVE_CF", true);
+            }
+            if (safelyTestBiome(BiomeConfig.iceDragonCaveBiomes, biomeHolder)) {
                 generator.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, ICE_DRAGON_CAVE_CF);
                 LOADED_FEATURES.put("ICE_DRAGON_CAVE_CF", true);
             }
         }
+
         if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, CYCLOPS_CAVE_CF);
             LOADED_FEATURES.put("CYCLOPS_CAVE_CF", true);
@@ -494,10 +495,10 @@ public class IafWorldRegistry {
         processed.add(biomeHolder.value().generationSettings);
     }
 
-    private static boolean safelyTestBiome(Pair<String, IafSpawnBiomeData> entry, Holder<Biome> biomeHolder){
-        try{
+    private static boolean safelyTestBiome(Pair<String, IafSpawnBiomeData> entry, Holder<Biome> biomeHolder) {
+        try {
             return BiomeConfig.test(entry, biomeHolder);
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

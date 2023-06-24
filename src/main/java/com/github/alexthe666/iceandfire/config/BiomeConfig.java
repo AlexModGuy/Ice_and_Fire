@@ -20,8 +20,11 @@ public class BiomeConfig {
     public static Pair<String, IafSpawnBiomeData> iceLilyBiomes = Pair.of("iceandfire:ice_lily_biomes", DefaultBiomes.VERY_SNOWY);
     public static Pair<String, IafSpawnBiomeData> lightningLilyBiomes = Pair.of("iceandfire:lightning_lily_biomes", DefaultBiomes.SAVANNAS);
     public static Pair<String, IafSpawnBiomeData> fireDragonBiomes = Pair.of("iceandfire:fire_dragon_biomes", DefaultBiomes.FIREDRAGON_ROOST);
+    public static Pair<String, IafSpawnBiomeData> fireDragonCaveBiomes = Pair.of("iceandfire:fire_dragon_cave_biomes", DefaultBiomes.FIREDRAGON_CAVE);
     public static Pair<String, IafSpawnBiomeData> iceDragonBiomes = Pair.of("iceandfire:ice_dragon_biomes", DefaultBiomes.ICEDRAGON_ROOST);
+    public static Pair<String, IafSpawnBiomeData> iceDragonCaveBiomes = Pair.of("iceandfire:ice_dragon_cave_biomes", DefaultBiomes.ICEDRAGON_CAVE);
     public static Pair<String, IafSpawnBiomeData> lightningDragonBiomes = Pair.of("iceandfire:lightning_dragon_biomes", DefaultBiomes.LIGHTNING_ROOST);
+    public static Pair<String, IafSpawnBiomeData> lightningDragonCaveBiomes = Pair.of("iceandfire:lightning_dragon_cave_biomes", DefaultBiomes.LIGHTNING_CAVE);
 
     public static Pair<String, IafSpawnBiomeData> cyclopsCaveBiomes = Pair.of("iceandfire:cyclops_cave_biomes", DefaultBiomes.BEACHES);
     public static Pair<String, IafSpawnBiomeData> hippogryphBiomes = Pair.of("iceandfire:hippogryph_biomes", DefaultBiomes.HILLS);
