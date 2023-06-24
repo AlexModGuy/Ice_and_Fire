@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 import static com.github.alexthe666.iceandfire.util.WorldUtil.isChunkLoaded;
 
 public class ChunkCache implements LevelReader {
+    private final DimensionType dimType;
     protected int chunkX;
     protected int chunkZ;
     protected LevelChunk[][] chunkArray;
@@ -48,7 +49,7 @@ public class ChunkCache implements LevelReader {
      */
     protected Level world;
 
-    public ChunkCache(Level worldIn, BlockPos posFromIn, BlockPos posToIn, int subIn) {
+    public ChunkCache(Level worldIn, BlockPos posFromIn, BlockPos posToIn, int subIn, final DimensionType type) {
         this.world = worldIn;
         this.chunkX = posFromIn.getX() - subIn >> 4;
         this.chunkZ = posFromIn.getZ() - subIn >> 4;
@@ -64,6 +65,7 @@ public class ChunkCache implements LevelReader {
                 }
             }
         }
+        this.dimType = type;
     }
 
     public static boolean isEntityChunkLoaded(final LevelAccessor world, final ChunkPos pos) {
@@ -100,10 +102,8 @@ public class ChunkCache implements LevelReader {
 
 
     @Override
-    public BlockState getBlockState(BlockPos pos)
-    {
-        if (pos.getY() >= 0 && pos.getY() < 256)
-        {
+    public BlockState getBlockState(BlockPos pos) {
+        if (pos.getY() >= getMinBuildHeight() && pos.getY() < getMaxBuildHeight()) {
             int i = (pos.getX() >> 4) - this.chunkX;
             int j = (pos.getZ() >> 4) - this.chunkZ;
 
@@ -111,8 +111,7 @@ public class ChunkCache implements LevelReader {
             {
                 LevelChunk chunk = this.chunkArray[i][j];
 
-                if (chunk != null)
-                {
+                if (chunk != null) {
                     return chunk.getBlockState(pos);
                 }
             }
@@ -122,10 +121,8 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public FluidState getFluidState(final BlockPos pos)
-    {
-        if (pos.getY() >= 0 && pos.getY() < 256)
-        {
+    public FluidState getFluidState(final BlockPos pos) {
+        if (pos.getY() >= getMinBuildHeight() && pos.getY() < getMaxBuildHeight()) {
             int i = (pos.getX() >> 4) - this.chunkX;
             int j = (pos.getZ() >> 4) - this.chunkZ;
 
@@ -133,8 +130,7 @@ public class ChunkCache implements LevelReader {
             {
                 LevelChunk chunk = this.chunkArray[i][j];
 
-                if (chunk != null)
-                {
+                if (chunk != null) {
                     return chunk.getFluidState(pos);
                 }
             }
@@ -230,18 +226,16 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public int getSeaLevel()
-    {
+    public int getSeaLevel() {
         return 0;
     }
 
     @Override
     public DimensionType dimensionType() {
-        return null;
+        return dimType;
     }
 
-    private boolean withinBounds(int x, int z)
-    {
+    private boolean withinBounds(int x, int z) {
         return x >= 0 && x < chunkArray.length && z >= 0 && z < chunkArray[x].length && chunkArray[x][z] != null;
     }
 
