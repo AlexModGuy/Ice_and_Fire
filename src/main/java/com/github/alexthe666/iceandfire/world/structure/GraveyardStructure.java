@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.ChunkPos;
@@ -32,6 +33,8 @@ public class GraveyardStructure extends StructureFeature<JigsawConfiguration> {
     }
 
     public static @NotNull Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
+        if (!IafConfig.generateGraveyards)
+            return Optional.empty();
         ChunkGenerator chunkGenerator = context.chunkGenerator();
         ChunkPos pos = context.chunkPos();
         LevelHeightAccessor height = context.heightAccessor();
