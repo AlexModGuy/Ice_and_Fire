@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
+import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ public class GraveyardStructure extends StructureFeature<NoneFeatureConfiguratio
         return GraveyardStructure.Start::new;
     }
 
-   /* 
+   /*
     public int getSize() {
         return 3;
     }
@@ -66,6 +67,8 @@ public class GraveyardStructure extends StructureFeature<NoneFeatureConfiguratio
 
         @Override
         public void generatePieces(RegistryAccess dynamicRegistries, ChunkGenerator chunkGenerator, StructureManager templateManager, ChunkPos pos, Biome biome, NoneFeatureConfiguration config, LevelHeightAccessor height) {
+            if (!IafConfig.generateGraveyards)
+                return;
             Rotation rotation = Rotation.getRandom(this.random);
             int xOffset = 5;
             int yOffset = 5;
