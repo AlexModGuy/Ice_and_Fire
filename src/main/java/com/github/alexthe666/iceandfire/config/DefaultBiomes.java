@@ -29,13 +29,18 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_FOREST.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:volcanic_crater", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:volcanic_peaks", 3)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 4);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:rose_fields", 5)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:prairie", 6)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 7)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 8)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:lush_stacks", 9);
             //Not sure if firedragons should generate in mountainous terrain or not
             /*.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);*/
     public static final IafSpawnBiomeData FIREDRAGON_CAVE = FIREDRAGON_ROOST
-                    .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 5);
+                    .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 10);
     public static final IafSpawnBiomeData ICEDRAGON_ROOST = new IafSpawnBiomeData()
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_ICY.location().toString()"icy", 0) This category doesn't seem to exist anymore
@@ -47,10 +52,13 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:snowy_maple_forest", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:snowy_shield", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:wintry_forest", 5)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:wintry_lowlands", 6);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:wintry_lowlands", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:shattered_glacier", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:frosted_taiga", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:frosted_coniferous_forest", 9);
 
     public static final IafSpawnBiomeData ICEDRAGON_CAVE = ICEDRAGON_ROOST
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/ice_caves", 7);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/ice_caves", 10);
 
     public static final IafSpawnBiomeData LIGHTNING_ROOST = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -61,7 +69,12 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SAVANNA.location().toString(), 2)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:ashen_savanna", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:savanna_badlands", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:savanna_slopes", 5);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:savanna_slopes", 5)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:guiana_shield", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:temperate_rainforest", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:tropical_rainforest", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:jacaranda_forest", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:sierra_badlands", 9);
 
     public static final IafSpawnBiomeData LIGHTNING_CAVE = ICEDRAGON_ROOST;
     public static final IafSpawnBiomeData VERY_HOT = new IafSpawnBiomeData()
@@ -126,7 +139,10 @@ public class DefaultBiomes {
     public static final IafSpawnBiomeData SWAMPS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SWAMP.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:orchid_swamp", 1);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "terralith:orchid_swamp", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:crag_gardens", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:cypress_swamplands", 3)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:bayou", 4);
 
     public static final IafSpawnBiomeData DESERT = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DRY_OVERWORLD.location().toString(), 0)
@@ -157,14 +173,21 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "taiga", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:siberian_taiga", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands", 3)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:mirage_isles", 4);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:mirage_isles", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:amaranth_fields", 5)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:skyris_vale", 6)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:rainbow_beach", 7);
 
     public static final IafSpawnBiomeData JUNGLE = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "jungle", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_jungle", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:jungle_mountains", 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:tropical_jungle", 3);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:tropical_jungle", 3)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:guiana_shield", 4)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:temperate_rainforest", 5)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:tropical_rainforest", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "byg:jacaranda_forest", 7);
 
     public static final IafSpawnBiomeData HILLS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
