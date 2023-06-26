@@ -1,29 +1,7 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.iceandfire.IafConfig;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
-import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static com.github.alexthe666.iceandfire.world.structure.Pool.dread_pool;
-import static com.github.alexthe666.iceandfire.world.structure.Pool.replaceContext;
-
-public class DreadMausoleumStructure extends StructureFeature<JigsawConfiguration> {
-
+public class DreadMausoleumStructure /*extends StructureFeature<JigsawConfiguration>*/ {
+    /*
     public DreadMausoleumStructure() {
         super(JigsawConfiguration.CODEC, DreadMausoleumStructure::createPiecesGenerator, PostPlacementProcessor.NONE);
     }
@@ -79,5 +57,5 @@ public class DreadMausoleumStructure extends StructureFeature<JigsawConfiguratio
     @Override
     public boolean canGenerate(@NotNull RegistryAccess p_197172_, @NotNull ChunkGenerator p_197173_, @NotNull BiomeSource p_197174_, @NotNull StructureManager p_197175_, long p_197176_, @NotNull ChunkPos p_197177_, @NotNull JigsawConfiguration p_197178_, @NotNull LevelHeightAccessor p_197179_, @NotNull Predicate<Holder<Biome>> p_197180_) {
         return super.canGenerate(p_197172_, p_197173_, p_197174_, p_197175_, p_197176_, p_197177_, p_197178_, p_197179_, p_197180_);
-    }
+    }*/
 }

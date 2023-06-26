@@ -10,6 +10,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
@@ -37,7 +38,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
         super(configFactoryIn);
     }
 
-    private void genSheepPen(ServerLevelAccessor worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
+    private void genSheepPen(ServerLevelAccessor worldIn, BlockPos blockpos, RandomSource rand, BlockPos origin, float radius) {
 
         int width = 5 + rand.nextInt(3);
         int sheeps = 2 + rand.nextInt(3);
@@ -91,7 +92,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
         return isTouchingAir;
     }
 
-    private void genSkeleton(LevelAccessor worldIn, BlockPos blockpos, Random rand, BlockPos origin, float radius) {
+    private void genSkeleton(LevelAccessor worldIn, BlockPos blockpos, RandomSource rand, BlockPos origin, float radius) {
         Direction direction = HORIZONTALS[new Random().nextInt(3)];
         Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         int maxRibHeight = rand.nextInt(2);
@@ -131,7 +132,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
         if (!IafConfig.generateCyclopsCaves || rand.nextInt(IafConfig.spawnCyclopsCaveChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;

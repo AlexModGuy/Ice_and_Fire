@@ -42,8 +42,8 @@ public class MessageHippogryphArmor {
             context.get().setPacketHandled(true);
             Player player = context.get().getSender();
             if (player != null) {
-                if (player.level != null) {
-                    Entity entity = player.level.getEntity(message.dragonId);
+                if (player.level()!= null) {
+                    Entity entity = player.level().getEntity(message.dragonId);
                     if (entity != null && entity instanceof EntityHippogryph) {
                         EntityHippogryph hippo = (EntityHippogryph) entity;
                         if (message.slot_index == 0) {

@@ -46,11 +46,11 @@ public class MessageUpdatePodium {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
+                if (player.level()!= null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof TileEntityPodium) {
-                            TileEntityPodium podium = (TileEntityPodium) player.level.getBlockEntity(pos);
+                    if (player.level().getBlockEntity(pos) != null) {
+                        if (player.level().getBlockEntity(pos) instanceof TileEntityPodium) {
+                            TileEntityPodium podium = (TileEntityPodium) player.level().getBlockEntity(pos);
                             podium.setItem(0, message.heldStack);
                         }
                     }

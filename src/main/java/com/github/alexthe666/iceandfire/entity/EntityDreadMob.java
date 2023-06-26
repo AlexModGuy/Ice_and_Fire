@@ -32,28 +32,28 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     public static Entity necromancyEntity(LivingEntity entity) {
         Entity lichSummoned = null;
         if (entity.getMobType() == MobType.ARTHROPOD) {
-            lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), entity.level);
+            lichSummoned = new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), entity.level());
             float readInScale = (entity.getBbWidth() / 1.5F);
-            if (entity.level instanceof ServerLevelAccessor) {
-                ((EntityDreadScuttler) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+            if (entity.level()instanceof ServerLevelAccessor) {
+                ((EntityDreadScuttler) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadScuttler) lichSummoned).setSize(readInScale);
             return lichSummoned;
         }
         if (entity instanceof Zombie || entity instanceof IHumanoid) {
-            lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), entity.level);
+            lichSummoned = new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), entity.level());
             float readInScale = (entity.getBbWidth() / 0.6F);
-            if (entity.level instanceof ServerLevelAccessor) {
-                ((EntityDreadGhoul) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+            if (entity.level()instanceof ServerLevelAccessor) {
+                ((EntityDreadGhoul) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadGhoul) lichSummoned).setSize(readInScale);
             return lichSummoned;
         }
         if (entity.getMobType() == MobType.UNDEAD || entity instanceof AbstractSkeleton || entity instanceof Player) {
-            lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), entity.level);
+            lichSummoned = new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), entity.level());
             EntityDreadThrall thrall = (EntityDreadThrall) lichSummoned;
-            if (entity.level instanceof ServerLevelAccessor) {
-                thrall.finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+            if (entity.level()instanceof ServerLevelAccessor) {
+                thrall.finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             thrall.setCustomArmorHead(false);
             thrall.setCustomArmorChest(false);
@@ -65,14 +65,14 @@ public class EntityDreadMob extends Monster implements IDreadMob {
             return thrall;
         }
         if (entity instanceof AbstractHorse) {
-            lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE.get(), entity.level);
+            lichSummoned = new EntityDreadHorse(IafEntityRegistry.DREAD_HORSE.get(), entity.level());
             return lichSummoned;
         }
         if (entity instanceof Animal) {
-            lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), entity.level);
+            lichSummoned = new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), entity.level());
             float readInScale = (entity.getBbWidth() / 1.2F);
-            if (entity.level instanceof ServerLevelAccessor) {
-                ((EntityDreadBeast) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level, entity.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+            if (entity.level()instanceof ServerLevelAccessor) {
+                ((EntityDreadBeast) lichSummoned).finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
             ((EntityDreadBeast) lichSummoned).setSize(readInScale);
             return lichSummoned;
@@ -132,7 +132,7 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!level.isClientSide && this.getCommander() instanceof EntityDreadLich) {
+        if (!level().isClientSide && this.getCommander() instanceof EntityDreadLich) {
             EntityDreadLich lich = (EntityDreadLich) this.getCommander();
             if (lich.getTarget() != null && lich.getTarget().isAlive()) {
                 this.setTarget(lich.getTarget());
@@ -144,12 +144,12 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            LivingEntity player = uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            LivingEntity player = uuid == null ? null : this.level().getPlayerByUUID(uuid);
             if (player != null) {
                 return player;
             } else {
-                if (!level.isClientSide) {
-                    Entity entity = level.getServer().getLevel(this.level.dimension()).getEntity(uuid);
+                if (!level().isClientSide) {
+                    Entity entity = level().getServer().getLevel(this.level().dimension()).getEntity(uuid);
                     if (entity instanceof LivingEntity) {
                         return entity;
                     }
@@ -167,8 +167,8 @@ public class EntityDreadMob extends Monster implements IDreadMob {
             Entity summoned = necromancyEntity(LivingEntityIn);
             if (summoned != null) {
                 summoned.copyPosition(LivingEntityIn);
-                if (!level.isClientSide) {
-                    level.addFreshEntity(summoned);
+                if (!level().isClientSide) {
+                    level().addFreshEntity(summoned);
                 }
                 if (commander instanceof EntityDreadLich) {
                     ((EntityDreadLich) commander).setMinionCount(((EntityDreadLich) commander).getMinionCount() + 1);

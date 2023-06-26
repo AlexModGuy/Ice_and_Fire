@@ -48,8 +48,8 @@ public class MessagePlayerHitMultipart {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
-                    Entity entity = player.level.getEntity(message.creatureID);
+                if (player.level()!= null) {
+                    Entity entity = player.level().getEntity(message.creatureID);
                     if (entity != null && entity instanceof LivingEntity) {
                         double dist = player.distanceTo(entity);
                         LivingEntity mob = (LivingEntity) entity;

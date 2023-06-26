@@ -43,7 +43,7 @@ public class MessageDaytime {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                Entity entity = player.level.getEntity(message.dragonId);
+                Entity entity = player.level().getEntity(message.dragonId);
                 if (entity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) entity;
                     dragon.isDaytime = message.isDay;

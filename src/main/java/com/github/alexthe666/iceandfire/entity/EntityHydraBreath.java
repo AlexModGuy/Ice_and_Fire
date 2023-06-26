@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -47,7 +48,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -79,13 +80,13 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
             this.remove(RemovalReason.DISCARDED);
         }
         Entity shootingEntity = this.getOwner();
-        if (this.level.isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
             if (this.shouldBurn()) {
                 this.setSecondsOnFire(1);
             }
 
-            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            HitResult raytraceresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
             if (raytraceresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
@@ -96,7 +97,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
             double d2 = this.getZ() + Vector3d.z;
             ProjectileUtil.rotateTowardsMovement(this, 0.2F);
             float f = this.getInertia();
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 for (int i = 0; i < 15; ++i) {
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Hydra, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() - 0.5D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, 0.1D, 1.0D, 0.1D);
                 }
@@ -111,7 +112,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.level.addParticle(ParticleTypes.BUBBLE, this.getX() - this.getDeltaMovement().x * 0.25D, this.getY() - this.getDeltaMovement().y * 0.25D, this.getZ() - this.getDeltaMovement().z * 0.25D, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
+                    this.level().addParticle(ParticleTypes.BUBBLE, this.getX() - this.getDeltaMovement().x * 0.25D, this.getY() - this.getDeltaMovement().y * 0.25D, this.getZ() - this.getDeltaMovement().z * 0.25D, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
                 }
             }
             this.setPos(d0, d1, d2);
@@ -126,9 +127,9 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
 
     @Override
     protected void onHit(@NotNull HitResult movingObject) {
-        this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
         Entity shootingEntity = this.getOwner();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {
                 Entity entity = ((EntityHitResult) movingObject).getEntity();
 

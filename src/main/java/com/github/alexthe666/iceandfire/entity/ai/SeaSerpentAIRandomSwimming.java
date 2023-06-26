@@ -53,10 +53,10 @@ public class SeaSerpentAIRandomSwimming extends RandomStrollGoal {
             final int range = 16;
             for (int i = 0; i < 15; i++) {
                 BlockPos blockpos1 = this.mob.blockPosition().offset(random.nextInt(range) - range / 2, random.nextInt(range) - range / 2, random.nextInt(range) - range / 2);
-                while (this.mob.level.isEmptyBlock(blockpos1) && this.mob.level.getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1) {
+                while (this.mob.level().isEmptyBlock(blockpos1) && this.mob.level().getFluidState(blockpos1).isEmpty() && blockpos1.getY() > 1) {
                     blockpos1 = blockpos1.below();
                 }
-                if (this.mob.level.getFluidState(blockpos1).is(FluidTags.WATER)) {
+                if (this.mob.level().getFluidState(blockpos1).is(FluidTags.WATER)) {
                     blockpos = blockpos1;
                 }
             }
@@ -67,16 +67,16 @@ public class SeaSerpentAIRandomSwimming extends RandomStrollGoal {
 
     private boolean canJumpTo(BlockPos pos, int dx, int dz, int scale) {
         BlockPos blockpos = pos.offset(dx * scale, 0, dz * scale);
-        return this.mob.level.getFluidState(blockpos).is(FluidTags.WATER) && !this.mob.level.getBlockState(blockpos).getMaterial().blocksMotion();
+        return this.mob.level().getFluidState(blockpos).is(FluidTags.WATER) && !this.mob.level().getBlockState(blockpos).getMaterial().blocksMotion();
     }
 
     private boolean isAirAbove(BlockPos pos, int dx, int dz, int scale) {
-        return this.mob.level.getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir() && this.mob.level.getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
+        return this.mob.level().getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir() && this.mob.level().getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
     }
 
     private Vec3 findSurfaceTarget(PathfinderMob creature, int i, int i1) {
         BlockPos upPos = creature.blockPosition();
-        while (creature.level.getFluidState(upPos).is(FluidTags.WATER)) {
+        while (creature.level().getFluidState(upPos).is(FluidTags.WATER)) {
             upPos = upPos.above();
         }
         if (isAirAbove(upPos.below(), 0, 0, 0) && canJumpTo(upPos.below(), 0, 0, 0)) {

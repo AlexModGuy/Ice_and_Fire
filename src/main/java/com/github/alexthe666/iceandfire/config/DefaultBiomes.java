@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.config;
 
 import com.github.alexthe666.iceandfire.config.biome.BiomeEntryType;
 import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
+import net.minecraftforge.common.Tags;
 
 import static net.minecraft.tags.BiomeTags.*;
 import static net.minecraftforge.common.Tags.Biomes.*;
@@ -113,7 +114,7 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData VERY_HILLY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HILL.location().toString(), 1);
 
@@ -172,7 +173,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DENSE.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "forest", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_MOUNTAIN.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_MOUNTAIN.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HILL.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HOT.location().toString(), 1)
@@ -201,7 +202,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_BADLANDS.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HILL.location().toString(), 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_mountains", 3);
@@ -235,7 +236,7 @@ public class DefaultBiomes {
     public static final IafSpawnBiomeData HIPPOGRYPH_DARK_BROWN = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 1)
@@ -247,12 +248,12 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SPARSE.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_PEAK.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SPARSE.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SLOPE.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_mountains", 2);
 
@@ -265,7 +266,7 @@ public class DefaultBiomes {
 
     public static final IafSpawnBiomeData HIPPOGRYPH_CHESTNUT = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MOUNTAIN.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_MOUNTAIN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_BADLANDS.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DRY.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:savanna_badlands", 1);

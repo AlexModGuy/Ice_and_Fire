@@ -64,7 +64,7 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
         BlockEntity te = IceAndFire.PROXY.getRefrencedTE();
         int j = 0;
 
-        List<DragonForgeRecipe> recipes = this.getMinecraft().level.getRecipeManager()
+        List<DragonForgeRecipe> recipes = this.getMinecraft().level().getRecipeManager()
             .getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE)
             .stream().filter(item ->
                 item.isValidInput(tileFurnace.getSlot(0).getItem()) && item.isValidBlood(tileFurnace.getSlot(1).getItem())).collect(Collectors.toList());

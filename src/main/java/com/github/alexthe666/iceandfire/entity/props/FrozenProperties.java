@@ -37,7 +37,7 @@ public class FrozenProperties {
     private static CompoundTag clearFrozenStatus(CompoundTag nbt, LivingEntity entity, boolean breakIce) {
         if (breakIce) {
             for (int i = 0; i < 15; i++) {
-                entity.level.addParticle(
+                entity.level().addParticle(
                     new BlockParticleOption(ParticleTypes.BLOCK,
                         IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
                     entity.getX() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
@@ -96,7 +96,7 @@ public class FrozenProperties {
 
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
@@ -107,7 +107,7 @@ public class FrozenProperties {
         if (entity instanceof EntityIceDragon) {
             frozenData.putBoolean(FROZEN_BOOL, false);
         }
-        if (entity.level.isClientSide())
+        if (entity.level().isClientSide())
             return;
         if (frozenData.contains(FROZEN_TIME)) {
             int frozenTime = frozenData.getInt(FROZEN_TIME);

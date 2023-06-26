@@ -190,7 +190,7 @@ public class MiscProperties {
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
                 continue;
             int targetedById = targetedBy.getInt(SCEPTER_ENTITY_ID);
-            Entity entity = target.level.getEntity(targetedById);
+            Entity entity = target.level().getEntity(targetedById);
             if (entity instanceof LivingEntity)
                 targetedByEntities.add((LivingEntity) entity);
         }
@@ -206,7 +206,7 @@ public class MiscProperties {
             if (!targetedBy.contains(SCEPTER_ENTITY_ID))
                 continue;
             int targetedById = targetedBy.getInt(SCEPTER_ENTITY_ID);
-            Entity entity = caster.level.getEntity(targetedById);
+            Entity entity = caster.level().getEntity(targetedById);
             if (entity instanceof LivingEntity)
                 targetingEntities.add((LivingEntity) entity);
         }
@@ -265,7 +265,7 @@ public class MiscProperties {
 
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
@@ -273,7 +273,7 @@ public class MiscProperties {
     private static void createLoveParticles(LivingEntity entity) {
         if (rand.nextInt(7) == 0) {
             for (int i = 0; i < 5; i++) {
-                entity.level.addParticle(ParticleTypes.HEART,
+                entity.level().addParticle(ParticleTypes.HEART,
                     entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
                     entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
                     entity.getZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);

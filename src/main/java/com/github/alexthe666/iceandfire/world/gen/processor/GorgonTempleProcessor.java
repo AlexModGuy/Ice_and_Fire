@@ -2,21 +2,9 @@ package com.github.alexthe666.iceandfire.world.gen.processor;
 
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
 
 public class GorgonTempleProcessor extends StructureProcessor {
 
@@ -25,7 +13,7 @@ public class GorgonTempleProcessor extends StructureProcessor {
 
     public GorgonTempleProcessor() {
     }
-
+    /* TODO:
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, @NotNull StructurePlaceSettings settings, @Nullable StructureTemplate template) {
 
@@ -52,7 +40,7 @@ public class GorgonTempleProcessor extends StructureProcessor {
         }
 
         return infoIn2;
-    }
+    }*/
 
     @Override
     protected @NotNull StructureProcessorType getType() {

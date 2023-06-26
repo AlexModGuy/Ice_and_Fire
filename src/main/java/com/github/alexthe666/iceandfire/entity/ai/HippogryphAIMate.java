@@ -28,7 +28,7 @@ public class HippogryphAIMate extends Goal {
 
     public HippogryphAIMate(EntityHippogryph hippogryph, double speed, Class<? extends Animal> mate) {
         this.hippo = hippogryph;
-        this.world = hippogryph.level;
+        this.world = hippogryph.level();
         this.moveSpeed = speed;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }

@@ -45,8 +45,8 @@ public class MyrmexAIPickupBabies<T extends ItemEntity> extends TargetGoal {
             return false;
         }
 
-        if (this.myrmex.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            listBabies = this.mob.level.getEntitiesOfClass(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
+        if (this.myrmex.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
+            listBabies = this.mob.level().getEntitiesOfClass(LivingEntity.class, this.getTargetableArea(20), this.targetEntitySelector);
 
         if (listBabies.isEmpty())
             return false;

@@ -2,15 +2,15 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
-import java.util.Random;
 
 public class PixieAIEnterHouse extends Goal {
 
     EntityPixie pixie;
-    Random random;
+    RandomSource random;
 
     public PixieAIEnterHouse(EntityPixie entityPixieIn) {
         this.pixie = entityPixieIn;
@@ -24,7 +24,7 @@ public class PixieAIEnterHouse extends Goal {
             return false;
         }
 
-        BlockPos blockpos1 = EntityPixie.findAHouse(this.pixie, this.pixie.level);
+        BlockPos blockpos1 = EntityPixie.findAHouse(this.pixie, this.pixie.level());
         return !blockpos1.toString().equals(this.pixie.blockPosition().toString());
     }
 
@@ -36,7 +36,7 @@ public class PixieAIEnterHouse extends Goal {
     @Override
     public void tick() {
         for (int i = 0; i < 3; ++i) {
-            BlockPos blockpos1 = EntityPixie.findAHouse(this.pixie, this.pixie.level);
+            BlockPos blockpos1 = EntityPixie.findAHouse(this.pixie, this.pixie.level());
             this.pixie.getMoveControl().setWantedPosition(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D,
                 blockpos1.getZ() + 0.5D, 0.25D);
             this.pixie.setHousePosition(blockpos1);

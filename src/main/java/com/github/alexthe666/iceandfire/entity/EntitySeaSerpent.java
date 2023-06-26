@@ -21,6 +21,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -56,7 +57,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
@@ -677,7 +677,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         return spawnDataIn;
     }
 
-    public void onWorldSpawn(Random random) {
+    public void onWorldSpawn(RandomSource random) {
         this.setVariant(random.nextInt(7));
         boolean ancient = random.nextInt(15) == 1;
         if (ancient) {

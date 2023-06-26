@@ -20,10 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -91,11 +88,11 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
 
-        modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
+        /*modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
             (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
                 .registerStructureConfiguredFeatures());
         modBus.addGenericListener(Feature.class, EventPriority.LOW,
-            (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
+            (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());*/
 
         IafItemRegistry.ITEMS.register(modBus);
         IafBlockRegistry.BLOCKS.register(modBus);
@@ -126,9 +123,9 @@ public class IceAndFire {
         // Create configured structure feature tags
         //DataGenerators.createResources(biomes);
 
-        event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
+        /*event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
             reloadSources(biomes, levelStem.generator());
-        });
+        });*/
 
         biomes.holders().forEach(biome -> {
             IafWorldRegistry.addFeatures(biome);
@@ -138,13 +135,13 @@ public class IceAndFire {
     }
 
     private static void reloadSources(Registry<Biome> biomes, ChunkGenerator generator) {
-        if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
+        /*if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
                 && chunkGenerator.biomeSource instanceof MultiNoiseBiomeSource biomeSource
                 && chunkGenerator.runtimeBiomeSource instanceof MultiNoiseBiomeSource runtimeBiomeSource)
         {
             biomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
             runtimeBiomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
-        }
+        }*/
     }
 
     @SubscribeEvent
@@ -193,7 +190,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         event.enqueueWork(() -> {
             PROXY.setup();
-            IafVillagerRegistry.setup();
+            //TODO: IafVillagerRegistry.setup();
             IafLootRegistry.init();
         });
     }

@@ -7,16 +7,11 @@ import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
 import com.github.alexthe666.iceandfire.world.gen.*;
-import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
-import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
-import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
-import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -36,12 +31,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType.StructureTemplateType;
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.registries.DeferredRegister;
@@ -51,12 +42,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 import static com.github.alexthe666.iceandfire.block.IafBlockRegistry.*;
 import static net.minecraft.world.level.block.Blocks.STONE;
@@ -102,9 +91,9 @@ public class IafWorldRegistry {
     //        ForgeRegistries.STRUCTURE_FEATURES,
     //        IceAndFire.MODID
     //);
-    public static final StructureType<GorgonTempleStructure> GORGON_TEMPLE = register("gorgon_temple", GorgonTempleStructure.CODEC);
-    public static final StructureType<DreadMausoleumStructure> MAUSOLEUM = register("mausoleum", DreadMausoleumStructure.CODEC);
-    public static final StructureType<GraveyardStructure> GRAVEYARD = register("graveyard", GraveyardStructure.CODEC);
+    //public static final StructureType<GorgonTempleStructure> GORGON_TEMPLE = register("gorgon_temple", GorgonTempleStructure.CODEC);
+    //public static final StructureType<DreadMausoleumStructure> MAUSOLEUM = register("mausoleum", DreadMausoleumStructure.CODEC);
+    //public static final StructureType<GraveyardStructure> GRAVEYARD = register("graveyard", GraveyardStructure.CODEC);
 
     public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/gorgon_temple"));
     public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
@@ -141,9 +130,9 @@ public class IafWorldRegistry {
     public static Holder<PlacedFeature> SPAWN_SEA_SERPENT_CF;
     public static Holder<PlacedFeature> SPAWN_STYMPHALIAN_BIRD_CF;
     public static Holder<PlacedFeature> SPAWN_WANDERING_CYCLOPS_CF;
-    public static Holder<ConfiguredStructureFeature<?, ?>> GORGON_TEMPLE_CF;
-    public static Holder<ConfiguredStructureFeature<?, ?>> MAUSOLEUM_CF;
-    public static Holder<ConfiguredStructureFeature<?, ?>> GRAVEYARD_CF;
+    //public static Holder<ConfiguredStructureFeature<?, ?>> GORGON_TEMPLE_CF;
+    //public static Holder<ConfiguredStructureFeature<?, ?>> MAUSOLEUM_CF;
+    //public static Holder<ConfiguredStructureFeature<?, ?>> GRAVEYARD_CF;
 
     static {
         FIRE_DRAGON_ROOST = register("fire_dragon_roost", () -> new WorldGenFireDragonRoosts(NoneFeatureConfiguration.CODEC));
@@ -208,13 +197,13 @@ public class IafWorldRegistry {
         // Technically we don't need the piece classes anymore but we should register
         // dummy pieces
         // under the same registry name or else player's will get logspammed by Minecraft in existing worlds.
-        DUMMY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", (StructureTemplateType) DummyPiece::new);
-        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", (StructureTemplateType) DummyPiece::new);
-        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", (StructureTemplateType) DummyPiece::new);
-        Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", (StructureTemplateType) DummyPiece::new);
+        // TODO: DUMMY_PIECE = Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece", (StructureTemplateType) DummyPiece::new);
+        //Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:mausoleum_piece", (StructureTemplateType) DummyPiece::new);
+        //Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", (StructureTemplateType) DummyPiece::new);
+        //Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", (StructureTemplateType) DummyPiece::new);
 
         COPPER_ORE_CF = register("iceandfire:copper_ore",
-                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, COPPER_ORE.get().defaultBlockState(), 8)),
+                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.ORE_COPPPER_SMALL, COPPER_ORE.get().defaultBlockState(), 8)),
                 CountPlacement.of(2), maxHeight(128), spread());
 
         SILVER_ORE_CF = register("iceandfire:silver_ore",
@@ -272,24 +261,24 @@ public class IafWorldRegistry {
 
     }
 
-    public static void registerStructureSet(Holder<ConfiguredStructureFeature<?, ?>> structure, String name, int spacing, int separation, int seed) {
+    /*public static void registerStructureSet(Holder<ConfiguredStructureFeature<?, ?>> structure, String name, int spacing, int separation, int seed) {
         BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, name), new StructureSet(structure, new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
         //BuiltinRegistries.register(
         //        BuiltinRegistries.STRUCTURE_SETS,
         //        ResourceKey.create(Registry.STRUCTURE_SET_REGISTRY, new ResourceLocation("%s/%s".formatted(IceAndFire.MODID, name))),
         //        new StructureSet(structure,
         //                new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
-    }
+    }*/
 
-    public static Holder<ConfiguredStructureFeature<?, ?>> registerConfiguredStructureFeature(String name, RegistryObject<StructureFeature<JigsawConfiguration>> structure, TagKey<Biome> biomeTag) {
+    /*public static Holder<ConfiguredStructureFeature<?, ?>> registerConfiguredStructureFeature(String name, RegistryObject<StructureFeature<JigsawConfiguration>> structure, TagKey<Biome> biomeTag) {
         // Placeholder pools since we haven't loaded our own json files at this stage
         var DUMMY_CONFIG = new JigsawConfiguration(PlainVillagePools.START, 0);
         return BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, "%s:%s".formatted(IceAndFire.MODID, name), structure.get().configured(DUMMY_CONFIG, biomeTag, false));
-    }
+    }*/
 
     public static void registerStructureConfiguredFeatures() {
 
-        GORGON_TEMPLE_CF = registerConfiguredStructureFeature("gorgon_temple", GORGON_TEMPLE, HAS_GORGON_TEMPLE);
+        /*GORGON_TEMPLE_CF = registerConfiguredStructureFeature("gorgon_temple", GORGON_TEMPLE, HAS_GORGON_TEMPLE);
         MAUSOLEUM_CF = registerConfiguredStructureFeature("mausoleum", MAUSOLEUM, HAS_MAUSOLEUM);
         GRAVEYARD_CF = registerConfiguredStructureFeature("graveyard", GRAVEYARD, HAS_GRAVEYARD);
 
@@ -303,7 +292,7 @@ public class IafWorldRegistry {
                 ),
                 new RandomSpreadStructurePlacement(Math.max(average, 2), Math.max(average / 2, 1), RandomSpreadType.LINEAR, 342226450));
 
-        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
+        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);*/
     }
 
     public static boolean isFarEnoughFromSpawn(LevelAccessor world, BlockPos pos) {

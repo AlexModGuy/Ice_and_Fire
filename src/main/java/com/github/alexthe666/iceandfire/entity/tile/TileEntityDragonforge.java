@@ -74,7 +74,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             entityDragonforge.lastDragonFlameTimer--;
         }
         entityDragonforge.updateGrills(entityDragonforge.assembled());
-        if (!level.isClientSide) {
+        if (level.isClientSide) {
             if (entityDragonforge.prevAssembled != entityDragonforge.assembled()) {
                 BlockDragonforgeCore.setState(entityDragonforge.fireType, entityDragonforge.prevAssembled, level, pos);
             }
@@ -288,7 +288,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        if (this.level.getBlockEntity(this.worldPosition) != this) {
+        if (player.level().getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
             return player.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D,

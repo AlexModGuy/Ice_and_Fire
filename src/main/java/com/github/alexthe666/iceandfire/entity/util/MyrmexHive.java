@@ -542,7 +542,7 @@ public class MyrmexHive {
         return rooms.isEmpty() ? returnPos : rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
 
-    public BlockPos getClosestEntranceToEntity(Entity entity, Random random, boolean randomize) {
+    public BlockPos getClosestEntranceToEntity(Entity entity, RandomSource random, boolean randomize) {
         Map.Entry<BlockPos, Direction> closest = getClosestEntrance(entity);
         if (closest != null) {
             if (randomize) {
@@ -555,7 +555,7 @@ public class MyrmexHive {
         return entity.blockPosition();
     }
 
-    public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
+    public BlockPos getClosestEntranceBottomToEntity(Entity entity, RandomSource random) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
             Vec3i vec = new Vec3i(entity.getBlockX(), entity.getBlockY(), entity.getBlockZ());

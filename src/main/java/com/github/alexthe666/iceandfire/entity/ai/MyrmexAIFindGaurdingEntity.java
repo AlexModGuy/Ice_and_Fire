@@ -37,7 +37,7 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Targ
         if (!this.myrmex.canMove() || this.myrmex.getTarget() != null || this.myrmex.guardingEntity != null) {
             return false;
         }
-        List<EntityMyrmexBase> list = this.mob.level.getEntitiesOfClass(EntityMyrmexBase.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
+        List<EntityMyrmexBase> list = this.mob.level().getEntitiesOfClass(EntityMyrmexBase.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {

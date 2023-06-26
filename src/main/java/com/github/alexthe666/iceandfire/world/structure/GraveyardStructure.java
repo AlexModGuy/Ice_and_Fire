@@ -1,30 +1,8 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.iceandfire.IafConfig;
-import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
-import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-public class GraveyardStructure extends Structure {
+public class GraveyardStructure /*extends Structure*/ {
+    /*
+    TODO:
     public static final Codec<GraveyardStructure> CODEC = simpleCodec(GraveyardStructure::new);
 
     public GraveyardStructure(StructureSettings settings) {
@@ -77,5 +55,5 @@ public class GraveyardStructure extends Structure {
         public void afterPlace(@NotNull WorldGenLevel level, @NotNull StructureFeatureManager structureFeatureManager, @NotNull ChunkGenerator generator, @NotNull Random random, @NotNull BoundingBox box, @NotNull ChunkPos pos, PiecesContainer container) {
             container.calculateBoundingBox();
         }
-    }
+    }*/
 }

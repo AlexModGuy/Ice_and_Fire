@@ -49,15 +49,15 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
-            village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 100);
+            village = MyrmexWorldData.get(this.myrmex.level()).getNearestHive(this.myrmex.blockPosition(), 100);
         }
         if (village != null && village.getCenter().distToCenterSqr(this.myrmex.getX(), village.getCenter().getY(), this.myrmex.getZ()) < 2000) {
             list = IAFMath.emptyEntityList;
             return false;
         }
 
-        if (this.myrmex.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.mob.level.getEntities(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
+        if (this.myrmex.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level().getEntities(myrmex, this.getTargetableArea(100), this.targetEntitySelector);
 
         if (list.isEmpty())
             return false;
@@ -66,7 +66,7 @@ public class MyrmexAIFindMate<T extends EntityMyrmexBase> extends TargetGoal {
         for (Entity royal : list) {
             if (this.myrmex.canMate((EntityMyrmexRoyal) royal)) {
                 this.myrmex.mate = (EntityMyrmexRoyal) royal;
-                this.myrmex.level.broadcastEntityEvent(this.myrmex, (byte) 76);
+                this.myrmex.level().broadcastEntityEvent(this.myrmex, (byte) 76);
                 return true;
             }
         }

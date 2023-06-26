@@ -78,7 +78,7 @@ public class ChainProperties {
 
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
@@ -110,24 +110,24 @@ public class ChainProperties {
         }
         for (int i = 0; i < chainData.size(); i++) {
             CompoundTag lassoedTag = (CompoundTag) chainData.get(i);
-            if (chained.level.isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
+            if (chained.level().isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
                 int id = lassoedTag.getInt(CHAIN_TO_ENTITY_ID_TAG);
                 if (id != -1) {
-                    Entity found = chained.level.getEntity(id);
+                    Entity found = chained.level().getEntity(id);
                     if (found != null) {
                         chainedTo.add(found);
                     } else {
                         UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                         if (uuid != null) {
-                            if (chained.level.getPlayerByUUID(uuid) != null)
-                                chainedTo.add(chained.level.getPlayerByUUID(uuid));
+                            if (chained.level().getPlayerByUUID(uuid) != null)
+                                chainedTo.add(chained.level().getPlayerByUUID(uuid));
                         }
                     }
                 }
-            } else if (chained.level instanceof ServerLevel) {
+            } else if (chained.level() instanceof ServerLevel) {
                 UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                 if (uuid != null) {
-                    Entity found = ((ServerLevel) chained.level).getEntity(uuid);
+                    Entity found = ((ServerLevel) chained.level()).getEntity(uuid);
                     if (found != null) {
                         lassoedTag.putInt(CHAIN_TO_ENTITY_ID_TAG, found.getId());
                         chainedTo.add(found);

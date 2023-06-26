@@ -36,8 +36,8 @@ public class AmphithereAIFleePlayer extends Goal {
     public boolean canUse() {
         if (!this.entity.isFlying() && !this.entity.isTame()) {
 
-            if (this.entity.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.entity.level.getEntitiesOfClass(Player.class, this.entity.getBoundingBox().inflate(this.avoidDistance, 6D, this.avoidDistance), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
+            if (this.entity.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.entity.level().getEntitiesOfClass(Player.class, this.entity.getBoundingBox().inflate(this.avoidDistance, 6D, this.avoidDistance), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
 
             if (list.isEmpty())
                 return false;

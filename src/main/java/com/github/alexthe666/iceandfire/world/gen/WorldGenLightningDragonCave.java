@@ -10,11 +10,10 @@ import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class WorldGenLightningDragonCave extends WorldGenDragonCave {
 
@@ -35,7 +34,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge) {
         EntityLightningDragon dragon = new EntityLightningDragon(IafEntityRegistry.LIGHTNING_DRAGON.get(),
             worldIn.getLevel());
         dragon.setGender(isMale);

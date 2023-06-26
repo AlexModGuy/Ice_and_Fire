@@ -24,7 +24,7 @@ public class AmphithereAIFollowOwner extends Goal {
 
     public AmphithereAIFollowOwner(EntityAmphithere ampithereIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.ampithere = ampithereIn;
-        this.world = ampithereIn.level;
+        this.world = ampithereIn.level();
         this.followSpeed = followSpeedIn;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;

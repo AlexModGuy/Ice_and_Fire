@@ -7,12 +7,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.world.gen.processor.VillageHouseProcessor;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.*;
 import net.minecraft.resources.ResourceKey;
@@ -25,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.minecraftforge.fml.common.Mod;
@@ -34,10 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
-import java.util.OptionalInt;
-import java.util.Random;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafVillagerRegistry {
@@ -104,6 +95,8 @@ public class IafVillagerRegistry {
     }
 
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
+        /*
+        TODO:
         StructureTemplatePool old = Registries.TEMPLATE_POOL;
         List<StructurePoolElement> shuffled = old != null ? old.getShuffledTemplates(new Random()) : ImmutableList.of();
         Object2IntMap<StructurePoolElement> recomputedPieces = new Object2IntLinkedOpenHashMap<>();
@@ -126,7 +119,7 @@ public class IafVillagerRegistry {
                 OptionalInt.of(id),
                 ResourceKey.create(BuiltinRegistries.TEMPLATE_POOL.key(), name),
                 new StructureTemplatePool(pool, name, newPieces),
-                Lifecycle.stable());
+                Lifecycle.stable());*/
     }
 
 }
