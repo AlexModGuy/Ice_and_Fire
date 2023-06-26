@@ -22,7 +22,7 @@ body:
       label: Minecraft Version
       description: Which version of Minecraft did you experience this issue on?
       options:
-        - "1.16"
+        - "1.16(CRASHES ONLY)"
         - "1.17"
         - "1.18"
         - "1.19"
