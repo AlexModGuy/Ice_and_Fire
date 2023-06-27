@@ -293,7 +293,7 @@ public class ServerConfig {
         this.spawnStymphalianBirds = buildBoolean(builder, "Spawn Stymphalian Birds", "all", true, "True if stymphalian birds are allowed to spawn");
         this.stymphalianBirdsDataTagDrops = buildBoolean(builder, "Stymphalian Birds drop ore dict items", "all", true, "True if stymphalian birds can drop items registered in the ore dictionary to ingotCopper, ingotBronze, nuggetCopper, nuggetBronze.");
         this.stympahlianBirdAttackAnimals = buildBoolean(builder, "Stymphalian Birds Target Animals", "all", false, "True if stymphalian birds are allowed to target and attack animals");
-        this.stymphalianBirdSpawnChance = buildInt(builder, "Spawn Stymhphalian Bird Chance", "all", 80, 1, 10000, "1 out of this number chance per chunk for generation");
+        this.stymphalianBirdSpawnChance = buildInt(builder, "Spawn Stymhphalian Bird Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
         builder.pop();
         builder.push("Trolls");
         this.spawnTrolls = buildBoolean(builder, "Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
@@ -352,7 +352,7 @@ public class ServerConfig {
 
         this.hydraMaxHealth = buildDouble(builder, "Hydra Max Health", "all", 250, 1, 10000, "Maximum hydra health");
         this.generateHydraCaves = buildBoolean(builder, "Generate Hydra Caves", "all", true, "True if hydra caves are allowed to generate");
-        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 100, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
+        this.generateHydraChance = buildInt(builder, "Hydra Caves Gen Chance", "all", 60, 1, 10000, "One out of this number chance per chunk to generate a hydra cave.");
 
         this.ghostMaxHealth = buildDouble(builder, "Ghost Max Health", "all", 30F, 1.0F, 10000.0F, "Maximum ghost health.");
         this.ghostAttackStrength = buildDouble(builder, "Ghost Attack Strength", "all", 3F, 0.0F, 10000.0F, "Maximum ghost attack strength.");
