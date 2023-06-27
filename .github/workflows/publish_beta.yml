@@ -21,8 +21,14 @@ jobs:
         run: echo "DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
       - name: Set Version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> ${GITHUB_ENV}
+      - name: Get current branch
+        run: |
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch=${raw##*/}
+          echo "::set-output name=branch::$branch"
+          echo "Branch is $branch."
       - name: Set Minecraft Version
-        run: echo "MINECRAFT_VERSION=${GITHUB_REF##*/}" >> ${GITHUB_ENV}
+        run: echo "MINECRAFT_VERSION=$branch" >> ${GITHUB_ENV}
       - name: Build jar
         run: ./gradlew build
         env:
