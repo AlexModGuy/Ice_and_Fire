@@ -80,7 +80,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HOT_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:shrubland", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:volcanic_crater", 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:volcanic_peaks", 3);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:volcanic_peaks", 3)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 4);
 
     public static final IafSpawnBiomeData VERY_SNOWY = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -125,7 +126,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SAVANNA.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:fractured_savanna", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:savanna_badlands", 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:savanna_slopes", 3);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:savanna_slopes", 3)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:baobab_savanna", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:araucaria_savanna", 5);
 
     public static final IafSpawnBiomeData BEACHES = new IafSpawnBiomeData()
             /*.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -133,7 +136,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "beach", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "beach", 1);
+            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "beach", 1)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:dacite_shore", 2)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:basalt_barrera", 3);
 
     public static final IafSpawnBiomeData SWAMPS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -151,7 +156,10 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:desert_canyon", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:desert_oasis", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:desert_spires", 3)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:ancient_sands", 4);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:ancient_sands", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:mojave_desert", 5)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:atacama_desert", 6)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:windswept_valley", 7);
 
     public static final IafSpawnBiomeData OCEANS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -201,7 +209,9 @@ public class DefaultBiomes {
     public static final IafSpawnBiomeData PLAINS = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_PLAINS.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 1);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 1)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 2)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 3);
 
     public static final IafSpawnBiomeData GRAVEYARD = new IafSpawnBiomeData()
             /*.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
