@@ -75,7 +75,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:jacaranda_forest", 8)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:sierra_badlands", 9);
 
-    public static final IafSpawnBiomeData LIGHTNING_CAVE = ICEDRAGON_ROOST;
+    public static final IafSpawnBiomeData LIGHTNING_CAVE = LIGHTNING_ROOST;
     public static final IafSpawnBiomeData VERY_HOT = new IafSpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HOT_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:shrubland", 1)
