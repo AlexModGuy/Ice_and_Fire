@@ -82,7 +82,7 @@ public class MessageDragonControl {
                             if (hippo.isOwnedBy(player)) {
                                 hippo.setControlState(message.controlState);
                             }
-                            hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+//                            hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
                         } else if (entity instanceof EntityHippocampus) {
                             EntityHippocampus hippo = (EntityHippocampus) entity;
                             if (hippo.isOwnedBy(player)) {

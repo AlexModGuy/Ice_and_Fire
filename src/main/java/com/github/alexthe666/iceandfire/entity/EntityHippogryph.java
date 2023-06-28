@@ -171,7 +171,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DragonAIRide(this));
+//        this.goalSelector.addGoal(0, new DragonAIRide(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2D, true));
@@ -224,7 +224,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return false;
+        return super.isControlledByLocalInstance();
     }
 
     @Override
@@ -763,14 +763,89 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return movingobjectposition == null || movingobjectposition.getType() != HitResult.Type.BLOCK;
     }
 
-
+    public final boolean DISABLE_MOVEMENT_CHECK = true;
     @Override
-    public void travel(@NotNull Vec3 move) {
+    public void travel(@NotNull Vec3 pTravelVector) {
         if (!this.canMove() && !this.isVehicle()) {
             super.travel(Vec3.ZERO);
             return;
         }
-        super.travel(move);
+
+        // Handle riding movement
+        // Reference: AbstractHorse#travel
+        if (this.isAlive()) {
+            if (this.isVehicle() && this.canBeControlledByRider() && this.isSaddled()) {
+                // Approx value for speed tweak
+                // Maybe should be put into config
+                float walkSpeedFactor = 0.80f;
+                float flightSpeedFactor = 0.35F;
+                LivingEntity rider = (LivingEntity)this.getControllingPassenger();
+
+                // Mouse controlled yaw
+                this.setYRot(rider.getYRot());
+                this.yRotO = this.getYRot();
+                this.setXRot(rider.getXRot() * 0.5F);
+                this.setRot(this.getYRot(), this.getXRot());
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
+
+                float sideway = rider.xxa;
+                float forward = rider.zza;
+                float vertical = this.isGoingUp() ? 1.0F : this.isGoingDown() ? -1.0F : 0F;
+
+                float speedFactor = 1.0f;
+                if (this.isFlying() || this.isHovering()) {
+                    speedFactor *= flightSpeedFactor;
+                    // Let server know we're flying before they kick us
+                    this.setNoGravity(true);
+                    this.flyingSpeed = this.getSpeed();
+                } else {
+                    speedFactor *= walkSpeedFactor;
+                    this.setNoGravity(false);
+                    // Inherit the vertical movement, e.g. falling movement
+                    vertical = (float) pTravelVector.y;
+                    // In air moving speed
+                    this.flyingSpeed = this.getSpeed() * 0.1F;
+                }
+
+                // Faster on sprint
+                speedFactor *= rider.isSprinting() ? 1.5f : 1.0f;
+                // Slower on going back/sideways
+                forward *= forward <= 0f ? 0.25f : 1.0f;
+                sideway *= 0.5F;
+
+                if (this.isControlledByLocalInstance()) {
+                    this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) * speedFactor);
+                    super.travel(new Vec3(sideway, vertical, forward));
+
+                    // Vanilla travel has a smaller friction factor for Y axis
+                    // Add more friction in case moving too fast on Y axis
+                    if (this.isFlying() || this.isHovering()) {
+                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.92f, 1.0f));
+                    }
+                } else if (rider instanceof Player) {
+                    this.setDeltaMovement(Vec3.ZERO);
+                    // Disable server side vehicle movement check, in case of console log spam
+                    // Happens when stepping up blocks
+                    // Might because client & server's onGround flag is out of sync
+                    // I can't get it fixed, so it's disabled
+                    this.noPhysics = DISABLE_MOVEMENT_CHECK;
+                }
+
+                this.calculateEntityAnimation(this, false);
+                this.tryCheckInsideBlocks();
+            } else {
+                this.setNoGravity(false);
+                this.noPhysics = false;
+
+                this.flyingSpeed = 0.02F;
+                super.travel(pTravelVector);
+            }
+        } else {
+            // Return to defaults
+            this.setNoGravity(false);
+            this.noPhysics = false;
+        }
     }
 
     @Override
@@ -895,7 +970,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if (!flying && !this.isLandNavigator) {
             switchNavigator(true);
         }
-        if ((flying || hovering) && !doesWantToLand()) {
+        if ((flying || hovering) && !doesWantToLand() && this.getControllingPassenger() == null) {
             double up = isInWater() ? 0.16D : 0.08D;
             this.setDeltaMovement(this.getDeltaMovement().add(0, up, 0));
         }
