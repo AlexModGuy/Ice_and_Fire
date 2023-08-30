@@ -1,10 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -24,12 +22,12 @@ import java.util.List;
 public class ItemCyclopsEye extends Item {
 
     public ItemCyclopsEye() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(500));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(500));
     }
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.sameItem(newStack);
+        return !ItemStack.isSameItem(oldStack, newStack);
     }
 
     @Override
@@ -64,8 +62,8 @@ public class ItemCyclopsEye extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("item.iceandfire.cyclops_eye.desc_0").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("item.iceandfire.cyclops_eye.desc_1").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.iceandfire.cyclops_eye.desc_0").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.iceandfire.cyclops_eye.desc_1").withStyle(ChatFormatting.GRAY));
     }
 }

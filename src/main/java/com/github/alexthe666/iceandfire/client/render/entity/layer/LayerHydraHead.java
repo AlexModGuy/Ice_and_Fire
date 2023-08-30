@@ -6,14 +6,15 @@ import com.github.alexthe666.iceandfire.client.model.ModelHydraHead;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderHydra;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
     public static final ResourceLocation TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/hydra/stone.png");
@@ -71,7 +72,7 @@ public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
             matrixStackIn.pushPose();
             float bodyWidth = 0.5F;
             matrixStackIn.translate(TRANSLATE[heads - 1][head - 1] * bodyWidth, 0, 0);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, ROTATE[heads - 1][head - 1], true));
+            matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180*ROTATE[heads - 1][head - 1], new Vector3f(0.0F, 1.0F, 0.0F))));
             modelArr[head - 1].setupAnim(hydra, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             modelArr[head - 1].renderToBuffer(matrixStackIn, bufferIn.getBuffer(type), packedLightIn, LivingEntityRenderer.getOverlayCoords(hydra, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStackIn.popPose();
@@ -115,15 +116,15 @@ public class LayerHydraHead extends RenderLayer<EntityHydra, ModelHydraBody> {
         } else {
             matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotateAngleZ * scale);
             if (renderer.rotateAngleZ != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.rotateAngleZ));
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleZ, new Vector3f(0.0F, 0.0F, 1.0F))));
             }
 
             if (renderer.rotateAngleY != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.rotateAngleY));
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleY, new Vector3f(0.0F, 1.0F, 0.0F))));
             }
 
             if (renderer.rotateAngleX != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.rotateAngleX));
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleX, new Vector3f(1.0F, 0.0F, 0.0F))));
             }
         }
     }

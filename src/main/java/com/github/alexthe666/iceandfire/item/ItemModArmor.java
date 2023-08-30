@@ -1,9 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
@@ -17,8 +15,8 @@ import java.util.List;
 
 public class ItemModArmor extends ArmorItem {
 
-    public ItemModArmor(ArmorMaterial material, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemModArmor(ArmorMaterial material, ArmorItem.Type slot) {
+        super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class ItemModArmor extends ArmorItem {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             if (calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1) {
-                tooltip.add(new TranslatableComponent("item.iceandfire.air_pods.desc").withStyle(ChatFormatting.GREEN));
+                tooltip.add(Component.translatable("item.iceandfire.air_pods.desc").withStyle(ChatFormatting.GREEN));
             }
         }
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

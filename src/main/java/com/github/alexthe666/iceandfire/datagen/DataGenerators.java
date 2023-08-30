@@ -3,15 +3,18 @@ package com.github.alexthe666.iceandfire.datagen;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.tags.Tag;
+import net.minecraft.server.packs.resources.IoSupplier;
+import net.minecraft.tags.TagBuilder;
+import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -21,12 +24,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -38,53 +38,54 @@ public class DataGenerators {
         if (event.getPackType() == PackType.SERVER_DATA) {
             // Hacky workaround to avoid reloading datapacks
             // FIXME: Won't work in 1.19.2
-            createResources(ForgeRegistries.BIOMES.getKeys().stream().map(ForgeRegistries.BIOMES::getHolder).filter(Optional::isPresent).map(Optional::get));
-            event.addRepositorySource((packConsumer, packConstructor) -> {
-                Pack pack = Pack.create(IceAndFire.MODID + ":data", true, () -> resources, packConstructor, Pack.Position.TOP, PackSource.DEFAULT);
-                packConsumer.accept(pack);
+            createResources((Registry<Biome>) ForgeRegistries.BIOMES);
+            event.addRepositorySource(pOnLoad -> {
+                Pack pack = Pack.create(IceAndFire.MODID + ":data", Component.nullToEmpty(""), true, pId -> resources,
+                        Pack.readPackInfo("server", pId -> resources),event.getPackType(), Pack.Position.TOP, true, PackSource.DEFAULT);
+                pOnLoad.accept(pack);
             });
         }
     }
 
-    @Deprecated(since = "1.19.2", forRemoval = true)
+/*    @Deprecated(since = "1.19.2", forRemoval = true)
     public static void createResources(Stream<Holder<Biome>> biomeStream) {
-        HashMap<TagKey<?>, Tag.Builder> builders = new HashMap<>();
-        builders.put(IafWorldRegistry.HAS_MAUSOLEUM, Tag.Builder.tag());
-        builders.put(IafWorldRegistry.HAS_GRAVEYARD, Tag.Builder.tag());
-        builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, Tag.Builder.tag());
+        HashMap<TagKey<?>, TagBuilder> builders = new HashMap<>();
+        builders.put(IafWorldRegistry.HAS_MAUSOLEUM, TagBuilder.create());
+        builders.put(IafWorldRegistry.HAS_GRAVEYARD, TagBuilder.create());
+        builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, TagBuilder.create());
 
         biomeStream.forEach(biomeReference -> {
-            if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, biomeReference.value())) {
-                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(biomeReference.value().getRegistryName(), "forge");
+            if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(ForgeRegistries.BIOMES.getKey(biomeReference.value()));
             }
-            if (BiomeConfig.test(BiomeConfig.graveyardBiomes, biomeReference.value())) {
-                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(biomeReference.value().getRegistryName(), "forge");
+            if (BiomeConfig.test(BiomeConfig.graveyardBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(ForgeRegistries.BIOMES.getKey(biomeReference.value()));
             }
-            if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeReference.value())) {
-                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(biomeReference.value().getRegistryName(), "forge");
+            if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeReference)) {
+                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(ForgeRegistries.BIOMES.getKey(biomeReference.value()));
             }
         });
 
         addBiomeTag("has_structure/mausoleum.json", builders.get(IafWorldRegistry.HAS_MAUSOLEUM));
         addBiomeTag("has_structure/graveyard.json", builders.get(IafWorldRegistry.HAS_GRAVEYARD));
         addBiomeTag("has_structure/gorgon_temple.json", builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE));
-    }
+    }*/
 
     public static void createResources(Registry<Biome> biomes) {
-        HashMap<TagKey<?>, Tag.Builder> builders = new HashMap<>();
-        builders.put(IafWorldRegistry.HAS_MAUSOLEUM, Tag.Builder.tag());
-        builders.put(IafWorldRegistry.HAS_GRAVEYARD, Tag.Builder.tag());
-        builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, Tag.Builder.tag());
+        HashMap<TagKey<?>, TagBuilder> builders = new HashMap<>();
+        builders.put(IafWorldRegistry.HAS_MAUSOLEUM, TagBuilder.create());
+        builders.put(IafWorldRegistry.HAS_GRAVEYARD, TagBuilder.create());
+        builders.put(IafWorldRegistry.HAS_GORGON_TEMPLE, TagBuilder.create());
 
         biomes.holders().forEach(biomeReference -> {
             if (BiomeConfig.test(BiomeConfig.gorgonTempleBiomes, biomeReference)) {
-                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(biomeReference.key().location(), "forge");
+                builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE).addElement(biomeReference.key().location());
             }
             if (BiomeConfig.test(BiomeConfig.graveyardBiomes, biomeReference)) {
-                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(biomeReference.key().location(), "forge");
+                builders.get(IafWorldRegistry.HAS_GRAVEYARD).addElement(biomeReference.key().location());
             }
             if (BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeReference)) {
-                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(biomeReference.key().location(), "forge");
+                builders.get(IafWorldRegistry.HAS_MAUSOLEUM).addElement(biomeReference.key().location());
             }
         });
 
@@ -93,8 +94,33 @@ public class DataGenerators {
         addBiomeTag("has_structure/gorgon_temple.json", builders.get(IafWorldRegistry.HAS_GORGON_TEMPLE));
     }
 
-    static void addBiomeTag(String location, Tag.Builder builder) {
-        resources.add(new ResourceLocation(IceAndFire.MODID, "tags/worldgen/biome/" + location), builder.serializeToJson());
+    static void addBiomeTag(String location, TagBuilder builder) {
+        resources.add(new ResourceLocation(IceAndFire.MODID, "tags/worldgen/biome/" + location), serializeToJson(builder));
+    }
+
+    static JsonObject serializeToJson(TagBuilder builder) {
+        JsonObject jsonobject = new JsonObject();
+        JsonArray jsonarray = new JsonArray();
+
+        for(TagEntry tagEntry : builder.build()) {
+            jsonarray.add("#" + tagEntry.getId());
+        }
+
+        jsonobject.addProperty("replace", builder.isReplace());
+        jsonobject.add("values", jsonarray);
+        builder.getRemoveEntries();
+        if (builder.getRemoveEntries().findAny().isPresent()) {
+            JsonArray removeArray = new JsonArray();
+            for (Object removeEntry : builder.getRemoveEntries().toArray()) {
+                if (removeEntry instanceof TagEntry) {
+                    removeArray.add("#" + ((TagEntry) removeEntry).getId());
+                }
+            }
+            if (!removeArray.isEmpty())
+                jsonobject.add("remove", removeArray);
+        }
+
+        return jsonobject;
     }
 
     public static class PackResources implements net.minecraft.server.packs.PackResources {
@@ -105,35 +131,33 @@ public class DataGenerators {
             DATA.put(location, data);
         }
 
-        @Nullable
         @Override
-        public InputStream getRootResource(String pFileName) throws IOException {
+        public IoSupplier<InputStream> getRootResource(String @NotNull ... pFileName) {
             return null;
         }
 
         @Override
-        public InputStream getResource(PackType pType, ResourceLocation pLocation) throws IOException {
+        public IoSupplier<InputStream> getResource(@NotNull PackType pType, @NotNull ResourceLocation pLocation) {
             if (pType == PackType.SERVER_DATA) {
-                return new ByteArrayInputStream(DATA.get(pLocation).toString().getBytes());
+                return IoSupplier.create(Path.of(pLocation.getPath()));
             }
-            throw new IOException("Data wasn't found");
+            return null;
         }
 
         @Override
-        public Collection<ResourceLocation> getResources(PackType pType, String pNamespace, String pPath, int pMaxDepth, Predicate<String> pFilter) {
+        public void listResources(@NotNull PackType pType, @NotNull String pNamespace, @NotNull String pPath, net.minecraft.server.packs.PackResources.@NotNull ResourceOutput pResourceOutput) {
             Collection<ResourceLocation> resources = new ArrayList<>();
             if (pType == PackType.SERVER_DATA) {
                 DATA.forEach(((resourceLocation, _jsonObject) -> {
-                    if (resourceLocation.getNamespace().equals(pNamespace) && resourceLocation.toString().startsWith(pPath) && pFilter.test(resourceLocation.getPath())) {
+                    if (resourceLocation.getNamespace().equals(pNamespace) && resourceLocation.toString().startsWith(pPath) && pPath.equals(resourceLocation.getPath())) {
                         resources.add(resourceLocation);
                     }
                 }
                 ));
             }
-            return resources;
+//            return resources;
         }
 
-        @Override
         public boolean hasResource(PackType pType, ResourceLocation pLocation) {
             if (pType != PackType.SERVER_DATA) {
                 return false;
@@ -143,12 +167,12 @@ public class DataGenerators {
         }
 
         @Override
-        public String getName() {
+        public @NotNull String packId() {
             return "iceandfire:data";
         }
 
         @Override
-        public Set<String> getNamespaces(PackType pType) {
+        public @NotNull Set<String> getNamespaces(@NotNull PackType pType) {
             Set<String> namespaces = new HashSet<>();
             if (pType != PackType.SERVER_DATA) {
                 return namespaces;
@@ -167,7 +191,7 @@ public class DataGenerators {
 
         @Nullable
         @Override
-        public <T> T getMetadataSection(MetadataSectionSerializer<T> pDeserializer) throws IOException {
+        public <T> T getMetadataSection(MetadataSectionSerializer<T> pDeserializer) {
             if (pDeserializer.getMetadataSectionName().equals("pack")) {
                 JsonObject object = new JsonObject();
                 object.addProperty("pack_format", PACK_FORMAT);

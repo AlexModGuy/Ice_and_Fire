@@ -5,25 +5,24 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
-    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound) {
+    public BlockFallingGeneric(float hardness, float resistance, SoundType sound) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
         );
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
+    public BlockFallingGeneric(float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .friction(0.98F)

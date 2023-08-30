@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +22,7 @@ public class BlockMyrmexCocoon extends BaseEntityBlock {
     public BlockMyrmexCocoon() {
         super(
             Properties
-                .of(Material.DIRT)
+                .of()
                 .strength(2.5F)
                 .noOcclusion()
                 .dynamicShape()

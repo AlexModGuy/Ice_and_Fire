@@ -7,23 +7,22 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class BlockGeneric extends Block {
-    public BlockGeneric(Material materialIn, float hardness, float resistance, SoundType sound) {
+    public BlockGeneric(float hardness, float resistance, SoundType sound) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
         );
     }
 
-    public BlockGeneric(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
+    public BlockGeneric(float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .friction(0.98F)

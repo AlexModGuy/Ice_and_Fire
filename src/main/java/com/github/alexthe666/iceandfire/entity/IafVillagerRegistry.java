@@ -13,8 +13,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.WritableRegistry;
-import net.minecraft.core.Holder;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -37,31 +36,31 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafVillagerRegistry {
 
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, IceAndFire.MODID);
-    public static final RegistryObject<PoiType> SCRIBE_POI = POI_TYPES.register("scribe", () -> new PoiType("scribe", ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
-    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", SCRIBE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, IceAndFire.MODID);
+    public static final RegistryObject<PoiType> SCRIBE_POI = POI_TYPES.register("scribe", () -> new PoiType(ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
+    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", Predicate.isEqual(SCRIBE_POI.getHolder().get()), Predicate.isEqual(SCRIBE_POI.getHolder().get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final Holder<StructureProcessorList> HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
-
+    private static final ResourceKey<StructureProcessorList> HOUSE_PROCESSOR = ResourceKey.create(Registries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"));
     private static StructureProcessorList genVillageHouseProcessor() {
         RuleProcessor mossify = new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockMatchTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.defaultBlockState())));
         return new StructureProcessorList(ImmutableList.of(mossify, new VillageHouseProcessor()));
     }
 
-    public static void setup() {
+    public static void setup(BootstapContext<StructureTemplatePool> pContext) {
         if (IafConfig.villagerHouseWeight > 0) {
-            PlainVillagePools.bootstrap();
-            SnowyVillagePools.bootstrap();
-            SavannaVillagePools.bootstrap();
-            DesertVillagePools.bootstrap();
-            TaigaVillagePools.bootstrap();
+            PlainVillagePools.bootstrap(pContext);
+            SnowyVillagePools.bootstrap(pContext);
+            SavannaVillagePools.bootstrap(pContext);
+            DesertVillagePools.bootstrap(pContext);
+            TaigaVillagePools.bootstrap(pContext);
 
             for (String type : VILLAGE_TYPES) {
                 addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
@@ -105,7 +104,7 @@ public class IafVillagerRegistry {
     }
 
     private static void addStructureToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
-        StructureTemplatePool old = BuiltinRegistries.TEMPLATE_POOL.get(pool);
+        StructureTemplatePool old = Registries.TEMPLATE_POOL;
         List<StructurePoolElement> shuffled = old != null ? old.getShuffledTemplates(new Random()) : ImmutableList.of();
         Object2IntMap<StructurePoolElement> recomputedPieces = new Object2IntLinkedOpenHashMap<>();
 
@@ -122,8 +121,8 @@ public class IafVillagerRegistry {
         newPieces.add(new Pair<>(StructurePoolElement.legacy(toAdd.toString(), HOUSE_PROCESSOR).apply(StructureTemplatePool.Projection.RIGID), weight));
 
         ResourceLocation name = old.getName();
-        int id = BuiltinRegistries.TEMPLATE_POOL.getId(old);
-        ((WritableRegistry<StructureTemplatePool>) BuiltinRegistries.TEMPLATE_POOL).registerOrOverride(
+        int id = Registries.TEMPLATE_POOL.getId(old);
+        ((WritableRegistry<StructureTemplatePool>) Registries.TEMPLATE_POOL).registerOrOverride(
                 OptionalInt.of(id),
                 ResourceKey.create(BuiltinRegistries.TEMPLATE_POOL.key(), name),
                 new StructureTemplatePool(pool, name, newPieces),

@@ -17,14 +17,13 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.NewRegistryEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class IafRecipeRegistry {
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void preInit(RegistryEvent.Register<Block> event) {
+    public static void preInit(NewRegistryEvent event) {
         DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW.get(), new AbstractProjectileDispenseBehavior() {
             /**
              * Return the projectile entity spawned by this dispense behavior.

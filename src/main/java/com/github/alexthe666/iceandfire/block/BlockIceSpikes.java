@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +25,7 @@ public class BlockIceSpikes extends Block {
     public BlockIceSpikes() {
         super(
             Properties
-                .of(Material.ICE_SOLID)
+                .of()
                 .noOcclusion()
                 .dynamicShape()
                 .randomTicks()
@@ -70,7 +68,7 @@ public class BlockIceSpikes extends Block {
     @Override
     public void stepOn(Level worldIn, BlockPos pos, BlockState pState, Entity entityIn) {
         if (!(entityIn instanceof EntityIceDragon)) {
-            entityIn.hurt(DamageSource.CACTUS, 1);
+            entityIn.hurt(worldIn.damageSources().cactus(), 1);
             if (entityIn instanceof LivingEntity && entityIn.getDeltaMovement().x != 0 && entityIn.getDeltaMovement().z != 0) {
                 ((LivingEntity) entityIn).knockback(0.5F, entityIn.getDeltaMovement().x, entityIn.getDeltaMovement().z);
             }

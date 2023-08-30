@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -11,6 +10,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -24,11 +25,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,7 +53,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
         if (!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
@@ -89,7 +88,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         return true;
     }
 
-    public void generateCave(LevelAccessor worldIn, int radius, int amount, BlockPos center, Random rand) {
+    public void generateCave(LevelAccessor worldIn, int radius, int amount, BlockPos center, RandomSource rand) {
         List<SphereInfo> sphereList = new ArrayList<>();
         sphereList.add(new SphereInfo(radius, center.immutable()));
         Stream<BlockPos> sphereBlocks = ShapeBuilder.start().getAllInCutOffSphereMutable(radius, radius / 2, center).toStream(false);
@@ -117,7 +116,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         sphereList.clear();
     }
 
-    public void createShell(LevelAccessor worldIn, Random rand, Set<BlockPos> positions) {
+    public void createShell(LevelAccessor worldIn, RandomSource rand, Set<BlockPos> positions) {
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BaseEntityBlock) && worldIn.getBlockState(blockPos).getDestroySpeed(worldIn, blockPos) >= 0) {
                 boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
@@ -157,7 +156,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         });
     }
 
-    public void decorateCave(LevelAccessor worldIn, Random rand, Set<BlockPos> positions, List<SphereInfo> spheres, BlockPos center) {
+    public void decorateCave(LevelAccessor worldIn, RandomSource rand, Set<BlockPos> positions, List<SphereInfo> spheres, BlockPos center) {
         for (SphereInfo sphere : spheres) {
             BlockPos pos = sphere.pos;
             int radius = sphere.radius;
@@ -169,13 +168,13 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         int y = center.getY();
         positions.forEach(blockPos -> {
             if (blockPos.getY() < y) {
-                if (worldIn.getBlockState(blockPos.below()).getMaterial() == Material.STONE && worldIn.getBlockState(blockPos).getMaterial() == Material.AIR)
+                if (worldIn.getBlockState(blockPos.below()).is(BlockTags.BASE_STONE_OVERWORLD) && worldIn.getBlockState(blockPos).isAir())
                     setGoldPile(worldIn, blockPos, rand);
             }
         });
     }
 
-    public void setGoldPile(LevelAccessor world, BlockPos pos, Random rand) {
+    public void setGoldPile(LevelAccessor world, BlockPos pos, RandomSource rand) {
         if (!(world.getBlockState(pos).getBlock() instanceof BaseEntityBlock)) {
             int chance = rand.nextInt(99) + 1;
             if (chance < 60) {
@@ -194,7 +193,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         }
     }
 
-    abstract EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge);
+    abstract EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge);
 
     private static class SphereInfo {
         int radius;

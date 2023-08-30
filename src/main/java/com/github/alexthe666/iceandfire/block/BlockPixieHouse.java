@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -31,7 +30,7 @@ public class BlockPixieHouse extends BaseEntityBlock {
     public BlockPixieHouse() {
         super(
             Properties
-                .of(Material.WOOD)
+                .of()
                 .noOcclusion()
                 .dynamicShape()
                 .strength(2.0F, 5.0F)
@@ -76,7 +75,7 @@ public class BlockPixieHouse extends BaseEntityBlock {
     }
 
     @Override
-    public void initializeClient(@NotNull Consumer<IBlockRenderProperties> consumer) {
+    public void initializeClient(@NotNull Consumer<IClientBlockExtensions> consumer) {
         super.initializeClient(consumer);
     }
 

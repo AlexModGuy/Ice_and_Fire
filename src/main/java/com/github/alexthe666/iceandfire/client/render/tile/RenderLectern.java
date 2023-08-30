@@ -3,8 +3,6 @@ package com.github.alexthe666.iceandfire.client.render.tile;
 import com.github.alexthe666.iceandfire.block.BlockLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,6 +12,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRenderer<T> {
 
@@ -30,13 +31,13 @@ public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRe
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.1F, 0.5F);
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, this.getRotation(lectern), true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 112, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90, true));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*this.getRotation(lectern), new Vector3f(0.0F, 1.0F, 0.0F))));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*112F, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/2F, new Vector3f(0.0F, 1.0F, 0.0F))));
         float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.25F;
         float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.75F;
-        f4 = (f4 - Mth.fastFloor(f4)) * 1.6F - 0.3F;
-        f5 = (f5 - Mth.fastFloor(f5)) * 1.6F - 0.3F;
+        f4 = (f4 - Mth.floor(f4)) * 1.6F - 0.3F;
+        f5 = (f5 - Mth.floor(f5)) * 1.6F - 0.3F;
 
         if (f4 < 0.0F) {
             f4 = 0.0F;

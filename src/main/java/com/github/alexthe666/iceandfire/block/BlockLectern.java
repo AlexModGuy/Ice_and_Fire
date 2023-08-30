@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -37,7 +36,7 @@ public class BlockLectern extends BaseEntityBlock {
     public BlockLectern() {
         super(
             Properties
-                .of(Material.WOOD)
+                .of()
                 .noOcclusion()
                 .dynamicShape()
                 .strength(2, 5)

@@ -9,8 +9,6 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -18,6 +16,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.Locale;
 import java.util.Map;
@@ -56,8 +57,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     public void render(@NotNull EntityMobSkull entity, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) -Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) -Math.PI/180F*(180-entity.getYaw()), new Vector3f(0.0F, -1.0F, 0.0F))));
         float f = 0.0625F;
         float size = 1.0F;
         matrixStackIn.scale(size, size, size);

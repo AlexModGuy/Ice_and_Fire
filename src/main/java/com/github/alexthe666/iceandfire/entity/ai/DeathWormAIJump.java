@@ -47,13 +47,13 @@ public class DeathWormAIJump extends JumpGoal {
 
     private boolean canJumpTo(BlockPos pos, int dx, int dz, int scale) {
         BlockPos blockpos = pos.offset(dx * scale, 0, dz * scale);
-        return this.dolphin.level.getBlockState(blockpos).is(BlockTags.SAND);
+        return this.dolphin.level().getBlockState(blockpos).is(BlockTags.SAND);
     }
 
     @SuppressWarnings("deprecation")
     private boolean isAirAbove(BlockPos pos, int dx, int dz, int scale) {
-        return this.dolphin.level.getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir()
-            && this.dolphin.level.getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
+        return this.dolphin.level().getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir()
+            && this.dolphin.level().getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
     }
 
     /**
@@ -63,7 +63,7 @@ public class DeathWormAIJump extends JumpGoal {
     public boolean canContinueToUse() {
         final double d0 = this.dolphin.getDeltaMovement().y;
         return jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.dolphin.getXRot() == 0.0F
-            || Math.abs(this.dolphin.getXRot()) >= 10.0F || !this.dolphin.isInSand()) && !this.dolphin.isOnGround();
+            || Math.abs(this.dolphin.getXRot()) >= 10.0F || !this.dolphin.isInSand()) && !this.dolphin.onGround();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class DeathWormAIJump extends JumpGoal {
     public void tick() {
         final boolean flag = this.inWater;
         if (!flag) {
-            this.inWater = this.dolphin.level.getBlockState(this.dolphin.blockPosition()).is(BlockTags.SAND);
+            this.inWater = this.dolphin.level().getBlockState(this.dolphin.blockPosition()).is(BlockTags.SAND);
         }
         Vec3 vector3d = this.dolphin.getDeltaMovement();
         if (vector3d.y * vector3d.y < 0.1F && this.dolphin.getXRot() != 0.0F) {

@@ -4,16 +4,15 @@ package com.github.alexthe666.iceandfire.config.biome;
 import com.github.alexthe666.citadel.Citadel;
 import com.google.gson.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biome.SpawnBiomeData {
 
@@ -44,7 +43,7 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
         return this;
     }
 
-    @Deprecated
+/*    @Deprecated
     public boolean matches(Biome biomeIn) {
         return this.matches(Biome.BiomeCategory.NONE, biomeIn.getRegistryName());
     }
@@ -62,7 +61,7 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
             }
         }
         return false;
-    }
+    }*/
 
     public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
         for (List<SpawnBiomeEntry> all : biomes) {
@@ -124,16 +123,7 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
                         return !negate;
                     }
                     return negate;
-                }
-                else if (type == BiomeEntryType.BIOME_CATEGORY)
-                {
-                    if (Biome.getBiomeCategory(biomeHolder).getName().toLowerCase(Locale.ROOT).equals(this.value)) {
-                        return !this.negate;
-                    } else {
-                        return this.negate;
-                    }
-                }
-                else {
+                } else {
                     if (registryName.toString().equals(value)) {
                         return !negate;
                     }
@@ -141,9 +131,9 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
                 }
             }
         }
-        public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
+/*        public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
             if (this.type == BiomeEntryType.BIOME_DICT) {
-                ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, registryName);
+                ResourceKey<Biome> biomeKey = ResourceKey.create(ForgeRegistries.BIOMES.getRegistryKey(), registryName);
                 List<? extends String> biomeTypes = BiomeDictionary.getTypes(biomeKey).stream().map((t) -> {
                     return t.toString().toLowerCase(Locale.ROOT);
                 }).toList();
@@ -164,7 +154,7 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
             } else {
                 return this.negate;
             }
-        }
+        }*/
     }
 
     static class InvalidCitadelFormatException extends JsonParseException {

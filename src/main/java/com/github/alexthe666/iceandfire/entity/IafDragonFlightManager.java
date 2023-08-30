@@ -80,7 +80,10 @@ public class IafDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level.isEmptyBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
+        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4
+                || !dragon.level().isEmptyBlock(new BlockPos((int) Math.round(target.x), (int) Math.round(target.y), (int) Math.round(target.z)))
+                        && (dragon.isHovering() || dragon.isFlying())
+                || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;
 
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
@@ -184,7 +187,7 @@ public class IafDragonFlightManager {
                 PathNavigation pathnavigate = this.mob.getNavigation();
                 if (pathnavigate != null) {
                     NodeEvaluator nodeprocessor = pathnavigate.getNodeEvaluator();
-                    if (nodeprocessor != null && nodeprocessor.getBlockPathType(this.mob.level, Mth.floor(this.mob.getX() + (double) f7), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double) f8)) != BlockPathTypes.WALKABLE) {
+                    if (nodeprocessor != null && nodeprocessor.getBlockPathType(this.mob.level(), Mth.floor(this.mob.getX() + (double) f7), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double) f8)) != BlockPathTypes.WALKABLE) {
                         this.strafeForwards = 1.0F;
                         this.strafeRight = 0.0F;
                         f1 = f;
@@ -214,14 +217,14 @@ public class IafDragonFlightManager {
                 }
                 this.mob.setYRot(this.rotlerp(this.mob.getYRot(), targetDegree, changeRange));
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
-                if (d2 > (double) this.mob.maxUpStep && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getBbWidth() / 2)) {
+                if (d2 > (double) this.mob.maxUpStep() && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.mob.getBbWidth() / 2)) {
                     this.mob.getJumpControl().jump();
                     this.operation = Operation.JUMPING;
                 }
             } else if (this.operation == Operation.JUMPING) {
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 
-                if (this.mob.isOnGround()) {
+                if (this.mob.onGround()) {
                     this.operation = Operation.WAIT;
                 }
             } else {

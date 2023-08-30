@@ -20,8 +20,8 @@ public class SeaSerpentAIGetInWater extends Goal {
 
     @Override
     public boolean canUse() {
-        if ((this.creature.jumpCooldown == 0 || this.creature.isOnGround())
-            && !this.creature.level.getFluidState(this.creature.blockPosition()).is(FluidTags.WATER)) {
+        if ((this.creature.jumpCooldown == 0 || this.creature.onGround())
+            && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER)) {
             targetPos = generateTarget();
             return targetPos != null;
         }
@@ -38,7 +38,7 @@ public class SeaSerpentAIGetInWater extends Goal {
     @Override
     public boolean canContinueToUse() {
         return !this.creature.getNavigation().isDone() && targetPos != null
-            && !this.creature.level.getFluidState(this.creature.blockPosition()).is(FluidTags.WATER);
+            && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER);
     }
 
     public BlockPos generateTarget() {
@@ -47,10 +47,10 @@ public class SeaSerpentAIGetInWater extends Goal {
         for (int i = 0; i < 15; i++) {
             BlockPos blockpos1 = this.creature.blockPosition().offset(ThreadLocalRandom.current().nextInt(range) - range / 2,
                 3, ThreadLocalRandom.current().nextInt(range) - range / 2);
-            while (this.creature.level.isEmptyBlock(blockpos1) && blockpos1.getY() > 1) {
+            while (this.creature.level().isEmptyBlock(blockpos1) && blockpos1.getY() > 1) {
                 blockpos1 = blockpos1.below();
             }
-            if (this.creature.level.getFluidState(blockpos1).is(FluidTags.WATER)) {
+            if (this.creature.level().getFluidState(blockpos1).is(FluidTags.WATER)) {
                 blockpos = blockpos1;
             }
         }

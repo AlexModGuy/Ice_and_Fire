@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderGhost;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -18,6 +17,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ParticleGhostAppearance extends Particle {
     private final ModelGhost model = new ModelGhost(0.0F);
@@ -47,13 +49,12 @@ public class ParticleGhostAppearance extends Particle {
             PoseStack matrixstack = new PoseStack();
             matrixstack.mulPose(renderInfo.rotation());
             if (fromLeft) {
-                matrixstack.mulPose(Vector3f.YN.rotationDegrees(150.0F * f - 60.0F));
-                matrixstack.mulPose(Vector3f.ZN.rotationDegrees(150.0F * f - 60.0F));
+                matrixstack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180.0F*(150.0F*f-60.0F), new Vector3f(0.0F, -1.0F, 0.0F))));
+                matrixstack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180.0F*(150.0F*f-60.0F), new Vector3f(0.0F, 0.0F, -1.0F))));
 
             } else {
-                matrixstack.mulPose(Vector3f.YP.rotationDegrees(150.0F * f - 60.0F));
-                matrixstack.mulPose(Vector3f.ZP.rotationDegrees(150.0F * f - 60.0F));
-
+                matrixstack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180.0F*(150.0F*f-60.0F), new Vector3f(0.0F, 1.0F, 0.0F))));
+                matrixstack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180.0F*(150.0F*f-60.0F), new Vector3f(0.0F, 0.0F, 1.0F))));
             }
             matrixstack.scale(-1.0F, -1.0F, 1.0F);
             matrixstack.translate(0.0D, 0.3F, 1.25D);

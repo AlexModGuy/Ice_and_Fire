@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockDreadStoneFace extends HorizontalDirectionalBlock implements IDreadBlock, IDragonProof {
@@ -21,7 +20,7 @@ public class BlockDreadStoneFace extends HorizontalDirectionalBlock implements I
     public BlockDreadStoneFace() {
         super(
             BlockBehaviour.Properties
-                .of(Material.STONE)
+                .of()
                 .sound(SoundType.STONE)
                 .strength(-1F, 10000F)
         );

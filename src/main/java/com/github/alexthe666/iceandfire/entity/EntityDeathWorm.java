@@ -16,6 +16,8 @@ import com.github.alexthe666.iceandfire.pathfinding.PathNavigateDeathWormSand;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.PositionImpl;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -48,9 +50,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
@@ -94,7 +98,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
-        this.maxUpStep = 1;
+        this.setMaxUpStep(1);
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
@@ -161,10 +165,10 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         int j = Mth.floor(this.getBoundingBox().minY);
         int k = Mth.floor(this.getZ());
         BlockPos blockpos = new BlockPos(i, j, k);
-        this.level.getBlockState(blockpos.below()).is(BlockTags.SAND);
-        return this.level.getBlockState(blockpos.below()).is(BlockTags.SAND)
+        this.level().getBlockState(blockpos.below()).is(BlockTags.SAND);
+        return this.level().getBlockState(blockpos.below()).is(BlockTags.SAND)
                 && this.getRandom().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0
-                && this.level.getMaxLocalRawBrightness(blockpos) > 8;
+                && this.level().getMaxLocalRawBrightness(blockpos) > 8;
     }
 
     public void onUpdateParts() {
@@ -174,16 +178,16 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             int j = Mth.floor(this.getY() - 1);
             int k = Mth.floor(this.getZ());
             BlockPos blockpos = new BlockPos(i, j, k);
-            BlockState BlockState = this.level.getBlockState(blockpos);
+            BlockState BlockState = this.level().getBlockState(blockpos);
 
-            if (level.isClientSide) {
+            if (level().isClientSide) {
                 // world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
             }
         }
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return this.getScale() > 3 ? 20 : 10;
     }
 
@@ -200,7 +204,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         for (Entity entity : segments) {
             if (entity != null) {
                 if (!((EntityMutlipartPart) entity).shouldContinuePersisting()) {
-                    level.addFreshEntity(entity);
+                    level().addFreshEntity(entity);
                 }
                 ((EntityMutlipartPart) entity).setParent(this);
             }
@@ -228,9 +232,9 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             this.setAnimation(ANIMATION_BITE);
             this.playSound(this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_ATTACK : IafSoundRegistry.DEATHWORM_ATTACK, 1, 1);
         }
-        if (this.getRandom().nextInt(3) == 0 && this.getScale() > 1 && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+        if (this.getRandom().nextInt(3) == 0 && this.getScale() > 1 && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, entityIn.getX(), entityIn.getY(), entityIn.getZ()))) {
-                BlockLaunchExplosion explosion = new BlockLaunchExplosion(level, this, entityIn.getX(), entityIn.getY(), entityIn.getZ(), this.getScale());
+                BlockLaunchExplosion explosion = new BlockLaunchExplosion(level(), this, entityIn.getX(), entityIn.getY(), entityIn.getZ(), this.getScale());
                 explosion.explode();
                 explosion.finalizeExplosion(true);
             }
@@ -367,7 +371,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         this.entityData.set(SCALE, scale);
         this.updateAttributes();
         clearSegments();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             initSegments(scale * (this.getWormAge() / 5F));
             IceAndFire.sendMSGToAll(new MessageDeathWormHitbox(this.getId(), scale * (this.getWormAge() / 5F)));
         }
@@ -384,8 +388,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    public void positionRider(@NotNull Entity passenger, @NotNull MoveFunction callback) {
+        super.positionRider(passenger, callback);
         if (this.hasPassenger(passenger)) {
             this.setYBodyRot(passenger.getYRot());
             float radius = -0.5F * this.getScale();
@@ -398,7 +402,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player) {
                 Player player = (Player) passenger;
@@ -411,7 +415,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (this.getWormAge() > 4 && player.getVehicle() == null && player.getMainHandItem().getItem() == Items.FISHING_ROD && player.getOffhandItem().getItem() == Items.FISHING_ROD && !this.level.isClientSide) {
+        if (this.getWormAge() > 4 && player.getVehicle() == null && player.getMainHandItem().getItem() == Items.FISHING_ROD && player.getOffhandItem().getItem() == Items.FISHING_ROD && !this.level().isClientSide) {
             player.startRiding(this);
             return InteractionResult.SUCCESS;
         }
@@ -421,18 +425,18 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     private void switchNavigator(boolean inSand) {
         if (inSand) {
             this.moveControl = new EntityDeathWorm.SandMoveHelper();
-            this.navigation = new PathNavigateDeathWormSand(this, level);
+            this.navigation = new PathNavigateDeathWormSand(this, level());
             this.isSandNavigator = true;
         } else {
             this.moveControl = new MoveControl(this);
-            this.navigation = new PathNavigateDeathWormLand(this, level);
+            this.navigation = new PathNavigateDeathWormLand(this, level());
             this.isSandNavigator = false;
         }
     }
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
-        if (source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK) {
+        if (source == this.level().damageSources().inWall() || (source.getEntity() != null && source == this.level().damageSources().fallingBlock(source.getEntity()))) {
             return false;
         }
         if (this.isVehicle() && source.getEntity() != null && this.getControllingPassenger() != null && source.getEntity() == this.getControllingPassenger()) {
@@ -463,16 +467,17 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     protected void moveTowardsClosestSpace(double x, double y, double z) {
-        BlockPos blockpos = new BlockPos(x, y, z);
-        Vec3 vector3d = new Vec3(x - (double) blockpos.getX(), y - (double) blockpos.getY(), z - (double) blockpos.getZ());
+        PositionImpl blockpos = new PositionImpl(x, y, z);
+        Vec3i vec3i = new Vec3i((int) Math.round(blockpos.x()), (int) Math.round(blockpos.y()), (int) Math.round(blockpos.z()));
+        Vec3 vector3d = new Vec3(x - blockpos.x(), y - blockpos.y(), z - blockpos.z());
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
         Direction direction = Direction.UP;
         double d0 = Double.MAX_VALUE;
 
         for (Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
-            blockpos$mutable.setWithOffset(blockpos, direction1);
-            if (!this.level.getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level, blockpos$mutable)
-                || level.getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
+            blockpos$mutable.setWithOffset(vec3i, direction1);
+            if (!this.level().getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level(), blockpos$mutable)
+                || level().getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
                 double d1 = vector3d.get(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {
@@ -503,10 +508,12 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void killed(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
+    public boolean killedEntity(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         if (this.isTame()) {
             this.heal(14);
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -543,11 +550,11 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         if (this.getWormJumping() > 0) {
             float f2 = (float) -((float) this.getDeltaMovement().y * (double) (180F / (float) Math.PI));
             this.setXRot(f2);
-            if (this.isInSand() || this.isOnGround()) {
+            if (this.isInSand() || this.onGround()) {
                 this.setWormJumping(this.getWormJumping() - 1);
             }
         }
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         if (this.getTarget() != null && (!this.getTarget().isAlive() || !DragonUtils.isAlive(this.getTarget()))) {
@@ -557,7 +564,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             if (this.ticksTillExplosion == 0) {
                 boolean b = !MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, this.getX(), this.getY(), this.getZ()));
                 if (b) {
-                    level.explode(this.thrower, this.getX(), this.getY(), this.getZ(), 2.5F * this.getScale(), false, Explosion.BlockInteraction.DESTROY);
+                    level().explode(this.thrower, this.getX(), this.getY(), this.getZ(), 2.5F * this.getScale(), false, Level.ExplosionInteraction.MOB);
                 }
                 this.thrower = null;
             } else {
@@ -576,9 +583,9 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             this.clearSegments();
             this.heal(15);
             this.setDeathWormScale(this.getDeathwormScale());
-            if (level.isClientSide) {
+            if (level().isClientSide) {
                 for (int i = 0; i < 10 * this.getScale(); i++) {
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())) + 0.5F, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level().addParticle(ParticleTypes.HAPPY_VILLAGER, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())) + 0.5F, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                     /*
                     for (int j = 0; j < segments.length; j++) {
                         this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, segments[j].getPosX() + (double) (this.rand.nextFloat() * segments[j].getWidth() * 2.0F) - (double) segments[j].getWidth(), this.getSurface((int) Math.floor(segments[j].getPosX()), (int) Math.floor(segments[j].getPosY()), (int) Math.floor(segments[j].getPosZ())) + 0.5F, segments[j].getPosZ() + (double) (this.rand.nextFloat() * segments[j].getWidth() * 2.0F) - (double) segments[j].getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
@@ -607,24 +614,25 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             }*/
         if (this.getTarget() != null && this.distanceTo(this.getTarget()) < Math.min(4, 4D * getScale()) && this.getAnimation() == ANIMATION_BITE && this.getAnimationTick() == 5) {
             float f = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-            this.getTarget().hurt(DamageSource.mobAttack(this), f);
+            this.getTarget().hurt(this.level().damageSources().mobAttack(this), f);
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4F, 0));
         }
 
     }
 
     public int getWormBrightness(boolean sky) {
-        BlockPos eyePos = new BlockPos(this.getEyePosition(1.0F));
-        while (eyePos.getY() < 256 && !level.isEmptyBlock(eyePos)) {
+        Vec3 vec3 = this.getEyePosition(1.0F);
+        BlockPos eyePos = new BlockPos((int) Math.round(vec3.x()), (int) Math.round(vec3.y()), (int) Math.round(vec3.z()));
+        while (eyePos.getY() < 256 && !level().isEmptyBlock(eyePos)) {
             eyePos = eyePos.above();
         }
-        int light = this.level.getBrightness(sky ? LightLayer.SKY : LightLayer.BLOCK, eyePos.above());
+        int light = this.level().getBrightness(sky ? LightLayer.SKY : LightLayer.BLOCK, eyePos.above());
         return light;
     }
 
     public int getSurface(int x, int y, int z) {
         BlockPos pos = new BlockPos(x, y, z);
-        while (!level.isEmptyBlock(pos)) {
+        while (!level().isEmptyBlock(pos)) {
             pos = pos.above();
         }
         return pos.getY();
@@ -664,28 +672,28 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
                     float angle = (0.01745329251F * this.yBodyRot);
                     double extraX = radius * Mth.sin((float) (Math.PI + angle));
                     double extraZ = radius * Mth.cos(angle);
-                    BlockLaunchExplosion explosion = new BlockLaunchExplosion(level, this, this.getX() + extraX, this.getY() - this.getEyeHeight(), this.getZ() + extraZ, this.getScale() * 0.75F);
+                    BlockLaunchExplosion explosion = new BlockLaunchExplosion(level(), this, this.getX() + extraX, this.getY() - this.getEyeHeight(), this.getZ() + extraZ, this.getScale() * 0.75F);
                     explosion.explode();
                     explosion.finalizeExplosion(true);
                 }
             }
             if (target != null) {
-                target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.isInSand()) {
-            BlockPos pos = new BlockPos(this.getX(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())), this.getZ()).below();
-            BlockState state = level.getBlockState(pos);
-            if (state.isSolidRender(level, pos)) {
-                if (level.isClientSide) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())) + 0.5F, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+            BlockPos pos = new BlockPos(this.getBlockX(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())), this.getBlockZ()).below();
+            BlockState state = level().getBlockState(pos);
+            if (state.isSolidRender(level(), pos)) {
+                if (level().isClientSide) {
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())) + 0.5F, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             if (this.tickCount % 10 == 0) {
                 this.playSound(SoundEvents.SAND_BREAK, 1, 0.5F);
             }
         }
-        if (this.up() && this.onGround) {
+        if (this.up() && this.onGround()) {
             this.jumpFromGround();
         }
         boolean inSand = isInSand() || this.getControllingPassenger() == null;
@@ -695,7 +703,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         if (!inSand && this.isSandNavigator) {
             switchNavigator(false);
         }
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             tail_buffer.calculateChainSwingBuffer(90, 20, 5F, this);
         }
 
@@ -744,8 +752,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         int j = Mth.floor(this.getY() + 1);
         int k = Mth.floor(this.getZ());
         BlockPos blockpos = new BlockPos(i, j, k);
-        BlockState BlockState = this.level.getBlockState(blockpos);
-        return BlockState.getMaterial() == Material.SAND;
+        BlockState BlockState = this.level().getBlockState(blockpos);
+        return BlockState.is(BlockTags.SAND);
     }
 
     public boolean isInSand() {
@@ -753,7 +761,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     public boolean isInSandStrict() {
-        return level.getBlockState(blockPosition()).is(BlockTags.SAND);
+        return level().getBlockState(blockPosition()).is(BlockTags.SAND);
     }
 
     @Override
@@ -796,11 +804,6 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public boolean canBeControlledByRider() {
-        return true;
-    }
-
-    @Override
     public void travel(@NotNull Vec3 vec) {
         super.travel(vec);
     }
@@ -817,7 +820,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     public boolean canPassThrough(BlockPos pos, BlockState state, VoxelShape shape) {
-        return level.getBlockState(pos).getMaterial() == Material.SAND;
+        return level().getBlockState(pos).is(BlockTags.SAND);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.ClientRegistry;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class IafKeybindRegistry {
     public static KeyMapping dragon_fireAttack;
@@ -18,9 +18,9 @@ public class IafKeybindRegistry {
         dragon_strike = new KeyMapping("key.dragon_strike", 71, "key.categories.gameplay");
         dragon_down = new KeyMapping("key.dragon_down", 88, "key.categories.gameplay");
         dragon_change_view = new KeyMapping("key.dragon_change_view", 296, "key.categories.misc");
-        ClientRegistry.registerKeyBinding(dragon_fireAttack);
-        ClientRegistry.registerKeyBinding(dragon_strike);
-        ClientRegistry.registerKeyBinding(dragon_down);
-        ClientRegistry.registerKeyBinding(dragon_change_view);
+        Minecraft.getInstance().options.keyMappings = ArrayUtils.add(Minecraft.getInstance().options.keyMappings, dragon_fireAttack);
+        Minecraft.getInstance().options.keyMappings = ArrayUtils.add(Minecraft.getInstance().options.keyMappings, dragon_strike);
+        Minecraft.getInstance().options.keyMappings = ArrayUtils.add(Minecraft.getInstance().options.keyMappings, dragon_down);
+        Minecraft.getInstance().options.keyMappings = ArrayUtils.add(Minecraft.getInstance().options.keyMappings, dragon_change_view);
     }
 }

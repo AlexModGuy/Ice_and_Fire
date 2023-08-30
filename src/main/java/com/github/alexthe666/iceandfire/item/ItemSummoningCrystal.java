@@ -8,7 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
@@ -31,7 +30,7 @@ public class ItemSummoningCrystal extends Item {
 
 
     public ItemSummoningCrystal() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
     }
 
     public static boolean hasDragon(ItemStack stack) {
@@ -69,18 +68,18 @@ public class ItemSummoningCrystal extends Item {
             for (String tagInfo : stack.getTag().getAllKeys()) {
                 if (tagInfo.contains("Dragon")) {
                     CompoundTag draginTag = stack.getTag().getCompound(tagInfo);
-                    String dragonName = new TranslatableComponent(desc).getContents();
+                    String dragonName = Component.translatable(desc).getContents().toString();
                     if (!draginTag.getString("CustomName").isEmpty()) {
                         dragonName = draginTag.getString("CustomName");
                     }
-                    tooltip.add(new TranslatableComponent("item.iceandfire.summoning_crystal.bound", dragonName).withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Component.translatable("item.iceandfire.summoning_crystal.bound", dragonName).withStyle(ChatFormatting.GRAY));
                     flag = true;
                 }
             }
         }
         if (!flag) {
-            tooltip.add(new TranslatableComponent("item.iceandfire.summoning_crystal.desc_0").withStyle(ChatFormatting.GRAY));
-            tooltip.add(new TranslatableComponent("item.iceandfire.summoning_crystal.desc_1").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("item.iceandfire.summoning_crystal.desc_0").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("item.iceandfire.summoning_crystal.desc_1").withStyle(ChatFormatting.GRAY));
 
         }
 
@@ -104,7 +103,7 @@ public class ItemSummoningCrystal extends Item {
                         if (id != null) {
                             if (!context.getLevel().isClientSide) {
                                 try {
-                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
+                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
                                     if (entity != null) {
                                         flag = true;
                                         summonEntity(entity, context.getLevel(), offsetPos, yaw);
@@ -143,7 +142,7 @@ public class ItemSummoningCrystal extends Item {
                                         }
                                         if (flag2) {
                                             try {
-                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
+                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
                                                 if (entity != null) {
                                                     flag = true;
                                                     summonEntity(entity, context.getLevel(), offsetPos, yaw);
@@ -170,10 +169,10 @@ public class ItemSummoningCrystal extends Item {
                 context.getPlayer().playSound(SoundEvents.ENDERMAN_TELEPORT, 1, 1);
                 context.getPlayer().playSound(SoundEvents.GLASS_BREAK, 1, 1);
                 context.getPlayer().swing(context.getHand());
-                context.getPlayer().displayClientMessage(new TranslatableComponent("message.iceandfire.dragonTeleport"), true);
+                context.getPlayer().displayClientMessage(Component.translatable("message.iceandfire.dragonTeleport"), true);
                 stack.setTag(new CompoundTag());
             } else if (displayError) {
-                context.getPlayer().displayClientMessage(new TranslatableComponent("message.iceandfire.noDragonTeleport"), true);
+                context.getPlayer().displayClientMessage(Component.translatable("message.iceandfire.noDragonTeleport"), true);
 
             }
         }

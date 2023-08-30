@@ -20,7 +20,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
 
     @Override
     public boolean canUse() {
-        return this.dolphin.getTarget() != null && dolphin.shouldUseJumpAttack(this.dolphin.getTarget()) && !this.dolphin.isOnGround();
+        return this.dolphin.getTarget() != null && dolphin.shouldUseJumpAttack(this.dolphin.getTarget()) && !this.dolphin.onGround();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
         return dolphin.getTarget() != null && dolphin.jumpCooldown > 0
             && (d0 * d0 >= 0.03F || this.dolphin.getXRot() == 0.0F
             || Math.abs(this.dolphin.getXRot()) >= 10.0F || !this.dolphin.isInWater())
-            && !this.dolphin.isOnGround();
+            && !this.dolphin.onGround();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SeaSerpentAIMeleeJump  extends JumpGoal {
     public void tick() {
         final boolean flag = this.inWater;
         if (!flag) {
-            FluidState fluidstate = this.dolphin.level.getFluidState(this.dolphin.blockPosition());
+            FluidState fluidstate = this.dolphin.level().getFluidState(this.dolphin.blockPosition());
             this.inWater = fluidstate.is(FluidTags.WATER);
         }
         if (attackCooldown > 0) {

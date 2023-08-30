@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.item.ItemTrollWeapon;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 
@@ -41,10 +42,10 @@ public enum EnumTroll {
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_stone.png");
         TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + "_eyes.png");
         leather = () ->new ItemTrollLeather(this);
-        helmet = () -> new ItemTrollArmor(this, material, EquipmentSlot.HEAD);
-        chestplate = () -> new ItemTrollArmor(this, material, EquipmentSlot.CHEST);
-        leggings = () -> new ItemTrollArmor(this, material, EquipmentSlot.LEGS);
-        boots = () -> new ItemTrollArmor(this, material, EquipmentSlot.FEET);
+        helmet = () -> new ItemTrollArmor(this, material, ArmorItem.Type.HELMET);
+        chestplate = () -> new ItemTrollArmor(this, material, ArmorItem.Type.CHESTPLATE);
+        leggings = () -> new ItemTrollArmor(this, material, ArmorItem.Type.LEGGINGS);
+        boots = () -> new ItemTrollArmor(this, material, ArmorItem.Type.BOOTS);
 
 
         //leather = IafItemRegistry.deferredRegister.register("troll_leather_" + name().toLowerCase(Locale.ROOT), () -> new ItemTrollLeather(this));
@@ -85,10 +86,10 @@ public enum EnumTroll {
     public static void initArmors() {
         for (EnumTroll troll: EnumTroll.values()) {
             troll.leather = IafItemRegistry.ITEMS.register("troll_leather_%s".formatted(troll.name().toLowerCase(Locale.ROOT)), () -> new ItemTrollLeather(troll));
-            troll.helmet = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.HEAD), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.HEAD));
-            troll.chestplate = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.CHEST), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.CHEST));
-            troll.leggings = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.LEGS), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.LEGS));
-            troll.boots = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.FEET), () -> new ItemTrollArmor(troll, troll.material, EquipmentSlot.FEET));
+            troll.helmet = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.HEAD), () -> new ItemTrollArmor(troll, troll.material, ArmorItem.Type.HELMET));
+            troll.chestplate = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.CHEST), () -> new ItemTrollArmor(troll, troll.material, ArmorItem.Type.CHESTPLATE));
+            troll.leggings = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.LEGS), () -> new ItemTrollArmor(troll, troll.material, ArmorItem.Type.LEGGINGS));
+            troll.boots = IafItemRegistry.ITEMS.register(ItemTrollArmor.getName(troll, EquipmentSlot.FEET), () -> new ItemTrollArmor(troll, troll.material, ArmorItem.Type.BOOTS));
         }
     }
 

@@ -3,9 +3,6 @@ package com.github.alexthe666.iceandfire.client.particle;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -13,6 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import org.joml.*;
+
+import java.lang.Math;
 
 public class CockatriceBeamRender {
 
@@ -27,7 +27,7 @@ public class CockatriceBeamRender {
         if (entityIn instanceof EntityCockatrice)
             f = (((EntityCockatrice) entityIn).getAttackAnimationScale(partialTicks));
 
-        float f1 = (float) entityIn.level.getGameTime() + partialTicks;
+        float f1 = (float) entityIn.level().getGameTime() + partialTicks;
         float f2 = f1 * 0.5F % 1.0F;
         float f3 = entityIn.getEyeHeight();
         matrixStackIn.pushPose();
@@ -39,8 +39,8 @@ public class CockatriceBeamRender {
         Vector3d2 = Vector3d2.normalize();
         float f5 = (float) Math.acos(Vector3d2.y);
         float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((((float) Math.PI / 2F) - f6), new Vector3f(0.0F, 1.0F, 0.0F))));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(f5, new Vector3f(1.0F, 0.0F, 0.0F))));
         int i = 1;
         float f7 = f1 * 0.05F * -1.5F;
         float f8 = f * f;

@@ -10,8 +10,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -19,6 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, AdvancedEnti
     protected void scale(EntityDragonBase entity, PoseStack matrixStackIn, float partialTickTime) {
         this.shadowRadius = entity.getRenderSize() / 3;
         float f7 = entity.prevDragonPitch + (entity.getDragonPitch() - entity.prevDragonPitch) * partialTickTime;
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, f7, true));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F, new Vector3f(1.0F, 0.0F, 0.0F))));
         matrixStackIn.scale(shadowRadius, shadowRadius, shadowRadius);
     }
 

@@ -28,10 +28,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,14 +55,14 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void renderWorldLastEvent(RenderLevelLastEvent event) {
+    public void renderWorldLastEvent(RenderLevelStageEvent event) {
         if (Pathfinding.isDebug()) {
             RenderPath.debugDraw(event.getPartialTick(), event.getPoseStack());
         }
     }
 
     @SubscribeEvent
-    public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+    public void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
         Player player = Minecraft.getInstance().player;
         if (player.getVehicle() != null) {
             if (player.getVehicle() instanceof EntityDragonBase) {
@@ -83,11 +83,11 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+    public void onLivingUpdate(LivingEvent.LivingTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (event.getEntityLiving() instanceof ICustomMoveController) {
-            Entity entity = event.getEntityLiving();
-            ICustomMoveController moveController = ((Entity & ICustomMoveController) event.getEntityLiving());
+        if (event.getEntity() instanceof ICustomMoveController) {
+            Entity entity = event.getEntity();
+            ICustomMoveController moveController = ((Entity & ICustomMoveController) event.getEntity());
             if (entity.getVehicle() != null && entity.getVehicle() == mc.player) {
                 byte previousState = moveController.getControlState();
                 moveController.dismount(mc.options.keyShift.isDown());
@@ -97,9 +97,8 @@ public class ClientEvents {
                 }
             }
         }
-        if (event.getEntityLiving() instanceof Player) {
-            Player player = (Player) event.getEntityLiving();
-            if (player.level.isClientSide) {
+        if (event.getEntity() instanceof Player player) {
+            if (player.level().isClientSide) {
 
                 if (player.getVehicle() instanceof ICustomMoveController) {
                     Entity entity = player.getVehicle();
@@ -116,7 +115,7 @@ public class ClientEvents {
                     }
                 }
             }
-            if (player.level.isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
+            if (player.level().isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
                     currentView = 0;
@@ -126,7 +125,7 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            if (player.level.isClientSide) {
+            if (player.level().isClientSide) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
                 EntitySiren siren = SirenProperties.getSiren(player);
 
@@ -145,7 +144,7 @@ public class ClientEvents {
                 }
 
                 if (isCharmed) {
-                    if (player.level.isClientSide && rand.nextInt(40) == 0) {
+                    if (player.level().isClientSide && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getX(), player.getY(), player.getZ(), siren.getHairColor(), 0, 0);
                     }
 
@@ -182,9 +181,9 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onGuiOpened(ScreenOpenEvent event) {
+    public void onGuiOpened(ScreenEvent.Opening event) {
         if (IafConfig.customMainMenu && event.getScreen() instanceof TitleScreen && !(event.getScreen() instanceof IceAndFireMainMenu)) {
-            event.setScreen(new IceAndFireMainMenu());
+            event.setNewScreen(new IceAndFireMainMenu());
         }
     }
 
@@ -193,7 +192,7 @@ public class ClientEvents {
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
 
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
             EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
             if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
                 if (AUTO_ADAPT_3RD_PERSON) {

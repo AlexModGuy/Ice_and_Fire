@@ -5,8 +5,8 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.inventory.ContainerDragon;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
 
 public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
     private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
@@ -27,12 +28,12 @@ public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY) {
 
     }
 
     @Override
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         this.mousePosx = mouseX;
         this.mousePosY = mouseY;
@@ -41,35 +42,35 @@ public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, texture);
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
+        matrixStack.blit(texture, k, l, 0, 0, this.imageWidth, this.imageHeight);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             float dragonScale = 1F / Math.max(0.0001F, dragon.getScale());
-            InventoryScreen.renderEntityInInventory(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, (int) (dragonScale * 23F), k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
+            InventoryScreen.renderEntityInInventory(matrixStack, k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, (int) (dragonScale * 23F), new Quaternionf(k + 51 - this.mousePosx, 0, 0, 0), new Quaternionf(0, l + 75 - 50 - this.mousePosY, 0, 0), dragon);
         }
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
 
             Font font = this.getMinecraft().font;
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + " " + dragon.getCustomName().getString();
-            font.draw(matrixStack, s3, k + this.imageWidth / 2 - font.width(s3) / 2, l + 75, 0XFFFFFF);
+            font.drawInBatch(s3, k + this.imageWidth / 2 - font.width(s3) / 2, l + 75, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
             String s2 = StatCollector.translateToLocal("dragon.health") + " " + Math.floor(Math.min(dragon.getHealth(), dragon.getMaxHealth())) + " / " + dragon.getMaxHealth();
-            font.draw(matrixStack, s2, k + this.imageWidth / 2 - font.width(s2) / 2, l + 84, 0XFFFFFF);
+            font.drawInBatch(s2, k + this.imageWidth / 2 - font.width(s2) / 2, l + 84, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
             String s5 = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((dragon.isMale() ? "dragon.gender.male" : "dragon.gender.female"));
-            font.draw(matrixStack, s5, k + this.imageWidth / 2 - font.width(s5) / 2, l + 93, 0XFFFFFF);
+            font.drawInBatch(s5, k + this.imageWidth / 2 - font.width(s5) / 2, l + 93, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
             String s6 = StatCollector.translateToLocal("dragon.hunger") + dragon.getHunger() + "/100";
-            font.draw(matrixStack, s6, k + this.imageWidth / 2 - font.width(s6) / 2, l + 102, 0XFFFFFF);
+            font.drawInBatch(s6, k + this.imageWidth / 2 - font.width(s6) / 2, l + 102, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
             String s4 = StatCollector.translateToLocal("dragon.stage") + " " + dragon.getDragonStage() + " " + StatCollector.translateToLocal("dragon.days.front") + dragon.getAgeInDays() + " " + StatCollector.translateToLocal("dragon.days.back");
-            font.draw(matrixStack, s4, k + this.imageWidth / 2 - font.width(s4) / 2, l + 111, 0XFFFFFF);
+            font.drawInBatch(s4, k + this.imageWidth / 2 - font.width(s4) / 2, l + 111, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
             String s7 = dragon.getOwner() != null ? StatCollector.translateToLocal("dragon.owner") + dragon.getOwner().getName().getString() : StatCollector.translateToLocal("dragon.untamed");
-            font.draw(matrixStack, s7, k + this.imageWidth / 2 - font.width(s7) / 2, l + 120, 0XFFFFFF);
+            font.drawInBatch(s7, k + this.imageWidth / 2 - font.width(s7) / 2, l + 120, 0XFFFFFF, false, matrixStack.pose().last().pose(), matrixStack.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
         }
     }
 

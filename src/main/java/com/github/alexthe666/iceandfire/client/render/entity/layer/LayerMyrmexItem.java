@@ -6,18 +6,19 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class LayerMyrmexItem extends RenderLayer<EntityMyrmexBase, AdvancedEntityModel<EntityMyrmexBase>> {
 
@@ -28,7 +29,7 @@ public class LayerMyrmexItem extends RenderLayer<EntityMyrmexBase, AdvancedEntit
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    private void renderHeldItem(EntityMyrmexBase myrmex, ItemStack stack, ItemTransforms.TransformType transform, HumanoidArm handSide) {
+    private void renderHeldItem(EntityMyrmexBase myrmex, ItemStack stack, ItemDisplayContext transform, HumanoidArm handSide) {
 
     }
 
@@ -59,9 +60,9 @@ public class LayerMyrmexItem extends RenderLayer<EntityMyrmexBase, AdvancedEntit
                     } else {
                         matrixStackIn.translate(0F, 0.2F, 0.3F);
                     }
-                    matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 160, true));
-                    matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 180, true));
-                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+                    matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180*160, new Vector3f(1.0F, 0.0F, 0.0F))));
+                    matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0.0F, 1.0F, 0.0F))));
+                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, Minecraft.getInstance().level, 0);
                     matrixStackIn.popPose();
                 }
                 matrixStackIn.popPose();

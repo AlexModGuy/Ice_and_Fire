@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderSiren;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
@@ -16,6 +15,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ParticleSirenAppearance extends Particle {
     private final Model model = new ModelSiren();
@@ -39,7 +41,7 @@ public class ParticleSirenAppearance extends Particle {
         float f1 = 0.05F + 0.5F * Mth.sin(f * (float) Math.PI);
         PoseStack matrixstack = new PoseStack();
         matrixstack.mulPose(renderInfo.rotation());
-        matrixstack.mulPose(Vector3f.XP.rotationDegrees(150.0F * f - 60.0F));
+        matrixstack.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180.0F*(150.0F*f-60.0F), new Vector3f(1.0F, 0.0F, 0.0F))));
         matrixstack.scale(-1.0F, -1.0F, 1.0F);
         matrixstack.translate(0.0D, -1.101F, 1.5D);
         MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();

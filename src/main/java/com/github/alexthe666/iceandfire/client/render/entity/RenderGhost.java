@@ -5,9 +5,6 @@ import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -19,6 +16,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import org.jetbrains.annotations.NotNull;
+import org.joml.*;
+
+import java.lang.Math;
 
 public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
@@ -97,8 +97,8 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         float f8 = 0.0F;
         float f5 = 0.0F;
         if (!shouldSit && entityIn.isAlive()) {
-            f8 = Mth.lerp(partialTicks, entityIn.animationSpeedOld, entityIn.animationSpeed);
-            f5 = entityIn.animationPosition - entityIn.animationSpeed * (1.0F - partialTicks);
+            f8 = entityIn.walkAnimation.speed();
+            f5 = entityIn.walkAnimation.position();
             if (entityIn.isBaby()) {
                 f5 *= 3.0F;
             }
@@ -119,7 +119,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.8F + Mth.sin((entityIn.tickCount + partialTicks) * 0.15F) * 0.1F, 0);
                 matrixStackIn.scale(0.6F, 0.6F, 0.6F);
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0.0F, 1.0F, 0.0F))));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
@@ -131,7 +131,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, 2, 0, 1F, 1, 0, 1, 0, 240);
                     matrixStackIn.popPose();
                 }
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0.0F, 1.0F, 0.0F))));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
@@ -157,7 +157,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         }
 
         matrixStackIn.popPose();
-        net.minecraftforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameplateEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
+        net.minecraftforge.client.event.RenderNameTagEvent renderNameplateEvent = new net.minecraftforge.client.event.RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
         if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entityIn))) {
             this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);

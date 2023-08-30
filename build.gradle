@@ -26,13 +26,18 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 repositories {
     maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
     }
-    maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
+//    maven {
+//        name = "Progwml6 maven"
+//        url = "https://dvs1.progwml6.com/files/maven/"
+//    }
     maven {
         name = "CurseMaven"
         url = "https://www.cursemaven.com"
@@ -42,7 +47,7 @@ repositories {
 def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
 def build_id = System.getenv("BUILD_ID")
 
-version = '2.1.12-1.18.2'
+version = '2.1.12-1.20.1'
 
 if (build_snapshot) {
     version += '-SNAPSHOT'
@@ -58,7 +63,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
+    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -138,13 +143,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 processResources {}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.1.0'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2-common-api:10.2.1.283")
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2-forge-api:10.2.1.283")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2-forge:10.2.1.283")
-    implementation "curse.maven:citadel-331936:3783098"
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    //compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.25")
+    //compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.25")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
+    implementation "curse.maven:citadel-331936:4613231"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

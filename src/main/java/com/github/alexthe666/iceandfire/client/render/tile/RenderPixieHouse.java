@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -14,6 +13,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEntityRenderer<T> {
 
@@ -64,8 +66,8 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEn
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.501F, 0.5F);
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotation));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*rotation, new Vector3f(0.0F, 1.0F, 0.0F))));
         if (entity != null && entity.getLevel() != null && entity.hasPixie) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0F, 0.95F, 0F);

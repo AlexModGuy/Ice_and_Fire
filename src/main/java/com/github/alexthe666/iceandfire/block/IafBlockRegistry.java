@@ -5,19 +5,16 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.BlockItemWithRender;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.*;
 
 import java.util.Optional;
 
@@ -45,34 +42,34 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> SAPPHIRE_ORE = BLOCKS.register("sapphire_ore", () -> new BlockIafOre(2, 4.0F, 3.0F));
     public static final RegistryObject<Block> COPPER_ORE = BLOCKS.register("copper_ore", () -> new BlockIafOre(0, 3.0F, 3.0F));
     public static final RegistryObject<Block> AMYTHEST_ORE = BLOCKS.register("amythest_ore", () -> new BlockIafOre(2, 4.0F, 3.0F));
-    public static final RegistryObject<Block> SILVER_BLOCK = BLOCKS.register("silver_block", () -> new BlockGeneric(Material.METAL, 3.0F, 5.0F, SoundType.METAL));
-    public static final RegistryObject<Block> SAPPHIRE_BLOCK = BLOCKS.register("sapphire_block", () -> new BlockGeneric(Material.METAL, 3.0F, 6.0F, SoundType.METAL));
-    public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", () -> new BlockGeneric(Material.METAL, 4.0F, 5.0F, SoundType.METAL));
-    public static final RegistryObject<Block> AMYTHEST_BLOCK = BLOCKS.register("amythest_block", () -> new BlockGeneric(Material.METAL, 5.0F, 6.0F, SoundType.METAL));
-    public static final RegistryObject<Block> CHARRED_DIRT = BLOCKS.register("chared_dirt", () -> new BlockReturningState(Material.DIRT, 0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState()));
-    public static final RegistryObject<Block> CHARRED_GRASS = BLOCKS.register("chared_grass", () -> new BlockReturningState(Material.GRASS, 0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState()));
-    public static final RegistryObject<Block> CHARRED_STONE = BLOCKS.register("chared_stone", () -> new BlockReturningState(Material.STONE, 1.5F, 10.0F, SoundType.STONE, Blocks.STONE.defaultBlockState()));
-    public static final RegistryObject<Block> CHARRED_COBBLESTONE = BLOCKS.register("chared_cobblestone", () -> new BlockReturningState(Material.STONE, 2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState()));
-    public static final RegistryObject<Block> CHARRED_GRAVEL = BLOCKS.register("chared_gravel", () -> new BlockFallingReturningState(Material.DIRT, 0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState()));
+    public static final RegistryObject<Block> SILVER_BLOCK = BLOCKS.register("silver_block", () -> new BlockGeneric(3.0F, 5.0F, SoundType.METAL));
+    public static final RegistryObject<Block> SAPPHIRE_BLOCK = BLOCKS.register("sapphire_block", () -> new BlockGeneric(3.0F, 6.0F, SoundType.METAL));
+    public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", () -> new BlockGeneric(4.0F, 5.0F, SoundType.METAL));
+    public static final RegistryObject<Block> AMYTHEST_BLOCK = BLOCKS.register("amythest_block", () -> new BlockGeneric(5.0F, 6.0F, SoundType.METAL));
+    public static final RegistryObject<Block> CHARRED_DIRT = BLOCKS.register("chared_dirt", () -> new BlockReturningState(0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState()));
+    public static final RegistryObject<Block> CHARRED_GRASS = BLOCKS.register("chared_grass", () -> new BlockReturningState(0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState()));
+    public static final RegistryObject<Block> CHARRED_STONE = BLOCKS.register("chared_stone", () -> new BlockReturningState(1.5F, 10.0F, SoundType.STONE, Blocks.STONE.defaultBlockState()));
+    public static final RegistryObject<Block> CHARRED_COBBLESTONE = BLOCKS.register("chared_cobblestone", () -> new BlockReturningState(2F, 10.0F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState()));
+    public static final RegistryObject<Block> CHARRED_GRAVEL = BLOCKS.register("chared_gravel", () -> new BlockFallingReturningState(0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState()));
     public static final RegistryObject<Block> CHARRED_DIRT_PATH = BLOCKS.register(BlockCharedPath.getNameFromType(0), () -> new BlockCharedPath(0));
-    public static final RegistryObject<Block> ASH = BLOCKS.register("ash", () -> new BlockFallingGeneric(Material.SAND, 0.5F, 0F, SoundType.SAND));
-    public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt", () -> new BlockReturningState(Material.DIRT, 0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.defaultBlockState()));
-    public static final RegistryObject<Block> FROZEN_GRASS = BLOCKS.register("frozen_grass", () -> new BlockReturningState(Material.GRASS, 0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.defaultBlockState()));
-    public static final RegistryObject<Block> FROZEN_STONE = BLOCKS.register("frozen_stone", () -> new BlockReturningState(Material.STONE, 1.5F, 1.0F, SoundType.GLASS, true, Blocks.STONE.defaultBlockState()));
-    public static final RegistryObject<Block> FROZEN_COBBLESTONE = BLOCKS.register("frozen_cobblestone", () -> new BlockReturningState(Material.STONE, 2F, 2.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.defaultBlockState()));
-    public static final RegistryObject<Block> FROZEN_GRAVEL = BLOCKS.register("frozen_gravel", () -> new BlockFallingReturningState(Material.DIRT, 0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.defaultBlockState()));
+    public static final RegistryObject<Block> ASH = BLOCKS.register("ash", () -> new BlockFallingGeneric(0.5F, 0F, SoundType.SAND));
+    public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt", () -> new BlockReturningState(0.5F, 0.0F, SoundType.GLASS, true, Blocks.DIRT.defaultBlockState()));
+    public static final RegistryObject<Block> FROZEN_GRASS = BLOCKS.register("frozen_grass", () -> new BlockReturningState(0.6F, 0.0F, SoundType.GLASS, true, Blocks.GRASS_BLOCK.defaultBlockState()));
+    public static final RegistryObject<Block> FROZEN_STONE = BLOCKS.register("frozen_stone", () -> new BlockReturningState(1.5F, 1.0F, SoundType.GLASS, true, Blocks.STONE.defaultBlockState()));
+    public static final RegistryObject<Block> FROZEN_COBBLESTONE = BLOCKS.register("frozen_cobblestone", () -> new BlockReturningState(2F, 2.0F, SoundType.GLASS, true, Blocks.COBBLESTONE.defaultBlockState()));
+    public static final RegistryObject<Block> FROZEN_GRAVEL = BLOCKS.register("frozen_gravel", () -> new BlockFallingReturningState(0.6F, 0F, SoundType.GLASS, true, Blocks.GRAVEL.defaultBlockState()));
     public static final RegistryObject<Block> FROZEN_DIRT_PATH = BLOCKS.register(BlockCharedPath.getNameFromType(1), () -> new BlockCharedPath(1));
-    public static final RegistryObject<Block> FROZEN_SPLINTERS = BLOCKS.register("frozen_splinters", () -> new BlockGeneric(Material.WOOD, 2.0F, 1.0F, SoundType.GLASS, true));
-    public static final RegistryObject<Block> DRAGON_ICE = BLOCKS.register("dragon_ice", () -> new BlockGeneric(Material.ICE_SOLID, 0.5F, 0F, SoundType.GLASS, true));
+    public static final RegistryObject<Block> FROZEN_SPLINTERS = BLOCKS.register("frozen_splinters", () -> new BlockGeneric(2.0F, 1.0F, SoundType.GLASS, true));
+    public static final RegistryObject<Block> DRAGON_ICE = BLOCKS.register("dragon_ice", () -> new BlockGeneric(0.5F, 0F, SoundType.GLASS, true));
     public static final RegistryObject<Block> DRAGON_ICE_SPIKES = BLOCKS.register("dragon_ice_spikes", () -> new BlockIceSpikes());
-    public static final RegistryObject<Block> CRACKLED_DIRT = BLOCKS.register("crackled_dirt", () -> new BlockReturningState(Material.DIRT, 0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState()));
-    public static final RegistryObject<Block> CRACKLED_GRASS = BLOCKS.register("crackled_grass", () -> new BlockReturningState(Material.GRASS, 0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState()));
-    public static final RegistryObject<Block> CRACKLED_STONE = BLOCKS.register("crackled_stone", () -> new BlockReturningState(Material.STONE, 1.5F, 1.0F, SoundType.STONE, Blocks.STONE.defaultBlockState()));
-    public static final RegistryObject<Block> CRACKLED_COBBLESTONE = BLOCKS.register("crackled_cobblestone", () -> new BlockReturningState(Material.STONE, 2F, 2F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState()));
-    public static final RegistryObject<Block> CRACKLED_GRAVEL = BLOCKS.register("crackled_gravel", () -> new BlockFallingReturningState(Material.DIRT, 0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState()));
+    public static final RegistryObject<Block> CRACKLED_DIRT = BLOCKS.register("crackled_dirt", () -> new BlockReturningState(0.5F, 0.0F, SoundType.GRAVEL, Blocks.DIRT.defaultBlockState()));
+    public static final RegistryObject<Block> CRACKLED_GRASS = BLOCKS.register("crackled_grass", () -> new BlockReturningState(0.6F, 0.0F, SoundType.GRAVEL, Blocks.GRASS_BLOCK.defaultBlockState()));
+    public static final RegistryObject<Block> CRACKLED_STONE = BLOCKS.register("crackled_stone", () -> new BlockReturningState(1.5F, 1.0F, SoundType.STONE, Blocks.STONE.defaultBlockState()));
+    public static final RegistryObject<Block> CRACKLED_COBBLESTONE = BLOCKS.register("crackled_cobblestone", () -> new BlockReturningState(2F, 2F, SoundType.STONE, Blocks.COBBLESTONE.defaultBlockState()));
+    public static final RegistryObject<Block> CRACKLED_GRAVEL = BLOCKS.register("crackled_gravel", () -> new BlockFallingReturningState(0.6F, 0F, SoundType.GRAVEL, Blocks.GRAVEL.defaultBlockState()));
     public static final RegistryObject<Block> CRACKLED_DIRT_PATH = BLOCKS.register(BlockCharedPath.getNameFromType(2), () -> new BlockCharedPath(2));
 
-    public static final RegistryObject<Block> NEST = BLOCKS.register("nest", () -> new BlockGeneric(Material.PLANT, 0.5F, 0F, SoundType.GRAVEL, false));
+    public static final RegistryObject<Block> NEST = BLOCKS.register("nest", () -> new BlockGeneric(0.5F, 0F, SoundType.GRAVEL, false));
 
     public static final RegistryObject<Block> DRAGON_SCALE_RED = BLOCKS.register("dragonscale_red", () -> new BlockDragonScales(EnumDragonEgg.RED));
     public static final RegistryObject<Block> DRAGON_SCALE_GREEN = BLOCKS.register("dragonscale_green", () -> new BlockDragonScales(EnumDragonEgg.GREEN));
@@ -126,22 +123,22 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> MYRMEX_JUNGLE_RESIN_BLOCK = BLOCKS.register(BlockMyrmexConnectedResin.name(true, false), () -> new BlockMyrmexConnectedResin(true, false));
     public static final RegistryObject<Block> MYRMEX_DESERT_RESIN_GLASS = BLOCKS.register(BlockMyrmexConnectedResin.name(false, true), () -> new BlockMyrmexConnectedResin(false, true));
     public static final RegistryObject<Block> MYRMEX_JUNGLE_RESIN_GLASS = BLOCKS.register(BlockMyrmexConnectedResin.name(true, true), () -> new BlockMyrmexConnectedResin(true, true));
-    public static final RegistryObject<Block> DRAGONSTEEL_FIRE_BLOCK = BLOCKS.register("dragonsteel_fire_block", () -> new BlockGeneric(Material.METAL, 10.0F, 1000.0F, SoundType.METAL));
-    public static final RegistryObject<Block> DRAGONSTEEL_ICE_BLOCK = BLOCKS.register("dragonsteel_ice_block", () -> new BlockGeneric(Material.METAL, 10.0F, 1000.0F, SoundType.METAL));
-    public static final RegistryObject<Block> DRAGONSTEEL_LIGHTNING_BLOCK = BLOCKS.register("dragonsteel_lightning_block", () -> new BlockGeneric(Material.METAL, 10.0F, 1000.0F, SoundType.METAL));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE = BLOCKS.register("dread_stone", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS = BLOCKS.register("dread_stone_bricks", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_CHISELED = BLOCKS.register("dread_stone_bricks_chiseled", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_CRACKED = BLOCKS.register("dread_stone_bricks_cracked", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_MOSSY = BLOCKS.register("dread_stone_bricks_mossy", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
-    public static final RegistryObject<BlockDreadBase> DREAD_STONE_TILE = BLOCKS.register("dread_stone_tile", () -> new BlockDreadBase(Material.STONE, -1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<Block> DRAGONSTEEL_FIRE_BLOCK = BLOCKS.register("dragonsteel_fire_block", () -> new BlockGeneric(10.0F, 1000.0F, SoundType.METAL));
+    public static final RegistryObject<Block> DRAGONSTEEL_ICE_BLOCK = BLOCKS.register("dragonsteel_ice_block", () -> new BlockGeneric(10.0F, 1000.0F, SoundType.METAL));
+    public static final RegistryObject<Block> DRAGONSTEEL_LIGHTNING_BLOCK = BLOCKS.register("dragonsteel_lightning_block", () -> new BlockGeneric(10.0F, 1000.0F, SoundType.METAL));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE = BLOCKS.register("dread_stone", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS = BLOCKS.register("dread_stone_bricks", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_CHISELED = BLOCKS.register("dread_stone_bricks_chiseled", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_CRACKED = BLOCKS.register("dread_stone_bricks_cracked", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE_BRICKS_MOSSY = BLOCKS.register("dread_stone_bricks_mossy", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
+    public static final RegistryObject<BlockDreadBase> DREAD_STONE_TILE = BLOCKS.register("dread_stone_tile", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.STONE));
     public static final RegistryObject<Block> DREAD_STONE_FACE = BLOCKS.register("dread_stone_face", () -> new BlockDreadStoneFace());
     public static final RegistryObject<Block> DREAD_TORCH = BLOCKS.register("dread_torch", () -> new BlockDreadTorch());
     public static final RegistryObject<Block> DREAD_TORCH_WALL = BLOCKS.register("dread_torch_wall", () -> new BlockDreadTorchWall());
     public static final RegistryObject<Block> DREAD_STONE_BRICKS_STAIRS = BLOCKS.register("dread_stone_stairs", () -> new BlockGenericStairs(DREAD_STONE_BRICKS.get().defaultBlockState()));
-    public static final RegistryObject<Block> DREAD_STONE_BRICKS_SLAB = BLOCKS.register("dread_stone_slab", () -> new SlabBlock(BlockBehaviour.Properties.of(Material.STONE).strength(10F, 10000F)));
+    public static final RegistryObject<Block> DREAD_STONE_BRICKS_SLAB = BLOCKS.register("dread_stone_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().strength(10F, 10000F)));
     public static final RegistryObject<Block> DREADWOOD_LOG = BLOCKS.register("dreadwood_log", () -> new BlockDreadWoodLog());
-    public static final RegistryObject<BlockDreadBase> DREADWOOD_PLANKS = BLOCKS.register("dreadwood_planks", () -> new BlockDreadBase(Material.WOOD, -1.0F, 100000.0F, SoundType.WOOD));
+    public static final RegistryObject<BlockDreadBase> DREADWOOD_PLANKS = BLOCKS.register("dreadwood_planks", () -> new BlockDreadBase(-1.0F, 100000.0F, SoundType.WOOD));
     public static final RegistryObject<Block> DREADWOOD_PLANKS_LOCK = BLOCKS.register("dreadwood_planks_lock", () -> new BlockDreadWoodLock());
     public static final RegistryObject<Block> DREAD_PORTAL = BLOCKS.register("dread_portal", () -> new BlockDreadPortal());
     public static final RegistryObject<Block> DREAD_SPAWNER = BLOCKS.register("dread_spawner", () -> new BlockDreadSpawner());
@@ -151,13 +148,13 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> GRAVEYARD_SOIL = BLOCKS.register("graveyard_soil", () -> new BlockGraveyardSoil());
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void registerBlockItems(RegistryEvent.Register<Item> event) {
+    public static void registerBlockItems(RegisterEvent event) {
         IafBlockRegistry.BLOCKS.getEntries().stream()
             .map(RegistryObject::get)
             .forEach(block -> {
                 Optional<Item> item = registerItemBlock(block);
                 if (item.isPresent())
-                    IafItemRegistry.ITEMS.register(block.getRegistryName().getPath(), () -> item.get());
+                    IafItemRegistry.ITEMS.register(block.getDescriptionId(), item::get);
             });
 
     }
@@ -165,12 +162,12 @@ public class IafBlockRegistry {
     public static Optional<Item> registerItemBlock(Block block) {
         if (!(block instanceof WallTorchBlock)) {
             Item.Properties props = new Item.Properties();
-            if (!(block instanceof INoTab) || ((INoTab) block).shouldBeInTab()) {
+/*            if (!(block instanceof INoTab) || ((INoTab) block).shouldBeInTab()) {
                 props.tab(IceAndFire.TAB_BLOCKS);
-            }
+            }*/
             BlockItem itemBlock;
             if (block instanceof IWallBlock) {
-                itemBlock = new StandingAndWallBlockItem(block, ((IWallBlock) block).wallBlock(), props);
+                itemBlock = new StandingAndWallBlockItem(block, ((IWallBlock) block).wallBlock(), props, Direction.DOWN);
             } else if (block instanceof BlockGhostChest || block instanceof BlockDreadPortal || block instanceof BlockPixieHouse) {
                 itemBlock = new BlockItemWithRender(block, props);
             } else {

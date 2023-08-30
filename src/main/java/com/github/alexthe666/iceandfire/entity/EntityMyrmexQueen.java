@@ -42,7 +42,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +71,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 20;
     }
 
@@ -132,7 +131,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             spawnGroundEffects(3);
         }
         if (this.getHive() != null) {
-            this.getHive().tick(0, level);
+            this.getHive().tick(0, level());
         }
 
         if (hasMadeHome() && this.getGrowthStage() >= 2 && !this.canSeeSky()) {
@@ -141,11 +140,11 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             this.setAnimation(ANIMATION_DIGNEST);
             if (this.getAnimationTick() == 42) {
                 int down = Math.max(15, this.blockPosition().getY() - 20 + this.getRandom().nextInt(10));
-                BlockPos genPos = new BlockPos(this.getX(), down, this.getZ());
+                BlockPos genPos = new BlockPos(this.getBlockX(), down, this.getBlockZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
                     WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoneFeatureConfiguration.CODEC);
-                    if (!level.isClientSide && level instanceof ServerLevel) {
-                        hiveGen.placeSmallGen((ServerLevel) level, this.getRandom(), genPos);
+                    if (!level().isClientSide && level() instanceof ServerLevel) {
+                        hiveGen.placeSmallGen((ServerLevel) level(), this.getRandom(), genPos);
                     }
                     this.setMadeHome(true);
                     this.moveTo(genPos.getX(), down, genPos.getZ(), 0, 0);
@@ -153,37 +152,37 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     this.setHive(hiveGen.hive);
                     for (int i = 0; i < 3; i++) {
                         EntityMyrmexWorker worker = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(),
-                            level);
+                            level());
                         worker.copyPosition(this);
                         worker.setHive(this.getHive());
                         worker.setJungleVariant(this.isJungle());
-                        if (!level.isClientSide) {
-                            level.addFreshEntity(worker);
+                        if (!level().isClientSide) {
+                            level().addFreshEntity(worker);
                         }
                     }
                     return;
                 }
             }
         }
-        if (!level.isClientSide && eggTicks > IafConfig.myrmexPregnantTicks && this.getHive() == null || !level.isClientSide && this.getHive() != null && this.getHive().repopulate() && eggTicks > IafConfig.myrmexPregnantTicks) {
+        if (!level().isClientSide && eggTicks > IafConfig.myrmexPregnantTicks && this.getHive() == null || !level().isClientSide && this.getHive() != null && this.getHive().repopulate() && eggTicks > IafConfig.myrmexPregnantTicks) {
             float radius = -5.25F;
             float angle = (0.01745329251F * this.yBodyRot);
             double extraX = radius * Mth.sin((float) (Math.PI + angle));
             double extraZ = radius * Mth.cos(angle);
-            BlockPos eggPos = new BlockPos(this.getX() + extraX, this.getY() + 0.75F, this.getZ() + extraZ);
-            if (level.isEmptyBlock(eggPos)) {
+            BlockPos eggPos = new BlockPos((int) Math.round(this.getX() + extraX), (int) Math.round(this.getY() + 0.75F), (int) Math.round(this.getZ() + extraZ));
+            if (level().isEmptyBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
                 if (this.getAnimationTick() == 10) {
-                    EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), this.level);
+                    EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), this.level());
                     egg.setJungle(this.isJungle());
-                    int caste = getRandomCaste(level, this.getRandom(), getHive() == null || getHive().reproduces);
+                    int caste = getRandomCaste(level(), this.getRandom(), getHive() == null || getHive().reproduces);
                     egg.setMyrmexCaste(caste);
                     egg.moveTo(this.getX() + extraX, this.getY() + 0.75F, this.getZ() + extraZ, 0, 0);
                     if (getHive() != null) {
                         egg.hiveUUID = this.getHive().hiveUUID;
                     }
-                    if (!level.isClientSide) {
-                        level.addFreshEntity(egg);
+                    if (!level().isClientSide) {
+                        level().addFreshEntity(egg);
                     }
                     eggTicks = 0;
                 }
@@ -195,7 +194,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_BITE && this.getTarget() != null && this.getAnimationTick() == 6) {
             this.playBiteSound();
             if (this.getAttackBounds().intersects(this.getTarget().getBoundingBox())) {
-                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                this.getTarget().hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getAnimationTick() == 0) {
@@ -204,7 +203,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getTarget().getBoundingBox())) {
                 LivingEntity attackTarget = this.getTarget();
-                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getTarget().hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getTarget().addEffect(new MobEffectInstance(MobEffects.POISON, 200, 2));
                 this.getTarget().hasImpulse = true;
                 float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
@@ -212,7 +211,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().multiply(0.5D, 1, 0.5D));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(-0.5 / f * 4, 1, -0.5 / f * 4));
 
-                if (this.getTarget().isOnGround()) {
+                if (this.getTarget().onGround()) {
                     attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(0, 0.4, 0));
                 }
             }
@@ -255,7 +254,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public boolean isInHive() {
         if (getHive() != null) {
             for (BlockPos pos : getHive().getAllRooms()) {
-                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getLevel(), pos), 300))
+                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(level(), pos), 300))
                     return true;
             }
         }
@@ -318,7 +317,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         }
         if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
             this.setAnimation(this.getRandom().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
-            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
+            if (!this.level().isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
@@ -349,10 +348,10 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level.getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
-                if (BlockState.getMaterial() != Material.AIR) {
-                    if (level.isClientSide) {
-                        level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), true, this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
+                BlockState BlockState = this.level().getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
+                if (BlockState.isAir()) {
+                    if (level().isClientSide) {
+                        level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), true, this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
             }

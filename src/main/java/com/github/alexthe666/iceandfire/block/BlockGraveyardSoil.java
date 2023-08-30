@@ -4,16 +4,15 @@ import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BlockGraveyardSoil extends Block {
@@ -21,7 +20,7 @@ public class BlockGraveyardSoil extends Block {
     public BlockGraveyardSoil() {
         super(
             Properties
-                .of(Material.DIRT)
+                .of()
                 .sound(SoundType.GRAVEL)
                 .strength(5, 1F)
                 .randomTicks()
@@ -30,7 +29,7 @@ public class BlockGraveyardSoil extends Block {
 
 
     @Override
-    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;

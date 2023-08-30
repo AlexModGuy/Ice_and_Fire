@@ -146,7 +146,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
     public PathResult moveAwayFromXYZ(final BlockPos avoid, final double range, final double speedFactor, final boolean safeDestination) {
         final BlockPos start = AbstractPathJob.prepareStart(ourEntity);
 
-        return setPathJob(new PathJobMoveAwayFromLocation(ourEntity.level,
+        return setPathJob(new PathJobMoveAwayFromLocation(ourEntity.level(),
             start,
             avoid,
             (int) range,
@@ -165,7 +165,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final int theRange = (int) (mob.getRandom().nextInt((int) range) + range / 2);
         final BlockPos start = AbstractPathJob.prepareStart(ourEntity);
 
-        return setPathJob(new PathJobRandomPos(ourEntity.level,
+        return setPathJob(new PathJobRandomPos(ourEntity.level(),
             start,
             theRange,
             (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
@@ -182,7 +182,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         }
 
         desiredPos = BlockPos.ZERO;
-        return setPathJob(new PathJobRandomPos(ourEntity.level,
+        return setPathJob(new PathJobRandomPos(ourEntity.level(),
             AbstractPathJob.prepareStart(ourEntity),
             3,
             (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
@@ -202,7 +202,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final int theRange = mob.getRandom().nextInt(range) + range / 2;
         final BlockPos start = AbstractPathJob.prepareStart(ourEntity);
 
-        return setPathJob(new PathJobRandomPos(ourEntity.level,
+        return setPathJob(new PathJobRandomPos(ourEntity.level(),
             start,
             theRange,
             (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
@@ -303,7 +303,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             } else if (this.path != null && !this.path.isDone()) {
                 Vec3 vector3d = this.getTempMobPos();
                 Vec3 vector3d1 = this.path.getNextEntityPos(this.mob);
-                if (vector3d.y > vector3d1.y && !this.mob.isOnGround() && Mth.floor(vector3d.x) == Mth.floor(vector3d1.x) && Mth.floor(vector3d.z) == Mth.floor(vector3d1.z)) {
+                if (vector3d.y > vector3d1.y && !this.mob.onGround() && Mth.floor(vector3d.x) == Mth.floor(vector3d1.x) && Mth.floor(vector3d.z) == Mth.floor(vector3d1.z)) {
                     this.path.advance();
                 }
             }
@@ -311,7 +311,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
                 Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
-                BlockPos blockpos = new BlockPos(vector3d2);
+                BlockPos blockpos = new BlockPos((int) Math.round(vector3d2.x), (int) Math.round(vector3d2.y), (int) Math.round(vector3d2.z));
                 if (isEntityBlockLoaded(this.level, blockpos)) {
                     this.mob.getMoveControl()
                         .setWantedPosition(vector3d2.x,
@@ -384,7 +384,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         desiredPos = new BlockPos(newX, newY, newZ);
 
         return setPathJob(
-            new PathJobMoveToLocation(ourEntity.level,
+            new PathJobMoveToLocation(ourEntity.level(),
                 start,
                 desiredPos,
                 (int) ourEntity.getAttribute(Attributes.FOLLOW_RANGE).getValue(),
@@ -770,18 +770,18 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final Vec3 curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
         final Vec3 next = this.path.getEntityPosAtNode(this.mob, curNode);
 
-        final Vec3i currI = new Vec3i(curr.x, curr.y, curr.z);
-        final Vec3i nextI = new Vec3i(next.x, next.y, next.z);
+        final Vec3i currI = new Vec3i((int) Math.round(curr.x), (int) Math.round(curr.y), (int) Math.round(curr.z));
+        final Vec3i nextI = new Vec3i((int) Math.round(next.x), (int) Math.round(next.y), (int) Math.round(next.z));
 
         if (mob.blockPosition().closerThan(currI, 2.0) && mob.blockPosition().closerThan(nextI, 2.0)) {
             int currentIndex = curNode - 1;
             while (currentIndex > 0) {
                 final Vec3 tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
-                final Vec3i tempoPosI = new Vec3i(tempoPos.x, tempoPos.y, tempoPos.z);
+                final Vec3i tempoPosI = new Vec3i((int) Math.round(tempoPos.x), (int) Math.round(tempoPos.y), (int) Math.round(tempoPos.z));
                 if (mob.blockPosition().closerThan(tempoPosI, 1.0)) {
                     this.path.setNextNodeIndex(currentIndex);
                 } else if (isTracking) {
-                    reached.add(new BlockPos(tempoPos.x, tempoPos.y, tempoPos.z));
+                    reached.add(new BlockPos(tempoPosI));
                 }
                 currentIndex--;
             }

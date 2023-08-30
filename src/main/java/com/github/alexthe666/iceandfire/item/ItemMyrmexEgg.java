@@ -1,16 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -26,11 +22,11 @@ public class ItemMyrmexEgg extends Item {
     boolean isJungle;
 
     public ItemMyrmexEgg(boolean isJungle) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
         this.isJungle = isJungle;
     }
 
-    @Override
+/*    @Override
     public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             for (int i = 0; i < 5; i++) {
@@ -42,7 +38,7 @@ public class ItemMyrmexEgg extends Item {
             }
         }
 
-    }
+    }*/
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
@@ -69,9 +65,9 @@ public class ItemMyrmexEgg extends Item {
                 caste = "queen";
         }
         if (eggOrdinal == 4) {
-            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.add(Component.translatable("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.GRAY));
         }
     }
 

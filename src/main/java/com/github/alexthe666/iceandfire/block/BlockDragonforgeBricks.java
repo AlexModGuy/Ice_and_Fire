@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
     public BlockDragonforgeBricks(int isFire) {
         super(
             Properties
-                .of(Material.STONE)
+                .of()
                 .dynamicShape()
                 .strength(40, 500)
     			.sound(SoundType.METAL)

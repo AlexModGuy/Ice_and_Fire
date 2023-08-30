@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
-import com.github.alexthe666.iceandfire.datagen.DataGenerators;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
@@ -25,9 +24,7 @@ import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -50,7 +47,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -61,18 +57,8 @@ public class IceAndFire {
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static boolean DEBUG = true;
     public static String VERSION = "UNKNOWN";
-    public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
-        }
-    };
-    public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get());
-        }
-    };
+    public static CreativeModeTab TAB_ITEMS = CreativeModeTab.builder().icon(() -> new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get())).build();
+    public static CreativeModeTab TAB_BLOCKS = CreativeModeTab.builder().icon(() -> new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get())).build();
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
 
@@ -135,7 +121,7 @@ public class IceAndFire {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerAboutToStart(ServerAboutToStartEvent event) {
-        var biomes = event.getServer().registryAccess().ownedRegistryOrThrow(ForgeRegistries.BIOMES.getRegistryKey());
+        var biomes = event.getServer().registryAccess().registryOrThrow(ForgeRegistries.BIOMES.getRegistryKey());
 
         // Create configured structure feature tags
         //DataGenerators.createResources(biomes);

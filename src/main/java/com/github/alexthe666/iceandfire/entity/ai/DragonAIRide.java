@@ -65,7 +65,7 @@ public class DragonAIRide<T extends Mob & IFlyingMount> extends Goal {
         if ((dragon.isFlying() || hovering()) && (dragon.fliesLikeElytra() || dragon.isGoingUp() || dragon.isGoingDown())) {
             y += lookVec.y * dragon.getYSpeedMod();
         }
-        if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.isOnGround()) {
+        if (dragon.fliesLikeElytra() && lookVec.y == -1 || !(dragon.isFlying() || hovering()) && !dragon.onGround()) {
             y -= 1;
         }
         dragon.getMoveControl().setWantedPosition(x, y, z, speed);

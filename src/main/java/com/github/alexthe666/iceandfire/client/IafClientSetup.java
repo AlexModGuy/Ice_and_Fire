@@ -19,12 +19,11 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonBow;
 import com.github.alexthe666.iceandfire.item.ItemDragonHorn;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -33,18 +32,13 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = IceAndFire.MODID)
 public class IafClientSetup {
@@ -132,17 +126,17 @@ public class IafClientSetup {
 
         // TODO: Remove in future releases
         // This has been implemented because some mods don't know how to properly register things
-        if (Sheets.getBannerMaterial(IafRecipeRegistry.PATTERN_DREAD) == null)
+/*        if (Sheets.getBannerMaterial(new ResourceLocation("minecraft:textures/entity/banner/iceandfire_dread.png")) == null)
         {
             IceAndFire.LOGGER.error("Some mod(s) you're using incorrectly registers things! This WILL break other mods banner patterns. Ice and fire will attempt to fix things so the game doesn't crash");
             Sheets.BANNER_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createBannerMaterial));
             Sheets.SHIELD_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createShieldMaterial));
-        }
+        }*/
     }
 
     @SubscribeEvent
     public static void setupShaders(RegisterShadersEvent event) throws IOException {
-        ResourceManager manager = event.getResourceManager();
+        ResourceManager manager = Minecraft.getInstance().getResourceManager();
         event.registerShader(new ShaderInstance(manager, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
             rendertypeDreadPortalShader = p_172782_;
         });
@@ -159,15 +153,15 @@ public class IafClientSetup {
         return rendertypeScalableTextureShader;
     }
 
-    @SubscribeEvent
-    public static void onStitch(TextureStitchEvent.Pre event) {
+/*    @SubscribeEvent
+    public static void onStitch(TextureStitchEvent event) {
         if (!event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
             return;
         }
         event.addSprite(GHOST_CHEST_LOCATION);
         event.addSprite(GHOST_CHEST_RIGHT_LOCATION);
         event.addSprite(GHOST_CHEST_LEFT_LOCATION);
-    }
+    }*/
 
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event) {

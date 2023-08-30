@@ -2,17 +2,17 @@ package com.github.alexthe666.iceandfire.client.particle;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class ParticleSerpentBubble extends TextureSheetParticle {
     private static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation("iceandfire:textures/particles/sea_serpent_bubble.png");
@@ -34,23 +34,23 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
         float f = (float) (Mth.lerp(partialTicks, this.xo, this.x) - Vector3d.x());
         float f1 = (float) (Mth.lerp(partialTicks, this.yo, this.y) - Vector3d.y());
         float f2 = (float) (Mth.lerp(partialTicks, this.zo, this.z) - Vector3d.z());
-        Quaternion quaternion;
+        Quaternionf quaternion;
         if (this.roll == 0.0F) {
             quaternion = renderInfo.rotation();
         } else {
-            quaternion = new Quaternion(renderInfo.rotation());
+            quaternion = new Quaternionf(renderInfo.rotation());
             float f3 = Mth.lerp(partialTicks, this.oRoll, this.roll);
-            quaternion.mul(Vector3f.ZP.rotation(f3));
+            quaternion.mul(new Quaternionf(new AxisAngle4f(f3, new Vector3f(0.0F, 0.0F, 1.0F))));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        vector3f1.transform(quaternion);
+        vector3f1 = quaternion.transform(vector3f1);
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
         float f4 = this.getQuadSize(partialTicks);
 
         for (int i = 0; i < 4; ++i) {
             Vector3f vector3f = avector3f[i];
-            vector3f.transform(quaternion);
+            vector3f = quaternion.transform(vector3f);
             vector3f.mul(f4);
             vector3f.add(f, f1, f2);
         }
@@ -72,7 +72,8 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTick) {
-        BlockPos blockpos = new BlockPos(this.x, this.y, this.z);
+        //If uncomment : BlockPos needs integers
+//        BlockPos blockpos = new BlockPos(this.x, this.y, this.z);
         return 240;
     }
 

@@ -149,7 +149,7 @@ public class ContainerLectern extends AbstractContainerMenu {
         ItemStack itemstack1 = this.tileFurnace.getItem(1);
         int i = 3;
 
-        if (!playerIn.level.isClientSide && !playerIn.isCreative()) {
+        if (!playerIn.level().isClientSide && !playerIn.isCreative()) {
             itemstack1.shrink(i);
             if (itemstack1.isEmpty()) {
                 this.tileFurnace.setItem(1, ItemStack.EMPTY);
@@ -168,7 +168,7 @@ public class ContainerLectern extends AbstractContainerMenu {
                 if (itemstack.getItem() == IafItemRegistry.BESTIARY.get()) {
                     this.tileFurnace.setItem(0, itemstack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-                        if (playerIn.level.isClientSide) {
+                        if (playerIn.level().isClientSide) {
                             IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getBlockPos().asLong(), 0, 0, 0, true, page.ordinal()));
                         }
                         ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
@@ -178,7 +178,7 @@ public class ContainerLectern extends AbstractContainerMenu {
                 this.tileFurnace.setChanged();
                 //this.xpSeed = playerIn.getXPSeed();
                 this.slotsChanged(this.tileFurnace);
-                playerIn.level.playSound(null, playerIn.blockPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundSource.BLOCKS, 1.0F, playerIn.level.random.nextFloat() * 0.1F + 0.9F);
+                playerIn.level().playSound(null, playerIn.blockPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundSource.BLOCKS, 1.0F, playerIn.level().random.nextFloat() * 0.1F + 0.9F);
             }
             onUpdate();
             return true;

@@ -11,10 +11,11 @@ import com.github.alexthe666.iceandfire.world.structure.DreadMausoleumStructure;
 import com.github.alexthe666.iceandfire.world.structure.DummyPiece;
 import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
 import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
@@ -30,13 +31,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType.StructureTemplateType;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
@@ -101,17 +102,16 @@ public class IafWorldRegistry {
     //        ForgeRegistries.STRUCTURE_FEATURES,
     //        IceAndFire.MODID
     //);
+    public static final StructureType<GorgonTempleStructure> GORGON_TEMPLE = register("gorgon_temple", GorgonTempleStructure.CODEC);
+    public static final StructureType<DreadMausoleumStructure> MAUSOLEUM = register("mausoleum", DreadMausoleumStructure.CODEC);
+    public static final StructureType<GraveyardStructure> GRAVEYARD = register("graveyard", GraveyardStructure.CODEC);
 
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GORGON_TEMPLE = STRUCTURES.register("gorgon_temple", GorgonTempleStructure::new);
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> MAUSOLEUM = STRUCTURES.register("mausoleum", DreadMausoleumStructure::new);
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> GRAVEYARD = STRUCTURES.register("graveyard", GraveyardStructure::new);
-
-    public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/gorgon_temple"));
-    public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
-    public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/graveyard"));
+    public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/gorgon_temple"));
+    public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
+    public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/graveyard"));
 
     public static final ResourceLocation RL_IAF_STRUCTURE_SET = new ResourceLocation(IceAndFire.MODID, "iaf_structure_set");
-    public static final TagKey<StructureSet> IAF_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_IAF_STRUCTURE_SET);
+//    public static final TagKey<StructureSet> IAF_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_IAF_STRUCTURE_SET);
 
     public static StructurePieceType DUMMY_PIECE;
     public static Holder<PlacedFeature> FIRE_LILY_CF;
@@ -501,5 +501,9 @@ public class IafWorldRegistry {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private static <S extends Structure> StructureType<S> register(String pName, Codec<S> pCodec) {
+        return Registry.register(BuiltInRegistries.STRUCTURE_TYPE, pName, () -> pCodec);
     }
 }

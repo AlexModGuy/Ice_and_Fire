@@ -1,13 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -23,7 +22,7 @@ public class ItemDragonArmor extends Item {
     private Pattern baseName = Pattern.compile("[a-z]+_[a-z]+");
 
     public ItemDragonArmor(DragonArmorType type, int dragonSlot) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
         if (type == DragonArmorType.FIRE || type == DragonArmorType.ICE || type == DragonArmorType.LIGHTNING)
@@ -32,7 +31,7 @@ public class ItemDragonArmor extends Item {
 
     @Override
     public @NotNull String getDescriptionId() {
-        String fullName = this.getRegistryName().getPath();
+        String fullName = ForgeRegistries.ITEMS.getKey(this).getPath();
         Matcher matcher = baseName.matcher(fullName);
         name = matcher.find() ? matcher.group() : fullName;
         return "item.iceandfire." + name;
@@ -56,7 +55,7 @@ public class ItemDragonArmor extends Item {
             case 3 -> "dragon.armor_tail";
             default -> "dragon.armor_head";
         };
-        tooltip.add(new TranslatableComponent(words).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable(words).withStyle(ChatFormatting.GRAY));
     }
 
     public enum DragonArmorType {

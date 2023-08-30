@@ -9,16 +9,17 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRenderer<T> {
 
@@ -27,32 +28,20 @@ public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRend
     }
 
     protected static RenderType getEggTexture(EnumDragonEgg type) {
-        switch (type) {
-            default:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_RED);
-            case GREEN:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_GREEN);
-            case BRONZE:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_BRONZE);
-            case GRAY:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_GREY);
-            case BLUE:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_BLUE);
-            case WHITE:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_WHITE);
-            case SAPPHIRE:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_SAPPHIRE);
-            case SILVER:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_SILVER);
-            case ELECTRIC:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_ELECTRIC);
-            case AMYTHEST:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_AMYTHEST);
-            case COPPER:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_COPPER);
-            case BLACK:
-                return RenderType.entityCutout(RenderDragonEgg.EGG_BLACK);
-        }
+        return switch (type) {
+            default -> RenderType.entityCutout(RenderDragonEgg.EGG_RED);
+            case GREEN -> RenderType.entityCutout(RenderDragonEgg.EGG_GREEN);
+            case BRONZE -> RenderType.entityCutout(RenderDragonEgg.EGG_BRONZE);
+            case GRAY -> RenderType.entityCutout(RenderDragonEgg.EGG_GREY);
+            case BLUE -> RenderType.entityCutout(RenderDragonEgg.EGG_BLUE);
+            case WHITE -> RenderType.entityCutout(RenderDragonEgg.EGG_WHITE);
+            case SAPPHIRE -> RenderType.entityCutout(RenderDragonEgg.EGG_SAPPHIRE);
+            case SILVER -> RenderType.entityCutout(RenderDragonEgg.EGG_SILVER);
+            case ELECTRIC -> RenderType.entityCutout(RenderDragonEgg.EGG_ELECTRIC);
+            case AMYTHEST -> RenderType.entityCutout(RenderDragonEgg.EGG_AMYTHEST);
+            case COPPER -> RenderType.entityCutout(RenderDragonEgg.EGG_COPPER);
+            case BLACK -> RenderType.entityCutout(RenderDragonEgg.EGG_BLACK);
+        };
     }
 
     @Override
@@ -89,12 +78,12 @@ public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRend
                 float f2 = ((float) podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * partialTicks);
                 float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
                 matrixStackIn.translate(0.5F, 1.55F + f3, 0.5F);
-                float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
-                matrixStackIn.mulPose(new Quaternion(Vector3f.YP, f4, true));
+                float f4 = (f2 / 20.0F);
+                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(f4, new Vector3f(0.0F, 1.0F, 0.0F))));
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.2F, 0);
                 matrixStackIn.scale(0.65F, 0.65F, 0.65F);
-                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
+                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, podium.getLevel(), 0);
                 matrixStackIn.popPose();
                 matrixStackIn.popPose();
                 //}
