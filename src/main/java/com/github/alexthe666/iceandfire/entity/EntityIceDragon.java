@@ -571,7 +571,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 if (!level().isClientSide) {
                     HitResult result = this.level().clip(new ClipContext(new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()), new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
                     Vec3 vec3 = result.getLocation();
-                    BlockPos pos = new BlockPos((int) Math.round(vec3.x), (int) Math.round(vec3.y), (int) Math.round(vec3.z));
+                    BlockPos pos = BlockPos.containing(vec3);
                     if (!this.isInMaterialWater()) {
                         IafDragonDestructionManager.destroyAreaIce(level(), pos, this);
                     }
@@ -584,7 +584,7 @@ public class EntityIceDragon extends EntityDragonBase {
             double spawnZ = burnZ + (random.nextFloat() * 3.0) - 1.5;
             if (!level().isClientSide) {
                 if (!this.isInMaterialWater()) {
-                    IafDragonDestructionManager.destroyAreaIce(level(), new BlockPos((int) Math.round(spawnX), (int) Math.round(spawnY), (int) Math.round(spawnZ)), this);
+                    IafDragonDestructionManager.destroyAreaIce(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
                 }
             }
         }

@@ -81,7 +81,7 @@ public class IafDragonFlightManager {
             }
 
         } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4
-                || !dragon.level().isEmptyBlock(new BlockPos((int) Math.round(target.x), (int) Math.round(target.y), (int) Math.round(target.z)))
+                || !dragon.level().isEmptyBlock(BlockPos.containing(target.x, target.y, target.z))
                         && (dragon.isHovering() || dragon.isFlying())
                 || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;

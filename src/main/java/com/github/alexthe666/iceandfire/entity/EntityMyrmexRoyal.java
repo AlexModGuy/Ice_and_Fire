@@ -80,7 +80,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, RandomSource rand) {
-        BlockPos pos = new BlockPos((int) Math.round(x), entity.getBlockY(), (int) Math.round(z));
+        BlockPos pos = BlockPos.containing(x, entity.getBlockY(), z);
         for (int yDown = 0; yDown < 10; yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
                 return pos.above(yDown);

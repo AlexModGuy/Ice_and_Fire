@@ -77,8 +77,7 @@ public class AquaticAIGetInWater extends Goal {
     @Nullable
     protected Vec3 findPossibleShelter(int xz, int y) {
         RandomSource random = this.creature.getRandom();
-        BlockPos blockpos = new BlockPos(this.creature.getBlockX(), (int) Math.round(this.creature.getBoundingBox().minY),
-            this.creature.getBlockZ());
+        BlockPos blockpos = BlockPos.containing(this.creature.getBlockX(), this.creature.getBoundingBox().minY, this.creature.getBlockZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y,

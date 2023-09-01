@@ -93,12 +93,12 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     private int getPathablePosY() {
         if (this.worm.isInSand()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            BlockState blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
+            BlockState blockstate = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ()));
             int j = 0;
 
             while (blockstate.is(BlockTags.SAND)) {
                 ++i;
-                blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
+                blockstate = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ()));
                 ++j;
 
                 if (j > 16) {
@@ -115,7 +115,7 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     protected void removeSunnyPath() {
 
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(BlockPos.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY + 0.5D, this.mob.getBlockZ()))) {
                 return;
             }
 

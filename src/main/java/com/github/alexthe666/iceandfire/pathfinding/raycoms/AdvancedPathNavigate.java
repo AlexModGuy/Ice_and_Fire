@@ -311,7 +311,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
                 Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
-                BlockPos blockpos = new BlockPos((int) Math.round(vector3d2.x), (int) Math.round(vector3d2.y), (int) Math.round(vector3d2.z));
+                BlockPos blockpos = BlockPos.containing(vector3d2);
                 if (isEntityBlockLoaded(this.level, blockpos)) {
                     this.mob.getMoveControl()
                         .setWantedPosition(vector3d2.x,

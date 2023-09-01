@@ -64,7 +64,7 @@ public class LegSolver {
 
 
         private float settle(EntityDragonBase entity, double x, double y, double z, float height) {
-            BlockPos pos = new BlockPos((int) Math.round(x), (int) Math.round(y + 1e-3), (int) Math.round(z));
+            BlockPos pos = BlockPos.containing(x, y + 1e-3, z);
             float dist = this.getDistance(entity.level(), pos);
             if (1 - dist < 1e-3) {
                 dist = this.getDistance(entity.level(), pos.below()) + (float) y % 1;

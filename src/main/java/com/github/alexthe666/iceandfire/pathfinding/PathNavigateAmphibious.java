@@ -79,12 +79,12 @@ public class PathNavigateAmphibious extends PathNavigation {
     private int getPathablePosY() {
         if (this.mob.isInWater() && this.canFloat()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            Block block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+            Block block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
             int j = 0;
 
             while (block == Blocks.WATER) {
                 ++i;
-                block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+                block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
                 ++j;
 
                 if (j > 16) {
@@ -100,7 +100,7 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     protected void removeSunnyPath() {
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(BlockPos.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY + 0.5D, this.mob.getBlockZ()))) {
                 return;
             }
 

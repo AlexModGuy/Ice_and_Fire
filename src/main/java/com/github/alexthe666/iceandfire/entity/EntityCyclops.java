@@ -312,7 +312,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level().getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
+                BlockState BlockState = this.level().getBlockState(BlockPos.containing(this.getX() + extraX, this.getY() + extraY - 1, this.getZ() + extraZ));
                 if (BlockState.isAir()) {
                     if (level().isClientSide) {
                         level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);

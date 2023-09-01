@@ -455,7 +455,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                         new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER,
                         ClipContext.Fluid.NONE, this));
                     Vec3 vec3 = result.getLocation();
-                    BlockPos pos = new BlockPos((int) Math.round(vec3.x), (int) Math.round(vec3.y), (int) Math.round(vec3.z));
+                    BlockPos pos = BlockPos.containing(vec3);
                     IafDragonDestructionManager.destroyAreaLightning(level(), pos, this);
                     setHasLightningTarget(true);
                     setLightningTargetVec((float) result.getLocation().x, (float) result.getLocation().y, (float) result.getLocation().z);
@@ -469,7 +469,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             setHasLightningTarget(true);
             setLightningTargetVec((float) spawnX, (float) spawnY, (float) spawnZ);
             if (!level().isClientSide) {
-                IafDragonDestructionManager.destroyAreaLightning(level(), new BlockPos((int) Math.round(spawnX), (int) Math.round(spawnY), (int) Math.round(spawnZ)), this);
+                IafDragonDestructionManager.destroyAreaLightning(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }

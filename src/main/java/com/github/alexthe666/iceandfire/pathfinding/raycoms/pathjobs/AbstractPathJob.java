@@ -301,9 +301,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return ChunkCoordinates for starting location.
      */
     public static BlockPos prepareStart(final LivingEntity entity) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(Mth.floor(entity.getX()),
-            Mth.floor(entity.getY()),
-            Mth.floor(entity.getZ()));
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(entity.getBlockX(),
+            entity.getBlockY(),
+            entity.getBlockZ());
         final Level world = entity.level();
 
         BlockState bs = world.getBlockState(pos);

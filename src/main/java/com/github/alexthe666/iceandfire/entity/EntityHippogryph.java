@@ -162,7 +162,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     private boolean isOverAirLogic() {
-        return level().isEmptyBlock(new BlockPos(this.getBlockX(), (int) Math.round(this.getBoundingBox().minY - 1), this.getBlockZ()));
+        return level().isEmptyBlock(BlockPos.containing(this.getBlockX(), this.getBoundingBox().minY - 1, this.getBlockZ()));
     }
 
     @Override

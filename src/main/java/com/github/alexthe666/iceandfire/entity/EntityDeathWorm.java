@@ -622,7 +622,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public int getWormBrightness(boolean sky) {
         Vec3 vec3 = this.getEyePosition(1.0F);
-        BlockPos eyePos = new BlockPos((int) Math.round(vec3.x()), (int) Math.round(vec3.y()), (int) Math.round(vec3.z()));
+        BlockPos eyePos = BlockPos.containing(vec3);
         while (eyePos.getY() < 256 && !level().isEmptyBlock(eyePos)) {
             eyePos = eyePos.above();
         }
@@ -682,7 +682,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             }
         }
         if (this.isInSand()) {
-            BlockPos pos = new BlockPos(this.getBlockX(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())), this.getBlockZ()).below();
+            BlockPos pos = new BlockPos(this.getBlockX(), this.getSurface(this.getBlockX(), this.getBlockY(), this.getBlockZ()), this.getBlockZ()).below();
             BlockState state = level().getBlockState(pos);
             if (state.isSolidRender(level(), pos)) {
                 if (level().isClientSide) {

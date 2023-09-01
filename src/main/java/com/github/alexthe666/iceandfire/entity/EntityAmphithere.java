@@ -159,7 +159,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         float angle = (0.01745329251F * possibleOrbitRadius);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos((int) Math.round(orbit.getX() + extraX), orbit.getY(), (int) Math.round(orbit.getZ() + extraZ));
+        BlockPos radialPos = BlockPos.containing(orbit.getX() + extraX, orbit.getY(),orbit.getZ() + extraZ);
         //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
         // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
         entity.orbitRadius = possibleOrbitRadius;
