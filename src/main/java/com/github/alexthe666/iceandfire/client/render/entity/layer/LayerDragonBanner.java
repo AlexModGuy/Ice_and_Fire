@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -14,9 +15,6 @@ import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.stream.StreamSupport;
 
@@ -38,7 +36,7 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
             matrixStackIn.pushPose();
             postRender(StreamSupport.stream(this.renderer.getModel().getAllParts().spliterator(), false).filter(cube -> cube.boxName.equals("BodyUpper")).findFirst().get(), matrixStackIn, 0.0625F);
             matrixStackIn.translate(0, -0.2F, 0.4F);
-            matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStackIn.pushPose();
             matrixStackIn.scale(f2, f2, f2);
             Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, Minecraft.getInstance().level, 0);
@@ -56,15 +54,15 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
         } else {
             matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
             if (renderer.rotateAngleZ != 0.0F) {
-                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleZ, new Vector3f(0.0F, 0.0F, 1.0F))));
+                matrixStackIn.mulPose(Axis.ZP.rotation(renderer.rotateAngleZ));
             }
 
             if (renderer.rotateAngleY != 0.0F) {
-                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleY, new Vector3f(0.0F, 1.0F, 0.0F))));
+                matrixStackIn.mulPose(Axis.YP.rotation(renderer.rotateAngleY));
             }
 
             if (renderer.rotateAngleX != 0.0F) {
-                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(renderer.rotateAngleX, new Vector3f(1.0F, 0.0F, 0.0F))));
+                matrixStackIn.mulPose(Axis.XP.rotation(renderer.rotateAngleX));
             }
         }
     }

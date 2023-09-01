@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.EntityDragonLightningCharge;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -11,9 +12,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 
@@ -38,8 +36,8 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
         matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*(yaw-180F), new Vector3f(0.0F, 1.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*20F*f, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw - 180.0F));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f * 20.0F));
         matrixStackIn.translate(0F, 0.25F, 0F);
         MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder2, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();
@@ -47,8 +45,8 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
         matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.5F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*(yaw-180F), new Vector3f(0.0F, 1.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*15F*f, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw - 180.0F));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f * 15.0F));
         matrixStackIn.translate(0F, 0.25F, 0F);
         matrixStackIn.scale(1.5F, 1.5F, 1.5F);
         MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -57,8 +55,8 @@ public class RenderDragonLightningCharge extends EntityRenderer<EntityDragonLigh
         matrixStackIn.pushPose();
         matrixStackIn.translate(0F, 0.75F, 0F);
         matrixStackIn.translate(0F, -0.25F, 0F);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*(yaw-180F), new Vector3f(0.0F, 1.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*10F*f, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw - 180.0F));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f * 10.0F));
         matrixStackIn.translate(0F, 0.75F, 0F);
         matrixStackIn.scale(2.5F, 2.5F, 2.5F);
         MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

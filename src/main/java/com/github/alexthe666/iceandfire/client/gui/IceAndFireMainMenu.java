@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.gui;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
@@ -204,7 +205,7 @@ public class IceAndFireMainMenu extends TitleScreen {
         if (this.splashText != null) {
             ms.pose().pushPose();
             ms.pose().translate((this.width / 2 + 90), 70.0D, 0.0D);
-            ms.pose().mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI * -20.0F / 180.0F, new Vector3f(0.0F, 0.0F, 1.0F))));
+            ms.pose().mulPose(Axis.ZP.rotationDegrees(-20.0F));
             float f2 = 1.8F - Mth.abs(Mth.sin((float) (Util.getMillis() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
             f2 = f2 * 100.0F / (float) (this.font.width(this.splashText) + 32);
             ms.pose().scale(f2, f2, f2);

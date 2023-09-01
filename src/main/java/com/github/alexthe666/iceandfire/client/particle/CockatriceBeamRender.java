@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.particle;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -39,8 +40,8 @@ public class CockatriceBeamRender {
         Vector3d2 = Vector3d2.normalize();
         float f5 = (float) Math.acos(Vector3d2.y);
         float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((((float) Math.PI / 2F) - f6), new Vector3f(0.0F, 1.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(f5, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.YP.rotation((float) Math.PI / 2.0F - f6));
+        matrixStackIn.mulPose(Axis.XP.rotation(f5));
         int i = 1;
         float f7 = f1 * 0.05F * -1.5F;
         float f8 = f * f;

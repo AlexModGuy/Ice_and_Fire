@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -13,9 +14,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
 
@@ -55,8 +53,8 @@ public class RenderDragonSkull extends EntityRenderer<EntityDragonSkull> {
         }
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) -Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*(180F-entity.getYaw()), new Vector3f(0.0F, -1.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(-180.0F));
+        matrixStackIn.mulPose(Axis.YN.rotationDegrees(-180.0F - entity.getYaw()));
         float f = 0.0625F;
         matrixStackIn.scale(1.0F, 1.0F, 1.0F);
         float size = getRenderSize(entity) / 3;

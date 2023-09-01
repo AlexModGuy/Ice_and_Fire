@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -15,9 +16,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
     private static final ModelTideTrident MODEL = new ModelTideTrident();
@@ -44,7 +42,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
             } else {
                 stackIn.translate(0, 0.6F, 0.0F);
             }
-            stackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*160, new Vector3f(1.0F, 0.0F, 0.0F))));
+            stackIn.mulPose(Axis.XP.rotationDegrees(160.0F));
             VertexConsumer glintVertexBuilder = ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityCutoutNoCull(RenderTideTrident.TRIDENT), false, stack.hasFoil());
             MODEL.renderToBuffer(stackIn,
                 glintVertexBuilder, combinedLightIn,

@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -48,8 +49,8 @@ public class RenderChain {
         vector3d2 = vector3d2.normalize();
         float f5 = (float) Math.acos(vector3d2.y);
         float f6 = (float) Math.atan2(vector3d2.z, vector3d2.x);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/2F-f6, new Vector3f(0.0F, 1.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f(f5, new Vector3f(1.0F, 0.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.YP.rotation((float) Math.PI / 2.0F - f6));
+        matrixStackIn.mulPose(Axis.XP.rotation(f5));
         float f7 = -1.0F;
         int j = 255;
         int k = 255;

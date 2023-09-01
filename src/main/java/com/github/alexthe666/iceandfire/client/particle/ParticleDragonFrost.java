@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.client.particle;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -11,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -80,7 +80,7 @@ public class ParticleDragonFrost extends TextureSheetParticle {
         } else {
             quaternion = new Quaternionf(renderInfo.rotation());
             float f3 = Mth.lerp(partialTicks, this.oRoll, this.roll);
-            quaternion.mul(new Quaternionf(new AxisAngle4f(f3, new Vector3f(0.0F, 0.0F, 1.0F))));
+            quaternion.mul(Axis.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);

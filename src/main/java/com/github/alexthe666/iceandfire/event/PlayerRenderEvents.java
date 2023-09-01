@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -9,9 +10,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.UUID;
 
@@ -63,7 +61,7 @@ public class PlayerRenderEvents {
             float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
             event.getPoseStack().translate((float) 0, event.getEntity().getBbHeight() * 1.25F, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
-            event.getPoseStack().mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*f4, new Vector3f(0.0F, 1.0F, 0.0F))));
+            event.getPoseStack().mulPose(Axis.YP.rotationDegrees(f4));
             event.getPoseStack().pushPose();
             Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemDisplayContext.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntity().level(), event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getPoseStack().popPose();

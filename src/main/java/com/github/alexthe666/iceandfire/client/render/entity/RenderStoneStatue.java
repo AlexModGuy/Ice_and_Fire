@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PigModel;
@@ -28,9 +29,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,8 +110,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         }
         preRenderCallback(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0, 1.5F, 0);
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
-        matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*yaw, new Vector3f(0.0F, 1.0F, 0.0F))));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
         if (model instanceof ICustomStatueModel && fakeEntity != null) {
             ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, fakeEntity);
             if (model instanceof ModelHydraBody && fakeEntity instanceof EntityHydra) {
@@ -133,8 +131,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             matrixStackIn.pushPose();
             preRenderCallback(entityIn, matrixStackIn, partialTicks);
             matrixStackIn.translate(0, 1.5F, 0);
-            matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(1.0F, 0.0F, 0.0F))));
-            matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/180F*yaw, new Vector3f(0.0F, 1.0F, 0.0F))));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
             if (model instanceof ICustomStatueModel) {
                 ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder2, packedLightIn, fakeEntity);
             } else {

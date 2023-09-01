@@ -5,14 +5,12 @@ import com.github.alexthe666.iceandfire.client.model.ModelMyrmexPupa;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 
 public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEntityModel<EntityMyrmexBase>> {
@@ -51,7 +49,7 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
         }
         matrixStackIn.scale(scale, scale, scale);
         if (myrmex.isPassenger() && myrmex.getGrowthStage() < 2) {
-            matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI/2, new Vector3f(0.0F, 1.0F, 0.0F))));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(90.0F));
         }
     }
 

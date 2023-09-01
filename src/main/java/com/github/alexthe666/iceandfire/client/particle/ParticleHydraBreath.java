@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.client.particle;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -59,7 +60,7 @@ public class ParticleHydraBreath extends TextureSheetParticle {
         } else {
             quaternion = new Quaternionf(renderInfo.rotation());
             float f3 = Mth.lerp(partialTicks, this.oRoll, this.roll);
-            quaternion.mul(new Quaternionf(new AxisAngle4f(f3, new Vector3f(0.0F, 0.0F, 1.0F))));
+            quaternion.mul(Axis.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);

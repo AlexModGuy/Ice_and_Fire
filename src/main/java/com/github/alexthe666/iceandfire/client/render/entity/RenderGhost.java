@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -119,7 +120,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.8F + Mth.sin((entityIn.tickCount + partialTicks) * 0.15F) * 0.1F, 0);
                 matrixStackIn.scale(0.6F, 0.6F, 0.6F);
-                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0.0F, 1.0F, 0.0F))));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
@@ -131,7 +132,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, 2, 0, 1F, 1, 0, 1, 0, 240);
                     matrixStackIn.popPose();
                 }
-                matrixStackIn.mulPose(new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0.0F, 1.0F, 0.0F))));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
