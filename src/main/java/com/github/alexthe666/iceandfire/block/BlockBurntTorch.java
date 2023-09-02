@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockBurntTorch extends TorchBlock implements IDreadBlock, IWallBlock {
@@ -15,11 +16,13 @@ public class BlockBurntTorch extends TorchBlock implements IDreadBlock, IWallBlo
     public BlockBurntTorch() {
         super(
             Properties.of()
-                .lightLevel((state) -> 0)
-                .sound(SoundType.WOOD)
-                .noOcclusion()
-                .dynamicShape()
-                .noCollission(),
+                    .mapColor(MapColor.WOOD)
+                    .ignitedByLava()
+                    .lightLevel((state) -> 0)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()
+                    .dynamicShape()
+                    .noCollission(),
             DustParticleOptions.REDSTONE
         );
     }

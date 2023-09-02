@@ -7,6 +7,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -21,6 +22,7 @@ public class BlockSeaSerpentScales extends Block {
         super(
             Properties
                 .of()
+                .mapColor(MapColor.STONE)
                 .strength(30F, 500F)
                 .sound(SoundType.STONE)
                 .requiresCorrectToolForDrops()

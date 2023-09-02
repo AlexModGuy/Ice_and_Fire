@@ -11,7 +11,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
@@ -27,6 +29,8 @@ public class BlockMyrmexConnectedResin extends HalfTransparentBlock {
         super(
             Properties
                 .of()
+                .mapColor(MapColor.STONE)
+                .instrument(NoteBlockInstrument.BASEDRUM)
                 .strength(glass ? 1.5F : 3.5F)
                 .noOcclusion()
                 .dynamicShape()

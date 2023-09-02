@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
@@ -18,6 +20,9 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
         super(
             Properties
                 .of()
+                .mapColor(MapColor.WOOD)
+                .instrument(NoteBlockInstrument.BASS)
+                .ignitedByLava()
                 .lightLevel((state) -> 5)
                 .sound(SoundType.STONE)
                 .noOcclusion()

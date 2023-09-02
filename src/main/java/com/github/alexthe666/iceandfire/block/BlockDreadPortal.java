@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -27,11 +29,11 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
         super(
             Properties
                 .of()
+                .mapColor(MapColor.NONE)
+                .pushReaction(PushReaction.BLOCK)
                 .dynamicShape()
                 .strength(-1, 100000)
-                .lightLevel((state) -> {
-                    return 1;
-                })
+                .lightLevel((state) -> 1)
                 .randomTicks()
 		);
     }

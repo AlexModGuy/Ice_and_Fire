@@ -10,6 +10,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockReturningState extends Block {
@@ -17,7 +20,7 @@ public class BlockReturningState extends Block {
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockReturningState(float hardness, float resistance, SoundType sound, BlockState returnToState) {
+/*    public BlockReturningState(float hardness, float resistance, SoundType sound, BlockState returnToState) {
         super(
             BlockBehaviour.Properties
                 .of()
@@ -28,11 +31,38 @@ public class BlockReturningState extends Block {
 
         this.returnState = returnToState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
+    }*/
+
+    public static BlockReturningState builder(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+        if (ignited) {
+            props.ignitedByLava();
+        }
+        return new BlockReturningState(props, returnToState);
+    }
+    public static BlockReturningState builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).randomTicks();
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+        if (ignited) {
+            props.ignitedByLava();
+        }
+        return new BlockReturningState(props, returnToState);
     }
 
-    @SuppressWarnings("deprecation")
-    public BlockReturningState(float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
-        super(BlockBehaviour.Properties.of().sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks());
+
+    public BlockReturningState(BlockBehaviour.Properties props, BlockState returnToState) {
+        super(props);
         this.returnState = returnToState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
     }

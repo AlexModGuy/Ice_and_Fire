@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,7 @@ public class BlockMyrmexCocoon extends BaseEntityBlock {
         super(
             Properties
                 .of()
+                .mapColor(MapColor.DIRT)
                 .strength(2.5F)
                 .noOcclusion()
                 .dynamicShape()
