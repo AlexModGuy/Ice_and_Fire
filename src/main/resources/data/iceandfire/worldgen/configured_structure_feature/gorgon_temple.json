@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:village",
+  "config": {
+    "start_pool": "iceandfire:gorgon_temple/bottom_pool",
+    "size": 2
+  },
+  "biomes": "#minecraft:is_beach",
+  "adapt_noise": false,
+  "spawn_overrides": {}
+}
