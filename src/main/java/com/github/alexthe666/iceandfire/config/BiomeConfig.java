@@ -85,6 +85,7 @@ public class BiomeConfig {
     public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name) {
         if (!init) {
             init();
+            return false;
         }
         return biomeConfigValues.get(entry.getKey()).matches(biome, name);
     }

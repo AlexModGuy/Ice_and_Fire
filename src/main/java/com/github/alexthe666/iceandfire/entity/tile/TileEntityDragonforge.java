@@ -260,11 +260,11 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     public Optional<DragonForgeRecipe> getCurrentRecipe() {
-        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE, this, level);
+        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get(), this, level);
     }
 
     public List<DragonForgeRecipe> getRecipes() {
-        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
+        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get());
     }
 
     public boolean canSmelt() {

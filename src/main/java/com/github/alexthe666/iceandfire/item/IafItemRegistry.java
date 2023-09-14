@@ -6,7 +6,9 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.*;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
@@ -16,12 +18,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.*;
+
+import java.util.function.Supplier;
 
 import static com.github.alexthe666.iceandfire.item.DragonSteelTier.*;
 
@@ -59,7 +61,7 @@ public class IafItemRegistry {
     public static CustomToolMaterial DREAD_KNIGHT_TOOL_MATERIAL = new CustomToolMaterial("DreadKnightSword", 0, 1200, 13F, 0F, 10);
     public static CustomToolMaterial GHOST_SWORD_TOOL_MATERIAL = new CustomToolMaterial("GhostSword", 2, 3000, 5, 10.0F, 25);
 
-    public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, IceAndFire.MODID);
+    public static DeferredIntercept<Item> ITEMS = DeferredIntercept.create(ForgeRegistries.ITEMS, IceAndFire.MODID);
 
 
     public static final RegistryObject<Item> BESTIARY = ITEMS.register("bestiary", ItemBestiary::new);
@@ -400,4 +402,38 @@ public class IafItemRegistry {
     private static TagKey<BannerPattern> create(String pName) {
         return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(pName));
     }
+
+    public static class DeferredIntercept<T extends Item> {
+
+        private final DeferredRegister<T> register;
+
+        private DeferredIntercept(ResourceKey<? extends Registry<T>> registryKey, String modid)
+        {
+            register = DeferredRegister.create(registryKey, modid);
+        }
+
+        private DeferredIntercept(IForgeRegistry<T> reg, String modid)
+        {
+            this(reg.getRegistryKey(), modid);
+        }
+
+        public static <B extends Item> DeferredIntercept<B> create(IForgeRegistry<B> reg, String modid)
+        {
+            return new DeferredIntercept<>(reg, modid);
+        }
+
+        public <I extends T> RegistryObject<I> register(final String name, final Supplier<? extends I> sup)
+        {
+            RegistryObject<I> ret = register.register(name, sup);
+            IafTabRegistry.TAB_ITEMS_LIST.add(ret);
+            return ret;
+        }
+
+        public void register(IEventBus bus)
+        {
+            register.register(bus);
+        }
+    }
+
+
 }

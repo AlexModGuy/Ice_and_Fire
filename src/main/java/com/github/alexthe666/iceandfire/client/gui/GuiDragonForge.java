@@ -66,7 +66,7 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
         int j = 0;
 
         List<DragonForgeRecipe> recipes = this.getMinecraft().level.getRecipeManager()
-                .getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE)
+                .getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get())
                 .stream().filter(item ->
                         item.isValidInput(tileFurnace.getSlot(0).getItem()) && item.isValidBlood(tileFurnace.getSlot(1).getItem())).collect(Collectors.toList());
         int maxCookTime = recipes.isEmpty() ? 100 : recipes.get(0).getCookTime();

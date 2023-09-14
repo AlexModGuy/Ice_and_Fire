@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafTabRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
@@ -17,10 +18,10 @@ import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -54,8 +55,6 @@ public class IceAndFire {
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static boolean DEBUG = true;
     public static String VERSION = "UNKNOWN";
-    public static CreativeModeTab TAB_ITEMS = CreativeModeTab.builder().icon(() -> new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get())).build();
-    public static CreativeModeTab TAB_BLOCKS = CreativeModeTab.builder().icon(() -> new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get())).build();
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
 
@@ -96,9 +95,12 @@ public class IceAndFire {
 
         IafItemRegistry.ITEMS.register(modBus);
         IafBlockRegistry.BLOCKS.register(modBus);
+        IafTabRegistry.TAB_REGISTER.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
+        IafRecipeRegistry.RECIPE_TYPE.register(modBus);
+        IafRecipeRegistry.BANNERS.register(modBus);
         //IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
@@ -123,25 +125,24 @@ public class IceAndFire {
         // Create configured structure feature tags
         //DataGenerators.createResources(biomes);
 
-        /*event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
-            reloadSources(biomes, levelStem.generator());
-        });*/
+        //event.getServer().getWorldData()..worldGenSettings().dimensions().forEach(levelStem -> {
+        //    reloadSources(biomes, levelStem.generator());
+        //});
 
         biomes.holders().forEach(biome -> {
-            IafWorldRegistry.addFeatures(biome);
-            IafEntityRegistry.addSpawners(biome);
+            //IafWorldRegistry.addFeatures(biome);
+            //IafEntityRegistry.addSpawners(biome);
         });
 
     }
 
     private static void reloadSources(Registry<Biome> biomes, ChunkGenerator generator) {
-        /*if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
-                && chunkGenerator.biomeSource instanceof MultiNoiseBiomeSource biomeSource
-                && chunkGenerator.runtimeBiomeSource instanceof MultiNoiseBiomeSource runtimeBiomeSource)
+        if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
+                && chunkGenerator.biomeSource instanceof MultiNoiseBiomeSource biomeSource)
         {
-            biomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
-            runtimeBiomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
-        }*/
+            biomeSource.possibleBiomes.get().stream().distinct().forEach(IafWorldRegistry::addFeatures);
+            //runtimeBiomeSource.possibleBiomes.get().stream().distinct().forEach(IafWorldRegistry::addFeatures);
+        }
     }
 
     @SubscribeEvent

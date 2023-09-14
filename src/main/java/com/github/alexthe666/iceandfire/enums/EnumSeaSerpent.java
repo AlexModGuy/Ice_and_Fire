@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
@@ -34,11 +35,13 @@ public enum EnumSeaSerpent {
     public RegistryObject<Item> leggings;
     public RegistryObject<Item> boots;
     public RegistryObject<Block> scaleBlock;
+    public RegistryObject<Item> item;
 
     EnumSeaSerpent(ChatFormatting color) {
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
         this.scaleBlock = IafBlockRegistry.BLOCKS.register("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockSeaSerpentScales(resourceName, color));
+        this.item = IafItemRegistry.ITEMS.register("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockItem(scaleBlock.get(), new Item.Properties()));
         //this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }
 

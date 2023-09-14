@@ -356,7 +356,6 @@ public class IafWorldRegistry {
         // So we avoid adding them twice here to not get feature cycle order crashes
         if (processed.contains(biomeHolder.value().getGenerationSettings()))
             return;
-
         var generator = new BiomeGenerationSettingsBuilder(biomeHolder.value().getGenerationSettings());
         if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FIRE_LILY_CF);
@@ -475,8 +474,8 @@ public class IafWorldRegistry {
             LOADED_FEATURES.put("SPAWN_STYMPHALIAN_BIRD_CF", true);
         }
 
-        biomeHolder.value().generationSettings = generator.build();
-        processed.add(biomeHolder.value().generationSettings);
+        //TODO: biomeHolder.value().generationSettings = generator.build();
+        //processed.add(biomeHolder.value().generationSettings);
     }
 
     private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {

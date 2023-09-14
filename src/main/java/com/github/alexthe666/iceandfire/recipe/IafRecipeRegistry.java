@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IafRecipeRegistry {
-    private static final DeferredRegister<BannerPattern> BANNERS = DeferredRegister.create(Registries.BANNER_PATTERN, IceAndFire.MODID);
+    public static final DeferredRegister<BannerPattern> BANNERS = DeferredRegister.create(Registries.BANNER_PATTERN, IceAndFire.MODID);
     public static final RegistryObject<BannerPattern> PATTERN_FIRE = addBanner("iceandfire_fire");
     public static final RegistryObject<BannerPattern> PATTERN_ICE = addBanner("iceandfire_ice");
     public static final RegistryObject<BannerPattern> PATTERN_LIGHTNING = addBanner("iceandfire_lightning");
@@ -55,7 +56,8 @@ public class IafRecipeRegistry {
     public static final RegistryObject<BannerPattern> PATTERN_WEEZER = addBanner("iceandfire_weezer");
     public static final RegistryObject<BannerPattern> PATTERN_DREAD = addBanner("iceandfire_dread");
 
-    public static final RecipeType<DragonForgeRecipe> DRAGON_FORGE_TYPE = RecipeType.register("iceandfire:dragonforge");
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(Registries.RECIPE_TYPE, IceAndFire.MODID);
+    public static final RegistryObject<RecipeType<DragonForgeRecipe>> DRAGON_FORGE_TYPE = RECIPE_TYPE.register("dragonforge", () -> RecipeType.simple(new ResourceLocation(IceAndFire.MODID, "dragonforge")));
 
     public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
 
