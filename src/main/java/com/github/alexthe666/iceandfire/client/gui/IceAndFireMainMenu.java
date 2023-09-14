@@ -186,7 +186,7 @@ public class IceAndFireMainMenu extends TitleScreen {
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
                 RenderSystem.setShaderColor(1, 1, 1, 1);
-                GUIColoredBlit.blit(ms.pose(), (int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
+                ms.blit(drawingTextures[picture.image], (int) (picture.x * widthScale) + middleX, (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
                 RenderSystem.disableBlend();
             }
         }
