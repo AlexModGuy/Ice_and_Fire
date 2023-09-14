@@ -33,7 +33,8 @@ import java.util.*;
 public class DataGenerators {
     static PackResources resources = new PackResources();
 
-    @SubscribeEvent
+    //TODO : WIP 1.20
+/*    @SubscribeEvent
     public static void addPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.SERVER_DATA) {
             // Hacky workaround to avoid reloading datapacks
@@ -45,7 +46,7 @@ public class DataGenerators {
                 pOnLoad.accept(pack);
             });
         }
-    }
+    }*/
 
 /*    @Deprecated(since = "1.19.2", forRemoval = true)
     public static void createResources(Stream<Holder<Biome>> biomeStream) {
