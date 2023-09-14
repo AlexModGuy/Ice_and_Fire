@@ -139,7 +139,7 @@ public class EntityDreadGhoul extends EntityDreadMob implements IAnimatedEntity,
             }
             this.lookAt(attackTarget, 360, 80);
             if (this.getAnimation() == ANIMATION_SLASH && (this.getAnimationTick() == 9 || this.getAnimationTick() == 19)) {
-                attackTarget.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                attackTarget.hurt(level().damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                 attackTarget.knockback(0.25F, this.getX() - attackTarget.getX(), this.getZ() - attackTarget.getZ());
             }
         }

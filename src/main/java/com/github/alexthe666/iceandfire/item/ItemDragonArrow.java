@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemDragonArrow extends ArrowItem {
     public ItemDragonArrow() {
-        super(new Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Properties());
     }
 
     @Override

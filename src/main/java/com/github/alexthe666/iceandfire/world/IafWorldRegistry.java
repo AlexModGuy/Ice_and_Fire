@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.world;
 
+import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
 import com.github.alexthe666.iceandfire.world.gen.*;
@@ -12,10 +12,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.LevelAccessor;
@@ -33,6 +34,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,9 +58,10 @@ public class IafWorldRegistry {
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES,
             IceAndFire.MODID);
-    public static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister
-            .create(ForgeRegistries.STRUCTURE_FEATURES, IceAndFire.MODID);
-
+    //TODO:
+    // public static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister
+    //        .create(ForgeRegistries.STRUCTURE_FEATURES, IceAndFire.MODID);
+    public static final DeferredRegister<ConfiguredFeature<?,?>> CONFIGURED_FEATURES = DeferredRegister.create(Registries.CONFIGURED_FEATURE, IceAndFire.MODID);
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> FIRE_DRAGON_ROOST;
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> ICE_DRAGON_ROOST;
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> LIGHTNING_DRAGON_ROOST;
@@ -185,8 +188,8 @@ public class IafWorldRegistry {
     }
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> Holder<PlacedFeature> register(String registerName, ConfiguredFeature<C, F> feature, PlacementModifier... modifiers) {
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(registerName), feature);
-        return PlacementUtils.register(registerName, Holder.direct(feature), modifiers);
+        var configuredFeature = CONFIGURED_FEATURES.register(registerName, () -> feature);
+        return PlacementUtils.inlinePlaced(Holder.direct(configuredFeature.get()), modifiers);
     }
 
     private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
@@ -202,12 +205,8 @@ public class IafWorldRegistry {
         //Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:gorgon_piece_empty", (StructureTemplateType) DummyPiece::new);
         //Registry.register(Registry.STRUCTURE_PIECE, "iceandfire:graveyard_piece", (StructureTemplateType) DummyPiece::new);
 
-        COPPER_ORE_CF = register("iceandfire:copper_ore",
-                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.ORE_COPPPER_SMALL, COPPER_ORE.get().defaultBlockState(), 8)),
-                CountPlacement.of(2), maxHeight(128), spread());
-
         SILVER_ORE_CF = register("iceandfire:silver_ore",
-                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, SILVER_ORE.get().defaultBlockState(), 8)),
+                new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES), SILVER_ORE.get().defaultBlockState(), 8)),
                 CountPlacement.of(2), maxHeight(32), spread()
         );
 
@@ -376,10 +375,6 @@ public class IafWorldRegistry {
                 generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SILVER_ORE_CF);
                 LOADED_FEATURES.put("SILVER_ORE_CF", true);
             }
-            if (IafConfig.generateCopperOre) {
-                generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, COPPER_ORE_CF);
-                LOADED_FEATURES.put("COPPER_ORE_CF", true);
-            }
         }
         if (IafConfig.generateSapphireOre && safelyTestBiome(BiomeConfig.sapphireBiomes, biomeHolder)) {
             generator.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, SAPPHIRE_ORE_CF);
@@ -484,7 +479,7 @@ public class IafWorldRegistry {
         processed.add(biomeHolder.value().generationSettings);
     }
 
-    private static boolean safelyTestBiome(Pair<String, IafSpawnBiomeData> entry, Holder<Biome> biomeHolder) {
+    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {
         try {
             return BiomeConfig.test(entry, biomeHolder);
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class ItemBlindfold extends ArmorItem {
 
     public ItemBlindfold() {
-        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, EquipmentSlot.HEAD, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, Type.HELMET, new Item.Properties());
     }
 
     @Override

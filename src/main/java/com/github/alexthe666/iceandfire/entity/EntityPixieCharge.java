@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -135,7 +134,7 @@ public class EntityPixieCharge extends Fireball {
                     if (entity instanceof LivingEntity) {
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.LEVITATION, 100, 0));
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
-                        entity.hurt(DamageSource.indirectMagic(shootingEntity, null), 5.0F);
+                        entity.hurt(level().damageSources().indirectMagic(shootingEntity, null), 5.0F);
                     }
                     if (this.level().isClientSide) {
                         for (int i = 0; i < 20; ++i) {

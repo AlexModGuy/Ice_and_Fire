@@ -11,8 +11,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -147,7 +147,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public boolean hurt(@NotNull DamageSource var1, float var2) {
-        if (this.level().isClientSide && !var1.is(DamageTypes.FELL_OUT_OF_WORLD) && !isRemoved()) {
+        if (this.level().isClientSide && !var1.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !isRemoved()) {
             this.spawnAtLocation(this.getItem().getItem(), 1);
         }
         this.remove(RemovalReason.KILLED);

@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BlockLaunchExplosion extends Explosion {
     private final float size;
@@ -84,7 +85,7 @@ public class BlockLaunchExplosion extends Explosion {
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-            Collections.shuffle(this.getToBlow(), this.world.random);
+            Collections.shuffle(this.getToBlow(), ThreadLocalRandom.current());
 
             for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);

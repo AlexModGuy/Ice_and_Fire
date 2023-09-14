@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityCockatriceEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.sounds.SoundEvents;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemRottenEgg extends Item {
 
     public ItemRottenEgg() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
     }
 
     @Override

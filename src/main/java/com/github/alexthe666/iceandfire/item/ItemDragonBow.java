@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
@@ -15,7 +14,7 @@ public class ItemDragonBow extends BowItem {
         -> stack.is(ForgeRegistries.ITEMS.tags().createTagKey(IafTagRegistry.DRAGON_ARROWS));
 
     public ItemDragonBow() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(584));
+        super(new Item.Properties().durability(584));
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.github.alexthe666.iceandfire.util;
 
-import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -15,13 +14,11 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
-
-import java.util.concurrent.CompletableFuture;
-
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class which has world related util functions like chunk load checks
@@ -48,10 +45,12 @@ public class WorldUtil {
      */
     public static boolean isChunkLoaded(final LevelAccessor world, final int x, final int z) {
         if (world.getChunkSource() instanceof ServerChunkCache) {
-            final CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>
-                future = ((ServerChunkCache) world.getChunkSource()).getChunkFuture(x, z, ChunkStatus.FULL, false);
+            final ChunkHolder holder = ((ServerChunkCache) world.getChunkSource()).chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(x, z));
+            if (holder != null) {
+                return holder.getFullChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left().isPresent();
+            }
 
-            return future.isDone() && future.getNow(ChunkHolder.UNLOADED_CHUNK).left().isPresent();
+            return false;
         }
         return world.getChunk(x, z, ChunkStatus.FULL, false) != null;
     }
@@ -113,7 +112,7 @@ public class WorldUtil {
      */
     public static boolean isEntityChunkLoaded(final LevelAccessor world, final ChunkPos pos) {
         if (world instanceof ServerLevel) {
-            return ((ServerLevel) world).isPositionEntityTicking(pos.getWorldPosition());
+            return isChunkLoaded(world, pos) && ((ServerLevel) world).isPositionEntityTicking(pos.getWorldPosition());
         }
         return isChunkLoaded(world, pos);
     }
@@ -147,8 +146,8 @@ public class WorldUtil {
      * @param world the world to check.
      * @return true if so.
      */
-    public static boolean isOverworldType(final Level world) {
-        return isOfWorldType(world, DimensionType.OVERWORLD_LOCATION);
+    public static boolean isOverworldType(@NotNull final Level world) {
+        return isOfWorldType(world, BuiltinDimensionTypes.OVERWORLD);
     }
 
     /**
@@ -157,8 +156,8 @@ public class WorldUtil {
      * @param world the world to check.
      * @return true if so.
      */
-    public static boolean isNetherType(final Level world) {
-        return isOfWorldType(world, DimensionType.NETHER_LOCATION);
+    public static boolean isNetherType(@NotNull final Level world) {
+        return isOfWorldType(world, BuiltinDimensionTypes.NETHER);
     }
 
     /**
@@ -168,16 +167,16 @@ public class WorldUtil {
      * @param type  the type to compare.
      * @return true if it matches.
      */
-    public static boolean isOfWorldType(final Level world, final ResourceKey<DimensionType> type) {
+    public static boolean isOfWorldType(@NotNull final Level world, @NotNull final ResourceKey<DimensionType> type) {
         RegistryAccess dynRegistries = world.registryAccess();
-        ResourceLocation loc = dynRegistries.registry(Registry.DIMENSION_TYPE_REGISTRY).get().getKey(world.dimensionType());
+        ResourceLocation loc = dynRegistries.registry(Registries.DIMENSION_TYPE).get().getKey(world.dimensionType());
         if (loc == null) {
             if (world.isClientSide) {
                 return world.dimensionType().effectsLocation().equals(type.location());
             }
             return false;
         }
-        ResourceKey<DimensionType> regKey = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, loc);
+        ResourceKey<DimensionType> regKey = ResourceKey.create(Registries.DIMENSION_TYPE, loc);
         return regKey == type;
     }
 
@@ -189,57 +188,9 @@ public class WorldUtil {
      * @param world world to check
      * @return true if peaceful
      */
-    public static boolean isPeaceful(final Level world) {
+    public static boolean isPeaceful(@NotNull final Level world) {
         return !world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) || world.getDifficulty().equals(Difficulty.PEACEFUL);
     }
-
-    /**
-     * Custom set block state, with 1 instead of default flag 3, to skip vanilla's path notify upon block change, making setBlockState expensive. The state change still affects
-     * neighbours and is synced
-     *
-     * @param world world to use
-     * @param pos   position to set
-     * @param state state to set
-     */
-    /*public static boolean setBlockState(final LevelAccessor world, final BlockPos pos, final BlockState state)
-    {
-        if (world.isClientSide())
-        {
-            return world.setBlock(pos, state, 3);
-        }
-
-        return setBlockState(world, pos, state, 3);
-    }*/
-
-    /**
-     * Custom set block state, skips vanilla's path notify upon block change, making setBlockState expensive.
-     *
-     * @param world world to use
-     * @param pos   position to set
-     * @param state state to set
-     * @param flags flags to use
-     */
-    /*public static boolean setBlockState(final LevelAccessor world, final BlockPos pos, final BlockState state, int flags)
-    {
-        if (world.isClientSide() || !(world instanceof ServerLevel))
-        {
-            return world.setBlock(pos, state, flags);
-        }
-
-        if ((flags & 2) != 0)
-        {
-            final Set<Mob> navigators = ((ServerLevel) world).navigatingMobs;
-            ((ServerLevel) world).navigatingMobs.clear();
-            final boolean result = world.setBlock(pos, state, flags);
-            ((ServerLevel) world).navigatingMobs.addAll(navigators);
-            return result;
-        }
-        else
-        {
-            return world.setBlock(pos, state, flags);
-        }
-    }*/
-
 
     /**
      * Returns a dimensions max height

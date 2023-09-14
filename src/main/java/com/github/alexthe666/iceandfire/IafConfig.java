@@ -12,7 +12,6 @@ public class IafConfig {
 
     //public static boolean logCascadingWorldGen = false;
     public static boolean generateSilverOre = true;
-    public static boolean generateCopperOre = true;
     public static boolean generateSapphireOre = true;
     public static boolean generateAmythestOre = true;
     public static boolean generateDragonSkeletons = true;
@@ -184,7 +183,6 @@ public class IafConfig {
     public static void bakeServer(final ModConfig config) {
         try {
             generateSilverOre = ConfigHolder.SERVER.generateSilverOre.get();
-            generateCopperOre = ConfigHolder.SERVER.generateCopperOre.get();
             generateSapphireOre = ConfigHolder.SERVER.generateSapphireOre.get();
             generateAmythestOre = ConfigHolder.SERVER.generateAmythestOre.get();
             generateDragonSkeletons = ConfigHolder.SERVER.generateDragonSkeletons.get();

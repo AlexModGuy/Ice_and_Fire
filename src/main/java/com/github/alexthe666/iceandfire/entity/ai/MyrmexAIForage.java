@@ -113,7 +113,7 @@ public class MyrmexAIForage extends Goal {
                 if (distance < 6) {
                     block.getBlock();
                     // Routine to break block and add item to myrmex
-                    List<ItemStack> drops = Block.getDrops(block, (ServerLevel) this.myrmex.level, this.targetBlock,
+                    List<ItemStack> drops = Block.getDrops(block, (ServerLevel) this.myrmex.level(), this.targetBlock,
                         this.myrmex.level().getBlockEntity(targetBlock)); // use the old method until it gets removed, for
                     // backward compatibility
                     if (!drops.isEmpty()) {

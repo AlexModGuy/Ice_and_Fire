@@ -99,7 +99,7 @@ public class IceAndFire {
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
-        IafWorldRegistry.STRUCTURES.register(modBus);
+        //IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
         IafProcessors.PROCESSORS.register(modBus);

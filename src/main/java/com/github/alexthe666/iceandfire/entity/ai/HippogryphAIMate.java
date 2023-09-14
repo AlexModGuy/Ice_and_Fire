@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.item.ItemHippogryphEgg;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 public class HippogryphAIMate extends Goal {
 
@@ -93,7 +93,7 @@ public class HippogryphAIMate extends Goal {
         if (!world.isClientSide) {
             this.world.addFreshEntity(egg);
         }
-        Random random = this.hippo.getRandom();
+        RandomSource random = this.hippo.getRandom();
 
         for (int i = 0; i < 7; ++i) {
             final double d0 = random.nextGaussian() * 0.02D;

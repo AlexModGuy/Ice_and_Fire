@@ -6,7 +6,6 @@ buildscript {
         maven { url = 'https://maven.parchmentmc.org' } // Add this line
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath 'org.parchmentmc:librarian:1.+'
     }
@@ -18,10 +17,12 @@ buildscript {
 }
 plugins {
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
+
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 repositories {
@@ -143,7 +144,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 processResources {}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.1.0'
+    minecraft 'net.neoforged:forge:1.20.1-47.1.65'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     // compile against the JEI API but do not include it at runtime

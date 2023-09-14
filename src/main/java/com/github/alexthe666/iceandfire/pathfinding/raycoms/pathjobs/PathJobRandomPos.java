@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 /**
@@ -36,7 +35,7 @@ public class PathJobRandomPos extends AbstractPathJob
     /**
      * Random pathing rand.
      */
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.createThreadSafe();
 
 
     /**

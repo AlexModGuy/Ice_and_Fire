@@ -53,7 +53,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
             IceAndFire.LOGGER.debug("Encountered issue creating stone statue from {}", parent);
         }
         statue.setTrappedTag(entityTag);
-        statue.setTrappedEntityTypeString(ForgeRegistries.ENTITIES.getKey(parent.getType()).toString());
+        statue.setTrappedEntityTypeString(ForgeRegistries.ENTITY_TYPES.getKey(parent.getType()).toString());
         statue.setTrappedEntityWidth(parent.getBbWidth());
         statue.setTrappedHeight(parent.getBbHeight());
         statue.setTrappedScale(parent.getScale());

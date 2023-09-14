@@ -17,8 +17,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
-
 public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
 
 
@@ -73,7 +71,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         return layer > up ? (int) (layer * 0.25) + up : layer;
     }
 
-    private BlockState getStone(Random random) {
+    private BlockState getStone(RandomSource random) {
         int chance = random.nextInt(100);
         if (chance > 90) {
             return Blocks.MOSSY_COBBLESTONE.defaultBlockState();
@@ -86,7 +84,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void spawnSiren(ServerLevelAccessor worldIn, Random rand, BlockPos position) {
+    private void spawnSiren(ServerLevelAccessor worldIn, RandomSource rand, BlockPos position) {
         EntitySiren siren = new EntitySiren(IafEntityRegistry.SIREN.get(), worldIn.getLevel());
         siren.setSinging(true);
         siren.setHairColor(rand.nextInt(2));

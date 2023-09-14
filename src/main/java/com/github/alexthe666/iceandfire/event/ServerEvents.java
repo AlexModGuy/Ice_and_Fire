@@ -568,10 +568,6 @@ public class ServerEvents {
                 LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.SILVER_INGOT.get()).setQuality(15).setWeight(12);
                 LootPool.Builder builder = new LootPool.Builder().name("iaf_silver_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.5f)).setRolls(UniformGenerator.between(1, 3)).setBonusRolls(UniformGenerator.between(0, 3));
                 event.getTable().addPool(builder.build());
-            } else if (IafConfig.generateCopperOre) {
-                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.COPPER_INGOT.get()).setQuality(10).setWeight(14);
-                LootPool.Builder builder = new LootPool.Builder().name("iaf_copper_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.6f)).setRolls(UniformGenerator.between(1, 2)).setBonusRolls(UniformGenerator.between(0, 3));
-                event.getTable().addPool(builder.build());
             }
         } else if ((event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST)
             || event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST_MALE)

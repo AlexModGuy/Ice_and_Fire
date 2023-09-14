@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -149,7 +150,7 @@ public class TileEntityJar extends BlockEntity {
     @Override
     public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
         if (facing == Direction.DOWN
-            && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            && capability == ForgeCapabilities.ITEM_HANDLER)
             return downHandler.cast();
         return super.getCapability(capability, facing);
     }

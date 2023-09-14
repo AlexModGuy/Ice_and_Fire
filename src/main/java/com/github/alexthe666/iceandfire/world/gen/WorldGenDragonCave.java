@@ -127,7 +127,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
                     } else if (chance > 30 && chance < 40) {
                         worldIn.setBlock(blockPos, Blocks.GOLD_ORE.defaultBlockState(), 2);
                     } else if (chance > 40 && chance < 45) {
-                        worldIn.setBlock(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.get().defaultBlockState() : PALETTE_BLOCK1, 2);
+                        worldIn.setBlock(blockPos,  Blocks.COPPER_ORE.defaultBlockState(), 2);
                     } else if (chance > 45 && chance < 50) {
                         worldIn.setBlock(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.get().defaultBlockState() : PALETTE_BLOCK1, 2);
                     } else if (chance > 50 && chance < 60) {

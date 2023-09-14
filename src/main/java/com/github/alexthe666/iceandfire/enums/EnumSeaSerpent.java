@@ -9,7 +9,7 @@ import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
@@ -49,13 +49,13 @@ public enum EnumSeaSerpent {
             color.scale = IafItemRegistry.ITEMS.register("sea_serpent_scales_" + color.resourceName, () ->
                 new ItemSeaSerpentScales(color.resourceName, color.color));
             color.helmet = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_helmet", () ->
-                new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.HEAD));
+                new ItemSeaSerpentArmor(color, color.armorMaterial, ArmorItem.Type.HELMET));
             color.chestplate = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_chestplate", () ->
-                new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.CHEST));
+                new ItemSeaSerpentArmor(color, color.armorMaterial, ArmorItem.Type.CHESTPLATE));
             color.leggings = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_leggings", () ->
-                new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.LEGS));
+                new ItemSeaSerpentArmor(color, color.armorMaterial, ArmorItem.Type.LEGGINGS));
             color.boots = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_boots", () ->
-                new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.FEET));
+                new ItemSeaSerpentArmor(color, color.armorMaterial, ArmorItem.Type.BOOTS));
         }
     }
 }

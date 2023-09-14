@@ -141,7 +141,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
                     if (dragon.isAlliedTo(entity) || dragon.is(entity)) {
                         return;
                     }
-                    entity.hurt(DamageSource.mobAttack(dragon), 2.0F);
+                    entity.hurt(level().damageSources().mobAttack(dragon), 2.0F);
                     if (entity instanceof LivingEntity) {
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
                     }

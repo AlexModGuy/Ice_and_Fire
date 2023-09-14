@@ -6,7 +6,6 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
-import com.github.alexthe666.iceandfire.entity.util.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
@@ -51,6 +50,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
@@ -390,7 +390,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
                 float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponY = (float) (getY() + (this.getEyeHeight() / 2));
-                BlockBreakExplosion explosion = new BlockBreakExplosion(level(), this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat());
+                Explosion explosion = new Explosion(level(), this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat(), new ArrayList<>());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))) {
                     explosion.explode();
                     explosion.finalizeExplosion(true);

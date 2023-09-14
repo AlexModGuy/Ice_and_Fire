@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -190,7 +191,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
         if (dmg.is(DamageTypes.IN_WALL) || dmg.is(DamageTypes.FALL)) {
             return false;
         }
-        if (!level().isClientSide && !dmg.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+        if (!level().isClientSide && !dmg.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.spawnAtLocation(this.getItem(), 0);
         }
         this.remove(RemovalReason.KILLED);

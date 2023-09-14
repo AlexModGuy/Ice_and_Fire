@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWormEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.sounds.SoundEvents;
@@ -18,7 +17,7 @@ public class ItemDeathwormEgg extends Item {
     private final boolean gigantic;
 
     public ItemDeathwormEgg(boolean gigantic) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.gigantic = gigantic;
     }
 

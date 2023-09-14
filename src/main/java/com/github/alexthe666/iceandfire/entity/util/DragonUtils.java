@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DragonUtils {
 
@@ -287,7 +286,7 @@ public class DragonUtils {
     }
 
     public static boolean canTameDragonAttack(TamableAnimal dragon, Entity entity) {
-        if (entity.getType().is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(IafTagRegistry.VILLAGERS))) {
+        if (isVillager(entity)) {
             return false;
         }
         if (entity instanceof AbstractVillager || entity instanceof AbstractGolem || entity instanceof Player) {
@@ -300,7 +299,10 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.VILLAGERS));
+        var tags =  ForgeRegistries.ENTITY_TYPES.tags();
+        if (tags == null)
+            return false;
+        return entity.getType().is(tags.createTagKey(IafTagRegistry.VILLAGERS));
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -308,7 +310,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(tag));
+        return entity.getType().is(ForgeRegistries.ENTITY_TYPES.tags().createTagKey(tag));
     }
 
     public static String getDimensionName(Level world) {
@@ -320,6 +322,7 @@ public class DragonUtils {
     }
 
     public static boolean canDragonBreak(Block block) {
+        // TODO: BLOCK_CACHE will probably miss a lot due to block position and the likes
         if (BLOCK_CACHE.containsKey(block))
             return BLOCK_CACHE.get(block);
 
@@ -367,14 +370,15 @@ public class DragonUtils {
     public static boolean isBlacklistedBlock(Block block) {
         if (IafConfig.blacklistBreakBlocksIsWhiteList) {
             for (String name : IafConfig.blacklistedBreakBlocks) {
-                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                //TODO: This might not work
+                if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(block).getNamespace())) {
                     return false;
                 }
             }
             return true;
         } else {
             for (String name : IafConfig.blacklistedBreakBlocks) {
-                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(block).getNamespace())) {
                     return true;
                 }
             }
@@ -423,7 +427,7 @@ public class DragonUtils {
 
     public static boolean canDropFromDragonBlockBreak(BlockState state) {
         for (String name : IafConfig.noDropBreakBlocks) {
-            if (name.equalsIgnoreCase(state.getBlock().getRegistryName().toString())) {
+            if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(state.getBlock()).getNamespace())) {
                 return false;
             }
         }

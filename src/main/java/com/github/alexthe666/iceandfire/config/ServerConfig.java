@@ -8,7 +8,6 @@ import java.util.List;
 public class ServerConfig {
 
     public final ForgeConfigSpec.BooleanValue generateSilverOre;
-    public final ForgeConfigSpec.BooleanValue generateCopperOre;
     public final ForgeConfigSpec.BooleanValue generateSapphireOre;
     public final ForgeConfigSpec.BooleanValue generateAmythestOre;
     public final ForgeConfigSpec.BooleanValue generateDragonSkeletons;
@@ -166,7 +165,6 @@ public class ServerConfig {
         builder.push("Dimensions");
         builder.pop();
         builder.push("Ores");
-        this.generateCopperOre = buildBoolean(builder, "Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
         this.generateAmythestOre = buildBoolean(builder, "Generate Amethyst Ore", "all", true, "Whether to generate amethyst ore or not");
