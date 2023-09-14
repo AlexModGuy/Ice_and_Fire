@@ -14,9 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.client.ForgeHooksClient;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -198,8 +195,7 @@ public class IceAndFireMainMenu extends TitleScreen {
         this.getMinecraft().font.drawInBatch("Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF, false, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
         RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        ms.blit(MINECRAFT_TITLE_TEXTURES, width / 2 - 274 / 2, 10, 0, 0, 155, 44);
-        ms.blit(MINECRAFT_TITLE_TEXTURES, width / 2 - 274 / 2 + 155, 10, 0, 45, 155, 44);
+        ms.blit(MINECRAFT_TITLE_TEXTURES, width / 2 - 256 / 2, 10, 0, 0, 256, 64, 256, 64);
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().font, width, height, l);
         if (this.splashText != null) {
