@@ -36,7 +36,7 @@ public class IafVillagerRegistry {
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
     public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, IceAndFire.MODID);
     public static final RegistryObject<PoiType> SCRIBE_POI = POI_TYPES.register("scribe", () -> new PoiType(ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
-    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", Predicate.isEqual(SCRIBE_POI.getHolder().get()), Predicate.isEqual(SCRIBE_POI.getHolder().get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
+//    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", Predicate.isEqual(SCRIBE_POI.getHolder().get()), Predicate.isEqual(SCRIBE_POI.getHolder().get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
     private static final ResourceKey<StructureProcessorList> HOUSE_PROCESSOR = ResourceKey.create(Registries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"));

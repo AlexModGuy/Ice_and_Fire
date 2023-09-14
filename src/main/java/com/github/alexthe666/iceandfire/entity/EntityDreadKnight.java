@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 
 public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
-    public static final ItemStack SHIELD = generateShield();
+//    public static final ItemStack SHIELD = generateShield();
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityDreadKnight.class, EntityDataSerializers.INT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     private int animationTick;
@@ -59,7 +59,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         super(type, worldIn);
     }
 
-    private static ItemStack generateShield() {
+/*    private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundTag compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
 
@@ -68,7 +68,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
         return shield;
-    }
+    }*/
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
@@ -133,9 +133,9 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         super.populateDefaultEquipmentSlots(pRandom, pDifficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD.get()));
-        if (random.nextBoolean()) {
+/*        if (random.nextBoolean()) {
             this.setItemSlot(EquipmentSlot.OFFHAND, SHIELD.copy());
-        }
+        }*/
         setArmorVariant(random.nextInt(3));
     }
 

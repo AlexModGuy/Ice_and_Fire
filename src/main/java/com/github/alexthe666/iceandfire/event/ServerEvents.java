@@ -627,10 +627,10 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
+/*    @SubscribeEvent
     public void onVillagerTrades(VillagerTradesEvent event) {
         if (event.getType() == IafVillagerRegistry.SCRIBE.get()) {
             IafVillagerRegistry.addScribeTrades(event.getTrades());
         }
-    }
+    }*/
 }

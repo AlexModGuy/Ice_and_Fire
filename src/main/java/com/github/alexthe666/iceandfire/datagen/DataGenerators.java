@@ -37,8 +37,8 @@ public class DataGenerators {
     public static void addPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.SERVER_DATA) {
             // Hacky workaround to avoid reloading datapacks
-            // FIXME: Won't work in 1.19.2
-            createResources((Registry<Biome>) ForgeRegistries.BIOMES);
+            // FIXME: Won't work in 1.19.2 -- can be done by tagging the structures in json files I think
+//            createResources((Registry<Biome>) ForgeRegistries.BIOMES);
             event.addRepositorySource(pOnLoad -> {
                 Pack pack = Pack.create(IceAndFire.MODID + ":data", Component.nullToEmpty(""), true, pId -> resources,
                         Pack.readPackInfo("server", pId -> resources),event.getPackType(), Pack.Position.TOP, true, PackSource.DEFAULT);

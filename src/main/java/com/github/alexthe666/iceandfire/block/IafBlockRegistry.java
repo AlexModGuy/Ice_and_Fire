@@ -150,7 +150,7 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> GHOST_CHEST = BLOCKS.register("ghost_chest", BlockGhostChest::new);
     public static final RegistryObject<Block> GRAVEYARD_SOIL = BLOCKS.register("graveyard_soil", BlockGraveyardSoil::new);
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+/*    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void registerBlockItems(RegisterEvent event) {
         IafBlockRegistry.BLOCKS.getEntries().stream()
             .map(RegistryObject::get)
@@ -160,7 +160,7 @@ public class IafBlockRegistry {
                     IafItemRegistry.ITEMS.register(block.getDescriptionId(), item::get);
             });
 
-    }
+    }*/
 
     public static Optional<Item> registerItemBlock(Block block) {
         if (!(block instanceof WallTorchBlock)) {
