@@ -607,7 +607,7 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(MobSpawnEvent event) {
+    public void onEntityJoinWorld(MobSpawnEvent.FinalizeSpawn event) {
         try {
             if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal) {
                 Animal animal = (Animal) event.getEntity();
