@@ -124,14 +124,6 @@ public class IafClientSetup {
         BlockEntityRenderers.register(IafTileEntityRegistry.DREAD_SPAWNER.get(), RenderDreadSpawner::new);
         BlockEntityRenderers.register(IafTileEntityRegistry.GHOST_CHEST.get(), RenderGhostChest::new);
 
-        // TODO: Remove in future releases
-        // This has been implemented because some mods don't know how to properly register things
-/*        if (Sheets.getBannerMaterial(new ResourceLocation("minecraft:textures/entity/banner/iceandfire_dread.png")) == null)
-        {
-            IceAndFire.LOGGER.error("Some mod(s) you're using incorrectly registers things! This WILL break other mods banner patterns. Ice and fire will attempt to fix things so the game doesn't crash");
-            Sheets.BANNER_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createBannerMaterial));
-            Sheets.SHIELD_MATERIALS = Arrays.stream(BannerPattern.values()).collect(Collectors.toMap(Function.identity(), Sheets::createShieldMaterial));
-        }*/
     }
 
     @SubscribeEvent
@@ -152,16 +144,6 @@ public class IafClientSetup {
     public static ShaderInstance getRendertypeScalableTextureShader() {
         return rendertypeScalableTextureShader;
     }
-
-/*    @SubscribeEvent
-    public static void onStitch(TextureStitchEvent event) {
-        if (!event.getAtlas().location().equals(Sheets.CHEST_SHEET)) {
-            return;
-        }
-        event.addSprite(GHOST_CHEST_LOCATION);
-        event.addSprite(GHOST_CHEST_RIGHT_LOCATION);
-        event.addSprite(GHOST_CHEST_LEFT_LOCATION);
-    }*/
 
     @SubscribeEvent
     public static void setupClient(FMLClientSetupEvent event) {

@@ -38,6 +38,7 @@ public class DataGenerators {
                 DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
                 Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
         generator.addProvider(event.includeServer(), new IafBiomeTagGenerator(output, lookupProvider, helper));
+        generator.addProvider(event.includeClient(), new AtlasGenerator(output, helper));
 
     }
 }
