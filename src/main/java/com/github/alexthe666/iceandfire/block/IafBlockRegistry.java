@@ -43,13 +43,10 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> SILVER_PILE = register("silver_pile", BlockGoldPile::new);
     public static final RegistryObject<Block> COPPER_PILE = register("copper_pile", BlockGoldPile::new);
     public static final RegistryObject<Block> SILVER_ORE = register("silver_ore", () -> new BlockIafOre(2, 3.0F, 3.0F));
-    public static final RegistryObject<Block> SAPPHIRE_ORE = register("sapphire_ore", () -> new BlockIafOre(2, 4.0F, 3.0F));
-    public static final RegistryObject<Block> COPPER_ORE = register("copper_ore", () -> new BlockIafOre(0, 3.0F, 3.0F));
-    public static final RegistryObject<Block> AMYTHEST_ORE = register("amythest_ore", () -> new BlockIafOre(2, 4.0F, 3.0F));
+    public static final RegistryObject<Block> DEEPSLATE_SILVER_ORE = register("deepslate_silver_ore", () -> new BlockIafOre(2, 3.0F, 3.0F));
     public static final RegistryObject<Block> SILVER_BLOCK = register("silver_block", () -> BlockGeneric.builder(3.0F, 5.0F, SoundType.METAL, MapColor.METAL, null, null, false));
+    public static final RegistryObject<Block> SAPPHIRE_ORE = register("sapphire_ore", () -> new BlockIafOre(2, 4.0F, 3.0F));
     public static final RegistryObject<Block> SAPPHIRE_BLOCK = register("sapphire_block", () -> BlockGeneric.builder(3.0F, 6.0F, SoundType.METAL, MapColor.METAL, null, null, false));
-    public static final RegistryObject<Block> COPPER_BLOCK = register("copper_block", () -> BlockGeneric.builder(4.0F, 5.0F, SoundType.METAL, MapColor.METAL, null, null, false));
-    public static final RegistryObject<Block> AMYTHEST_BLOCK = register("amythest_block", () -> BlockGeneric.builder(5.0F, 6.0F, SoundType.METAL, MapColor.METAL, null, null, false));
     public static final RegistryObject<Block> CHARRED_DIRT = register("chared_dirt", () -> BlockReturningState.builder(0.5F, 0.0F, SoundType.GRAVEL, MapColor.DIRT, null, null, false, Blocks.DIRT.defaultBlockState()));
     public static final RegistryObject<Block> CHARRED_GRASS = register("chared_grass", () -> BlockReturningState.builder(0.6F, 0.0F, SoundType.GRAVEL, MapColor.GRASS, null, null, false, Blocks.GRASS_BLOCK.defaultBlockState()));
     public static final RegistryObject<Block> CHARRED_STONE = register("chared_stone", () -> BlockReturningState.builder(1.5F, 10.0F, SoundType.STONE, MapColor.STONE, NoteBlockInstrument.BASEDRUM, null, false, Blocks.STONE.defaultBlockState()));

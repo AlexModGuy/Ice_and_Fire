@@ -27,30 +27,31 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class GorgonTempleStructure extends IafStructure {
+public class MausoleumStructure extends IafStructure {
 
-    public static final Codec<GorgonTempleStructure> CODEC = RecordCodecBuilder.<GorgonTempleStructure>mapCodec(instance ->
-            instance.group(GorgonTempleStructure.settingsCodec(instance),
+    public static final Codec<MausoleumStructure> CODEC = RecordCodecBuilder.<MausoleumStructure>mapCodec(instance ->
+            instance.group(MausoleumStructure.settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
                     ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),
                     Codec.intRange(0, 30).fieldOf("size").forGetter(structure -> structure.size),
                     HeightProvider.CODEC.fieldOf("start_height").forGetter(structure -> structure.startHeight),
                     Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(structure -> structure.projectStartToHeightmap),
                     Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter(structure -> structure.maxDistanceFromCenter)
-            ).apply(instance, GorgonTempleStructure::new)).codec();
+            ).apply(instance, MausoleumStructure::new)).codec();
 
-    public GorgonTempleStructure(StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter) {
+    public MausoleumStructure(StructureSettings config, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int size, HeightProvider startHeight, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter) {
         super(config, startPool, startJigsawName, size, startHeight, projectStartToHeightmap, maxDistanceFromCenter);
     }
 
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
-        if (!IafConfig.generateGorgonTemple)
+        if (!IafConfig.generateMausoleums)
             return Optional.empty();
+
         ChunkPos pos = pContext.chunkPos();
         BlockPos blockpos = pos.getMiddleBlockPosition(1);
 
-        if (!isBiomeValid(pContext, BiomeConfig.gorgonTempleBiomes, blockpos))
+        if (!isBiomeValid(pContext, BiomeConfig.mausoleumBiomes, blockpos))
             return Optional.empty();
 
         Optional<Structure.GenerationStub> structurePiecesGenerator =
@@ -72,14 +73,14 @@ public class GorgonTempleStructure extends IafStructure {
 
     @Override
     public StructureType<?> type() {
-        return IafStructureTypes.GORGON_TEMPLE.get();
+        return IafStructureTypes.MAUSOLEUM.get();
     }
 
-    public static GorgonTempleStructure buildStructureConfig(BootstapContext<Structure> context) {
+    public static MausoleumStructure buildStructureConfig(BootstapContext<Structure> context) {
         HolderGetter<StructureTemplatePool> templatePoolHolderGetter = context.lookup(Registries.TEMPLATE_POOL);
-        Holder<StructureTemplatePool> graveyardHolder = templatePoolHolderGetter.getOrThrow(IafStructurePieces.GORGON_TEMPLE_START);
+        Holder<StructureTemplatePool> graveyardHolder = templatePoolHolderGetter.getOrThrow(IafStructurePieces.MAUSOLEUM_START);
 
-        return new GorgonTempleStructure(
+        return new MausoleumStructure(
                 new Structure.StructureSettings(
                         context.lookup(Registries.BIOME).getOrThrow(IafBiomeTagGenerator.HAS_MAUSOLEUM),
                         new HashMap<>(),
@@ -88,10 +89,11 @@ public class GorgonTempleStructure extends IafStructure {
                 ),
                 graveyardHolder,
                 Optional.empty(),
-                2,
+                1,
                 ConstantHeight.ZERO,
                 Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
                 16
         );
     }
+
 }

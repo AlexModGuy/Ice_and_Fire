@@ -1,7 +1,0 @@
-{
-  "processors": [
-    {
-      "processor_type": "iceandfire:dread_mausoleum_processor"
-    }
-  ]
-}

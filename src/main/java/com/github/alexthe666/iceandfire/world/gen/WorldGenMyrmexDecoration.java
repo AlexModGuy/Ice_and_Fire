@@ -176,14 +176,14 @@ public class WorldGenMyrmexDecoration {
                 if (rand.nextInt(3) == 0) {
                     ore = rand.nextBoolean() ? Blocks.GOLD_ORE : IafBlockRegistry.SILVER_ORE.get();
                     if (rand.nextInt(2) == 0) {
-                        ore = IafBlockRegistry.COPPER_ORE.get();
+                        ore = Blocks.COPPER_ORE;
                     }
                 } else if (rand.nextInt(3) == 0) {
                     ore = Blocks.DIAMOND_ORE;
                 } else if (rand.nextInt(2) == 0) {
                     ore = rand.nextBoolean() ? Blocks.EMERALD_ORE : IafBlockRegistry.SAPPHIRE_ORE.get();
                     if(rand.nextInt(2) == 0){
-                        ore = IafBlockRegistry.AMYTHEST_ORE.get();
+                        ore = Blocks.AMETHYST_CLUSTER;
                     }
                 }
                 worldIn.setBlock(blockpos, ore.defaultBlockState(), 2);

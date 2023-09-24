@@ -69,7 +69,6 @@ public class IafItemRegistry {
     public static final RegistryObject<Item> SAPPHIRE_GEM = ITEMS.register("sapphire_gem", ItemGeneric::new);
     public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", ItemGeneric::new);
     public static final RegistryObject<Item> SILVER_NUGGET = ITEMS.register("silver_nugget", ItemGeneric::new);
-    public static final RegistryObject<Item> AMYTHEST_GEM = ITEMS.register("amythest_gem", ItemGeneric::new);
     public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", ItemGeneric::new);
     public static final RegistryObject<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", ItemGeneric::new);
     public static final RegistryObject<Item> SILVER_HELMET = ITEMS.register("armor_silver_metal_helmet", () -> new ItemSilverArmor(SILVER_ARMOR_MATERIAL, ArmorItem.Type.HELMET));

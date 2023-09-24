@@ -9,7 +9,6 @@ public class ServerConfig {
 
     public final ForgeConfigSpec.BooleanValue generateSilverOre;
     public final ForgeConfigSpec.BooleanValue generateSapphireOre;
-    public final ForgeConfigSpec.BooleanValue generateAmythestOre;
     public final ForgeConfigSpec.BooleanValue generateDragonSkeletons;
     public final ForgeConfigSpec.IntValue generateDragonSkeletonChance;
     public final ForgeConfigSpec.BooleanValue generateDragonDens;
@@ -44,8 +43,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue dragonHungerTickRate;
     public final ForgeConfigSpec.BooleanValue spawnHippogryphs;
     public final ForgeConfigSpec.IntValue hippogryphSpawnRate;
-    public final ForgeConfigSpec.BooleanValue spawnGorgons;
-    public final ForgeConfigSpec.IntValue spawnGorgonsChance;
+    public final ForgeConfigSpec.BooleanValue generateGorgonTemple;
     public final ForgeConfigSpec.DoubleValue gorgonMaxHealth;
     public final ForgeConfigSpec.BooleanValue spawnPixies;
     public final ForgeConfigSpec.IntValue spawnPixiesChance;
@@ -129,7 +127,6 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue dragonBlockBreakingDropChance;
     public final ForgeConfigSpec.BooleanValue completeDragonPathfinding;
     public final ForgeConfigSpec.BooleanValue generateMausoleums;
-    public final ForgeConfigSpec.IntValue generateMausoleumChance;
     public final ForgeConfigSpec.BooleanValue spawnLiches;
     public final ForgeConfigSpec.IntValue lichSpawnRate;
     public final ForgeConfigSpec.IntValue lichSpawnChance;
@@ -149,7 +146,6 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue ghostMaxHealth;
     public final ForgeConfigSpec.DoubleValue ghostAttackStrength;
     public final ForgeConfigSpec.BooleanValue generateGraveyards;
-    public final ForgeConfigSpec.IntValue generateGraveyardChance;
     public final ForgeConfigSpec.BooleanValue ghostSpawnFromPlayerDeaths;
     public ForgeConfigSpec.IntValue dragonPathfindingThreads;
     public ForgeConfigSpec.IntValue maxDragonPathingNodes;
@@ -167,7 +163,6 @@ public class ServerConfig {
         builder.push("Ores");
         this.generateSilverOre = buildBoolean(builder, "Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
         this.generateSapphireOre = buildBoolean(builder, "Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
-        this.generateAmythestOre = buildBoolean(builder, "Generate Amethyst Ore", "all", true, "Whether to generate amethyst ore or not");
         builder.pop();
         builder.push("Dragon");
         this.generateDragonSkeletons = buildBoolean(builder, "Generate Dragon Skeletons", "all", true, "Whether to generate dragon skeletons or not");
@@ -187,10 +182,10 @@ public class ServerConfig {
         this.glacierSpawnChance = buildInt(builder, "Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 
         this.generateMausoleums = buildBoolean(builder, "Generate Mausoleums", "all", true, "True if mausoleums are allowed to generate");
-        this.generateMausoleumChance = buildInt(builder, "Mausoleum Gen Chance", "all", 1800, 1, 10000, "One out of this number chance per chunk to generate a mausoleum.");
 
         this.generateGraveyards = buildBoolean(builder, "Generate Graveyards", "all", true, "Whether to generate graveyards or not");
-        this.generateGraveyardChance = buildInt(builder, "Graveyard Chance", "all", 46, 2, 10000, "Graveyard rarity.");
+
+        this.generateGorgonTemple = buildBoolean(builder, "Generate Gorgon Temple", "all", true, "True if gorgon temples are allowed to spawn");
 
         builder.pop();
         builder.pop();
@@ -339,8 +334,6 @@ public class ServerConfig {
         this.hippogryphFlightSpeedMod = buildDouble(builder, "Hippogryph Flight Speed Modifier", "all", 1F, 0.0F, 2.0F, "Change this to slow down or speed up hippogryph flight.");
         builder.pop();
         builder.push("Gorgons");
-        this.spawnGorgons = buildBoolean(builder, "Spawn Gorgons", "all", true, "True if gorgon temples are allowed to spawn");
-        this.spawnGorgonsChance = buildInt(builder, "Spawn Gorgon Chance", "all", 75, 1, 10000, "1 out of this number chance per chunk for generation");
         this.gorgonMaxHealth = buildDouble(builder, "Gorgon Max Health", "all", 100, 1, 10000, "Maximum gorgon health");
         builder.pop();
         builder.push("Others");

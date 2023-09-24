@@ -13,7 +13,6 @@ public class IafConfig {
     //public static boolean logCascadingWorldGen = false;
     public static boolean generateSilverOre = true;
     public static boolean generateSapphireOre = true;
-    public static boolean generateAmythestOre = true;
     public static boolean generateDragonSkeletons = true;
     public static int generateDragonSkeletonChance = 300;
     public static boolean generateDragonDens = true;
@@ -51,8 +50,7 @@ public class IafConfig {
     public static int dragonHungerTickRate = 3000;
     public static boolean spawnHippogryphs = true;
     public static int hippogryphSpawnRate = 2;
-    public static boolean spawnGorgons = true;
-    public static int spawnGorgonsChance = 16;
+    public static boolean generateGorgonTemple = true;
     public static double gorgonMaxHealth = 100D;
     public static boolean spawnPixies = true;
     public static int spawnPixiesChance = 60;
@@ -139,7 +137,6 @@ public class IafConfig {
     public static boolean dragonAuto3rdPerson = true;
     public static double dreadQueenMaxHealth = 750;
     public static boolean generateMausoleums = true;
-    public static int generateMausoleumChance = 30;
     public static boolean spawnLiches = true;
     public static int lichSpawnRate = 4;
     public static int lichSpawnChance = 30;
@@ -155,7 +152,6 @@ public class IafConfig {
     public static double hippogryphFlightSpeedMod = 1F;
     public static double hippocampusSwimSpeedMod = 1F;
     public static boolean generateGraveyards = true;
-    public static int generateGraveyardChance = 16;
     public static double ghostMaxHealth = 30;
     public static double ghostAttackStrength = 3;
     public static boolean ghostsFromPlayerDeaths = true;
@@ -184,7 +180,6 @@ public class IafConfig {
         try {
             generateSilverOre = ConfigHolder.SERVER.generateSilverOre.get();
             generateSapphireOre = ConfigHolder.SERVER.generateSapphireOre.get();
-            generateAmythestOre = ConfigHolder.SERVER.generateAmythestOre.get();
             generateDragonSkeletons = ConfigHolder.SERVER.generateDragonSkeletons.get();
             generateDragonSkeletonChance = ConfigHolder.SERVER.generateDragonSkeletonChance.get();
             generateDragonDens = ConfigHolder.SERVER.generateDragonDens.get();
@@ -219,8 +214,7 @@ public class IafConfig {
             dragonHungerTickRate = ConfigHolder.SERVER.dragonHungerTickRate.get();
             spawnHippogryphs = ConfigHolder.SERVER.spawnHippogryphs.get();
             hippogryphSpawnRate = ConfigHolder.SERVER.hippogryphSpawnRate.get();
-            spawnGorgons = ConfigHolder.SERVER.spawnGorgons.get();
-            spawnGorgonsChance = ConfigHolder.SERVER.spawnGorgonsChance.get();
+            generateGorgonTemple = ConfigHolder.SERVER.generateGorgonTemple.get();
             gorgonMaxHealth = ConfigHolder.SERVER.gorgonMaxHealth.get();
             spawnPixies = ConfigHolder.SERVER.spawnPixies.get();
             spawnPixiesChance = ConfigHolder.SERVER.spawnPixiesChance.get();
@@ -303,7 +297,6 @@ public class IafConfig {
             weezerTinkers = ConfigHolder.SERVER.weezerTinkers.get();
             dragonBlockBreakingDropChance = ConfigHolder.SERVER.dragonBlockBreakingDropChance.get();
             generateMausoleums = ConfigHolder.SERVER.generateMausoleums.get();
-            generateMausoleumChance = ConfigHolder.SERVER.generateMausoleumChance.get();
             spawnLiches = ConfigHolder.SERVER.spawnLiches.get();
             lichSpawnRate = ConfigHolder.SERVER.lichSpawnRate.get();
             lichSpawnChance = ConfigHolder.SERVER.lichSpawnChance.get();
@@ -321,7 +314,6 @@ public class IafConfig {
             hippogryphFlightSpeedMod = ConfigHolder.SERVER.hippogryphFlightSpeedMod.get();
             hippocampusSwimSpeedMod = ConfigHolder.SERVER.hippocampusSwimSpeedMod.get();
             generateGraveyards = ConfigHolder.SERVER.generateGraveyards.get();
-            generateGraveyardChance = ConfigHolder.SERVER.generateGraveyardChance.get();
             ghostMaxHealth = ConfigHolder.SERVER.ghostMaxHealth.get();
             ghostAttackStrength = ConfigHolder.SERVER.ghostAttackStrength.get();
             ghostsFromPlayerDeaths = ConfigHolder.SERVER.ghostSpawnFromPlayerDeaths.get();

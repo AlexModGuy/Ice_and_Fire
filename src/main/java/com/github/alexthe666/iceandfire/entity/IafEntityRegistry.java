@@ -11,7 +11,7 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.world.MobSpawnSettingsBuilder;
+import net.minecraftforge.common.world.ModifiableBiomeInfo;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -150,35 +150,33 @@ public class IafEntityRegistry {
     	LOADED_ENTITIES.put("TROLL_S", false);
     	LOADED_ENTITIES.put("TROLL_M", false);
     }
-    public static void addSpawners(Holder<Biome> biomeHolder) {
-        var spawners = new MobSpawnSettingsBuilder(biomeHolder.value().getMobSettings());
-        if (IafConfig.spawnHippogryphs && BiomeConfig.test(BiomeConfig.hippogryphBiomes, biomeHolder)) {
-            spawners.getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.HIPPOGRYPH.get(), IafConfig.hippogryphSpawnRate, 1, 1));
+    public static void addSpawners(Holder<Biome> biome, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+        if (IafConfig.spawnHippogryphs && BiomeConfig.test(BiomeConfig.hippogryphBiomes, biome)) {
+            builder.getMobSpawnSettings().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.HIPPOGRYPH.get(), IafConfig.hippogryphSpawnRate, 1, 1));
             LOADED_ENTITIES.put("HIPPOGRYPH", true);
         }
-        if (IafConfig.spawnLiches && BiomeConfig.test(BiomeConfig.mausoleumBiomes, biomeHolder)) {
-            spawners.getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.DREAD_LICH.get(), IafConfig.lichSpawnRate, 1, 1));
+        if (IafConfig.spawnLiches && BiomeConfig.test(BiomeConfig.mausoleumBiomes, biome)) {
+            builder.getMobSpawnSettings().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.DREAD_LICH.get(), IafConfig.lichSpawnRate, 1, 1));
             LOADED_ENTITIES.put("DREAD_LICH", true);
         }
-        if (IafConfig.spawnCockatrices && BiomeConfig.test(BiomeConfig.cockatriceBiomes, biomeHolder)) {
-            spawners.getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.COCKATRICE.get(), IafConfig.cockatriceSpawnRate, 1, 2));
+        if (IafConfig.spawnCockatrices && BiomeConfig.test(BiomeConfig.cockatriceBiomes, biome)) {
+            builder.getMobSpawnSettings().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.COCKATRICE.get(), IafConfig.cockatriceSpawnRate, 1, 2));
             LOADED_ENTITIES.put("COCKATRICE", true);
         }
-        if (IafConfig.spawnAmphitheres && BiomeConfig.test(BiomeConfig.amphithereBiomes, biomeHolder)) {
-            spawners.getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.AMPHITHERE.get(), IafConfig.amphithereSpawnRate, 1, 3));
+        if (IafConfig.spawnAmphitheres && BiomeConfig.test(BiomeConfig.amphithereBiomes, biome)) {
+            builder.getMobSpawnSettings().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.AMPHITHERE.get(), IafConfig.amphithereSpawnRate, 1, 3));
             LOADED_ENTITIES.put("AMPHITHERE", true);
         }
         if (IafConfig.spawnTrolls && (
-    		BiomeConfig.test(BiomeConfig.forestTrollBiomes, biomeHolder) ||
-    		BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biomeHolder) ||
-    		BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biomeHolder)
+    		BiomeConfig.test(BiomeConfig.forestTrollBiomes, biome) ||
+    		BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome) ||
+    		BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)
 		)) {
-            spawners.getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.TROLL.get(), IafConfig.trollSpawnRate, 1, 3));
-    		if (BiomeConfig.test(BiomeConfig.forestTrollBiomes, biomeHolder)) LOADED_ENTITIES.put("TROLL_F", true);
-    		if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biomeHolder)) LOADED_ENTITIES.put("TROLL_S", true);
-    		if (BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biomeHolder)) LOADED_ENTITIES.put("TROLL_M", true);
+            builder.getMobSpawnSettings().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(IafEntityRegistry.TROLL.get(), IafConfig.trollSpawnRate, 1, 3));
+    		if (BiomeConfig.test(BiomeConfig.forestTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_F", true);
+    		if (BiomeConfig.test(BiomeConfig.snowyTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_S", true);
+    		if (BiomeConfig.test(BiomeConfig.mountainTrollBiomes, biome)) LOADED_ENTITIES.put("TROLL_M", true);
         }
 
-        biomeHolder.value().getMobSettings().spawners = spawners.build().spawners;
     }
 }

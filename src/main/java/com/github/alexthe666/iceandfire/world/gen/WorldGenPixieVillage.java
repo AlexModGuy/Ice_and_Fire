@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,9 +31,9 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
-            return false;
-        }
+        //if (!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
+        //    return false;
+        //}
         position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
         int maxRoads = IafConfig.pixieVillageSize + rand.nextInt(5);
         BlockPos buildPosition = position;

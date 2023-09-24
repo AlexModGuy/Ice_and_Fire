@@ -72,11 +72,13 @@ public class EntitySheepAIFollowCyclops extends Goal {
     @Override
     public void tick() {
         if (--this.delayCounter <= 0) {
-            this.delayCounter = 10;
-            Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
-            if (path != null) {
-                this.childAnimal.getNavigation().moveTo(path, this.moveSpeed);
+            this.delayCounter = this.adjustedTickDelay(10);
+            if (this.childAnimal.distanceToSqr(this.cyclops) > 10) {
+                Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
+                if (path != null) {
+                    this.childAnimal.getNavigation().moveTo(path, this.moveSpeed);
 
+                }
             }
         }
     }

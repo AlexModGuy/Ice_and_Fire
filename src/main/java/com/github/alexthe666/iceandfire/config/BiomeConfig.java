@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Field;
@@ -16,9 +15,8 @@ import java.util.Map;
 public class BiomeConfig {
     public static Pair<String, SpawnBiomeData> oreGenBiomes = Pair.of("iceandfire:ore_gen_biomes", DefaultBiomes.OVERWORLD);
     public static Pair<String, SpawnBiomeData> sapphireBiomes = Pair.of("iceandfire:sapphire_gen_biomes", DefaultBiomes.VERY_SNOWY);
-    public static Pair<String, SpawnBiomeData> amethystBiomes = Pair.of("iceandfire:amethyst_gen_biomes", DefaultBiomes.SAVANNAS);
     public static Pair<String, SpawnBiomeData> fireLilyBiomes = Pair.of("iceandfire:fire_lily_biomes", DefaultBiomes.VERY_HOT);
-    public static Pair<String, SpawnBiomeData> iceLilyBiomes = Pair.of("iceandfire:ice_lily_biomes", DefaultBiomes.VERY_SNOWY);
+    public static Pair<String, SpawnBiomeData> frostLilyBiomes = Pair.of("iceandfire:frost_lily_biomes", DefaultBiomes.VERY_SNOWY);
     public static Pair<String, SpawnBiomeData> lightningLilyBiomes = Pair.of("iceandfire:lightning_lily_biomes", DefaultBiomes.SAVANNAS);
     public static Pair<String, SpawnBiomeData> fireDragonBiomes = Pair.of("iceandfire:fire_dragon_biomes", DefaultBiomes.FIREDRAGON_ROOST);
     public static Pair<String, SpawnBiomeData> fireDragonCaveBiomes = Pair.of("iceandfire:fire_dragon_cave_biomes", DefaultBiomes.FIREDRAGON_CAVE);
@@ -82,6 +80,10 @@ public class BiomeConfig {
         init = true;
     }
 
+    private static ResourceLocation getBiomeName(Holder<Biome> biome) {
+        return biome.unwrap().map((resourceKey) -> resourceKey.location(), (noKey) -> null);
+    }
+
     public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name) {
         if (!init) {
             init();
@@ -89,8 +91,12 @@ public class BiomeConfig {
         }
         return biomeConfigValues.get(entry.getKey()).matches(biome, name);
     }
-    public static boolean test(Pair<String, SpawnBiomeData> spawns, Holder<Biome> biome) {
-        return test(spawns, biome, ForgeRegistries.BIOMES.getKey(biome.value()));
+
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome) {
+        return BiomeConfig.test(entry, biome, getBiomeName(biome));
+    }
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder.Reference<Biome> biome) {
+        return test(entry, biome, biome.key().location());
     }
 
 }

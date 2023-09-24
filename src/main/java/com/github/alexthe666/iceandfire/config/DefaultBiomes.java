@@ -7,7 +7,6 @@ import net.minecraftforge.common.Tags;
 import static net.minecraft.tags.BiomeTags.*;
 import static net.minecraftforge.common.Tags.Biomes.*;
 
-// TODO: 1.19 remove BIOME_DICT entries
 public class DefaultBiomes {
 
     public static final SpawnBiomeData OVERWORLD = new SpawnBiomeData()
@@ -35,12 +34,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 7)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 8)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:lush_stacks", 9);
-            //Not sure if firedragons should generate in mountainous terrain or not
-            /*.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "mountain", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 2);*/
     public static final SpawnBiomeData FIREDRAGON_CAVE = FIREDRAGON_ROOST
-                    .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 10);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 10);
     public static final SpawnBiomeData ICEDRAGON_ROOST = new SpawnBiomeData()
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_ICY.location().toString()"icy", 0) This category doesn't seem to exist anymore
@@ -90,23 +85,15 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_forest", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_lowlands", 2);
-    //.addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-    //.addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1); // Doesn't exist anymore, might need a replacement
 
     public static final SpawnBiomeData MAUSOLEUM = new SpawnBiomeData()
-            /*.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_RIVER.location().toString(), 0)*/
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "snowy", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "ocean", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "icy", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "ocean", 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_forest", 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_lowlands", 3);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_RIVER.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_forest", 1)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:wintry_lowlands", 2);
 
     public static final SpawnBiomeData SNOWY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -120,7 +107,7 @@ public class DefaultBiomes {
 
     public static final SpawnBiomeData WOODLAND = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "forest", 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 0);
 
     public static final SpawnBiomeData SAVANNAS = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -132,14 +119,11 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:araucaria_savanna", 5);
 
     public static final SpawnBiomeData BEACHES = new SpawnBiomeData()
-            /*.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, Tags.Biomes.IS_BEACH.location().toString(), 0)*/
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "beach", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "beach", 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:dacite_shore", 2)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:basalt_barrera", 3);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_BEACH.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(),0)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:dacite_shore", 1)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:basalt_barrera", 2);
 
     public static final SpawnBiomeData SWAMPS = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -164,7 +148,7 @@ public class DefaultBiomes {
 
     public static final SpawnBiomeData OCEANS = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "ocean", 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OCEAN.location().toString(), 0);
 
     public static final SpawnBiomeData PIXIES = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
@@ -172,14 +156,14 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_MAGICAL.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_DENSE.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "forest", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_FOREST.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_MOUNTAIN.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HILL.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WET.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_HOT.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_COLD.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_DRY.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "taiga", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_TAIGA.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:siberian_taiga", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:mirage_isles", 4)
@@ -189,7 +173,7 @@ public class DefaultBiomes {
 
     public static final SpawnBiomeData JUNGLE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, false, "jungle", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_JUNGLE.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_jungle", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:jungle_mountains", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:tropical_jungle", 3)
@@ -215,18 +199,12 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 3);
 
     public static final SpawnBiomeData GRAVEYARD = new SpawnBiomeData()
-            /*.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_OCEAN.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_WATER.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, Tags.Biomes.IS_BEACH.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "ocean", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_UNDERGROUND.location().toString(), 0)*/
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, false, "overworld", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "ocean", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "ocean", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "river", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_DICT, true, "beach", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_CATEGORY, true, "beach", 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_RIVER.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_BEACH.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_UNDERGROUND.location().toString(), 0);
 
     public static final SpawnBiomeData HIPPOGRYPH_BLACK = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)

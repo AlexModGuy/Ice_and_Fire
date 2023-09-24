@@ -33,7 +33,7 @@ public class BlockIafOre extends Block {
     }
 
     protected int getExperience(RandomSource rand) {
-        if (this == IafBlockRegistry.SAPPHIRE_ORE.get() || this == IafBlockRegistry.AMYTHEST_ORE.get()) {
+        if (this == IafBlockRegistry.SAPPHIRE_ORE.get()) {
             return Mth.nextInt(rand, 3, 7);
         }
         return 0;
