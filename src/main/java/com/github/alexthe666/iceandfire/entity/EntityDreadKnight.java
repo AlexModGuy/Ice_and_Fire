@@ -10,7 +10,7 @@ import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
+import com.github.alexthe666.iceandfire.recipe.IafBannerPatterns;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -63,7 +63,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundTag compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
 
-        ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPatterns.BASE, DyeColor.CYAN).addPattern(Holder.direct(IafRecipeRegistry.PATTERN_DREAD.get()), DyeColor.WHITE).toListTag();
+        ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPatterns.BASE, DyeColor.CYAN).addPattern(Holder.direct(IafBannerPatterns.PATTERN_DREAD.get()), DyeColor.WHITE).toListTag();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());

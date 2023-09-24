@@ -22,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,26 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IafRecipeRegistry {
-    public static final DeferredRegister<BannerPattern> BANNERS = DeferredRegister.create(Registries.BANNER_PATTERN, IceAndFire.MODID);
-    public static final RegistryObject<BannerPattern> PATTERN_FIRE = addBanner("iceandfire_fire");
-    public static final RegistryObject<BannerPattern> PATTERN_ICE = addBanner("iceandfire_ice");
-    public static final RegistryObject<BannerPattern> PATTERN_LIGHTNING = addBanner("iceandfire_lightning");
-    public static final RegistryObject<BannerPattern> PATTERN_FIRE_HEAD = addBanner("iceandfire_fire_head");
-    public static final RegistryObject<BannerPattern> PATTERN_ICE_HEAD = addBanner("iceandfire_ice_head");
-    public static final RegistryObject<BannerPattern> PATTERN_LIGHTNING_HEAD = addBanner("iceandfire_lightning_head");
-    public static final RegistryObject<BannerPattern> PATTERN_AMPHITHERE = addBanner("iceandfire_amphithere");
-    public static final RegistryObject<BannerPattern> PATTERN_BIRD = addBanner("iceandfire_bird");
-    public static final RegistryObject<BannerPattern> PATTERN_EYE = addBanner("iceandfire_eye");
-    public static final RegistryObject<BannerPattern> PATTERN_FAE = addBanner("iceandfire_fae");
-    public static final RegistryObject<BannerPattern> PATTERN_FEATHER = addBanner("iceandfire_feather");
-    public static final RegistryObject<BannerPattern> PATTERN_GORGON = addBanner("iceandfire_gorgon");
-    public static final RegistryObject<BannerPattern> PATTERN_HIPPOCAMPUS = addBanner("iceandfire_hippocampus");
-    public static final RegistryObject<BannerPattern> PATTERN_HIPPOGRYPH_HEAD = addBanner("iceandfire_hippogryph_head");
-    public static final RegistryObject<BannerPattern> PATTERN_MERMAID = addBanner("iceandfire_mermaid");
-    public static final RegistryObject<BannerPattern> PATTERN_SEA_SERPENT = addBanner("iceandfire_sea_serpent");
-    public static final RegistryObject<BannerPattern> PATTERN_TROLL = addBanner("iceandfire_troll");
-    public static final RegistryObject<BannerPattern> PATTERN_WEEZER = addBanner("iceandfire_weezer");
-    public static final RegistryObject<BannerPattern> PATTERN_DREAD = addBanner("iceandfire_dread");
+
 
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(Registries.RECIPE_TYPE, IceAndFire.MODID);
     public static final RegistryObject<RecipeType<DragonForgeRecipe>> DRAGON_FORGE_TYPE = RECIPE_TYPE.register("dragonforge", () -> RecipeType.simple(new ResourceLocation(IceAndFire.MODID, "dragonforge")));
@@ -204,7 +184,5 @@ public class IafRecipeRegistry {
         return PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
     }
 
-    public static RegistryObject<BannerPattern> addBanner(String enumName) {
-        return BANNERS.register(enumName, () -> new BannerPattern(enumName));
-    }
+
 }

@@ -4,16 +4,13 @@ import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.citadel.server.item.CustomToolMaterial;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.datagen.TagGenerator;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.*;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -328,25 +325,25 @@ public class IafItemRegistry {
     public static final RegistryObject<Item> GHOST_INGOT = registerItem("ghost_ingot", () -> new ItemGeneric(1));
     public static final RegistryObject<Item> GHOST_SWORD = registerItem("ghost_sword", () -> new ItemGhostSword());
 
-    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE = registerItem("banner_pattern_fire", () -> new BannerPatternItem(create("pattern_item/fire_heart"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_ICE = registerItem("banner_pattern_ice", () -> new BannerPatternItem(create("pattern_item/ice_heart"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING = registerItem("banner_pattern_lightning", () -> new BannerPatternItem(create("pattern_item/lightning_heart"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE_HEAD = registerItem("banner_pattern_fire_head", () -> new BannerPatternItem(create("pattern_item/fire_skull"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_ICE_HEAD = registerItem("banner_pattern_ice_head", () -> new BannerPatternItem(create("pattern_item/ice_skull"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING_HEAD = registerItem("banner_pattern_lightning_head", () -> new BannerPatternItem(create("pattern_item/lightning_skull"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_AMPHITHERE = registerItem("banner_pattern_amphithere", () -> new BannerPatternItem(create("pattern_item/amphitere"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_BIRD = registerItem("banner_pattern_bird", () -> new BannerPatternItem(create("pattern_item/bird"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_EYE = registerItem("banner_pattern_eye", () -> new BannerPatternItem(create("pattern_item/eye"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_FAE = registerItem("banner_pattern_fae", () -> new BannerPatternItem(create("pattern_item/fae"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_FEATHER = registerItem("banner_pattern_feather", () -> new BannerPatternItem(create("pattern_item/feather"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_GORGON = registerItem("banner_pattern_gorgon", () -> new BannerPatternItem(create("pattern_item/gorgon"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOCAMPUS = registerItem("banner_pattern_hippocampus", () -> new BannerPatternItem(create("pattern_item/hippocampus"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOGRYPH_HEAD = registerItem("banner_pattern_hippogryph_head", () -> new BannerPatternItem(create("pattern_item/hippogryph"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_MERMAID = registerItem("banner_pattern_mermaid", () -> new BannerPatternItem(create("pattern_item/mermaid"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_SEA_SERPENT = registerItem("banner_pattern_sea_serpent", () -> new BannerPatternItem(create("pattern_item/sea_serpent"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_TROLL = registerItem("banner_pattern_troll", () -> new BannerPatternItem(create("pattern_item/troll"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_WEEZER = registerItem("banner_pattern_weezer", () -> new BannerPatternItem(create("pattern_item/weezer"), unstackable()));
-    public static final RegistryObject<BannerPatternItem> PATTERN_DREAD = registerItem("banner_pattern_dread", () -> new BannerPatternItem(create("pattern_item/dread"), unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE = registerItem("banner_pattern_fire", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.FIRE_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_ICE = registerItem("banner_pattern_ice", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.ICE_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING = registerItem("banner_pattern_lightning", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.LIGHTNING_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FIRE_HEAD = registerItem("banner_pattern_fire_head", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.FIRE_HEAD_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_ICE_HEAD = registerItem("banner_pattern_ice_head", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.ICE_HEAD_BANNER_PATTERN , unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_LIGHTNING_HEAD = registerItem("banner_pattern_lightning_head", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.LIGHTNING_HEAD_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_AMPHITHERE = registerItem("banner_pattern_amphithere", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.AMPHITHERE_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_BIRD = registerItem("banner_pattern_bird", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.BIRD_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_EYE = registerItem("banner_pattern_eye", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.EYE_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FAE = registerItem("banner_pattern_fae", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.FAE_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_FEATHER = registerItem("banner_pattern_feather", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.FEATHER_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_GORGON = registerItem("banner_pattern_gorgon", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.GORGON_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOCAMPUS = registerItem("banner_pattern_hippocampus", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.HIPPOCAMPUS_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_HIPPOGRYPH_HEAD = registerItem("banner_pattern_hippogryph_head", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.HIPPOGRYPH_HEAD_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_MERMAID = registerItem("banner_pattern_mermaid", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.MERMAID_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_SEA_SERPENT = registerItem("banner_pattern_sea_serpent", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.SEA_SERPENT_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_TROLL = registerItem("banner_pattern_troll", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.TROLL_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_WEEZER = registerItem("banner_pattern_weezer", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.WEEZER_BANNER_PATTERN, unstackable()));
+    public static final RegistryObject<BannerPatternItem> PATTERN_DREAD = registerItem("banner_pattern_dread", () -> new BannerPatternItem(TagGenerator.BannerPatternTagGenerator.DREAD_BANNER_PATTERN, unstackable()));
 
     static {
         EnumDragonArmor.initArmors();
@@ -408,11 +405,5 @@ public class IafItemRegistry {
             IafTabRegistry.TAB_ITEMS_LIST.add(itemRegistryObject);
         return itemRegistryObject;
     }
-
-
-    private static TagKey<BannerPattern> create(String pName) {
-        return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(pName));
-    }
-
 
 }

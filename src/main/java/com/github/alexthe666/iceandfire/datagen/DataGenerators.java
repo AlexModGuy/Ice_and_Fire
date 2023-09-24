@@ -33,6 +33,7 @@ public class DataGenerators {
         DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(output, provider);
         CompletableFuture<HolderLookup.Provider> lookupProvider = datapackProvider.getRegistryProvider();
         generator.addProvider(event.includeServer(), datapackProvider);
+        generator.addProvider(event.includeServer(), new TagGenerator.BannerPatternTagGenerator(output, provider, helper));
         generator.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
                 Component.literal("Resources for Ice and Fire"),
                 DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),

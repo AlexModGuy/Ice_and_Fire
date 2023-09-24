@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.IafTabRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.recipe.IafBannerPatterns;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeSerializers;
 import com.github.alexthe666.iceandfire.world.*;
@@ -95,7 +96,7 @@ public class IceAndFire {
         IafTileEntityRegistry.TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
         IafRecipeRegistry.RECIPE_TYPE.register(modBus);
-        IafRecipeRegistry.BANNERS.register(modBus);
+        IafBannerPatterns.BANNERS.register(modBus);
         IafStructureTypes.STRUCTURE_TYPES.register(modBus);
         //IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
