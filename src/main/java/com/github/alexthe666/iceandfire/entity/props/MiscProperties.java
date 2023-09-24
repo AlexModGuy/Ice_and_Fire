@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +26,9 @@ public class MiscProperties {
     private static final String TARGETING_ENTITIES_WITH_SCEPTER = "ScepterTargets";
     private static final String SCEPTER_ENTITY_ID = "ScepterEntityId";
     private static final Random rand = new Random();
+
+    // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
+    private static HashMap<CompoundTag, Boolean> containsLoveData = new HashMap<>();
 
     private static CompoundTag getOrCreateMiscData(LivingEntity entity) {
         return getOrCreateMiscData(CitadelEntityData.getCitadelTag(entity));
@@ -77,10 +81,28 @@ public class MiscProperties {
     }
 
     public static int getLoveTicks(LivingEntity entity) {
-        CompoundTag nbt = getOrCreateMiscData(entity);
-        if (nbt.contains(IN_LOVE_TIME)) {
-            return nbt.getInt(IN_LOVE_TIME);
+
+        CompoundTag citadelTag = CitadelEntityData.getCitadelTag(entity);
+        // If we have the nbt data in the hashmap and we know it contains love data
+        if (containsLoveData.containsKey(citadelTag) && containsLoveData.get(citadelTag)) {
+            CompoundTag miscData = (CompoundTag) citadelTag.get(MISC_DATA);
+            if (miscData.contains(IN_LOVE_TIME)) {
+                return miscData.getInt(IN_LOVE_TIME);
+            }
+            // Otherwise it means we have the nbt data in the hashmap but it doesn't contain love data
+        } else if (containsLoveData.containsKey(citadelTag) ) {
+            return 0;
+            // If we don't have the nbt data in the hashmap
+        } else if (citadelTag.contains(MISC_DATA, 10)) {
+            CompoundTag miscData = (CompoundTag) citadelTag.get(MISC_DATA);
+            if (miscData.contains(IN_LOVE_TIME)) {
+                containsLoveData.put(citadelTag, true);
+                return miscData.getInt(IN_LOVE_TIME);
+            } else {
+                containsLoveData.put(citadelTag, false);
+            }
         }
+
         return 0;
     }
 
@@ -274,9 +296,9 @@ public class MiscProperties {
         if (rand.nextInt(7) == 0) {
             for (int i = 0; i < 5; i++) {
                 entity.level().addParticle(ParticleTypes.HEART,
-                    entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
-                    entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
-                    entity.getZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
+                        entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
+                        entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
+                        entity.getZ() + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
             }
         }
     }
