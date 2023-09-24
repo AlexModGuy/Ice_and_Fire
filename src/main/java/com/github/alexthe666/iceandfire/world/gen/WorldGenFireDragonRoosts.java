@@ -43,7 +43,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoneFeatureConfiguration> 
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         if (!worldIn.getFluidState(worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).below()).isEmpty()) {

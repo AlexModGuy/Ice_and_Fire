@@ -27,7 +27,7 @@ public class SpawnStymphalianBird extends Feature<NoneFeatureConfiguration> {
 
         position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position.offset(8, 0, 8));
 
-        if (IafConfig.spawnStymphalianBirds && IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
+        if (IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) && rand.nextInt(IafConfig.stymphalianBirdSpawnChance + 1) == 0) {
             for (int i = 0; i < 4 + rand.nextInt(4); i++) {
                 BlockPos pos = position.offset(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
                 pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);

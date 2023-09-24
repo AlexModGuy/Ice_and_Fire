@@ -55,7 +55,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         isMale = rand.nextBoolean();
@@ -129,7 +129,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
                     } else if (chance > 40 && chance < 45) {
                         worldIn.setBlock(blockPos,  Blocks.COPPER_ORE.defaultBlockState(), 2);
                     } else if (chance > 45 && chance < 50) {
-                        worldIn.setBlock(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.get().defaultBlockState() : PALETTE_BLOCK1, 2);
+                        worldIn.setBlock(blockPos, IafBlockRegistry.SILVER_ORE.get().defaultBlockState(), 2);
                     } else if (chance > 50 && chance < 60) {
                         worldIn.setBlock(blockPos, Blocks.COAL_ORE.defaultBlockState(), 2);
                     } else if (chance > 60 && chance < 70) {

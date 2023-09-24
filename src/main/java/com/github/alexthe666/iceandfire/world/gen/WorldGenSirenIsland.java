@@ -29,7 +29,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateSirenIslands || rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);

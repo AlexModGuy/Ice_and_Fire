@@ -133,79 +133,78 @@ public class IafWorldRegistry {
         if (safelyTestBiome(BiomeConfig.frostLilyBiomes, biome)) {
             addFeatureToBiome("iceandfire:frost_lily", features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
         }
-        if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome) && IafConfig.generateSilverOre) {
+        if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome)) {
             addFeatureToBiome("iceandfire:silver_ore", features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
         }
-        if (IafConfig.generateSapphireOre && safelyTestBiome(BiomeConfig.sapphireBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.sapphireBiomes, biome)) {
             addFeatureToBiome("iceandfire:sapphire_ore", features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
         }
 
-        if (IafConfig.generateDragonRoosts) {
-            if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:fire_dragon_roost", features, builder);
-            }
-            if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:lightning_dragon_roost", features, builder);
-            }
-            if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:ice_dragon_roost", features, builder);
-            }
+
+        if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:fire_dragon_roost", features, builder);
+        }
+        if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:lightning_dragon_roost", features, builder);
+        }
+        if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:ice_dragon_roost", features, builder);
         }
 
-        if (IafConfig.generateDragonDens) {
-            if (safelyTestBiome(BiomeConfig.fireDragonCaveBiomes, biome)) {
-                addFeatureToBiome("iceandfire:fire_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
-            }
-            if (safelyTestBiome(BiomeConfig.lightningDragonCaveBiomes, biome)) {
-                addFeatureToBiome("iceandfire:lightning_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
-            }
-            if (safelyTestBiome(BiomeConfig.iceDragonCaveBiomes, biome)) {
-                addFeatureToBiome("iceandfire:ice_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
-            }
+
+        if (safelyTestBiome(BiomeConfig.fireDragonCaveBiomes, biome)) {
+            addFeatureToBiome("iceandfire:fire_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
+        }
+        if (safelyTestBiome(BiomeConfig.lightningDragonCaveBiomes, biome)) {
+            addFeatureToBiome("iceandfire:lightning_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
+        }
+        if (safelyTestBiome(BiomeConfig.iceDragonCaveBiomes, biome)) {
+            addFeatureToBiome("iceandfire:ice_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
         }
 
-        if (IafConfig.generateCyclopsCaves && safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biome)) {
+
+        if (safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biome)) {
             addFeatureToBiome("iceandfire:cyclops_cave", features, builder);
         }
-        if (IafConfig.spawnPixies && safelyTestBiome(BiomeConfig.pixieBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.pixieBiomes, biome)) {
             addFeatureToBiome("iceandfire:pixie_village", features, builder);
         }
-        if (IafConfig.generateHydraCaves && safelyTestBiome(BiomeConfig.hydraBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.hydraBiomes, biome)) {
             addFeatureToBiome("iceandfire:hydra_cave", features, builder);
         }
-        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biome)) {
             addFeatureToBiome("iceandfire:myrmex_hive_desert", features, builder);
         }
-        if (IafConfig.generateMyrmexColonies && safelyTestBiome(BiomeConfig.jungleMyrmexBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.jungleMyrmexBiomes, biome)) {
             addFeatureToBiome("iceandfire:myrmex_hive_jungle", features, builder);
         }
-        if (IafConfig.generateSirenIslands && safelyTestBiome(BiomeConfig.sirenBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.sirenBiomes, biome)) {
             addFeatureToBiome("iceandfire:siren_island", features, builder);
         }
-        if (IafConfig.spawnDeathWorm && safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
             addFeatureToBiome("iceandfire:spawn_death_worm", features, builder);
         }
-        if (IafConfig.generateWanderingCyclops && safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biome)) {
             addFeatureToBiome("iceandfire:spawn_wandering_cyclops", features, builder);
         }
-        if (IafConfig.generateDragonSkeletons) {
-            if (safelyTestBiome(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:spawn_dragon_skeleton_lightning", features, builder);
-            }
-            if (safelyTestBiome(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:spawn_dragon_skeleton_fire", features, builder);
-            }
-            if (safelyTestBiome(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
-                addFeatureToBiome("iceandfire:spawn_dragon_skeleton_ice", features, builder);
-            }
+
+        if (safelyTestBiome(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_lightning", features, builder);
         }
-        if (IafConfig.spawnHippocampus && safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_fire", features, builder);
+        }
+        if (safelyTestBiome(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
+            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_ice", features, builder);
+        }
+
+        if (safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
             addFeatureToBiome("iceandfire:spawn_hippocampus", features, builder);
         }
-        if (IafConfig.spawnSeaSerpents && safelyTestBiome(BiomeConfig.seaSerpentBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.seaSerpentBiomes, biome)) {
             addFeatureToBiome("iceandfire:spawn_sea_serpent", features, builder);
         }
-        if (IafConfig.spawnStymphalianBirds && safelyTestBiome(BiomeConfig.stymphalianBiomes, biome)) {
+        if (safelyTestBiome(BiomeConfig.stymphalianBiomes, biome)) {
             addFeatureToBiome("iceandfire:spawn_stymphalian_bird", features, builder);
         }
 
