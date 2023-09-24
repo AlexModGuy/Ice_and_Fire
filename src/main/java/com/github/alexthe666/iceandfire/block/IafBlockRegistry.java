@@ -151,29 +151,26 @@ public class IafBlockRegistry {
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
-        IafItemRegistry.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties()));
+        IafItemRegistry.registerItem(name, () -> new BlockItem(ret.get(), new Item.Properties()), false);
         IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
-    public static <T extends TorchBlock> RegistryObject<T> registerWallBlock(String name, Supplier<T> block)
-    {
+    public static <T extends TorchBlock> RegistryObject<T> registerWallBlock(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
-        IafItemRegistry.ITEMS.register(name, () -> new StandingAndWallBlockItem(ret.get(), ((IWallBlock) ret.get()).wallBlock(), new Item.Properties(), Direction.DOWN));
+        IafItemRegistry.registerItem(name, () -> new StandingAndWallBlockItem(ret.get(), ((IWallBlock) ret.get()).wallBlock(), new Item.Properties(), Direction.DOWN));
         IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
-    public static <T extends Block> RegistryObject<T> registerWithRender(String name, Supplier<T> block)
-    {
+    public static <T extends Block> RegistryObject<T> registerWithRender(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
-        IafItemRegistry.ITEMS.register(name, () -> new BlockItemWithRender(ret.get(), new Item.Properties()));
+        IafItemRegistry.registerItem(name, () -> new BlockItemWithRender(ret.get(), new Item.Properties()));
         IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
-    public static <T extends WallTorchBlock> RegistryObject<T> registerWallTorch(String name, Supplier<T> block)
-    {
+    public static <T extends WallTorchBlock> RegistryObject<T> registerWallTorch(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
     }
 

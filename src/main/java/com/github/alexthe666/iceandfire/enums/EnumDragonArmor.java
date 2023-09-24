@@ -44,13 +44,13 @@ public enum EnumDragonArmor {
             String sub = EnumDragonArmor.values()[i].name();
 
             int finalI = i;
-            EnumDragonArmor.values()[finalI].helmet = IafItemRegistry.ITEMS.register(sub + "_helmet", () ->
+            EnumDragonArmor.values()[finalI].helmet = IafItemRegistry.registerItem(sub + "_helmet", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, ArmorItem.Type.HELMET));
-            EnumDragonArmor.values()[finalI].chestplate = IafItemRegistry.ITEMS.register(sub + "_chestplate", () ->
+            EnumDragonArmor.values()[finalI].chestplate = IafItemRegistry.registerItem(sub + "_chestplate", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, ArmorItem.Type.CHESTPLATE));
-            EnumDragonArmor.values()[finalI].leggings = IafItemRegistry.ITEMS.register(sub + "_leggings", () ->
+            EnumDragonArmor.values()[finalI].leggings = IafItemRegistry.registerItem(sub + "_leggings", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, ArmorItem.Type.LEGGINGS));
-            EnumDragonArmor.values()[finalI].boots = IafItemRegistry.ITEMS.register(sub + "_boots", () ->
+            EnumDragonArmor.values()[finalI].boots = IafItemRegistry.registerItem(sub + "_boots", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, ArmorItem.Type.BOOTS));
         }
     }
