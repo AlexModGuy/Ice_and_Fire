@@ -2607,7 +2607,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         final float linearFactor = Mth.map(Math.max(this.getAgeInDays() - 50, 0), 0, 75, 0, 1);
         LivingEntity rider = this.getControllingPassenger();
         // Extra height when rider and the dragon look upwards, this will reduce model clipping
-        if (rider.getXRot() < 0) {
+        if (rider != null && rider.getXRot() < 0) {
             extraY += (float) Mth.map(rider.getXRot(), 60, -40, -0.1, 0.1);
         }
         if (this.isHovering() || this.isFlying()) {
@@ -2616,7 +2616,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             extraY += getRideHeightBase() * 0.6f;
         } else {
             // Extra height when walking, reduces model clipping
-            if (rider.zza > 0) {
+            if (rider != null && rider.zza > 0) {
                 final float MAX_RAISE_HEIGHT = 1.1f * linearFactor + getRideHeightBase() * 0.1f;
                 riderWalkingExtraY = Math.min(MAX_RAISE_HEIGHT, riderWalkingExtraY + 0.1f);
             } else {
