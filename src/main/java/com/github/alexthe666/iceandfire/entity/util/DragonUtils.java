@@ -322,7 +322,7 @@ public class DragonUtils {
     }
 
     public static boolean canDragonBreak(Block block) {
-        // TODO: BLOCK_CACHE will probably miss a lot due to block position and the likes
+
         if (BLOCK_CACHE.containsKey(block))
             return BLOCK_CACHE.get(block);
 
