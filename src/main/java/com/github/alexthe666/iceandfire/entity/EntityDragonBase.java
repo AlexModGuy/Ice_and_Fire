@@ -1437,7 +1437,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
             if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level(), this)) {
-                if (IafConfig.dragonGriefing != 2 && (!this.isTame() || IafConfig.tamedDragonGriefing)) {
+                if (DragonUtils.canGrief(this)) {
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                         final int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
                         final int flightModifier = isFlying() && this.getTarget() != null ? -1 : 1;
@@ -1454,7 +1454,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                                 return;
                             final BlockState state = level().getBlockState(pos);
                             final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
-                            if (isBreakable(pos, state, hardness)) {
+                            if (isBreakable(pos, state, hardness, this)) {
                                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
                                 if (!level().isClientSide) {
                                     if (random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state)) {
@@ -1471,15 +1471,19 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    protected boolean isBreakable(BlockPos pos, BlockState state, float hardness) {
-        return state.blocksMotion() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(level(), pos).isEmpty() && state.getDestroySpeed(level(), pos) >= 0F && state.getDestroySpeed(level(), pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos, state);
+    protected boolean isBreakable(BlockPos pos, BlockState state, float hardness, EntityDragonBase entity) {
+        return state.blocksMotion() && !state.isAir() &&
+                state.getFluidState().isEmpty() && !state.getShape(level(), pos).isEmpty() &&
+                state.getDestroySpeed(level(), pos) >= 0F &&
+                state.getDestroySpeed(level(), pos) <= hardness &&
+                DragonUtils.canDragonBreak(state.getBlock(), entity) && this.canDestroyBlock(pos, state);
     }
 
     @Override
     public boolean isBlockExplicitlyPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
         if (!isModelDead() && this.getDragonStage() >= 3) {
-            if (IafConfig.dragonGriefing != 2 && (!this.isTame() || IafConfig.tamedDragonGriefing) && pos.getY() >= this.getY()) {
-                return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F);
+            if (DragonUtils.canGrief(this) && pos.getY() >= this.getY()) {
+                return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F, this);
             }
         }
         return false;
@@ -2721,7 +2725,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean shouldBlockExplode(@NotNull Explosion explosionIn, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, BlockState blockStateIn, float explosionPower) {
-        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock());
+        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock(), this);
     }
 
     public void tryScorchTarget() {

@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -321,7 +322,10 @@ public class DragonUtils {
         return (dragonBase.getHomeDimensionName() == null || getDimensionName(dragonBase.level()).equals(dragonBase.getHomeDimensionName()));
     }
 
-    public static boolean canDragonBreak(Block block) {
+    public static boolean canDragonBreak(Block block, Entity entity) {
+
+        if (!ForgeEventFactory.getMobGriefingEvent(entity.level(), entity))
+            return false;
 
         if (BLOCK_CACHE.containsKey(block))
             return BLOCK_CACHE.get(block);
@@ -351,12 +355,13 @@ public class DragonUtils {
     }
 
 
-    public static boolean canGrief(boolean weak) {
-        if (weak) {
-            return IafConfig.dragonGriefing == 0;
-        } else {
-            return IafConfig.dragonGriefing < 2;
+    public static boolean canGrief(EntityDragonBase dragon) {
+        if (dragon.isTame() && !IafConfig.tamedDragonGriefing) {
+            return false;
         }
+
+        return IafConfig.dragonGriefing < 2;
+
     }
 
     public static boolean isBlacklistedBlock(Block block) {

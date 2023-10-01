@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -29,8 +30,8 @@ public class IafDragonDestructionManager {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
-            IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
-            IafDamageRegistry.causeDragonFireDamage(destroyer);
+                IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonFireDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageFire;
@@ -41,8 +42,8 @@ public class IafDragonDestructionManager {
                     ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
-                    fireAttackBlock(world, pos);
+                if (DragonUtils.canGrief(destroyer) && world.random.nextBoolean()) {
+                    fireAttackBlock(world, pos, destroyer);
                 }
             });
         } else {
@@ -60,8 +61,8 @@ public class IafDragonDestructionManager {
                     return;
                 }
                 if (center.distSqr(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
-                        fireAttackBlock(world, pos);
+                    if (DragonUtils.canGrief(destroyer) && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
+                        fireAttackBlock(world, pos, destroyer);
                     }
                 }
             });
@@ -70,15 +71,15 @@ public class IafDragonDestructionManager {
         final float stageDmg = stage * dmgScale;
         final int statusDuration = 5 + stage * 5;
         world.getEntitiesOfClass(
-            LivingEntity.class,
-            new AABB(
-                (double) center.getX() - damageRadius,
-                (double) center.getY() - damageRadius,
-                (double) center.getZ() - damageRadius,
-                (double) center.getX() + damageRadius,
-                (double) center.getY() + damageRadius,
-                (double) center.getZ() + damageRadius
-            )
+                LivingEntity.class,
+                new AABB(
+                        (double) center.getX() - damageRadius,
+                        (double) center.getY() - damageRadius,
+                        (double) center.getZ() - damageRadius,
+                        (double) center.getX() + damageRadius,
+                        (double) center.getY() + damageRadius,
+                        (double) center.getZ() + damageRadius
+                )
         ).stream().forEach(livingEntity -> {
             if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                 livingEntity.hurt(source, stageDmg);
@@ -91,8 +92,8 @@ public class IafDragonDestructionManager {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
-            IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
-            IafDamageRegistry.causeDragonIceDamage(destroyer);
+                IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonIceDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageIce;
@@ -103,8 +104,8 @@ public class IafDragonDestructionManager {
                     ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
-                    iceAttackBlock(world, pos);
+                if (DragonUtils.canGrief(destroyer) && world.random.nextBoolean()) {
+                    iceAttackBlock(world, pos, destroyer);
                 }
             });
         } else {
@@ -122,8 +123,8 @@ public class IafDragonDestructionManager {
                     return;
                 }
                 if (center.distSqr(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
-                        iceAttackBlock(world, pos);
+                    if (DragonUtils.canGrief(destroyer) && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
+                        iceAttackBlock(world, pos, destroyer);
                     }
                 }
             });
@@ -132,15 +133,15 @@ public class IafDragonDestructionManager {
         final float stageDmg = stage * dmgScale;
         final int statusDuration = 50 * stage;
         world.getEntitiesOfClass(
-            LivingEntity.class,
-            new AABB(
-                (double) center.getX() - damageRadius,
-                (double) center.getY() - damageRadius,
-                (double) center.getZ() - damageRadius,
-                (double) center.getX() + damageRadius,
-                (double) center.getY() + damageRadius,
-                (double) center.getZ() + damageRadius
-            )
+                LivingEntity.class,
+                new AABB(
+                        (double) center.getX() - damageRadius,
+                        (double) center.getY() - damageRadius,
+                        (double) center.getZ() - damageRadius,
+                        (double) center.getX() + damageRadius,
+                        (double) center.getY() + damageRadius,
+                        (double) center.getZ() + damageRadius
+                )
         ).stream().forEach(livingEntity -> {
             if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                 livingEntity.hurt(source, stageDmg);
@@ -153,8 +154,8 @@ public class IafDragonDestructionManager {
         if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
-            IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
-            IafDamageRegistry.causeDragonLightningDamage(destroyer);
+                IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
+                IafDamageRegistry.causeDragonLightningDamage(destroyer);
         int stage = destroyer.getDragonStage();
         double damageRadius = 3.5D;
         float dmgScale = (float) IafConfig.dragonAttackDamageLightning;
@@ -165,8 +166,8 @@ public class IafDragonDestructionManager {
                     ((TileEntityDragonforgeInput) world.getBlockEntity(pos)).onHitWithFlame();
                     return;
                 }
-                if (IafConfig.dragonGriefing != 2 && world.random.nextBoolean()) {
-                    lightningAttackBlock(world, pos);
+                if (DragonUtils.canGrief(destroyer) && world.random.nextBoolean()) {
+                    lightningAttackBlock(world, pos, destroyer);
                 }
             });
         } else {
@@ -184,8 +185,8 @@ public class IafDragonDestructionManager {
                     return;
                 }
                 if (center.distSqr(pos) <= ff) {
-                    if (IafConfig.dragonGriefing != 2 && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
-                        lightningAttackBlock(world, pos);
+                    if (DragonUtils.canGrief(destroyer) && world.random.nextFloat() > (float) center.distSqr(pos) / ff) {
+                        lightningAttackBlock(world, pos, destroyer);
                     }
                 }
             });
@@ -193,15 +194,15 @@ public class IafDragonDestructionManager {
 
         final float stageDmg = stage * dmgScale;
         world.getEntitiesOfClass(
-            LivingEntity.class,
-            new AABB(
-                (double) center.getX() - damageRadius,
-                (double) center.getY() - damageRadius,
-                (double) center.getZ() - damageRadius,
-                (double) center.getX() + damageRadius,
-                (double) center.getY() + damageRadius,
-                (double) center.getZ() + damageRadius
-            )
+                LivingEntity.class,
+                new AABB(
+                        (double) center.getX() - damageRadius,
+                        (double) center.getY() - damageRadius,
+                        (double) center.getZ() - damageRadius,
+                        (double) center.getX() + damageRadius,
+                        (double) center.getY() + damageRadius,
+                        (double) center.getZ() + damageRadius
+                )
         ).stream().forEach(livingEntity -> {
             if (!DragonUtils.onSameTeam(destroyer, livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                 livingEntity.hurt(source, stageDmg);
@@ -217,8 +218,8 @@ public class IafDragonDestructionManager {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
-                IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
-                IafDamageRegistry.causeDragonFireDamage(destroyer);
+                    IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
+                    IafDamageRegistry.causeDragonFireDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;
@@ -227,12 +228,12 @@ public class IafDragonDestructionManager {
             if (stage <= 3) {
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (world.random.nextFloat() * 3 > center.distSqr(pos) &&
-                        !(world.getBlockState(pos).getBlock() instanceof IDragonProof) &&
-                        DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                            !(world.getBlockState(pos).getBlock() instanceof IDragonProof) &&
+                            DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
                     if (world.random.nextBoolean()) {
-                        fireAttackBlock(world, pos);
+                        fireAttackBlock(world, pos, destroyer);
                     }
                 });
             } else {
@@ -243,14 +244,14 @@ public class IafDragonDestructionManager {
                 final float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
-                destroyBlocks(world, center, j, k, l, ff);
+                destroyBlocks(world, center, j, k, l, ff, destroyer);
 
                 j++;
                 k++;
                 l++;
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (center.distSqr(pos) <= ff) {
-                        fireAttackBlock(world, pos);
+                        fireAttackBlock(world, pos, destroyer);
                     }
                 });
             }
@@ -258,15 +259,15 @@ public class IafDragonDestructionManager {
             final float stageDmg = Math.max(1, stage - 1) * 2F;
             final int statusDuration = 15;
             world.getEntitiesOfClass(
-                LivingEntity.class,
-                new AABB(
-                    (double) center.getX() - j,
-                    (double) center.getY() - k,
-                    (double) center.getZ() - l,
-                    (double) center.getX() + j,
-                    (double) center.getY() + k,
-                    (double) center.getZ() + l
-                )
+                    LivingEntity.class,
+                    new AABB(
+                            (double) center.getX() - j,
+                            (double) center.getY() - k,
+                            (double) center.getZ() - l,
+                            (double) center.getX() + j,
+                            (double) center.getY() + k,
+                            (double) center.getZ() + l
+                    )
             ).stream().forEach(livingEntity -> {
                 if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                     livingEntity.hurt(source, stageDmg);
@@ -283,8 +284,8 @@ public class IafDragonDestructionManager {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
-                IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
-                IafDamageRegistry.causeDragonIceDamage(destroyer);
+                    IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
+                    IafDamageRegistry.causeDragonIceDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;
@@ -293,11 +294,11 @@ public class IafDragonDestructionManager {
             if (stage <= 3) {
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (world.random.nextFloat() * 3 > center.distSqr(pos) &&
-                        !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                            !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
                     if (world.random.nextBoolean()) {
-                        iceAttackBlock(world, pos);
+                        iceAttackBlock(world, pos, destroyer);
                     }
                 });
             } else {
@@ -308,14 +309,14 @@ public class IafDragonDestructionManager {
                 final float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
-                destroyBlocks(world, center, j, k, l, ff);
+                destroyBlocks(world, center, j, k, l, ff, destroyer);
 
                 j++;
                 k++;
                 l++;
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (center.distSqr(pos) <= ff) {
-                        iceAttackBlock(world, pos);
+                        iceAttackBlock(world, pos, destroyer);
                     }
                 });
             }
@@ -323,15 +324,15 @@ public class IafDragonDestructionManager {
             final float stageDmg = Math.max(1, stage - 1) * 2F;
             final int statusDuration = 400;
             world.getEntitiesOfClass(
-                LivingEntity.class,
-                new AABB(
-                    (double) center.getX() - j,
-                    (double) center.getY() - k,
-                    (double) center.getZ() - l,
-                    (double) center.getX() + j,
-                    (double) center.getY() + k,
-                    (double) center.getZ() + l
-                )
+                    LivingEntity.class,
+                    new AABB(
+                            (double) center.getX() - j,
+                            (double) center.getY() - k,
+                            (double) center.getZ() - l,
+                            (double) center.getX() + j,
+                            (double) center.getY() + k,
+                            (double) center.getZ() + l
+                    )
             ).stream().forEach(livingEntity -> {
                 if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                     livingEntity.hurt(source, stageDmg);
@@ -349,8 +350,8 @@ public class IafDragonDestructionManager {
             if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
-                IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
-                IafDamageRegistry.causeDragonLightningDamage(destroyer);
+                    IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
+                    IafDamageRegistry.causeDragonLightningDamage(destroyer);
             int stage = destroyer.getDragonStage();
             int j = 2;
             int k = 2;
@@ -359,11 +360,11 @@ public class IafDragonDestructionManager {
             if (stage <= 3) {
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (Math.pow(world.random.nextFloat() * 7F, 2) > center.distSqr(pos)
-                        && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                            && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                     }
                     if (Math.pow(world.random.nextFloat() * 7F, 2) > center.distSqr(pos)
-                        && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                            && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                         BlockState transformState = transformBlockLightning(world.getBlockState(pos));
                         world.setBlockAndUpdate(pos, transformState);
                     }
@@ -376,14 +377,14 @@ public class IafDragonDestructionManager {
                 float f = (float) (j + k + l) * 0.333F + 0.5F;
                 final float ff = f * f;
 
-                destroyBlocks(world, center, j, k, l, ff);
+                destroyBlocks(world, center, j, k, l, ff, destroyer);
 
                 j++;
                 k++;
                 l++;
                 BlockPos.betweenClosedStream(center.offset(-j, -k, -l), center.offset(j, k, l)).forEach(pos -> {
                     if (center.distSqr(pos) <= ff) {
-                        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                             BlockState transformState = transformBlockLightning(world.getBlockState(pos));
                             world.setBlockAndUpdate(pos, transformState);
                         }
@@ -393,15 +394,15 @@ public class IafDragonDestructionManager {
 
             final float stageDmg = Math.max(1, stage - 1) * 2F;
             world.getEntitiesOfClass(
-                LivingEntity.class,
-                new AABB(
-                    (double) center.getX() - j,
-                    (double) center.getY() - k,
-                    (double) center.getZ() - l,
-                    (double) center.getX() + j,
-                    (double) center.getY() + k,
-                    (double) center.getZ() + l
-                )
+                    LivingEntity.class,
+                    new AABB(
+                            (double) center.getX() - j,
+                            (double) center.getY() - k,
+                            (double) center.getZ() - l,
+                            (double) center.getX() + j,
+                            (double) center.getY() + k,
+                            (double) center.getZ() + l
+                    )
             ).stream().forEach(livingEntity -> {
                 if (!destroyer.isAlliedTo(livingEntity) && !destroyer.is(livingEntity) && destroyer.hasLineOfSight(livingEntity)) {
                     livingEntity.hurt(source, stageDmg);
@@ -423,34 +424,34 @@ public class IafDragonDestructionManager {
     }
 
 
-    private static void fireAttackBlock(Level world, BlockPos pos) {
-        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+    private static void fireAttackBlock(Level world, BlockPos pos, Entity destroyer) {
+        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(),destroyer)) {
             BlockState transformState = transformBlockFire(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
                 world.setBlockAndUpdate(pos, transformState);
             if (world.random.nextBoolean() && transformState.isSolid() &&
-                world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
-                world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock())) {
+                    world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
+                    world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock(),destroyer)) {
                 world.setBlockAndUpdate(pos.above(), Blocks.FIRE.defaultBlockState());
             }
         }
     }
 
-    private static void iceAttackBlock(Level world, BlockPos pos) {
-        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+    private static void iceAttackBlock(Level world, BlockPos pos, Entity destroyer) {
+        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
             BlockState transformState = transformBlockIce(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
                 world.setBlockAndUpdate(pos, transformState);
             if (world.random.nextInt(9) == 0 && transformState.isSolid() &&
-                world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
-                world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock())) {
+                    world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
+                    world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock(), destroyer)) {
                 world.setBlockAndUpdate(pos.above(), IafBlockRegistry.DRAGON_ICE_SPIKES.get().defaultBlockState());
             }
         }
     }
 
-    private static void lightningAttackBlock(Level world, BlockPos pos) {
-        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+    private static void lightningAttackBlock(Level world, BlockPos pos, Entity destroyer) {
+        if (!(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
             BlockState transformState = transformBlockLightning(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock()) {
                 world.setBlockAndUpdate(pos, transformState);
@@ -458,10 +459,10 @@ public class IafDragonDestructionManager {
         }
     }
 
-    private static void destroyBlocks(Level world, BlockPos center, int x, int y, int z, double radius2) {
+    private static void destroyBlocks(Level world, BlockPos center, int x, int y, int z, double radius2, Entity destroyer) {
         BlockPos.betweenClosedStream(center.offset(-x, -y, -z), center.offset(x, y, z)).forEach(pos -> {
             if (center.distSqr(pos) <= radius2) {
-                if (world.random.nextFloat() * 3 > (float) center.distSqr(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock())) {
+                if (world.random.nextFloat() * 3 > (float) center.distSqr(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
                     world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                 }
             }
