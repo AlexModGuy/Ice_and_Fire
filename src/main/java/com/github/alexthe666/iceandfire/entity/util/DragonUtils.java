@@ -326,19 +326,11 @@ public class DragonUtils {
         if (BLOCK_CACHE.containsKey(block))
             return BLOCK_CACHE.get(block);
 
-        boolean value = block != Blocks.BARRIER &&
-            block != Blocks.OBSIDIAN &&
-            block != Blocks.CRYING_OBSIDIAN &&
+        boolean value = block.getExplosionResistance() < 1200 &&
             block != Blocks.END_STONE &&
-            block != Blocks.BEDROCK &&
-            block != Blocks.END_PORTAL &&
-            block != Blocks.END_PORTAL_FRAME &&
-            block != Blocks.COMMAND_BLOCK &&
-            block != Blocks.REPEATING_COMMAND_BLOCK &&
-            block != Blocks.CHAIN_COMMAND_BLOCK &&
             block != Blocks.IRON_BARS &&
-            block != Blocks.END_GATEWAY &&
             !isBlacklistedBlock(block);
+
         BLOCK_CACHE.put(block, value);
         return value;
     }
