@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
-    private final float integrity = 1.0F;
     public static final DreadRuinProcessor INSTANCE = new DreadRuinProcessor();
     public static final Codec<DreadRuinProcessor> CODEC = Codec.unit(() -> INSTANCE);
 
@@ -43,29 +42,28 @@ public class DreadRuinProcessor extends StructureProcessor {
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
         RandomSource random = settings.getRandom(infoIn2.pos());
-        if (random.nextFloat() <= integrity) {
-            if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
-                BlockState state = getRandomCrackedBlock(null, random);
-                return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), state, null);
-            }
-            if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
-                CompoundTag tag = new CompoundTag();
-                CompoundTag spawnData = new CompoundTag();
-                ResourceLocation spawnerMobId = ForgeRegistries.ENTITY_TYPES.getKey(getRandomMobForMobSpawner(random));
-                if (spawnerMobId != null) {
-                    CompoundTag entity = new CompoundTag();
-                    entity.putString("id", spawnerMobId.toString());
-                    spawnData.put("entity", entity);
-                    tag.remove("SpawnPotentials");
-                    tag.put("SpawnData", spawnData.copy());
-                }
-                StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos(), IafBlockRegistry.DREAD_SPAWNER.get().defaultBlockState(), tag);
-                return newInfo;
 
+        if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
+            BlockState state = getRandomCrackedBlock(null, random);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), state, null);
+        }
+        if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
+            CompoundTag tag = new CompoundTag();
+            CompoundTag spawnData = new CompoundTag();
+            ResourceLocation spawnerMobId = ForgeRegistries.ENTITY_TYPES.getKey(getRandomMobForMobSpawner(random));
+            if (spawnerMobId != null) {
+                CompoundTag entity = new CompoundTag();
+                entity.putString("id", spawnerMobId.toString());
+                spawnData.put("entity", entity);
+                tag.remove("SpawnPotentials");
+                tag.put("SpawnData", spawnData.copy());
             }
-            return infoIn2;
+            StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos(), IafBlockRegistry.DREAD_SPAWNER.get().defaultBlockState(), tag);
+            return newInfo;
+
         }
         return infoIn2;
+
     }
 
     @Override

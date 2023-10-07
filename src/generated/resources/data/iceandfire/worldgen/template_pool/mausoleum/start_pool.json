@@ -4,7 +4,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "iceandfire:mausoleum/building",
-        "processors": "iceandfire:gorgon_temple_processors",
+        "processors": "iceandfire:mausoleum_processors",
         "projection": "rigid"
       },
       "weight": 1

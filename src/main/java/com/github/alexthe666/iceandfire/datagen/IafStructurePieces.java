@@ -32,7 +32,7 @@ public class IafStructurePieces {
 
     public static void registerMausoleum(BootstapContext<StructureTemplatePool> pContext) {
         HolderGetter<StructureProcessorList> processorListHolderGetter = pContext.lookup(Registries.PROCESSOR_LIST);
-        Holder<StructureProcessorList> graveyardProcessor = processorListHolderGetter.getOrThrow(IafProcessorLists.GORGON_TEMPLE_PROCESSORS);
+        Holder<StructureProcessorList> graveyardProcessor = processorListHolderGetter.getOrThrow(IafProcessorLists.MAUSOLEUM_PROCESSORS);
         HolderGetter<StructureTemplatePool> templatePoolHolderGetter = pContext.lookup(Registries.TEMPLATE_POOL);
         Holder<StructureTemplatePool> fallback = templatePoolHolderGetter.getOrThrow(Pools.EMPTY);
         pContext.register(MAUSOLEUM_START, new StructureTemplatePool(fallback, ImmutableList.of(Pair.of(StructurePoolElement.single("iceandfire:mausoleum/building", graveyardProcessor), 1)), StructureTemplatePool.Projection.RIGID));
@@ -40,7 +40,7 @@ public class IafStructurePieces {
 
     public static void registerGorgonTemple(BootstapContext<StructureTemplatePool> pContext) {
         HolderGetter<StructureProcessorList> processorListHolderGetter = pContext.lookup(Registries.PROCESSOR_LIST);
-        Holder<StructureProcessorList> graveyardProcessor = processorListHolderGetter.getOrThrow(IafProcessorLists.MAUSOLEUM_PROCESSORS);
+        Holder<StructureProcessorList> graveyardProcessor = processorListHolderGetter.getOrThrow(IafProcessorLists.GORGON_TEMPLE_PROCESSORS);
         HolderGetter<StructureTemplatePool> templatePoolHolderGetter = pContext.lookup(Registries.TEMPLATE_POOL);
         Holder<StructureTemplatePool> fallback = templatePoolHolderGetter.getOrThrow(Pools.EMPTY);
         pContext.register(GORGON_TEMPLE_START, new StructureTemplatePool(fallback, ImmutableList.of(Pair.of(StructurePoolElement.single("iceandfire:gorgon_temple/building", graveyardProcessor), 1)), StructureTemplatePool.Projection.RIGID));
