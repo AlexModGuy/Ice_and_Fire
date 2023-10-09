@@ -22,7 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -42,17 +43,19 @@ public class BlockJar extends BaseEntityBlock {
         super(
             pixieType != -1 ?
                 Properties
-                    .of(Material.GLASS)
+                    .of()
+                    .mapColor(MapColor.NONE)
+                    .instrument(NoteBlockInstrument.HAT)
                     .noOcclusion()
                     .dynamicShape()
                     .strength(1, 2)
                     .sound(SoundType.GLASS)
-                    .lightLevel((state) -> {
-                        return pixieType == -1 ? 0 : 10;
-                    })
+                    .lightLevel((state) -> pixieType == -1 ? 0 : 10)
                     .dropsLike(IafBlockRegistry.JAR_EMPTY.get())
 				: Properties
-                .of(Material.GLASS)
+                .of()
+                .mapColor(MapColor.NONE)
+                .instrument(NoteBlockInstrument.HAT)
                 .noOcclusion()
                 .dynamicShape()
                 .strength(1, 2)

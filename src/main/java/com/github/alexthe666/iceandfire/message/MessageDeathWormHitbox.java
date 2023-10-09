@@ -44,8 +44,8 @@ public class MessageDeathWormHitbox {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
-                    Entity entity = player.level.getEntity(message.deathWormId);
+                if (player.level()!= null) {
+                    Entity entity = player.level().getEntity(message.deathWormId);
                     if (entity != null && entity instanceof EntityDeathWorm) {
                         EntityDeathWorm worm = (EntityDeathWorm) entity;
                         worm.initSegments(message.scale);

@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -51,7 +52,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -72,9 +73,9 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
         this.zPower *= 0.95F;
         this.push(this.xPower, this.yPower, this.zPower);
 
-        if (this.level.isClientSide || (shootingEntity == null || !shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (shootingEntity == null || !shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
-            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            HitResult raytraceresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
             if (raytraceresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
@@ -85,7 +86,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
             double d2 = this.getZ() + Vector3d.z;
             ProjectileUtil.rotateTowardsMovement(this, 0.2F);
             float f = this.getInertia();
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 for (int i = 0; i < 3; ++i) {
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Serpent_Bubble, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() - 0.5D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, 0, 0, 0);
                 }
@@ -108,7 +109,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
 
     public void autoTarget() {
-        if (!level.isClientSide) {
+        if (this.level().isClientSide) {
             Entity shootingEntity = this.getOwner();
             if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getTarget() != null) {
                 Entity target = ((EntitySeaSerpent) shootingEntity).getTarget();
@@ -146,8 +147,8 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
     @Override
     protected void onHit(@NotNull HitResult movingObject) {
-        boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
-        if (!this.level.isClientSide) {
+        boolean flag = this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        if (!this.level().isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {
                 Entity entity = ((EntityHitResult) movingObject).getEntity();
 
@@ -160,7 +161,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
                     if (dragon.isAlliedTo(entity) || dragon.is(entity)) {
                         return;
                     }
-                    entity.hurt(DamageSource.mobAttack(dragon), 6.0F);
+                    entity.hurt(level().damageSources().mobAttack(dragon), 6.0F);
 
                 }
             }

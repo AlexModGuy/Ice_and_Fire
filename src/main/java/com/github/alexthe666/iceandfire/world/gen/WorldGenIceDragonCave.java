@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
-import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -10,11 +9,10 @@ import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class WorldGenIceDragonCave extends WorldGenDragonCave {
 
@@ -32,11 +30,11 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
         TREASURE_PILE = IafBlockRegistry.SILVER_PILE.get().defaultBlockState();
         PALETTE_ORE1 = IafBlockRegistry.SAPPHIRE_ORE.get().defaultBlockState();
         PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
-        generateGemOre = IafConfig.generateSapphireOre;
+        generateGemOre = true;
     }
 
     @Override
-    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge) {
         EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);

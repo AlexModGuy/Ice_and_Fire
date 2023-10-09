@@ -32,7 +32,7 @@ public class CockatriceAIAggroLook extends NearestAttackableTargetGoal<Player> {
     public boolean canUse() {
         if (cockatrice.isTame())
             return false;
-        this.player = this.cockatrice.level.getNearestPlayer(predicate, this.cockatrice.getX(),
+        this.player = this.cockatrice.level().getNearestPlayer(predicate, this.cockatrice.getX(),
             this.cockatrice.getY(), this.cockatrice.getZ());
         return this.player != null;
     }

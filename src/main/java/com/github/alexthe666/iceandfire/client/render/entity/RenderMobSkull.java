@@ -9,8 +9,7 @@ import com.github.alexthe666.iceandfire.enums.EnumSkullType;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -56,8 +55,8 @@ public class RenderMobSkull extends EntityRenderer<EntityMobSkull> {
     public void render(@NotNull EntityMobSkull entity, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, -180, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YN, 180 - entity.getYaw(), true));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(-180.0F));
+        matrixStackIn.mulPose(Axis.YN.rotationDegrees(180.0F - entity.getYaw()));
         float f = 0.0625F;
         float size = 1.0F;
         matrixStackIn.scale(size, size, size);

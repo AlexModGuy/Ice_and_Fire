@@ -4,14 +4,17 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.message.MessageMultipartInteract;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -59,7 +62,7 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public EntityMutlipartPart(EntityType<?> t, Entity parent, float radius, float angleYaw, float offsetY, float sizeX,
         float sizeY, float damageMultiplier) {
-        super(t, parent.level);
+        super(t, parent.level());
         this.setParent(parent);
         this.setScaleX(sizeX);
         this.setScaleY(sizeY);
@@ -102,7 +105,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     private float getScaleX() {
-        return this.entityData.get(SCALE_WIDTH).floatValue();
+        return this.entityData.get(SCALE_WIDTH);
     }
 
     private void setScaleX(float scale) {
@@ -110,7 +113,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     private float getScaleY() {
-        return this.entityData.get(SCALE_HEIGHT).floatValue();
+        return this.entityData.get(SCALE_HEIGHT);
     }
 
     private void setScaleY(float scale) {
@@ -118,7 +121,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     public float getPartYaw() {
-        return this.entityData.get(PART_YAW).floatValue();
+        return this.entityData.get(PART_YAW);
     }
 
     private void setPartYaw(float yaw) {
@@ -131,7 +134,7 @@ public abstract class EntityMutlipartPart extends Entity {
         if (this.tickCount > 10) {
             Entity parent = getParent();
             refreshDimensions();
-            if (parent != null && !level.isClientSide) {
+            if (parent != null && !level().isClientSide) {
                 float renderYawOffset = parent.getYRot();
                 if (parent instanceof LivingEntity) {
                     renderYawOffset = ((LivingEntity) parent).yBodyRot;
@@ -146,20 +149,20 @@ public abstract class EntityMutlipartPart extends Entity {
                     this.markHurt();
                     this.setYRot(renderYawOffset);
                     this.setPartYaw(getYRot());
-                    if (!this.level.isClientSide) {
+                    if (!this.level().isClientSide) {
                         this.collideWithNearbyEntities();
                     }
                 } else {
                     this.setPos(parent.getX() + this.radius * Mth.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.getY() + this.offsetY, parent.getZ() + this.radius * Mth.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     this.markHurt();
                 }
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.collideWithNearbyEntities();
                 }
-                if (parent.isRemoved() && !level.isClientSide) {
+                if (parent.isRemoved() && !level().isClientSide) {
                     this.remove(RemovalReason.DISCARDED);
                 }
-            } else if (tickCount > 20 && !level.isClientSide) {
+            } else if (tickCount > 20 && !level().isClientSide) {
                 remove(RemovalReason.DISCARDED);
             }
         }
@@ -198,8 +201,8 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !level.isClientSide) {
-            return ((ServerLevel) level).getEntity(id);
+        if (id != null && !level().isClientSide) {
+            return ((ServerLevel) level()).getEntity(id);
         }
         return null;
     }
@@ -219,7 +222,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -228,7 +231,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     public void collideWithNearbyEntities() {
-        List<Entity> entities = this.level.getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
         if (parent != null) {
             entities.stream().filter(entity -> entity != parent && !sharesRider(parent, entity) && !(entity instanceof EntityMutlipartPart) && entity.isPushable()).forEach(entity -> entity.push(parent));
@@ -253,7 +256,7 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
         Entity parent = getParent();
-        if (level.isClientSide && parent != null) {
+        if (level().isClientSide && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), 0));
         }
         return parent != null ? parent.interact(player, hand) : InteractionResult.PASS;
@@ -262,7 +265,7 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean hurt(@NotNull DamageSource source, float damage) {
         Entity parent = getParent();
-        if (level.isClientSide && source.getEntity() instanceof Player && parent != null) {
+        if (level().isClientSide && source.getEntity() instanceof Player && parent != null) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), damage * damageMultiplier));
         }
         return parent != null && parent.hurt(source, damage * this.damageMultiplier);
@@ -270,7 +273,7 @@ public abstract class EntityMutlipartPart extends Entity {
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        return source == DamageSource.FALL || source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.LAVA || source.isFire() || super.isInvulnerableTo(source);
+        return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
 
     public boolean shouldNotExist() {

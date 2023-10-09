@@ -24,7 +24,7 @@ public class RenderDreadLich extends MobRenderer<EntityDreadLich, ModelDreadLich
     public RenderDreadLich(EntityRendererProvider.Context context) {
         super(context, new ModelDreadLich(0.0F), 0.6F);
         this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
-        this.itemLayer = new HideableLayer<>(new ItemInHandLayer<>(this), this);
+        this.itemLayer = new HideableLayer<>(new ItemInHandLayer<>(this, context.getItemInHandRenderer()), this);
         this.addLayer(this.itemLayer);
     }
 

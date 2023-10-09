@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import java.util.EnumSet;
@@ -24,7 +23,7 @@ public class PixieAIFollowOwner extends Goal {
 
     public PixieAIFollowOwner(EntityPixie tameableIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.tameable = tameableIn;
-        this.world = tameableIn.level;
+        this.world = tameableIn.level();
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
         this.setFlags(EnumSet.of(Flag.MOVE));
@@ -70,7 +69,7 @@ public class PixieAIFollowOwner extends Goal {
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.canOcclude();
+        return BlockState.isAir() || !BlockState.canOcclude();
     }
 
     @Override

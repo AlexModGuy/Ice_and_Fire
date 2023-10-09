@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -16,8 +17,7 @@ import javax.annotation.Nullable;
 /**
  * Check if we can walk on a surface, drop into, or neither.
  */
-public enum SurfaceType
-{
+public enum SurfaceType {
     WALKABLE,
     DROPABLE,
     NOT_PASSABLE,
@@ -33,38 +33,50 @@ public enum SurfaceType
     public static SurfaceType getSurfaceType(final BlockGetter world, final BlockState blockState, final BlockPos pos) {
         final Block block = blockState.getBlock();
         if (block instanceof FenceBlock
-            || block instanceof FenceGateBlock
-            || block instanceof WallBlock
-            || block instanceof FireBlock
-            || block instanceof CampfireBlock
-            || block instanceof BambooBlock
-            || block instanceof DoorBlock
-            || block instanceof MagmaBlock) {
+                || block instanceof FenceGateBlock
+                || block instanceof WallBlock
+                || block instanceof FireBlock
+                || block instanceof CampfireBlock
+                || block instanceof BambooStalkBlock
+                || block instanceof BambooSaplingBlock
+                || block instanceof DoorBlock
+                || block instanceof MagmaBlock
+                || block instanceof PowderSnowBlock) {
             return SurfaceType.NOT_PASSABLE;
         }
 
+        if ((block instanceof HorizontalDirectionalBlock || block instanceof TrapDoorBlock) && !blockState.getValue(TrapDoorBlock.OPEN))
+        {
+            return SurfaceType.WALKABLE;
+        }
+
         final VoxelShape shape = blockState.getShape(world, pos);
-        if (shape.max(Direction.Axis.Y) > 1.0) {
+        if (shape.max(Direction.Axis.Y) > 1.0)
+        {
             return SurfaceType.NOT_PASSABLE;
         }
 
         final FluidState fluid = world.getFluidState(pos);
-        if (blockState.getBlock() == Blocks.LAVA || (fluid != null && !fluid.isEmpty() && (fluid.getType() == Fluids.LAVA || fluid.getType() == Fluids.FLOWING_LAVA))) {
+        if (blockState.getBlock() == Blocks.LAVA || (fluid != null && !fluid.isEmpty() && (fluid.getType() == Fluids.LAVA || fluid.getType() == Fluids.FLOWING_LAVA)))
+        {
             return SurfaceType.NOT_PASSABLE;
         }
 
-        if (isWater(world, pos, blockState, fluid)) {
+        if (isWater(world, pos, blockState, fluid))
+        {
             return SurfaceType.WALKABLE;
         }
 
-        if (block instanceof SignBlock || block instanceof VineBlock) {
+        if (block instanceof SignBlock || block instanceof VineBlock)
+        {
             return SurfaceType.DROPABLE;
         }
 
-        if ((blockState.getMaterial().isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
-            && (shape.max(Direction.Axis.Z) - shape.min(Direction.Axis.Z)) > 0.75)
-            || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowLayerBlock.LAYERS) > 1)
-            || block instanceof WoolCarpetBlock) {
+        if ((blockState.isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
+                && (shape.max(Direction.Axis.Z) - shape.min(Direction.Axis.Z)) > 0.75)
+                || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowLayerBlock.LAYERS) > 1)
+                || block instanceof CarpetBlock)
+        {
             return SurfaceType.WALKABLE;
         }
 
@@ -103,12 +115,15 @@ public enum SurfaceType
         }
 
         FluidState fluidState = pFluidState;
-        if (fluidState == null)
-        {
+        if (fluidState == null) {
             fluidState = world.getFluidState(pos);
         }
 
-        if (fluidState == null || fluidState.isEmpty())
+        if (fluidState == null || fluidState.isEmpty()) {
+            return false;
+        }
+
+        if (state.getBlock() instanceof TrapDoorBlock || state.getBlock() instanceof HorizontalDirectionalBlock && !state.getValue(TrapDoorBlock.OPEN) && state.getValue(TrapDoorBlock.HALF) == Half.TOP)
         {
             return false;
         }

@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelSiren;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderSiren;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
@@ -39,7 +39,7 @@ public class ParticleSirenAppearance extends Particle {
         float f1 = 0.05F + 0.5F * Mth.sin(f * (float) Math.PI);
         PoseStack matrixstack = new PoseStack();
         matrixstack.mulPose(renderInfo.rotation());
-        matrixstack.mulPose(Vector3f.XP.rotationDegrees(150.0F * f - 60.0F));
+        matrixstack.mulPose(Axis.XP.rotationDegrees(150.0F * f - 60.0F));
         matrixstack.scale(-1.0F, -1.0F, 1.0F);
         matrixstack.translate(0.0D, -1.101F, 1.5D);
         MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();

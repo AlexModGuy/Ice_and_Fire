@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BlockLaunchExplosion extends Explosion {
     private final float size;
@@ -73,7 +74,7 @@ public class BlockLaunchExplosion extends Explosion {
             this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
-        boolean flag = this.mode != Explosion.BlockInteraction.NONE;
+        boolean flag = this.mode != BlockInteraction.KEEP;
         if (spawnParticles) {
             if (!(this.size < 2.0F) && flag) {
                 this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
@@ -84,7 +85,7 @@ public class BlockLaunchExplosion extends Explosion {
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-            Collections.shuffle(this.getToBlow(), this.world.random);
+            Collections.shuffle(this.getToBlow(), ThreadLocalRandom.current());
 
             for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +26,7 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
     @Override
     public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
-        if (parent instanceof EntityCyclops && source.isProjectile()) {
+        if (parent instanceof EntityCyclops && source.is(DamageTypes.ARROW)) {
             ((EntityCyclops) parent).onHitEye(source, damage);
             return true;
         } else {

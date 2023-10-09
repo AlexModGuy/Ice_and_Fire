@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -12,10 +13,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
 
 public class BlockMyrmexBiolight extends BushBlock {
 
@@ -24,14 +24,14 @@ public class BlockMyrmexBiolight extends BushBlock {
     public BlockMyrmexBiolight() {
         super(
             Properties
-                .of(Material.PLANT)
+                .of()
+                .mapColor(MapColor.PLANT)
+                .pushReaction(PushReaction.DESTROY)
                 .noOcclusion()
                 .noCollission()
                 .dynamicShape()
                 .strength(0)
-                .lightLevel((state) -> {
-                    return 7;
-                })
+                .lightLevel((state) -> 7)
                 .sound(SoundType.GRASS).randomTicks()
         );
 
@@ -52,7 +52,7 @@ public class BlockMyrmexBiolight extends BushBlock {
     }
 
     @Override
-    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }

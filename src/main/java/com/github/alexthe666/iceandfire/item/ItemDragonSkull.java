@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
@@ -8,8 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +24,7 @@ public class ItemDragonSkull extends Item {
     private final int dragonType;
 
     public ItemDragonSkull(int dragonType) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
         this.dragonType = dragonType;
     }
 
@@ -62,9 +59,9 @@ public class ItemDragonSkull extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
-        tooltip.add(new TranslatableComponent(iceorfire).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable(iceorfire).withStyle(ChatFormatting.GRAY));
         if (stack.getTag() != null) {
-            tooltip.add(new TranslatableComponent("dragon.stage").withStyle(ChatFormatting.GRAY).append(new TextComponent(" " + stack.getTag().getInt("Stage"))));
+            tooltip.add(Component.translatable("dragon.stage").withStyle(ChatFormatting.GRAY).append(Component.literal(" " + stack.getTag().getInt("Stage"))));
         }
     }
 

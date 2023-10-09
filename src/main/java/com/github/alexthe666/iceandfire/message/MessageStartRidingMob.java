@@ -47,8 +47,8 @@ public class MessageStartRidingMob {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
-                    Entity entity = player.level.getEntity(message.dragonId);
+                if (player.level()!= null) {
+                    Entity entity = player.level().getEntity(message.dragonId);
                     if (entity != null && entity instanceof ISyncMount && entity instanceof TamableAnimal) {
                         TamableAnimal dragon = (TamableAnimal) entity;
                         if (dragon.isOwnedBy(player) && dragon.distanceTo(player) < 14) {

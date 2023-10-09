@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "iceandfire:models/ghost/ghost_chest"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "iceandfire:models/ghost/ghost_chest_left"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "iceandfire:models/ghost/ghost_chest_right"
+    }
+  ]
+}

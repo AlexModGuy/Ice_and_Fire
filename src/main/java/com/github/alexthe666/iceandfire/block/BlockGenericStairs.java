@@ -10,7 +10,7 @@ public class BlockGenericStairs extends StairBlock {
         super(
             modelState,
             BlockBehaviour.Properties
-                .of(modelState.getMaterial())
+                .of()
                 .strength(20F)
         );
     }

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,8 @@ public class ChainProperties {
     private static final String CHAIN_TO_ENTITY_ID_TAG = "ChainOwnerIDIaf";
     private static final String CHAIN_DATA = "ChainDataIaf";
 
+    // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
+    private static HashMap<CompoundTag, Boolean> containsChainData = new HashMap<>();
     public static void attachChain(LivingEntity chained, Entity chainedTo) {
         if (isChainedTo(chained, chainedTo)) {
             return;
@@ -66,10 +69,16 @@ public class ChainProperties {
 
     private static ListTag getOrCreateChainData(CompoundTag entityData) {
         //TODO: Look at type
-        if (entityData.contains(CHAIN_DATA, 9)) {
+        if (containsChainData.containsKey(entityData) && containsChainData.get(entityData) && entityData.contains(CHAIN_DATA, 9)) {
             return entityData.getList(CHAIN_DATA, 10);
         }
-        return new ListTag();
+        else if (entityData.contains(CHAIN_DATA, 9)) {
+            containsChainData.put(entityData, true);
+            return entityData.getList(CHAIN_DATA, 10);
+        } else {
+            containsChainData.put(entityData, false);
+            return new ListTag();
+        }
     }
 
     public static void updateData(LivingEntity entity) {
@@ -78,7 +87,7 @@ public class ChainProperties {
 
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
@@ -110,24 +119,24 @@ public class ChainProperties {
         }
         for (int i = 0; i < chainData.size(); i++) {
             CompoundTag lassoedTag = (CompoundTag) chainData.get(i);
-            if (chained.level.isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
+            if (chained.level().isClientSide() && lassoedTag.contains(CHAIN_TO_ENTITY_ID_TAG)) {
                 int id = lassoedTag.getInt(CHAIN_TO_ENTITY_ID_TAG);
                 if (id != -1) {
-                    Entity found = chained.level.getEntity(id);
+                    Entity found = chained.level().getEntity(id);
                     if (found != null) {
                         chainedTo.add(found);
                     } else {
                         UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                         if (uuid != null) {
-                            if (chained.level.getPlayerByUUID(uuid) != null)
-                                chainedTo.add(chained.level.getPlayerByUUID(uuid));
+                            if (chained.level().getPlayerByUUID(uuid) != null)
+                                chainedTo.add(chained.level().getPlayerByUUID(uuid));
                         }
                     }
                 }
-            } else if (chained.level instanceof ServerLevel) {
+            } else if (chained.level() instanceof ServerLevel) {
                 UUID uuid = lassoedTag.getUUID(CHAIN_TO_TAG);
                 if (uuid != null) {
-                    Entity found = ((ServerLevel) chained.level).getEntity(uuid);
+                    Entity found = ((ServerLevel) chained.level()).getEntity(uuid);
                     if (found != null) {
                         lassoedTag.putInt(CHAIN_TO_ENTITY_ID_TAG, found.getId());
                         chainedTo.add(found);

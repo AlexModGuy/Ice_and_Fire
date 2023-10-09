@@ -24,7 +24,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
 
     @Override
     public boolean canUse() {
-        List<EntityCyclops> list = this.childAnimal.level.getEntitiesOfClass(EntityCyclops.class, this.childAnimal.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
+        List<EntityCyclops> list = this.childAnimal.level().getEntitiesOfClass(EntityCyclops.class, this.childAnimal.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
         EntityCyclops cyclops = null;
         double d0 = Double.MAX_VALUE;
 
@@ -72,11 +72,13 @@ public class EntitySheepAIFollowCyclops extends Goal {
     @Override
     public void tick() {
         if (--this.delayCounter <= 0) {
-            this.delayCounter = 10;
-            Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
-            if (path != null) {
-                this.childAnimal.getNavigation().moveTo(path, this.moveSpeed);
+            this.delayCounter = this.adjustedTickDelay(10);
+            if (this.childAnimal.distanceToSqr(this.cyclops) > 10) {
+                Path path = getPathToLivingEntity(this.childAnimal, this.cyclops);
+                if (path != null) {
+                    this.childAnimal.getNavigation().moveTo(path, this.moveSpeed);
 
+                }
             }
         }
     }
@@ -85,7 +87,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
         PathNavigation navi = entityIn.getNavigation();
         Vec3 Vector3d = DefaultRandomPos.getPosTowards(entityIn, 2, 7, cyclops.position(), (float) Math.PI / 2F);
         if (Vector3d != null) {
-            BlockPos blockpos = new BlockPos(Vector3d);
+            BlockPos blockpos = BlockPos.containing(Vector3d);
             return navi.createPath(blockpos, 0);
         }
         return null;

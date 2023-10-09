@@ -72,7 +72,7 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     }
 
     public boolean isOnWall() {
-        return this.level.isEmptyBlock(this.blockPosition().below());
+        return this.level().isEmptyBlock(this.blockPosition().below());
     }
 
     public void onUpdate() {
@@ -142,7 +142,7 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
         stack.setTag(new CompoundTag());
         stack.getTag().putInt("Stage", this.getStage());
         stack.getTag().putInt("DragonAge", this.getDragonAge());
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
             this.spawnAtLocation(stack, 0.0F);
 
     }

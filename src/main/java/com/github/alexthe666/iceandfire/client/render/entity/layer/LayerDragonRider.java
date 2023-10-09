@@ -8,8 +8,7 @@ import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDreadQueen;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -67,12 +66,12 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
                         }
                         if ((passenger.getBbHeight() > passenger.getBbWidth() || modelBase instanceof HumanoidModel) && !(modelBase instanceof QuadrupedModel) && !(modelBase instanceof HorseModel)) {
                             matrixStackIn.translate(-0.15F * passenger.getBbHeight(), 0.1F * dragonScale - 0.1F * passenger.getBbHeight(), -0.1F * dragonScale - 0.1F * passenger.getBbWidth());
-                            matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
-                            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 45, true));
+                            matrixStackIn.mulPose(Axis.ZP.rotationDegrees(90.0F));
+                            matrixStackIn.mulPose(Axis.YP.rotationDegrees(45.0F));
                         } else {
                             boolean horse = modelBase instanceof HorseModel;
                             matrixStackIn.translate((horse ? -0.08F : -0.15F) * passenger.getBbWidth(), 0.1F * dragonScale - 0.15F * passenger.getBbWidth(), -0.1F * dragonScale - 0.1F * passenger.getBbWidth());
-                            matrixStackIn.mulPose(new Quaternion(Vector3f.XN, 90, true));
+                            matrixStackIn.mulPose(Axis.XN.rotationDegrees(90.0F));
                         }
                     } else {
                         matrixStackIn.translate(0, 0.555F * dragonScale, -0.5F * dragonScale);
@@ -82,11 +81,11 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
                     matrixStackIn.translate(0, -0.01F * dragonScale, -0.035F * dragonScale);
                 }
                 matrixStackIn.pushPose();
-                matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 180, true));
-                matrixStackIn.mulPose(new Quaternion(Vector3f.YP, riderRot + 180, true));
+                matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(riderRot+180));
                 matrixStackIn.scale(1 / dragonScale, 1 / dragonScale, 1 / dragonScale);
                 matrixStackIn.translate(0, -0.25F, 0);
-                renderEntity(passenger, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+                renderEntity(passenger, 0, 0, 0, 0.0F, partialTicks, matrixStackIn, bufferIn, packedLightIn);
                 matrixStackIn.popPose();
                 ClientProxy.currentDragonRiders.add(passenger.getUUID());
             }
@@ -114,15 +113,15 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
             matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
 
             if (renderer.rotateAngleZ != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.rotateAngleZ));
+                matrixStackIn.mulPose(Axis.ZP.rotation(renderer.rotateAngleZ));
             }
 
             if (renderer.rotateAngleY != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.rotateAngleY));
+                matrixStackIn.mulPose(Axis.YP.rotation(renderer.rotateAngleY));
             }
 
             if (renderer.rotateAngleX != 0.0F) {
-                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.rotateAngleX));
+                matrixStackIn.mulPose(Axis.XP.rotation(renderer.rotateAngleX));
             }
         }
     }
@@ -134,7 +133,7 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
     }
 
 
-    public <E extends Entity> void renderEntity(E entityIn, double x, double y, double z, float yaw, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int packedLight) {
+    public <E extends Entity> void renderEntity(E entityIn, int x, int y, int z, float yaw, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int packedLight) {
         EntityRenderer<? super E> render = null;
         EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
         try {

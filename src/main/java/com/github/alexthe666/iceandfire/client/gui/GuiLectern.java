@@ -8,13 +8,12 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -23,13 +22,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Random;
@@ -62,10 +64,10 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull GuiGraphics ms, int mouseX, int mouseY) {
         Font font = this.getMinecraft().font;
-        font.draw(matrixStack, this.nameable.getString(), 12, 4, 4210752);
-        font.draw(matrixStack, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+        font.drawInBatch(this.nameable.getString(), 12, 4, 4210752, false, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
+        font.drawInBatch(this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
     }
 
     @Override
@@ -94,38 +96,36 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics ms, float partialTicks, int mouseX, int mouseY) {
         Lighting.setupForFlatItems();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
         int k = (int) this.minecraft.getWindow().getGuiScale();
         RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
-        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
-        matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
+        Matrix4f matrix4f = new Matrix4f().m03(-0.34F).m13(0.23F);
+        matrix4f.mul(new Matrix4f().perspective(90.0F, 1.3333334F, 9.0F, 80.0F));
         RenderSystem.backupProjectionMatrix();
-        RenderSystem.setProjectionMatrix(matrix4f);
-        matrixStack.pushPose();
-        PoseStack.Pose posestack$pose = matrixStack.last();
-        posestack$pose.pose().setIdentity();
-        posestack$pose.normal().setIdentity();
-        matrixStack.translate(0.0D, 3.3F, 1984.0D);
+        RenderSystem.setProjectionMatrix(matrix4f, null);
+        ms.pose().pushPose();
+        ms.pose().setIdentity();
+        ms.pose().translate(0.0D, 3.3F, 1984.0D);
         float f = 5.0F;
-        matrixStack.scale(5.0F, 5.0F, 5.0F);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(20.0F));
+        ms.pose().scale(5.0F, 5.0F, 5.0F);
+        ms.pose().mulPose(Axis.ZP.rotationDegrees(180.0F));
+        ms.pose().mulPose(Axis.XP.rotationDegrees(20.0F));
         float f1 = Mth.lerp(partialTicks, this.oOpen, this.open);
-        matrixStack.translate(((1.0F - f1) * 0.2F), ((1.0F - f1) * 0.1F), ((1.0F - f1) * 0.25F));
+        ms.pose().translate(((1.0F - f1) * 0.2F), ((1.0F - f1) * 0.1F), ((1.0F - f1) * 0.25F));
         float f2 = -(1.0F - f1) * 90.0F - 90.0F;
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(f2));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        ms.pose().mulPose(Axis.YP.rotationDegrees(f2));
+        ms.pose().mulPose(Axis.XP.rotationDegrees(180.0F));
         float f3 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
         float f4 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
-        f3 = (f3 - (float) Mth.fastFloor(f3)) * 1.6F - 0.3F;
-        f4 = (f4 - (float) Mth.fastFloor(f4)) * 1.6F - 0.3F;
+        f3 = (f3 - (float) Mth.floor(f3)) * 1.6F - 0.3F;
+        f4 = (f4 - (float) Mth.floor(f4)) * 1.6F - 0.3F;
         if (f3 < 0.0F) {
             f3 = 0.0F;
         }
@@ -145,9 +145,9 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
         bookModel.setupAnim(0, f3, f4, f1);
         MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
         VertexConsumer vertexconsumer = multibuffersource$buffersource.getBuffer(bookModel.renderType(ENCHANTMENT_TABLE_BOOK_TEXTURE));
-        bookModel.renderToBuffer(matrixStack, vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        bookModel.renderToBuffer(ms.pose(), vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         multibuffersource$buffersource.endBatch();
-        matrixStack.popPose();
+        ms.pose().popPose();
         RenderSystem.viewport(0, 0, this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
         RenderSystem.restoreProjectionMatrix();
         Lighting.setupFor3DItems();
@@ -157,12 +157,11 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
         for (int i1 = 0; i1 < 3; ++i1) {
             int j1 = i + 60;
             int k1 = j1 + 20;
-            this.setBlitOffset(0);
             RenderSystem.setShaderTexture(0, ENCHANTMENT_TABLE_GUI_TEXTURE);
             int l1 = this.menu.getPossiblePages()[i1] == null ? -1 : this.menu.getPossiblePages()[i1].ordinal();//enchantment level
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             if (l1 == -1) {
-                this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+                ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
             } else {
                 String s = "" + 3;
                 Font fontrenderer = this.getMinecraft().font;
@@ -183,25 +182,25 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                         int l2 = mouseY - (j + 14 + 19 * i1);
                         int j3 = 0X9F988C;
                         if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
-                            this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 204, 108, 19);
+                            ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1, j + 14 + 19 * i1, 0, 204, 108, 19);
                             j2 = 16777088;
                             j3 = 16777088;
                         } else {
-                            this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                            ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
                         }
 
-                        this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
-                        matrixStack.pushPose();
-                        matrixStack.translate(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
-                        matrixStack.scale(textScale, textScale, 1);
-                        fontrenderer.draw(matrixStack, s1, 0, 20 + 19 * i1, j2);
-                        matrixStack.popPose();
+                        ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
+                        ms.pose().pushPose();
+                        ms.pose().translate(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
+                        ms.pose().scale(textScale, textScale, 1);
+                        fontrenderer.drawInBatch(s1, 0, 20 + 19 * i1, j2, false, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
+                        ms.pose().popPose();
                         fontrenderer = this.getMinecraft().font;
-                        fontrenderer.drawShadow(matrixStack, s, k1 + 84 - fontrenderer.width(s),
-                            j + 13 + 19 * i1 + 7, j3);
+                        fontrenderer.drawInBatch(s, k1 + 84 - fontrenderer.width(s),
+                            j + 13 + 19 * i1 + 7, j3, true, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
                     } else {
-                        this.blit(matrixStack, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
-                        this.blit(matrixStack, j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
+                        ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
+                        ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);
                     }
                 }
             }
@@ -209,10 +208,10 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
     }
 
     @Override
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics ms, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(ms);
+        super.render(ms, mouseX, mouseY, partialTicks);
+        this.renderTooltip(ms, mouseX, mouseY);
         boolean flag = this.getMinecraft().player.isCreative();
         int i = this.menu.getManuscriptAmount();
 
@@ -225,16 +224,16 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                 List<FormattedCharSequence> list = Lists.newArrayList();
 
                 if (enchantment == null) {
-                    list.add(new TextComponent(ChatFormatting.RED + I18n.get("container.lectern.no_bestiary")).getVisualOrderText());
+                    list.add(Component.literal(ChatFormatting.RED + I18n.get("container.lectern.no_bestiary")).getVisualOrderText());
                 } else if (!flag) {
-                    list.add(new TextComponent("" + ChatFormatting.WHITE + ChatFormatting.ITALIC + I18n.get(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())).getVisualOrderText());
+                    list.add(Component.literal("" + ChatFormatting.WHITE + ChatFormatting.ITALIC + I18n.get(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())).getVisualOrderText());
                     ChatFormatting textformatting = i >= i1 ? ChatFormatting.GRAY : ChatFormatting.RED;
-                    list.add(new TextComponent(textformatting + "" + I18n.get("container.lectern.costs")).getVisualOrderText());
+                    list.add(Component.literal(textformatting + "" + I18n.get("container.lectern.costs")).getVisualOrderText());
                     String s = I18n.get("container.lectern.manuscript.many", i1);
-                    list.add(new TextComponent(textformatting + "" + s).getVisualOrderText());
+                    list.add(Component.literal(textformatting + "" + s).getVisualOrderText());
                 }
 
-                this.renderTooltip(matrixStack, list, mouseX, mouseY);
+                this.renderTooltip(ms, mouseX, mouseY);
                 break;
             }
         }

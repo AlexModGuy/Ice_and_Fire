@@ -77,11 +77,11 @@ public class MyrmexAIFindHidingSpot extends Goal {
     public BlockPos getTargetPosition(int radius) {
         final int x = (int) myrmex.getX() + myrmex.getRandom().nextInt(radius * 2) - radius;
         final int z = (int) myrmex.getZ() + myrmex.getRandom().nextInt(radius * 2) - radius;
-        return myrmex.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
+        return myrmex.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
     }
 
     private boolean areMyrmexNear(double distance) {
-        List<Entity> sentinels = this.myrmex.level.getEntities(this.myrmex, this.getTargetableArea(distance), this.targetEntitySelector);
+        List<Entity> sentinels = this.myrmex.level().getEntities(this.myrmex, this.getTargetableArea(distance), this.targetEntitySelector);
         List<Entity> hiddenSentinels = new ArrayList<>();
         for (Entity sentinel : sentinels) {
             if (sentinel instanceof EntityMyrmexSentinel && ((EntityMyrmexSentinel) sentinel).isHiding()) {

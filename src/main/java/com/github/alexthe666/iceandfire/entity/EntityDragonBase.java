@@ -38,7 +38,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -52,6 +51,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -71,18 +71,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
@@ -289,7 +289,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public boolean hasRestriction() {
         return this.hasHomePosition &&
-            getHomeDimensionName().equals(DragonUtils.getDimensionName(this.level))
+            getHomeDimensionName().equals(DragonUtils.getDimensionName(this.level()))
             || super.hasRestriction();
     }
 
@@ -308,16 +308,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
-            @Override
-            public boolean apply(@Nullable LivingEntity entity) {
-                return (!(entity instanceof Player) || !((Player) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
-            }
-        }));
+        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, (Predicate<LivingEntity>) entity -> (!(entity instanceof Player) || !((Player) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity)));
         this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity entity) {
-                return entity instanceof LivingEntity && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
+                return DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
             }
         }));
         this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
@@ -405,61 +400,61 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void updateParts() {
         if (headPart != null) {
             if (!headPart.shouldContinuePersisting()) {
-                level.addFreshEntity(headPart);
+                level().addFreshEntity(headPart);
             }
             headPart.setParent(this);
         }
         if (neckPart != null) {
             if (!neckPart.shouldContinuePersisting()) {
-                level.addFreshEntity(neckPart);
+                level().addFreshEntity(neckPart);
             }
             neckPart.setParent(this);
         }
         if (rightWingUpperPart != null) {
             if (!rightWingUpperPart.shouldContinuePersisting()) {
-                level.addFreshEntity(rightWingUpperPart);
+                level().addFreshEntity(rightWingUpperPart);
             }
             rightWingUpperPart.setParent(this);
         }
         if (rightWingLowerPart != null) {
             if (!rightWingLowerPart.shouldContinuePersisting()) {
-                level.addFreshEntity(rightWingLowerPart);
+                level().addFreshEntity(rightWingLowerPart);
             }
             rightWingLowerPart.setParent(this);
         }
         if (leftWingUpperPart != null) {
             if (!leftWingUpperPart.shouldContinuePersisting()) {
-                level.addFreshEntity(leftWingUpperPart);
+                level().addFreshEntity(leftWingUpperPart);
             }
             leftWingUpperPart.setParent(this);
         }
         if (leftWingLowerPart != null) {
             if (!leftWingLowerPart.shouldContinuePersisting()) {
-                level.addFreshEntity(leftWingLowerPart);
+                level().addFreshEntity(leftWingLowerPart);
             }
             leftWingLowerPart.setParent(this);
         }
         if (tail1Part != null) {
             if (!tail1Part.shouldContinuePersisting()) {
-                level.addFreshEntity(tail1Part);
+                level().addFreshEntity(tail1Part);
             }
             tail1Part.setParent(this);
         }
         if (tail2Part != null) {
             if (!tail2Part.shouldContinuePersisting()) {
-                level.addFreshEntity(tail2Part);
+                level().addFreshEntity(tail2Part);
             }
             tail2Part.setParent(this);
         }
         if (tail3Part != null) {
             if (!tail3Part.shouldContinuePersisting()) {
-                level.addFreshEntity(tail3Part);
+                level().addFreshEntity(tail3Part);
             }
             tail3Part.setParent(this);
         }
         if (tail4Part != null) {
             if (!tail4Part.shouldContinuePersisting()) {
-                level.addFreshEntity(tail4Part);
+                level().addFreshEntity(tail4Part);
             }
             tail4Part.setParent(this);
         }
@@ -468,14 +463,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     protected void updateBurnTarget() {
         if (burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isBaby()) {
             float maxDist = 115 * this.getDragonStage();
-            boolean flag = false;
-            if (level.getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput && ((TileEntityDragonforgeInput) level.getBlockEntity(burningTarget)).isAssembled()
+            if (level().getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput && ((TileEntityDragonforgeInput) level().getBlockEntity(burningTarget)).isAssembled()
                 && this.distanceToSqr(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D) < maxDist && canPositionBeSeen(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D)) {
                 this.getLookControl().setLookAt(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);
                 this.setBreathingFire(true);
             } else {
-                if (!level.isClientSide) {
+                if (!level().isClientSide) {
                     IceAndFire.sendMSGToAll(new MessageDragonSetBurnBlock(this.getId(), true, burningTarget));
                 }
                 burningTarget = null;
@@ -504,7 +498,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type, PathingStuckHandler stuckHandler, float width, float height) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, level, type, width, height);
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, level(), type, width, height);
         this.navigation = newNavigator;
         newNavigator.setCanFloat(true);
         newNavigator.getNodeEvaluator().setCanOpenDoors(true);
@@ -514,23 +508,23 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     protected void switchNavigator(int navigatorType) {
         if (navigatorType == 0) {
             this.moveControl = new IafDragonFlightManager.GroundMoveHelper(this);
-            this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.WALKING, createStuckHandler().withTeleportSteps(5));
+            this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.WALKING, createStuckHandler().withTeleportSteps(5));
             this.navigatorType = 0;
             this.setFlying(false);
             this.setHovering(false);
         } else if (navigatorType == 1) {
             this.moveControl = new IafDragonFlightManager.FlightMoveHelper(this);
-            this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
+            this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.FLYING);
             this.navigatorType = 1;
         } else {
             this.moveControl = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
-            this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
+            this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.FLYING);
             this.navigatorType = 2;
         }
     }
 
     @Override
-    public boolean canBeRiddenInWater(Entity rider) {
+    public boolean canRide(@NotNull Entity rider) {
         return true;
     }
 
@@ -541,7 +535,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean canDestroyBlock(BlockPos pos, BlockState state) {
-        return state.getBlock().canEntityDestroy(state, level, pos, this);
+        return state.getBlock().canEntityDestroy(state, level(), pos, this);
     }
 
     @Override
@@ -555,8 +549,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void openInventory(Player player) {
-        if (!this.level.isClientSide)
-            NetworkHooks.openGui((ServerPlayer) player, getMenuProvider());
+        if (!this.level().isClientSide)
+            NetworkHooks.openScreen((ServerPlayer) player, getMenuProvider());
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
@@ -580,8 +574,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 double d2 = this.random.nextGaussian() * 0.02D;
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
-                if (level.isClientSide) {
-                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), d2, d0, d1);
+                if (level().isClientSide) {
+                    this.level().addParticle(ParticleTypes.CLOUD, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getY() + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), d2, d0, d1);
                 }
             }
             spawnDeathParticles();
@@ -601,19 +595,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
-        switch (this.getDragonStage()) {
-            case 2:
-                return 20;
-            case 3:
-                return 150;
-            case 4:
-                return 300;
-            case 5:
-                return 650;
-            default:
-                return 5;
-        }
+    public int getExperienceReward() {
+        return switch (this.getDragonStage()) {
+            case 2 -> 20;
+            case 3 -> 150;
+            case 4 -> 300;
+            case 5 -> 650;
+            default -> 5;
+        };
     }
 
     public int getArmorOrdinal(ItemStack stack) {
@@ -652,24 +641,24 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isGoingUp() {
-        return (entityData.get(CONTROL_STATE).byteValue() & 1) == 1;
+        return (entityData.get(CONTROL_STATE) & 1) == 1;
     }
 
     @Override
     public boolean isGoingDown() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 1 & 1) == 1;
     }
 
     public boolean isAttacking() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 2 & 1) == 1;
     }
 
     public boolean isStriking() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 3 & 1) == 1;
     }
 
     public boolean isDismounting() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 4 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 4 & 1) == 1;
     }
 
     @Override
@@ -803,7 +792,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.setCustomPose(compound.getString("CustomPose"));
         this.hasHomePosition = compound.getBoolean("HasHomePosition");
         if (hasHomePosition && compound.getInt("HomeAreaX") != 0 && compound.getInt("HomeAreaY") != 0 && compound.getInt("HomeAreaZ") != 0) {
-            homePos = new HomePosition(compound, this.level);
+            homePos = new HomePosition(compound, this.level());
         }
         this.setTackling(compound.getBoolean("Tackle"));
         this.setAgingDisabled(compound.getBoolean("AgingDisabled"));
@@ -858,14 +847,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     protected void updateContainerEquipment() {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             updateAttributes();
         }
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (this.isAlive() && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && itemHandler != null)
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (this.isAlive() && capability == ForgeCapabilities.ITEM_HANDLER && itemHandler != null)
             return itemHandler.cast();
         return super.getCapability(capability, facing);
     }
@@ -886,7 +875,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player player && this.getTarget() != passenger) {
                 if (this.isTame() && this.getOwnerUUID() != null && this.getOwnerUUID().equals(player.getUUID())) {
@@ -931,7 +920,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
         final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
             this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dragon armor bonus", calculateArmorModifier(), AttributeModifier.Operation.ADDITION));
         }
@@ -983,7 +972,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isModelDead() {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             return this.isModelDead = this.entityData.get(MODEL_DEAD);
         }
         return isModelDead;
@@ -991,7 +980,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public void setModelDead(boolean modeldead) {
         this.entityData.set(MODEL_DEAD, modeldead);
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             this.isModelDead = modeldead;
         }
     }
@@ -1046,7 +1035,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isOrderedToSit() {
-        return (this.entityData.get(DATA_FLAGS_ID).byteValue() & 1) != 0;
+        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
     }
 
     @Override
@@ -1079,34 +1068,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void riderShootFire(Entity controller) {
     }
 
-    @Override
-    public void killed(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
-        this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
-    }
-
     private double calculateArmorModifier() {
         double val = 1D;
         final EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
         for (EquipmentSlot slot : slots) {
             switch (getArmorOrdinal(getItemBySlot(slot))) {
-                case 1:
-                    val += 2D;
-                    break;
-                case 2:
-                case 4:
-                    val += 3D;
-                    break;
-                case 3:
-                    val += 5D;
-                    break;
-                case 5:
-                case 6:
-                case 8:
-                    val += 10D;
-                    break;
-                case 7:
-                    val += 1.5D;
-                    break;
+                case 1 -> val += 2D;
+                case 2, 4 -> val += 3D;
+                case 3 -> val += 5D;
+                case 5, 6, 8 -> val += 10D;
+                case 7 -> val += 1.5D;
             }
         }
         return val;
@@ -1120,7 +1091,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isFuelingForge() {
-        return burningTarget != null && level.getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput;
+        return burningTarget != null && level().getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput;
     }
 
     @Override
@@ -1139,14 +1110,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return InteractionResult.SUCCESS;
         }
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage && player.mayBuild()) {
-            if (!level.isClientSide && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IafConfig.dragonDropBlood) {
+            if (!level().isClientSide && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IafConfig.dragonDropBlood) {
                 if (!player.isCreative()) {
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
                 player.getInventory().add(new ItemStack(this.getBloodItem(), 1));
                 return InteractionResult.SUCCESS;
-            } else if (!level.isClientSide && stack.isEmpty() && IafConfig.dragonDropSkull) {
+            } else if (!level().isClientSide && stack.isEmpty() && IafConfig.dragonDropSkull) {
                 if (this.getDeathStage() >= lastDeathStage - 1) {
                     ItemStack skull = getSkull().copy();
                     skull.setTag(new CompoundTag());
@@ -1154,14 +1125,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     skull.getTag().putInt("DragonType", 0);
                     skull.getTag().putInt("DragonAge", this.getAgeInDays());
                     this.setDeathStage(this.getDeathStage() + 1);
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         this.spawnAtLocation(skull, 1);
                     }
                     this.remove(RemovalReason.DISCARDED);
                 } else if (this.getDeathStage() == (lastDeathStage / 2) - 1 && IafConfig.dragonDropHeart) {
                     ItemStack heart = new ItemStack(this.getHeartItem(), 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.random.nextInt(4)), 1);
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         this.spawnAtLocation(heart, 1);
                         if (!this.isMale() && this.getDragonStage() > 3) {
                             this.spawnAtLocation(egg, 1);
@@ -1171,7 +1142,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 } else {
                     this.setDeathStage(this.getDeathStage() + 1);
                     ItemStack drop = getRandomDrop();
-                    if (!drop.isEmpty() && !level.isClientSide) {
+                    if (!drop.isEmpty() && !level().isClientSide) {
                         this.spawnAtLocation(drop, 1);
                     }
                 }
@@ -1234,7 +1205,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     return super.mobInteract(player, hand);
                 }
                 if (stack.isEmpty() && !player.isShiftKeyDown()) {
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         final int dragonStage = this.getDragonStage();
                         if (dragonStage < 2) {
                             if (player.getPassengers().size() >= 3)
@@ -1300,18 +1271,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         if (player.isShiftKeyDown()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
-                                player.displayClientMessage(new TranslatableComponent("dragon.command.remove_home"), true);
+                                player.displayClientMessage(Component.translatable("dragon.command.remove_home"), true);
                                 return InteractionResult.SUCCESS;
                             } else {
                                 BlockPos pos = this.blockPosition();
-                                this.homePos = new HomePosition(pos, this.level);
+                                this.homePos = new HomePosition(pos, this.level());
                                 this.hasHomePosition = true;
-                                player.displayClientMessage(new TranslatableComponent("dragon.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
+                                player.displayClientMessage(Component.translatable("dragon.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                                 return InteractionResult.SUCCESS;
                             }
                         } else {
                             this.playSound(SoundEvents.ZOMBIE_INFECT, this.getSoundVolume(), this.getVoicePitch());
-                            if (!level.isClientSide) {
+                            if (!level().isClientSide) {
                                 this.setCommand(this.getCommand() + 1);
                                 if (this.getCommand() > 2) {
                                     this.setCommand(0);
@@ -1323,7 +1294,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                             } else if (this.getCommand() == 2) {
                                 commandText = "escort";
                             }
-                            player.displayClientMessage(new TranslatableComponent("dragon.command." + commandText), true);
+                            player.displayClientMessage(Component.translatable("dragon.command." + commandText), true);
                             return InteractionResult.SUCCESS;
                         }
                     }
@@ -1353,7 +1324,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean canPositionBeSeen(final double x, final double y, final double z) {
-        final HitResult result = this.level.clip(new ClipContext(new Vec3(this.getX(), this.getY() + (double) this.getEyeHeight(), this.getZ()), new Vec3(x, y, z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        final HitResult result = this.level().clip(new ClipContext(new Vec3(this.getX(), this.getY() + (double) this.getEyeHeight(), this.getZ()), new Vec3(x, y, z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         final double dist = result.getLocation().distanceToSqr(x, y, z);
         return dist <= 1.0D || result.getType() == HitResult.Type.MISS;
     }
@@ -1361,9 +1332,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public abstract ResourceLocation getDeadLootTable();
 
     public ItemStack getItemFromLootTable() {
-        LootTable loottable = this.level.getServer().getLootTables().get(getDeadLootTable());
-        LootContext.Builder lootcontext$builder = this.createLootContext(false, DamageSource.GENERIC);
-        for (ItemStack itemstack : loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY))) {
+        LootTable loottable = this.level().getServer().getServerResources().managers().getLootData().getLootTable(getDeadLootTable());
+        LootParams.Builder lootparams$builder = (new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.THIS_ENTITY, this).withParameter(LootContextParams.ORIGIN, this.position()).withParameter(LootContextParams.DAMAGE_SOURCE, this.level().damageSources().generic());
+        for (ItemStack itemstack : loottable.getRandomItems(lootparams$builder.create(LootContextParamSets.ENTITY))) {
             return itemstack;
         }
         return ItemStack.EMPTY;
@@ -1391,7 +1362,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.setAgeInDays(this.getAgeInDays() + ageInDays);
         //TODO: Probably brakes bounding boxes
         this.setBoundingBox(this.getBoundingBox());
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             if (this.getAgeInDays() % 25 == 0) {
                 for (int i = 0; i < this.getRenderSize() * 4; i++) {
                     final float f = (float) (getRandom().nextFloat() * (this.getBoundingBox().maxX - this.getBoundingBox().minX) + this.getBoundingBox().minX);
@@ -1401,7 +1372,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     final double motionY = getRandom().nextGaussian() * 0.07D;
                     final double motionZ = getRandom().nextGaussian() * 0.07D;
 
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, f, f1, f2, motionX, motionY, motionZ);
+                    this.level().addParticle(ParticleTypes.HAPPY_VILLAGER, f, f1, f2, motionX, motionY, motionZ);
                 }
             }
         }
@@ -1416,16 +1387,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             final double motionY = getRandom().nextGaussian() * 0.07D;
             final double motionZ = getRandom().nextGaussian() * 0.07D;
             final Vec3 headVec = this.getHeadPosition();
-            if (!level.isClientSide) {
-                ((ServerLevel) this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, 1, motionX, motionY, motionZ, 0.1);
+            if (!level().isClientSide) {
+                ((ServerLevel) this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, 1, motionX, motionY, motionZ, 0.1);
             } else {
-                this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, motionX, motionY, motionZ);
+                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(item)), headVec.x, headVec.y, headVec.z, motionX, motionY, motionZ);
             }
         }
     }
 
     public boolean isTimeToWake() {
-        return this.level.isDay() || this.getCommand() == 2;
+        return this.level().isDay() || this.getCommand() == 2;
     }
 
     private boolean isStuck() {
@@ -1437,7 +1408,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     private boolean isOverAirLogic() {
-        return level.isEmptyBlock(new BlockPos(this.getX(), this.getBoundingBox().minY - 1, this.getZ()));
+        return level().isEmptyBlock(BlockPos.containing(this.getBlockX(), this.getBoundingBox().minY - 1, this.getBlockZ()));
     }
 
     public boolean isDiving() {
@@ -1445,7 +1416,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isBeyondHeight() {
-        if (this.getY() > this.level.getMaxBuildHeight()) {
+        if (this.getY() > this.level().getMaxBuildHeight()) {
             return true;
         }
         return this.getY() > IafConfig.maxDragonFlight;
@@ -1465,8 +1436,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void breakBlock() {
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
-            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
-                if (IafConfig.dragonGriefing != 2 && (!this.isTame() || IafConfig.tamedDragonGriefing)) {
+            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level(), this)) {
+                if (DragonUtils.canGrief(this)) {
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                         final int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
                         final int flightModifier = isFlying() && this.getTarget() != null ? -1 : 1;
@@ -1481,15 +1452,15 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         ).forEach(pos -> {
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
                                 return;
-                            final BlockState state = level.getBlockState(pos);
+                            final BlockState state = level().getBlockState(pos);
                             final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
-                            if (isBreakable(pos, state, hardness)) {
+                            if (isBreakable(pos, state, hardness, this)) {
                                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
-                                if (!level.isClientSide) {
+                                if (!level().isClientSide) {
                                     if (random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state)) {
-                                        level.destroyBlock(pos, true);
+                                        level().destroyBlock(pos, true);
                                     } else {
-                                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                                        level().setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                                     }
                                 }
                             }
@@ -1500,15 +1471,19 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    protected boolean isBreakable(BlockPos pos, BlockState state, float hardness) {
-        return state.getMaterial().blocksMotion() && !state.isAir() && state.getFluidState().isEmpty() && !state.getShape(level, pos).isEmpty() && state.getDestroySpeed(level, pos) >= 0F && state.getDestroySpeed(level, pos) <= hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(pos, state);
+    protected boolean isBreakable(BlockPos pos, BlockState state, float hardness, EntityDragonBase entity) {
+        return state.blocksMotion() && !state.isAir() &&
+                state.getFluidState().isEmpty() && !state.getShape(level(), pos).isEmpty() &&
+                state.getDestroySpeed(level(), pos) >= 0F &&
+                state.getDestroySpeed(level(), pos) <= hardness &&
+                DragonUtils.canDragonBreak(state.getBlock(), entity) && this.canDestroyBlock(pos, state);
     }
 
     @Override
     public boolean isBlockExplicitlyPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
         if (!isModelDead() && this.getDragonStage() >= 3) {
-            if (IafConfig.dragonGriefing != 2 && (!this.isTame() || IafConfig.tamedDragonGriefing) && pos.getY() >= this.getY()) {
-                return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F);
+            if (DragonUtils.canGrief(this) && pos.getY() >= this.getY()) {
+                return isBreakable(pos, state, IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F, this);
             }
         }
         return false;
@@ -1524,7 +1499,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void spawnGroundEffects() {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             for (int i = 0; i < this.getRenderSize(); i++) {
                 for (int i1 = 0; i1 < 20; i1++) {
                     final float radius = 0.75F * (0.7F * getRenderSize() / 3) * -3;
@@ -1532,14 +1507,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     final double extraX = radius * Mth.sin((float) (Math.PI + angle));
                     final double extraY = 0.8F;
                     final double extraZ = radius * Mth.cos(angle);
-                    final BlockPos ground = getGround(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
-                    final BlockState BlockState = this.level.getBlockState(ground);
-                    if (BlockState.getMaterial() != Material.AIR) {
+                    final BlockPos ground = getGround(BlockPos.containing(this.getX() + extraX, this.getY() + extraY - 1, this.getZ() + extraZ));
+                    final BlockState BlockState = this.level().getBlockState(ground);
+                    if (BlockState.isAir()) {
                         final double motionX = getRandom().nextGaussian() * 0.07D;
                         final double motionY = getRandom().nextGaussian() * 0.07D;
                         final double motionZ = getRandom().nextGaussian() * 0.07D;
 
-                        level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), true, this.getX() + extraX, ground.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
+                        level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), true, this.getX() + extraX, ground.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
             }
@@ -1547,7 +1522,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     private BlockPos getGround(BlockPos blockPos) {
-        while (level.isEmptyBlock(blockPos) && blockPos.getY() > 1) {
+        while (level().isEmptyBlock(blockPos) && blockPos.getY() > 1) {
             blockPos = blockPos.below();
         }
         return blockPos;
@@ -1573,8 +1548,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    public void positionRider(@NotNull Entity passenger, @NotNull MoveFunction callback) {
+        super.positionRider(passenger, callback);
         if (this.hasPassenger(passenger)) {
             if (this.getControllingPassenger() == null || !this.getControllingPassenger().getUUID().equals(passenger.getUUID())) {
                 updatePreyInMouth(passenger);
@@ -1607,7 +1582,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setAnimation(ANIMATION_SHAKEPREY);
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            prey.hurt(DamageSource.mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
+            prey.hurt(this.level().damageSources().mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
         yBodyRot = getYRot();
@@ -1670,21 +1645,21 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean hurt(@NotNull DamageSource dmg, float i) {
-        if (this.isModelDead() && dmg != DamageSource.OUT_OF_WORLD) {
+        if (this.isModelDead() && dmg != this.level().damageSources().fellOutOfWorld()) {
             return false;
         }
         if (this.isVehicle() && dmg.getEntity() != null && this.getControllingPassenger() != null && dmg.getEntity() == this.getControllingPassenger()) {
             return false;
         }
 
-        if ((dmg.msgId.contains("arrow") || getVehicle() != null && dmg.getEntity() != null && dmg.getEntity().is(this.getVehicle())) && this.isPassenger()) {
+        if ((dmg.type().msgId().contains("arrow") || getVehicle() != null && dmg.getEntity() != null && dmg.getEntity().is(this.getVehicle())) && this.isPassenger()) {
             return false;
         }
 
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK || dmg == DamageSource.CRAMMING) {
+        if (dmg.is(DamageTypes.IN_WALL) || dmg.is(DamageTypes.FALLING_BLOCK) || dmg.is(DamageTypes.CRAMMING)) {
             return false;
         }
-        if (!level.isClientSide && dmg.getEntity() != null && this.getRandom().nextInt(4) == 0) {
+        if (!level().isClientSide && dmg.getEntity() != null && this.getRandom().nextInt(4) == 0) {
             this.roar();
         }
         if (i > 0) {
@@ -1730,12 +1705,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         refreshDimensions();
         updateParts();
         this.prevDragonPitch = getDragonPitch();
-        level.getProfiler().push("dragonLogic");
-        this.maxUpStep = getStepHeight();
+        level().getProfiler().push("dragonLogic");
+        this.setMaxUpStep(getStepHeight());
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
-            if (!level.isClientSide && level.isEmptyBlock(new BlockPos(this.getX(), this.getBoundingBox().minY, this.getZ())) && this.getY() > -1) {
+            if (!level().isClientSide && level().isEmptyBlock(BlockPos.containing(this.getBlockX(), this.getBoundingBox().minY, this.getBlockZ())) && this.getY() > -1) {
                 this.move(MoverType.SELF, new Vec3(0, -0.2F, 0));
             }
             this.setBreathingFire(false);
@@ -1749,19 +1724,19 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.setDragonPitch(Math.max(0, dragonPitch + 5));
             }
         } else {
-            if (level.isClientSide) {
+            if (level().isClientSide) {
                 logic.updateDragonClient();
             } else {
                 logic.updateDragonServer();
                 logic.updateDragonAttack();
             }
         }
-        level.getProfiler().pop();
-        level.getProfiler().push("dragonFlight");
-        if (useFlyingPathFinder() && !level.isClientSide && isControlledByLocalInstance()) {
+        level().getProfiler().pop();
+        level().getProfiler().push("dragonFlight");
+        if (useFlyingPathFinder() && !level().isClientSide && isControlledByLocalInstance()) {
             this.flightManager.update();
         }
-        level.getProfiler().pop();
+        level().getProfiler().pop();
     }
 
     @Override
@@ -1776,7 +1751,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         prevAnimationProgresses[4] = this.fireBreathProgress;
         prevAnimationProgresses[5] = this.ridingProgress;
         prevAnimationProgresses[6] = this.tackleProgress;
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         if (this.isModelDead()) {
@@ -1788,7 +1763,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setFlying(false);
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (animationTick > this.getAnimation().getDuration() && !level.isClientSide) {
+        if (animationTick > this.getAnimation().getDuration() && !level().isClientSide) {
             animationTick = 0;
         }
     }
@@ -1827,7 +1802,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return false;
         }
 
-        final boolean flag = entityIn.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+        final boolean flag = entityIn.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
             this.doEnchantDamageEffects(this, entityIn);
@@ -1863,7 +1838,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setPos(riding.getX() + extraX, riding.getY() + extraY, riding.getZ() + extraZ);
             if ((this.getControlState() == 1 << 4 || ((Player) riding).isFallFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
-                if (level.isClientSide) {
+                if (level().isClientSide) {
                     IceAndFire.sendMSGToServer(new MessageStartRidingMob(this.getId(), false, true));
                 }
 
@@ -1900,7 +1875,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public void playAmbientSound() {
-        if (!this.isSleeping() && !this.isModelDead() && !this.level.isClientSide) {
+        if (!this.isSleeping() && !this.isModelDead() && !this.level().isClientSide) {
             if (this.getAnimation() == this.NO_ANIMATION) {
                 this.setAnimation(ANIMATION_SPEAK);
             }
@@ -1911,7 +1886,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     protected void playHurtSound(@NotNull DamageSource source) {
         if (!this.isModelDead()) {
-            if (this.getAnimation() == this.NO_ANIMATION && !this.level.isClientSide) {
+            if (this.getAnimation() == this.NO_ANIMATION && !this.level().isClientSide) {
                 this.setAnimation(ANIMATION_SPEAK);
             }
             super.playHurtSound(source);
@@ -1937,7 +1912,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public EntityDragonEgg createEgg(EntityDragonBase ageable) {
-        EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), this.level);
+        EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), this.level());
         dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(4) + getStartMetaForType()));
         dragon.setPos(Mth.floor(this.getX()) + 0.5, Mth.floor(this.getY()) + 1, Mth.floor(this.getZ()) + 0.5);
         return dragon;
@@ -1949,11 +1924,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public boolean isTargetBlocked(Vec3 target) {
         if (target != null) {
-            final BlockHitResult rayTrace = this.level.clip(new ClipContext(this.position().add(0, this.getEyeHeight(), 0), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            final BlockHitResult rayTrace = this.level().clip(new ClipContext(this.position().add(0, this.getEyeHeight(), 0), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
             final BlockPos sidePos = rayTrace.getBlockPos();
-            if (!level.isEmptyBlock(sidePos)) {
-                return true;
-            } else if (!level.isEmptyBlock(new BlockPos(rayTrace.getLocation()))) {
+            if (!level().isEmptyBlock(sidePos)) {
                 return true;
             }
             return rayTrace.getType() == HitResult.Type.BLOCK;
@@ -2008,10 +1981,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return super.isControlledByLocalInstance();
     }
 
-    @Override
+/*    @Override
     public boolean canBeControlledByRider() {
         return true;
-    }
+    }*/
 
     @Override
     public boolean isImmobile() {
@@ -2040,8 +2013,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
         // Todo: move wrongly fix
-        if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider()) {
-            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
+        float flyingSpeed;
+        if (allowLocalMotionControl && this.getControllingPassenger() != null) {
+            LivingEntity rider = this.getControllingPassenger();
             if (rider == null) {
                 super.travel(pTravelVector);
                 return;
@@ -2119,13 +2093,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     }
                 }
                 // Speed bonus damping
-                glidingSpeedBonus -= glidingSpeedBonus * 0.01d;
+                glidingSpeedBonus -= (float) (glidingSpeedBonus * 0.01d);
 
                 if (this.isControlledByLocalInstance()) {
                     // Vanilla friction on Y axis is smaller, which will influence terminal speed for climbing and diving
                     // use same friction coefficient on all axis simplifies how travel vector is computed
-                    this.flyingSpeed = speed * 0.1F;
-                    this.setSpeed(speed);
+                    flyingSpeed = speed * 0.1F;
+                    this.setSpeed(flyingSpeed);
 
                     this.moveRelative(flyingSpeed, new Vec3(strafing, vertical, forward));
                     this.move(MoverType.SELF, this.getDeltaMovement());
@@ -2137,7 +2111,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     }
                     this.setDeltaMovement(currentMotion);
 
-                    this.calculateEntityAnimation(this, false);
+                    this.calculateEntityAnimation(false);
                 } else {
                     this.setDeltaMovement(Vec3.ZERO);
                 }
@@ -2158,10 +2132,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     vertical = -0.5f;
                 }
 
-                this.flyingSpeed = speed;
+                flyingSpeed = speed;
                 // Float in water for those can't swim is done in LivingEntity#aiStep on server side
                 // Leave this handled by both side before we have a better solution
-                this.setSpeed(speed);
+                this.setSpeed(flyingSpeed);
                 // Overwrite the zza in setSpeed
                 this.setZza((float) forward);
                 // Vanilla in water behavior includes float on water and moving very slow
@@ -2190,8 +2164,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 strafing *= 0.05f;
 
                 if (this.isControlledByLocalInstance()) {
-                    this.flyingSpeed = speed * 0.1F;
-                    this.setSpeed(speed);
+                    flyingSpeed = speed * 0.1F;
+                    this.setSpeed(flyingSpeed);
 
                     // Vanilla walking behavior includes going up steps
                     super.travel(new Vec3(strafing, vertical, forward));
@@ -2316,18 +2290,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 if (this.tacklingTicks == 40) {
                     this.tacklingTicks = 0;
                 }
-                if (!this.isFlying() && this.isOnGround()) {
+                if (!this.isFlying() && this.onGround()) {
                     this.tacklingTicks = 0;
                     this.setTackling(false);
                 }
                 // Todo: problem with friendly fire to tamed horses
-                List<Entity> victims = this.level.getEntities(this, this.getBoundingBox().expandTowards(2.0D, 2.0D, 2.0D), potentialVictim -> (
+                List<Entity> victims = this.level().getEntities(this, this.getBoundingBox().expandTowards(2.0D, 2.0D, 2.0D), potentialVictim -> (
                         potentialVictim != rider
                                 && potentialVictim instanceof LivingEntity
                 ));
-                victims.forEach(victim -> {
-                    logic.attackTarget(victim, rider, this.getDragonStage() * 3);
-                });
+                victims.forEach(victim -> logic.attackTarget(victim, rider, this.getDragonStage() * 3));
             }
             // Dragon breathe attack
             if (this.isStriking() && this.getControllingPassenger() != null && this.getDragonStage() > 1) {
@@ -2337,18 +2309,17 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
             // Dragon bite attack
             if (this.isAttacking() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
-                LivingEntity target = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
+                LivingEntity target = DragonUtils.riderLookingAtEntity(this, this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
                 if (this.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                     this.setAnimation(EntityDragonBase.ANIMATION_BITE);
                 }
                 if (target != null && !DragonUtils.hasSameOwner(this, target)) {
-                    logic.attackTarget(target, rider instanceof Player ? (Player) rider : null, (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    logic.attackTarget(target, rider, (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                 }
             }
             // Shift key to dismount
             if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
-                if (this.getControllingPassenger() instanceof LivingEntity)
-                    MiscProperties.setDismountedDragon((LivingEntity) this.getControllingPassenger(), true);
+                MiscProperties.setDismountedDragon(this.getControllingPassenger(), true);
                 this.getControllingPassenger().stopRiding();
             }
             // Reset attack target when being ridden
@@ -2385,7 +2356,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.fireStopTicks = 10;
             }
             if (this.isAttacking() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
-                LivingEntity target = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
+                LivingEntity target = DragonUtils.riderLookingAtEntity(this, this.getControllingPassenger(), this.getDragonStage() + (this.getBoundingBox().maxX - this.getBoundingBox().minX));
                 if (this.getAnimation() != EntityDragonBase.ANIMATION_BITE) {
                     this.setAnimation(EntityDragonBase.ANIMATION_BITE);
                 }
@@ -2394,17 +2365,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
             }
             if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
-                if (this.getControllingPassenger() instanceof LivingEntity)
-                    MiscProperties.setDismountedDragon((LivingEntity) this.getControllingPassenger(), true);
+                MiscProperties.setDismountedDragon(this.getControllingPassenger(), true);
                 this.getControllingPassenger().stopRiding();
             }
             if (this.isFlying()) {
-                if (!this.isHovering() && this.getControllingPassenger() != null && !this.isOnGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) < 0.1F) {
+                if (!this.isHovering() && this.getControllingPassenger() != null && !this.onGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) < 0.1F) {
                     this.setHovering(true);
                     this.setFlying(false);
                 }
             } else {
-                if (this.isHovering() && this.getControllingPassenger() != null && !this.isOnGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) > 0.1F) {
+                if (this.isHovering() && this.getControllingPassenger() != null && !this.onGround() && Math.max(Math.abs(this.getDeltaMovement().x()), Math.abs(this.getDeltaMovement().z())) > 0.1F) {
                     this.setFlying(true);
                     this.usingGroundAttack = false;
                     this.setHovering(false);
@@ -2424,7 +2394,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void setDeltaMovement(Vec3 pMotion) {
+    public void setDeltaMovement(@NotNull Vec3 pMotion) {
         super.setDeltaMovement(pMotion);
     }
 
@@ -2450,11 +2420,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 super.move(pType, pPos);
             }
             // Set no gravity flag to prevent getting kicked by flight disabled servers
-            if (this.isHovering() || this.isFlying()) {
-                this.setNoGravity(true);
-            } else {
-                this.setNoGravity(false);
-            }
+            this.setNoGravity(this.isHovering() || this.isFlying());
 
         } else {
             this.noPhysics = false;
@@ -2468,7 +2434,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public void updateCheckPlayer() {
         final double checkLength = this.getBoundingBox().getSize() * 3;
-        final Player player = level.getNearestPlayer(this, checkLength);
+        final Player player = level().getNearestPlayer(this, checkLength);
         if (this.isSleeping()) {
             if (player != null && !this.isOwnedBy(player) && !player.isCreative()) {
                 this.setInSittingPose(false);
@@ -2483,13 +2449,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2) {
-        final BlockHitResult rayTrace = this.level.clip(new ClipContext(vec1, new Vec3(vec2.x, vec2.y + (double) this.getBbHeight() * 0.5D, vec2.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        final BlockHitResult rayTrace = this.level().clip(new ClipContext(vec1, new Vec3(vec2.x, vec2.y + (double) this.getBbHeight() * 0.5D, vec2.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return rayTrace.getType() != HitResult.Type.BLOCK;
     }
 
     @Override
     public void die(@NotNull DamageSource cause) {
         super.die(cause);
+        this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(this));
     }
 
     @Override
@@ -2515,7 +2482,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
             if (this.getDragonStage() > 3) {
                 final int size = (this.getDragonStage() - 3) * 30;
-                final List<Entity> entities = level.getEntities(this, this.getBoundingBox().expandTowards(size, size, size));
+                final List<Entity> entities = level().getEntities(this, this.getBoundingBox().expandTowards(size, size, size));
                 for (final Entity entity : entities) {
                     final boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity living && !isStrongerDragon) {
@@ -2536,7 +2503,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
             if (this.getDragonStage() > 3) {
                 final int size = (this.getDragonStage() - 3) * 30;
-                final List<Entity> entities = level.getEntities(this, this.getBoundingBox().expandTowards(size, size, size));
+                final List<Entity> entities = level().getEntities(this, this.getBoundingBox().expandTowards(size, size, size));
                 for (final Entity entity : entities) {
                     final boolean isStrongerDragon = entity instanceof EntityDragonBase && ((EntityDragonBase) entity).getDragonStage() >= this.getDragonStage();
                     if (entity instanceof LivingEntity living && !isStrongerDragon) {
@@ -2557,7 +2524,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3 vec1, Vec3 vec2) {
 
-        HitResult movingobjectposition = this.level.clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        HitResult movingobjectposition = this.level().clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return movingobjectposition.getType() != HitResult.Type.BLOCK;
     }
 
@@ -2587,7 +2554,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         Vec3 Vector3d = rider.getEyePosition(partialTicks);
         Vec3 Vector3d1 = rider.getViewVector(partialTicks);
         Vec3 Vector3d2 = Vector3d.add(Vector3d1.x * blockReachDistance, Vector3d1.y * blockReachDistance, Vector3d1.z * blockReachDistance);
-        return this.level.clip(new ClipContext(Vector3d, Vector3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        return this.level().clip(new ClipContext(Vector3d, Vector3d2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
     }
 
     /**
@@ -2601,7 +2568,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
      * @see EntityDragonBase#getRideHorizontalBase()
      */
     protected float getRideHeightBase() {
-        return 0.002237889819f*Mth.square(getRenderSize()) + 0.233137174f*getRenderSize() + -1.717904311f;
+        return 0.002237889819f * Mth.square(getRenderSize()) + 0.233137174f * getRenderSize() - 1.717904311f;
     }
 
     /**
@@ -2610,7 +2577,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
      * @see EntityDragonBase#getRideHeightBase()
      */
     protected float getRideHorizontalBase() {
-        return 0.00336283f*Mth.square(getRenderSize()) + 0.1934242516f*getRenderSize() + -0.02622133882f;
+        return 0.00336283f * Mth.square(getRenderSize()) + 0.1934242516f * getRenderSize() - 0.02622133882f;
     }
 
     // For slowly raise rider position
@@ -2642,25 +2609,24 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Extra delta when moving
         // The linear part of the tuning
         final float linearFactor = Mth.map(Math.max(this.getAgeInDays() - 50, 0), 0, 75, 0, 1);
-        if (this.getControllingPassenger() instanceof LivingEntity rider) {
-            // Extra height when rider and the dragon look upwards, this will reduce model clipping
-            if (rider.getXRot() < 0) {
-                extraY += Mth.map(rider.getXRot(), 60, -40, -0.1, 0.1);
-            }
-            if (this.isHovering() || this.isFlying()) {
-                // Extra height when flying, reduces model clipping since dragon has a bigger amplitude when flying/hovering
-                extraY += 1.1f * linearFactor;
-                extraY += getRideHeightBase() * 0.6f;
+        LivingEntity rider = this.getControllingPassenger();
+        // Extra height when rider and the dragon look upwards, this will reduce model clipping
+        if (rider != null && rider.getXRot() < 0) {
+            extraY += (float) Mth.map(rider.getXRot(), 60, -40, -0.1, 0.1);
+        }
+        if (this.isHovering() || this.isFlying()) {
+            // Extra height when flying, reduces model clipping since dragon has a bigger amplitude when flying/hovering
+            extraY += 1.1f * linearFactor;
+            extraY += getRideHeightBase() * 0.6f;
+        } else {
+            // Extra height when walking, reduces model clipping
+            if (rider != null && rider.zza > 0) {
+                final float MAX_RAISE_HEIGHT = 1.1f * linearFactor + getRideHeightBase() * 0.1f;
+                riderWalkingExtraY = Math.min(MAX_RAISE_HEIGHT, riderWalkingExtraY + 0.1f);
             } else {
-                // Extra height when walking, reduces model clipping
-                if (rider.zza > 0) {
-                    final float MAX_RAISE_HEIGHT = 1.1f * linearFactor + getRideHeightBase() * 0.1f;
-                    riderWalkingExtraY = Math.min(MAX_RAISE_HEIGHT, riderWalkingExtraY + 0.1f);
-                } else {
-                    riderWalkingExtraY = Math.max(0, riderWalkingExtraY - 0.15f);
-                }
-                extraY += riderWalkingExtraY;
+                riderWalkingExtraY = Math.max(0, riderWalkingExtraY - 0.15f);
             }
+            extraY += riderWalkingExtraY;
         }
 
         final float xzMod = getRideHorizontalBase() + extraXZ;
@@ -2674,7 +2640,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public Vec3 getDismountLocationForPassenger(LivingEntity pPassenger) {
+    public @NotNull Vec3 getDismountLocationForPassenger(LivingEntity pPassenger) {
         return this.getRiderPosition().add(0, pPassenger.getBbHeight(), 0);
     }
 
@@ -2711,7 +2677,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         final float deadProg = this.modelDeadProgress * -0.02F;
         final float hoverProg = this.hoverProgress * 0.03F;
         final float flyProg = this.flyProgress * 0.01F;
-        int tick = 0;
+        int tick;
         if (this.getAnimationTick() < 10) {
             tick = this.getAnimationTick();
         } else if (this.getAnimationTick() > 50) {
@@ -2759,7 +2725,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean shouldBlockExplode(@NotNull Explosion explosionIn, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, BlockState blockStateIn, float explosionPower) {
-        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock());
+        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock(), this);
     }
 
     public void tryScorchTarget() {
@@ -2817,11 +2783,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isAllowedToTriggerFlight() {
-        return (this.hasFlightClearance() && this.onGround || this.isInWater()) && !this.isOrderedToSit() && this.getPassengers().isEmpty() && !this.isBaby() && !this.isSleeping() && this.canMove();
+        return (this.hasFlightClearance() && this.onGround() || this.isInWater()) && !this.isOrderedToSit() && this.getPassengers().isEmpty() && !this.isBaby() && !this.isSleeping() && this.canMove();
     }
 
     public BlockPos getEscortPosition() {
-        return this.getOwner() != null ? new BlockPos(this.getOwner().position()) : this.blockPosition();
+        return this.getOwner() != null ? new BlockPos(this.getOwner().blockPosition()) : this.blockPosition();
     }
 
     public boolean shouldTPtoOwner() {
@@ -2844,9 +2810,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public void playSound(@NotNull SoundEvent soundIn, float volume, float pitch) {
-        if (soundIn == SoundEvents.GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(null) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
+        if (soundIn == SoundEvents.GENERIC_EAT || soundIn == this.getAmbientSound() || soundIn == this.getHurtSound(this.level().damageSources().generic()) || soundIn == this.getDeathSound() || soundIn == this.getRoarSound()) {
             if (!this.isSilent() && this.headPart != null) {
-                this.level.playSound(null, this.headPart.getX(), this.headPart.getY(), this.headPart.getZ(), soundIn, this.getSoundSource(), volume, pitch);
+                this.level().playSound(null, this.headPart.getX(), this.headPart.getY(), this.headPart.getZ(), soundIn, this.getSoundSource(), volume, pitch);
             }
         } else {
             super.playSound(soundIn, volume, pitch);
@@ -2859,9 +2825,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean hasFlightClearance() {
-        BlockPos topOfBB = new BlockPos(this.getX(), this.getBoundingBox().maxY, this.getZ());
+        BlockPos topOfBB = BlockPos.containing(this.getBlockX(), this.getBoundingBox().maxY, this.getBlockZ());
         for (int i = 1; i < 4; i++) {
-            if (!level.isEmptyBlock(topOfBB.above(i))) {
+            if (!level().isEmptyBlock(topOfBB.above(i))) {
                 return false;
             }
         }
@@ -2870,42 +2836,25 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public @NotNull ItemStack getItemBySlot(final EquipmentSlot slotIn) {
-        switch (slotIn) {
-            case OFFHAND:
-                return dragonInventory.getItem(0);
-            case HEAD:
-                return dragonInventory.getItem(1);
-            case CHEST:
-                return dragonInventory.getItem(2);
-            case LEGS:
-                return dragonInventory.getItem(3);
-            case FEET:
-                return dragonInventory.getItem(4);
-            default:
-                return super.getItemBySlot(slotIn);
-        }
+        return switch (slotIn) {
+            case OFFHAND -> dragonInventory.getItem(0);
+            case HEAD -> dragonInventory.getItem(1);
+            case CHEST -> dragonInventory.getItem(2);
+            case LEGS -> dragonInventory.getItem(3);
+            case FEET -> dragonInventory.getItem(4);
+            default -> super.getItemBySlot(slotIn);
+        };
     }
 
     @Override
     public void setItemSlot(final EquipmentSlot slotIn, final @NotNull ItemStack stack) {
         switch (slotIn) {
-            case OFFHAND:
-                dragonInventory.setItem(0, stack);
-                break;
-            case HEAD:
-                dragonInventory.setItem(1, stack);
-                break;
-            case CHEST:
-                dragonInventory.setItem(2, stack);
-                break;
-            case LEGS:
-                dragonInventory.setItem(3, stack);
-                break;
-            case FEET:
-                dragonInventory.setItem(4, stack);
-                break;
-            default:
-                super.getItemBySlot(slotIn);
+            case OFFHAND -> dragonInventory.setItem(0, stack);
+            case HEAD -> dragonInventory.setItem(1, stack);
+            case CHEST -> dragonInventory.setItem(2, stack);
+            case LEGS -> dragonInventory.setItem(3, stack);
+            case FEET -> dragonInventory.setItem(4, stack);
+            default -> super.getItemBySlot(slotIn);
         }
     }
 
@@ -2930,7 +2879,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void onRemovedFromWorld() {
         if (IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
-                DragonPosWorldData data = DragonPosWorldData.get(level);
+                DragonPosWorldData data = DragonPosWorldData.get(level());
                 if (data != null) {
                     data.addDragon(this.getUUID(), this.blockPosition());
                 }
@@ -2961,7 +2910,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public void containerChanged(@NotNull Container invBasic) {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             updateAttributes();
         }
     }

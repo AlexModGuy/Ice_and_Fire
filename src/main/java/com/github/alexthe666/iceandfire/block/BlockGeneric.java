@@ -7,35 +7,75 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 public class BlockGeneric extends Block {
-    public BlockGeneric(Material materialIn, float hardness, float resistance, SoundType sound) {
+/*    public BlockGeneric(float hardness, float resistance, SoundType sound) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
         );
     }
 
-    public BlockGeneric(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
+    public BlockGeneric(float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .friction(0.98F)
         );
+    }*/
+
+    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
+                .mapColor(color)
+                .sound(sound)
+                .strength(hardness, resistance)
+                .requiresCorrectToolForDrops();
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+        if (ignited) {
+            props.ignitedByLava();
+        }
+        return new BlockGeneric(props);
     }
 
-    @SuppressWarnings("deprecation")
+    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
+                .mapColor(color)
+                .sound(sound)
+                .strength(hardness, resistance)
+                .friction(0.98F);
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+        if (ignited) {
+            props.ignitedByLava();
+        }
+        return new BlockGeneric(props);
+    }
+
+    public BlockGeneric(BlockBehaviour.Properties props) {
+        super(props);
+    }
+
     public boolean isOpaqueCube(BlockState state) {
         return this != IafBlockRegistry.DRAGON_ICE.get();
     }
 
-    @SuppressWarnings("deprecation")
     public boolean isFullCube(BlockState state) {
         return this != IafBlockRegistry.DRAGON_ICE.get();
     }

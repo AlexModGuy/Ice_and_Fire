@@ -3,34 +3,24 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
-import com.github.alexthe666.iceandfire.datagen.DataGenerators;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
 import com.github.alexthe666.iceandfire.inventory.IafContainerRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafTabRegistry;
 import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
+import com.github.alexthe666.iceandfire.recipe.IafBannerPatterns;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeSerializers;
-import com.github.alexthe666.iceandfire.world.IafProcessors;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
-import net.minecraft.core.Registry;
+import com.github.alexthe666.iceandfire.world.*;
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -46,11 +36,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -61,18 +51,6 @@ public class IceAndFire {
     private static final String PROTOCOL_VERSION = Integer.toString(1);
     public static boolean DEBUG = true;
     public static String VERSION = "UNKNOWN";
-    public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID) {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
-        }
-    };
-    public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab("iceandfire.blocks") {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get());
-        }
-    };
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
 
@@ -105,18 +83,22 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
 
-        modBus.addGenericListener(StructureFeature.class, EventPriority.LOW,
-            (final RegistryEvent.Register<StructureFeature<?>> event) -> IafWorldRegistry
-                .registerStructureConfiguredFeatures());
-        modBus.addGenericListener(Feature.class, EventPriority.LOW,
-            (final RegistryEvent.Register<Feature<?>> event) -> IafWorldRegistry.registerConfiguredFeatures());
+
+        final DeferredRegister<Codec<? extends BiomeModifier>> biomeModifiers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, IceAndFire.MODID);
+        biomeModifiers.register(modBus);
+        biomeModifiers.register("iaf_mob_spawns", IafMobSpawnBiomeModifier::makeCodec);
+        biomeModifiers.register("iaf_features", IafFeatureBiomeModifier::makeCodec);
 
         IafItemRegistry.ITEMS.register(modBus);
         IafBlockRegistry.BLOCKS.register(modBus);
+        IafTabRegistry.TAB_REGISTER.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
-        IafWorldRegistry.STRUCTURES.register(modBus);
+        IafRecipeRegistry.RECIPE_TYPE.register(modBus);
+        IafBannerPatterns.BANNERS.register(modBus);
+        IafStructureTypes.STRUCTURE_TYPES.register(modBus);
+        //IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
         IafProcessors.PROCESSORS.register(modBus);
@@ -130,35 +112,6 @@ public class IceAndFire {
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
         modBus.addListener(this::setupClient);
-    }
-
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onServerAboutToStart(ServerAboutToStartEvent event) {
-        var biomes = event.getServer().registryAccess().ownedRegistryOrThrow(ForgeRegistries.BIOMES.getRegistryKey());
-
-        // Create configured structure feature tags
-        //DataGenerators.createResources(biomes);
-
-        event.getServer().getWorldData().worldGenSettings().dimensions().forEach(levelStem -> {
-            reloadSources(biomes, levelStem.generator());
-        });
-
-        biomes.holders().forEach(biome -> {
-            IafWorldRegistry.addFeatures(biome);
-            IafEntityRegistry.addSpawners(biome);
-        });
-
-    }
-
-    private static void reloadSources(Registry<Biome> biomes, ChunkGenerator generator) {
-        if (generator instanceof NoiseBasedChunkGenerator chunkGenerator
-                && chunkGenerator.biomeSource instanceof MultiNoiseBiomeSource biomeSource
-                && chunkGenerator.runtimeBiomeSource instanceof MultiNoiseBiomeSource runtimeBiomeSource)
-        {
-            biomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
-            runtimeBiomeSource.possibleBiomes.stream().distinct().forEach(IafWorldRegistry::addFeatures);
-        }
     }
 
     @SubscribeEvent
@@ -207,7 +160,8 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         event.enqueueWork(() -> {
             PROXY.setup();
-            IafVillagerRegistry.setup();
+            //TODO: IafVillagerRegistry.setup();
+            // TODO: We might able to do this differently
             IafLootRegistry.init();
         });
     }

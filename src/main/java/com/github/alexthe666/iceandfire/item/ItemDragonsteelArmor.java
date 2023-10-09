@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelFireArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelIceArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelLightningArmor;
@@ -9,7 +8,6 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,11 +16,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static com.github.alexthe666.iceandfire.item.IafItemRegistry.*;
 
@@ -32,18 +32,17 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     private final ArmorMaterial material;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, ArmorItem.Type slot) {
+        super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
         this.material = material;
         this.attributeModifierMultimap = createAttributeMap();
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             @Override
-            @Nullable
-            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+            public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
                 if (itemStack.getItem() instanceof ArmorItem) {
                     ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getMaterial();
@@ -64,8 +63,8 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     //Workaround for armor attributes being registered before the config gets loaded
     private Multimap<Attribute, AttributeModifier> createAttributeMap() {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
-        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", material.getDefenseForSlot(slot), AttributeModifier.Operation.ADDITION));
+        UUID uuid = ARMOR_MODIFIERS[type.getSlot().getIndex()];
+        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", material.getDefenseForType(type), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", material.getToughness(), AttributeModifier.Operation.ADDITION));
         if (this.knockbackResistance > 0) {
             builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
@@ -88,26 +87,26 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        if (this.slot != null) {
-            return (this.getMaterial()).getDurabilityForSlot(this.slot);
+        if (this.type != null) {
+            return (this.getMaterial()).getDurabilityForType(this.type);
         }
         return super.getMaxDamage(stack);
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot equipmentSlot) {
-        return equipmentSlot == this.slot ? getOrUpdateAttributeMap() : super.getDefaultAttributeModifiers(equipmentSlot);
+        return equipmentSlot == this.type.getSlot() ? getOrUpdateAttributeMap() : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
     @Override
     public int getDefense() {
         if (this.material != null)
-            return this.material.getDefenseForSlot(this.getSlot());
+            return this.material.getDefenseForType(this.getType());
         return super.getDefense();
     }
 

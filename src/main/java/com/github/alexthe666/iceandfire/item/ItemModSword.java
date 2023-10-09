@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
@@ -22,7 +21,7 @@ public class ItemModSword extends SwordItem implements DragonSteelOverrides<Item
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
     public ItemModSword(Tier toolmaterial) {
-        super(toolmaterial, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(toolmaterial, 3, -2.4F, new Item.Properties());
     }
 
     @Override

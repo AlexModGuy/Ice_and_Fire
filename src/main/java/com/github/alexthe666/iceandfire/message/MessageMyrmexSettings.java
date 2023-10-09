@@ -49,8 +49,8 @@ public class MessageMyrmexSettings {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
-                    Entity entity = player.level.getEntity(message.queenID);
+                if (player.level()!= null) {
+                    Entity entity = player.level().getEntity(message.queenID);
                     if (entity != null && entity instanceof EntityMyrmexBase) {
                         MyrmexHive hive = ((EntityMyrmexBase) entity).getHive();
                         if (hive != null) {

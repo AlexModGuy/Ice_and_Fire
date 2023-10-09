@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "iceandfire:copper_ingot",
+          "name": "minecraft:copper_ingot",
           "weight": 1,
           "functions": [
             {

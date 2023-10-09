@@ -43,8 +43,8 @@ public class MyrmexAIForageForItems<T extends ItemEntity> extends TargetGoal {
             return false;
         }
 
-        if (this.myrmex.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
+        if (this.myrmex.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level().getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(32), this.targetEntitySelector);
 
         if (list.isEmpty())
             return false;

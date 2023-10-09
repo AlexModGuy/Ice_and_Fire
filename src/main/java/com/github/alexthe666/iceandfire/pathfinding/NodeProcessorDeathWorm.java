@@ -2,11 +2,11 @@ package com.github.alexthe666.iceandfire.pathfinding;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
@@ -28,7 +28,7 @@ public class NodeProcessorDeathWorm extends NodeEvaluator {
     }
 
     @Override
-    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter blockaccessIn, int x, int y, int z, @NotNull Mob entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter blockaccessIn, int x, int y, int z, @NotNull Mob entitylivingIn) {
         return this.getBlockPathType(blockaccessIn, x, y, z);
     }
 
@@ -83,10 +83,10 @@ public class NodeProcessorDeathWorm extends NodeEvaluator {
 
 
     private boolean isPassable(BlockGetter world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.SAND || world.getBlockState(pos).getMaterial() == Material.AIR;
+        return world.getBlockState(pos).is(BlockTags.SAND) || world.getBlockState(pos).isAir();
     }
 
     private boolean isPassable(BlockState state) {
-        return state.getMaterial() == Material.SAND || state.getMaterial() == Material.AIR;
+        return state.is(BlockTags.SAND) || state.isAir();
     }
 }

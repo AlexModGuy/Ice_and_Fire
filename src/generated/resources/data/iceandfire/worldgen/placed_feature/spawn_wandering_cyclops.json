@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:spawn_wandering_cyclops",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

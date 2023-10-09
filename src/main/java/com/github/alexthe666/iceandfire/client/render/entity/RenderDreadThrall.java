@@ -34,7 +34,7 @@ public class RenderDreadThrall extends MobRenderer<EntityDreadThrall, ModelDread
         super(context, new ModelDreadThrall(0.0F, false), 0.6F);
 
         this.addLayer(new LayerGenericGlowing<>(this, TEXTURE_EYES));
-        this.itemLayer = new HideableLayer<>(new ItemInHandLayer<>(this), this);
+        this.itemLayer = new HideableLayer<>(new ItemInHandLayer<>(this, context.getItemInHandRenderer()), this);
         this.addLayer(this.itemLayer);
         this.addLayer(new LayerBipedArmorMultiple<>(this,
             new ModelDreadThrall(0.5F, true), new ModelDreadThrall(1.0F, true),

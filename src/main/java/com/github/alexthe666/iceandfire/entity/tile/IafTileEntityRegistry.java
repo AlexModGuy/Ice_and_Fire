@@ -4,16 +4,16 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
 public class IafTileEntityRegistry {
 
     public static final DeferredRegister<BlockEntityType<?>> TYPES = DeferredRegister
-        .create(ForgeRegistries.BLOCK_ENTITIES, IceAndFire.MODID);
+        .create(ForgeRegistries.BLOCK_ENTITY_TYPES, IceAndFire.MODID);
 
     //@formatter:off
     public static final RegistryObject<BlockEntityType<TileEntityLectern>> IAF_LECTERN = registerTileEntity(() -> BlockEntityType.Builder.of(TileEntityLectern::new, IafBlockRegistry.LECTERN.get()), "lectern");

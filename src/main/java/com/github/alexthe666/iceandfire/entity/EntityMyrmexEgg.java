@@ -15,7 +15,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -97,7 +99,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean canSeeSky() {
-        return level.canSeeSkyFromBelowWater(this.blockPosition());
+        return level().canSeeSkyFromBelowWater(this.blockPosition());
     }
 
     @Override
@@ -111,56 +113,56 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {
                 default:
-                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(), level);
+                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(), level());
                     break;
                 case 1:
-                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(), level);
+                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(), level());
                     break;
                 case 2:
-                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(), level);
+                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(), level());
                     break;
                 case 3:
-                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(), level);
+                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(), level());
                     break;
                 case 4:
-                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), level);
+                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), level());
                     break;
             }
             myrmex.setJungleVariant(this.isJungle());
             myrmex.setGrowthStage(0);
             myrmex.absMoveTo(this.getX(), this.getY(), this.getZ(), 0, 0);
             if (myrmex instanceof EntityMyrmexQueen) {
-                MyrmexHive hive = new MyrmexHive(level, this.blockPosition(), 100);
-                Player player = level.getNearestPlayer(this, 30);
+                MyrmexHive hive = new MyrmexHive(level(), this.blockPosition(), 100);
+                Player player = level().getNearestPlayer(this, 30);
                 if (player != null) {
                     hive.hasOwner = true;
                     hive.ownerUUID = player.getUUID();
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         hive.modifyPlayerReputation(player.getUUID(), 100);
                     }
                 }
-                MyrmexWorldData.addHive(level, hive);
+                MyrmexWorldData.addHive(level(), hive);
                 myrmex.setHive(hive);
 
 
             } else {
-                if (MyrmexWorldData.get(level) != null) {
+                if (MyrmexWorldData.get(level()) != null) {
                     MyrmexHive hive;
                     if (this.hiveUUID == null) {
-                        hive = MyrmexWorldData.get(level).getNearestHive(this.blockPosition(), 400);
+                        hive = MyrmexWorldData.get(level()).getNearestHive(this.blockPosition(), 400);
                     } else {
-                        hive = MyrmexWorldData.get(level).getHiveFromUUID(hiveUUID);
+                        hive = MyrmexWorldData.get(level()).getHiveFromUUID(hiveUUID);
                     }
-                    if (!level.isClientSide && hive != null && Math.sqrt(this.distanceToSqr(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
+                    if (!level().isClientSide && hive != null && Math.sqrt(this.distanceToSqr(hive.getCenter().getX(), hive.getCenter().getY(), hive.getCenter().getZ())) < 2000) {
                         myrmex.setHive(hive);
                     }
                 }
             }
 
-            if (!level.isClientSide) {
-                level.addFreshEntity(myrmex);
+            if (!level().isClientSide) {
+                level().addFreshEntity(myrmex);
             }
-            this.level.playLocalSound(this.getX(), this.getY() + this.getEyeHeight(), this.getZ(), IafSoundRegistry.EGG_HATCH, this.getSoundSource(), 2.5F, 1.0F, false);
+            this.level().playLocalSound(this.getX(), this.getY() + this.getEyeHeight(), this.getZ(), IafSoundRegistry.EGG_HATCH, this.getSoundSource(), 2.5F, 1.0F, false);
         }
     }
 
@@ -186,10 +188,10 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public boolean hurt(@NotNull DamageSource dmg, float var2) {
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL) {
+        if (dmg.is(DamageTypes.IN_WALL) || dmg.is(DamageTypes.FALL)) {
             return false;
         }
-        if (!level.isClientSide && !dmg.isBypassInvul()) {
+        if (!level().isClientSide && !dmg.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.spawnAtLocation(this.getItem(), 0);
         }
         this.remove(RemovalReason.KILLED);
@@ -232,7 +234,7 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     public boolean isInNursery() {
-        MyrmexHive hive = MyrmexWorldData.get(this.level).getNearestHive(this.blockPosition(), 100);
+        MyrmexHive hive = MyrmexWorldData.get(this.level()).getNearestHive(this.blockPosition(), 100);
         if (hive != null && hive.getRooms(WorldGenMyrmexHive.RoomType.NURSERY).isEmpty() && hive.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.getRandom(), this.blockPosition()) != null) {
             return false;
         }

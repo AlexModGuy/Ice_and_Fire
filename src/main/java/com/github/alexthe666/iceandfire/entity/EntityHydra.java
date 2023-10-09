@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -128,13 +129,13 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
                     if (strikeCooldown == 0 && strikingProgress[index] == 0) {
                         isBreathing[index] = false;
                         isStriking[index] = true;
-                        this.level.broadcastEntityEvent(this, (byte) (40 + index));
+                        this.level().broadcastEntityEvent(this, (byte) (40 + index));
                         strikeCooldown = 3;
                     }
                 } else if (random.nextBoolean() && breathCooldown == 0) {
                     isBreathing[index] = true;
                     isStriking[index] = false;
-                    this.level.broadcastEntityEvent(this, (byte) (50 + index));
+                    this.level().broadcastEntityEvent(this, (byte) (50 + index));
                     breathCooldown = 15;
                 }
 
@@ -148,7 +149,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (attackTarget != null && this.distanceTo(attackTarget) < 6) {
-                    attackTarget.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    attackTarget.hurt(level().damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     attackTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 3, false, false));
                     attackTarget.knockback(0.25F, this.getX() - attackTarget.getX(), this.getZ() - attackTarget.getZ());
                 }
@@ -166,17 +167,17 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
                     double d3 = attackTarget.getY() + attackTarget.getEyeHeight() - headPosY + this.random.nextGaussian() * 0.4D;
                     double d4 = attackTarget.getZ() - headPosZ + this.random.nextGaussian() * 0.4D;
                     EntityHydraBreath entitylargefireball = new EntityHydraBreath(IafEntityRegistry.HYDRA_BREATH.get(),
-                        level, this, d2, d3, d4);
+                        level(), this, d2, d3, d4);
                     entitylargefireball.setPos(headPosX, headPosY, headPosZ);
-                    if (!level.isClientSide) {
-                        level.addFreshEntity(entitylargefireball);
+                    if (!level().isClientSide) {
+                        level().addFreshEntity(entitylargefireball);
                     }
                 }
-                if (isBreathing[i] && (attackTarget == null || !attackTarget.isAlive() || breathTicks[i] > 60) && !level.isClientSide) {
+                if (isBreathing[i] && (attackTarget == null || !attackTarget.isAlive() || breathTicks[i] > 60) && !level().isClientSide) {
                     isBreathing[i] = false;
                     breathTicks[i] = 0;
                     breathCooldown = 15;
-                    this.level.broadcastEntityEvent(this, (byte) (60 + i));
+                    this.level().broadcastEntityEvent(this, (byte) (60 + i));
                 }
                 breathTicks[i]++;
             } else {
@@ -257,17 +258,17 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             resetParts();
         }
         onUpdateParts();
-        float partY = 1.0F - animationSpeed * 0.5F;
+        float partY = 1.0F - this.walkAnimation.speed() * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
             headBoxes[i].setParent(this);
             if (!headBoxes[i].shouldContinuePersisting()) {
-                level.addFreshEntity(headBoxes[i]);
+                level().addFreshEntity(headBoxes[i]);
             }
             headBoxes[HEADS + i].setPos(headBoxes[HEADS + i].getX(), this.getY() + partY, headBoxes[HEADS + i].getZ());
             headBoxes[HEADS + i].setParent(this);
             if (!headBoxes[HEADS + i].shouldContinuePersisting()) {
-                level.addFreshEntity(headBoxes[HEADS + i]);
+                level().addFreshEntity(headBoxes[HEADS + i]);
             }
         }
         if (getHeadCount() > 1 && !isOnFire()) {
@@ -364,7 +365,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             this.setSeveredHead(headIndex);
             this.playSound(SoundEvents.GUARDIAN_FLOP, this.getSoundVolume(), this.getVoicePitch());
         }
-        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.isBypassInvul()) {
+        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             amount = 0;
         }
         return super.hurt(source, amount);

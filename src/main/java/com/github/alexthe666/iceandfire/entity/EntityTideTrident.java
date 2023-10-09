@@ -50,7 +50,7 @@ public class EntityTideTrident extends ThrownTrident {
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSource.trident(this, entity1 == null ? this : entity1);
+        DamageSource damagesource = level().damageSources().trident(this, entity1 == null ? this : entity1);
         entitiesHit++;
         if (entitiesHit >= getMaxPiercing())
             this.dealtDamage = true;
@@ -72,13 +72,13 @@ public class EntityTideTrident extends ThrownTrident {
         }
 
         float f1 = 1.0F;
-        if (this.level instanceof ServerLevel && this.level.isThundering() && EnchantmentHelper.hasChanneling(this.tridentItem)) {
+        if (this.level()instanceof ServerLevel && this.level().isThundering() && EnchantmentHelper.hasChanneling(this.tridentItem)) {
             BlockPos blockpos = entity.blockPosition();
-            if (this.level.canSeeSky(blockpos)) {
-                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+            if (this.level().canSeeSky(blockpos)) {
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level());
                 lightningboltentity.moveTo(Vec3.atCenterOf(blockpos));
                 lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
-                this.level.addFreshEntity(lightningboltentity);
+                this.level().addFreshEntity(lightningboltentity);
                 soundevent = SoundEvents.TRIDENT_THUNDER;
                 f1 = 5.0F;
             }

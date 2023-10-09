@@ -11,11 +11,14 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +26,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
@@ -42,21 +44,21 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             if (state.getBlock() instanceof BaseEntityBlock) {
                 return;
             }
-            if (state.getMaterial() == Material.GRASS) {
+            if (state.is(Blocks.GRASS)) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_GRASS.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.DIRT && state.getBlock() == Blocks.DIRT) {
+            } else if (state.is(BlockTags.DIRT) && state.getBlock() == Blocks.DIRT) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_DIRT.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.DIRT && state.getBlock() == Blocks.GRAVEL) {
+            } else if (state.is(BlockTags.DIRT) && state.getBlock() == Blocks.GRAVEL) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_GRAVEL.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.STONE && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getDescriptionId().contains("cobblestone"))) {
+            } else if (state.is(BlockTags.BASE_STONE_OVERWORLD) && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getDescriptionId().contains("cobblestone"))) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_COBBLESTONE.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.STONE && state.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE.get()) {
+            } else if (state.is(BlockTags.BASE_STONE_OVERWORLD) && state.getBlock() != IafBlockRegistry.FROZEN_COBBLESTONE.get()) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_STONE.get().defaultBlockState(), 2);
             } else if (state.getBlock() == Blocks.DIRT_PATH) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_DIRT_PATH.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.WOOD) {
+            } else if (state.is(BlockTags.LOGS) || state.is(BlockTags.PLANKS)) {
                 world.setBlock(blockpos, IafBlockRegistry.FROZEN_SPLINTERS.get().defaultBlockState(), 2);
-            } else if (state.getMaterial() == Material.LEAVES || state.getMaterial() == Material.PLANT) {
+            } else if (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.FLOWERS) ||state.is(BlockTags.CROPS)) {
                 world.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 2);
             }
         }
@@ -65,9 +67,9 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
             return false;
         }
         if (!worldIn.getFluidState(worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).below()).isEmpty()) {

@@ -5,24 +5,25 @@ import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
 
 public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
 
     public BlockDreadTorchWall() {
         super(
             Properties
-                .of(Material.WOOD)
-                .lightLevel((state) -> {
-                    return 5;
-                })
+                .of()
+                .mapColor(MapColor.WOOD)
+                .instrument(NoteBlockInstrument.BASS)
+                .ignitedByLava()
+                .lightLevel((state) -> 5)
                 .sound(SoundType.STONE)
                 .noOcclusion()
                 .dynamicShape()
@@ -33,7 +34,7 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
     }
 
     @Override
-    public void animateTick(BlockState stateIn, @NotNull Level worldIn, BlockPos pos, @NotNull Random rand) {
+    public void animateTick(BlockState stateIn, @NotNull Level worldIn, BlockPos pos, @NotNull RandomSource rand) {
         Direction direction = stateIn.getValue(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.7D;

@@ -14,7 +14,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockGhostChest extends ChestBlock {
@@ -22,12 +23,13 @@ public class BlockGhostChest extends ChestBlock {
     public BlockGhostChest() {
         super(
             Properties
-                .of(Material.WOOD)
+                .of()
+                .mapColor(MapColor.WOOD)
+                .instrument(NoteBlockInstrument.BASS)
+                .ignitedByLava()
                 .strength(2.5F)
                 .sound(SoundType.WOOD),
-            () -> {
-                return IafTileEntityRegistry.GHOST_CHEST.get();
-            }
+                IafTileEntityRegistry.GHOST_CHEST::get
         );
     }
 

@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     @Override
     protected boolean canUpdatePath() {
-        return this.mob.isOnGround() || this.canFloat() && this.isInLiquid() || this.mob.isPassenger();
+        return this.mob.onGround() || this.canFloat() && this.isInLiquid() || this.mob.isPassenger();
     }
 
     @Override
@@ -43,29 +42,29 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     @Override
     public Path createPath(@NotNull BlockPos pos, int i) {
-        if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
+        if (this.level.getBlockState(pos).isAir()) {
             BlockPos blockpos;
 
-            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.below()) {
+            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).isAir(); blockpos = blockpos.below()) {
             }
 
             if (blockpos.getY() > 0) {
                 return super.createPath(blockpos.above(), i);
             }
 
-            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).getMaterial() == Material.AIR) {
+            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).isAir()) {
                 blockpos = blockpos.above();
             }
 
             pos = blockpos;
         }
 
-        if (!this.level.getBlockState(pos).getMaterial().isSolid()) {
+        if (!this.level.getBlockState(pos).isSolid()) {
             return super.createPath(pos, i);
         } else {
             BlockPos blockpos1;
 
-            for (blockpos1 = pos.above(); blockpos1.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.above()) {
+            for (blockpos1 = pos.above(); blockpos1.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos1).isSolid(); blockpos1 = blockpos1.above()) {
             }
 
             return super.createPath(blockpos1, i);
@@ -80,12 +79,12 @@ public class PathNavigateAmphibious extends PathNavigation {
     private int getPathablePosY() {
         if (this.mob.isInWater() && this.canFloat()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            Block block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+            Block block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
             int j = 0;
 
             while (block == Blocks.WATER) {
                 ++i;
-                block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+                block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
                 ++j;
 
                 if (j > 16) {
@@ -101,7 +100,7 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     protected void removeSunnyPath() {
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(BlockPos.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY + 0.5D, this.mob.getBlockZ()))) {
                 return;
             }
 
@@ -193,7 +192,7 @@ public class PathNavigateAmphibious extends PathNavigation {
                     double d1 = (double) l + 0.5D - vec31.z;
 
                     if (d0 * p_179683_8_ + d1 * p_179683_10_ >= 0.0D) {
-                        BlockPathTypes pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob, sizeX, sizeY, sizeZ, true, true);
+                        BlockPathTypes pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y - 1, l, this.mob);
                         if (pathnodetype == BlockPathTypes.LAVA) {
                             return false;
                         }
@@ -202,7 +201,7 @@ public class PathNavigateAmphibious extends PathNavigation {
                             return false;
                         }
 
-                        pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y, l, this.mob, sizeX, sizeY, sizeZ, true, true);
+                        pathnodetype = this.nodeEvaluator.getBlockPathType(this.level, k, y, l, this.mob);
                         float f = this.mob.getPathfindingMalus(pathnodetype);
 
                         if (f < 0.0F || f >= 8.0F) {
@@ -231,7 +230,7 @@ public class PathNavigateAmphibious extends PathNavigation {
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.level.getBlockState(blockpos).getBlock();
 
-                if (this.level.getBlockState(blockpos).getMaterial().blocksMotion()) {
+                if (this.level.getBlockState(blockpos).blocksMotion()) {
                     return false;
                 }
             }
