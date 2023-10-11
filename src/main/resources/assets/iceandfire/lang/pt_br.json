@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Fogo & Gelo [Itens]",
+  "itemGroup.iceandfire.items": "Fogo & Gelo [Itens]",
   "itemGroup.iceandfire.blocks": "Fogo & Gelo [Blocos]",
   "iceandfire.empty": "Vazio",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "Pilha de Prata",
   "block.iceandfire.copper_pile": "Pilha de Cobre",
   "block.iceandfire.silver_ore": "Minério de Prata",
-  "block.iceandfire.copper_ore": "Minério de Cobre",
   "block.iceandfire.sapphire_ore": "Minério de Safira",
-  "block.iceandfire.amythest_ore": "Minério de Ametista",
   "block.iceandfire.silver_block": "Bloco de Prata",
-  "block.iceandfire.copper_block": "Bloco de Cobre",
   "block.iceandfire.sapphire_block": "Bloco de Safira",
-  "block.iceandfire.amythest_block": "Bloco de Ametista",
   "block.iceandfire.chared_dirt": "Terra Carbonizada",
   "block.iceandfire.chared_grass": "Bloco de Grama Carbonizada",
   "block.iceandfire.chared_stone": "Pedra Carbonizada",

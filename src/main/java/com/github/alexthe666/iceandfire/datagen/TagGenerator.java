@@ -69,7 +69,7 @@ public class TagGenerator {
 
         @Override
         public String getName() {
-            return "Twilight Forest Banner Pattern Tags";
+            return "Ice and Fire Banner Pattern Tags";
         }
     }
 }
