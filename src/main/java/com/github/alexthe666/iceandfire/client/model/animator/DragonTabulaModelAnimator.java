@@ -68,10 +68,6 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
             deltaTicks = 0;
         }
 
-        for (AdvancedModelBox cube : model.getCubes().values()) {
-            setRotationsLoop(model, entity, limbSwingAmount, walking, currentPosition, prevPosition, partialTick, deltaTicks, cube);
-        }
-
         float speed_walk = 0.2F;
         float speed_idle = entity.isSleeping() ? 0.025F : 0.05F;
         float speed_fly = 0.2F;
@@ -79,6 +75,9 @@ public abstract class DragonTabulaModelAnimator<T extends EntityDragonBase> exte
         float degree_idle = entity.isSleeping() ? 0.25F : 0.5F;
         float degree_fly = 0.5F;
         if (!entity.isNoAi()) {
+            for (AdvancedModelBox cube : model.getCubes().values()) {
+                setRotationsLoop(model, entity, limbSwingAmount, walking, currentPosition, prevPosition, partialTick, deltaTicks, cube);
+            }
             if (entity.getAnimation() != EntityDragonBase.ANIMATION_SHAKEPREY || entity.getAnimation() != EntityDragonBase.ANIMATION_ROAR) {
                 model.faceTarget(rotationYaw, rotationPitch, 2, neckParts);
             }
