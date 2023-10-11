@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "iceandfire:deepslate_silver_ore"
+  },
+  "result": "iceandfire:silver_ingot",
+  "experience": 0.35,
+  "cookingtime": 100
+}
