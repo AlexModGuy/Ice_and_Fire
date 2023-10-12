@@ -20,7 +20,6 @@ import com.github.alexthe666.iceandfire.item.ItemDragonBow;
 import com.github.alexthe666.iceandfire.item.ItemDragonHorn;
 import com.github.alexthe666.iceandfire.item.ItemSummoningCrystal;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -30,7 +29,6 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +47,6 @@ public class IafClientSetup {
     public static TabulaModel SEA_SERPENT_BASE_MODEL;
     public static TabulaModel LIGHTNING_DRAGON_BASE_MODEL;
     private static ShaderInstance rendertypeDreadPortalShader;
-    private static ShaderInstance rendertypeScalableTextureShader;
     public static final ResourceLocation GHOST_CHEST_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest");
     public static final ResourceLocation GHOST_CHEST_LEFT_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest_left");
     public static final ResourceLocation GHOST_CHEST_RIGHT_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest_right");
@@ -133,17 +130,10 @@ public class IafClientSetup {
         event.registerShader(new ShaderInstance(provider, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
             rendertypeDreadPortalShader = p_172782_;
         });
-        event.registerShader(new ShaderInstance(provider, new ResourceLocation(IceAndFire.MODID, "rendertype_scalable_texture"), DefaultVertexFormat.NEW_ENTITY), (p_172782_) -> {
-            rendertypeScalableTextureShader = p_172782_;
-        });
     }
 
     public static ShaderInstance getRendertypeDreadPortalShader() {
         return rendertypeDreadPortalShader;
-    }
-
-    public static ShaderInstance getRendertypeScalableTextureShader() {
-        return rendertypeScalableTextureShader;
     }
 
     @SubscribeEvent
