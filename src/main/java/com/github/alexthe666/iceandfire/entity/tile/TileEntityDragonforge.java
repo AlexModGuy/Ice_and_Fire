@@ -74,7 +74,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             entityDragonforge.lastDragonFlameTimer--;
         }
         entityDragonforge.updateGrills(entityDragonforge.assembled());
-        if (level.isClientSide) {
+        if (!level.isClientSide) {
             if (entityDragonforge.prevAssembled != entityDragonforge.assembled()) {
                 BlockDragonforgeCore.setState(entityDragonforge.fireType, entityDragonforge.prevAssembled, level, pos);
             }
