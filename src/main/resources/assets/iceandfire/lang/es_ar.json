@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Items de Ice And Fire ",
+  "itemGroup.iceandfire.items": "Items de Ice And Fire ",
   "itemGroup.iceandfire.blocks": "Bloques de Ice And Fire",
   "iceandfire.empty": "Vacio",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "Pila de plata",
   "block.iceandfire.copper_pile": "Pila de cobre",
   "block.iceandfire.silver_ore": "Mineral de plata",
-  "block.iceandfire.copper_ore": "Mineral de cobre",
   "block.iceandfire.sapphire_ore": "Mineral de zafiro",
-  "block.iceandfire.amythest_ore": "Mineral de amatista",
   "block.iceandfire.silver_block": "Bloque de plata",
-  "block.iceandfire.copper_block": "Bloque de cobre",
   "block.iceandfire.sapphire_block": "Bloque de zafiro",
-  "block.iceandfire.amythest_block": "Bloque de amatista",
   "block.iceandfire.chared_dirt": "Tierra carbonizada",
   "block.iceandfire.chared_grass": "Pasto carbonizado",
   "block.iceandfire.chared_stone": "Piedra carbonizada",

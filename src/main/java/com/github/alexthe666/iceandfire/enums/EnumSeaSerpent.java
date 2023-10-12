@@ -13,6 +13,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Locale;
@@ -35,20 +36,17 @@ public enum EnumSeaSerpent {
     public RegistryObject<Item> leggings;
     public RegistryObject<Item> boots;
     public RegistryObject<Block> scaleBlock;
-    public RegistryObject<Item> item;
 
     EnumSeaSerpent(ChatFormatting color) {
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
-        this.scaleBlock = IafBlockRegistry.BLOCKS.register("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockSeaSerpentScales(resourceName, color));
-        this.item = IafItemRegistry.registerItem("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockItem(scaleBlock.get(), new Item.Properties()));
-        //this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }
 
 
     public static void initArmors() {
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
             color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F);
+            color.scaleBlock = IafBlockRegistry.register("sea_serpent_scale_block_" + color.resourceName, () -> new BlockSeaSerpentScales(color.resourceName, color.color));
             color.scale = IafItemRegistry.registerItem("sea_serpent_scales_" + color.resourceName, () ->
                 new ItemSeaSerpentScales(color.resourceName, color.color));
             color.helmet = IafItemRegistry.registerItem("tide_" + color.resourceName + "_helmet", () ->

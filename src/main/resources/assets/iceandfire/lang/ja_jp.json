@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Ice And Fire アイテム",
+  "itemGroup.iceandfire.items": "Ice And Fire アイテム",
   "itemGroup.iceandfire.blocks": "Ice And Fire ブロック",
   "iceandfire.empty": "Empty",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "堆積した銀",
   "block.iceandfire.copper_pile": "堆積した銅",
   "block.iceandfire.silver_ore": "銀鉱石",
-  "block.iceandfire.copper_ore": "銅鉱石",
   "block.iceandfire.sapphire_ore": "サファイア鉱石",
-  "block.iceandfire.amythest_ore": "アメシスト鉱石",
   "block.iceandfire.silver_block": "銀ブロック",
-  "block.iceandfire.copper_block": "銅ブロック",
   "block.iceandfire.sapphire_block": "サファイアブロック",
-  "block.iceandfire.amythest_block": "アメシストブロック",
   "block.iceandfire.chared_dirt": "焼け焦げた土",
   "block.iceandfire.chared_grass": "焼け焦げた草ブロック",
   "block.iceandfire.chared_stone": "焼け焦げた石",

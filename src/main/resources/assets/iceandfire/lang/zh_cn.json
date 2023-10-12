@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "冰火传说丨物品",
+  "itemGroup.iceandfire.items": "冰火传说丨物品",
   "itemGroup.iceandfire.blocks": "冰火传说丨方块",
   "iceandfire.empty": "空",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "银堆",
   "block.iceandfire.copper_pile": "铜堆",
   "block.iceandfire.silver_ore": "银矿石",
-  "block.iceandfire.copper_ore": "铜矿石",
   "block.iceandfire.sapphire_ore": "蓝宝石矿石",
-  "block.iceandfire.amythest_ore": "紫水晶矿石",
   "block.iceandfire.silver_block": "银块",
-  "block.iceandfire.copper_block": "铜块",
   "block.iceandfire.sapphire_block": "蓝宝石块",
-  "block.iceandfire.amythest_block": "紫水晶块",
   "block.iceandfire.chared_dirt": "炎焚泥土",
   "block.iceandfire.chared_grass": "炎焚草方块",
   "block.iceandfire.chared_stone": "炎焚石头",

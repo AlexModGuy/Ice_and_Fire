@@ -158,14 +158,14 @@ public class IafBlockRegistry {
 
     public static <T extends TorchBlock> RegistryObject<T> registerWallBlock(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
-        IafItemRegistry.registerItem(name, () -> new StandingAndWallBlockItem(ret.get(), ((IWallBlock) ret.get()).wallBlock(), new Item.Properties(), Direction.DOWN));
+        IafItemRegistry.registerItem(name, () -> new StandingAndWallBlockItem(ret.get(), ((IWallBlock) ret.get()).wallBlock(), new Item.Properties(), Direction.DOWN), false);
         IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
     public static <T extends Block> RegistryObject<T> registerWithRender(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
-        IafItemRegistry.registerItem(name, () -> new BlockItemWithRender(ret.get(), new Item.Properties()));
+        IafItemRegistry.registerItem(name, () -> new BlockItemWithRender(ret.get(), new Item.Properties()), false);
         IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }

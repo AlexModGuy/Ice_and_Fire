@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -128,11 +129,11 @@ public class IafClientSetup {
 
     @SubscribeEvent
     public static void setupShaders(RegisterShadersEvent event) throws IOException {
-        ResourceManager manager = Minecraft.getInstance().getResourceManager();
-        event.registerShader(new ShaderInstance(manager, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
+        ResourceProvider provider = event.getResourceProvider();
+        event.registerShader(new ShaderInstance(provider, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
             rendertypeDreadPortalShader = p_172782_;
         });
-        event.registerShader(new ShaderInstance(manager, new ResourceLocation(IceAndFire.MODID, "rendertype_scalable_texture"), DefaultVertexFormat.NEW_ENTITY), (p_172782_) -> {
+        event.registerShader(new ShaderInstance(provider, new ResourceLocation(IceAndFire.MODID, "rendertype_scalable_texture"), DefaultVertexFormat.NEW_ENTITY), (p_172782_) -> {
             rendertypeScalableTextureShader = p_172782_;
         });
     }
@@ -153,10 +154,10 @@ public class IafClientSetup {
             DragonAnimationsLibrary.register(EnumDragonPoses.values(), EnumDragonModelTypes.values());
 
             try {
-                SEA_SERPENT_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent"), new SeaSerpentTabulaModelAnimator());
-                FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/firedragon_Ground"), new FireDragonTabulaModelAnimator());
-                ICE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/icedragon_Ground"), new IceDragonTabulaModelAnimator());
-                LIGHTNING_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/lightningdragon_Ground"), new LightningTabulaDragonAnimator());
+                SEA_SERPENT_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent_base"), new SeaSerpentTabulaModelAnimator());
+                FIRE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/firedragon/firedragon_ground"), new FireDragonTabulaModelAnimator());
+                ICE_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/icedragon/icedragon_ground"), new IceDragonTabulaModelAnimator());
+                LIGHTNING_DRAGON_BASE_MODEL = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/lightningdragon/lightningdragon_ground"), new LightningTabulaDragonAnimator());
             } catch (IOException e) {
                 e.printStackTrace();
             }
