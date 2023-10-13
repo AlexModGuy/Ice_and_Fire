@@ -42,7 +42,6 @@ public class GuiBestiary extends Screen {
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
     private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
     private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
-    private static final ResourceLocation BOOK_WIDGET_TEXTURE = new ResourceLocation("citadel:textures/gui/book/widgets.png");
     private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
     public List<EnumBestiaryPages> allPageTypes = new ArrayList<>();
     public EnumBestiaryPages pageType;
@@ -947,57 +946,17 @@ public class GuiBestiary extends Screen {
     }
 
     private void drawItemStack(GuiGraphics ms, ItemStack stack, int x, int y, float scale) {
-        // Code snippet based on Citadels GuiBasicBook
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
 
         ms.pose().pushPose();
-        PoseStack poseStack = RenderSystem.getModelViewStack();
-        poseStack.pushPose();
-        poseStack.translate(cornerX, cornerY, 0.0D);
-        poseStack.scale(scale, scale, scale);
-        ItemDecoratorHandler itemDecoratorHandler = ItemDecoratorHandler.of(stack);
-        itemDecoratorHandler.render(ms, font, stack, x, y);
-        poseStack.popPose();
+        ms.pose().translate(cornerX, cornerY, 0.0D);
+        ms.pose().scale(scale* 0.92f, scale* 0.92f,scale* 0.92f);
+        ms.renderItem(stack, x, y);
         ms.pose().popPose();
-        RenderSystem.applyModelViewMatrix();
 
     }
 
-    /*protected void renderItemModelIntoGUI(PoseStack ms, ItemStack stack, int x, int y, BakedModel bakedmodel, float scale) {
-        ms.pose().pushPose();
-        // PlayerContainer.LOCATION_BLOCKS_TEXTURE is equivalent to
-        // AtlasTexture.LOCATION_BLOCKS_TEXTURE, but the latter is deprecated
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        this.getMinecraft().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS)
-            .setFilter(false, false);
-        RenderSystem.enableRescaleNormal();
-        RenderSystem.enableAlphaTest();
-        RenderSystem.defaultAlphaFunc();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        ms.pose().scale(16.0F * scale, 16.0F * scale, 16.0F * scale);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        ms.translate(x, y, 100.0F + itemRenderer.blitOffset);
-        ms.pose().scale(1.0F, -1.0F, 1.0F);
-        PoseStack matrixstack = new PoseStack();
-        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
-        boolean flag = !bakedmodel.usesBlockLight();
-        if (flag) {
-            Lighting.setupForFlatItems();
-        }
-
-        this.itemRenderer.render(stack, ItemTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
-        irendertypebuffer$impl.endBatch();
-        RenderSystem.enableDepthTest();
-        if (flag) {
-            Lighting.setupFor3DItems();
-        }
-
-        RenderSystem.disableAlphaTest();
-        RenderSystem.disableRescaleNormal();
-        ms.pose().popPose();
-    }*/
 
     private void drawBlockStack(GuiGraphics ms, ItemStack stack, int x, int y, float scale, int zScale) {
         int cornerX = (width - X) / 2;
