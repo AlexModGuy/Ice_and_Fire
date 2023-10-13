@@ -28,10 +28,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Random;
@@ -182,14 +179,14 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                         int l2 = mouseY - (j + 14 + 19 * i1);
                         int j3 = 0X9F988C;
                         if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
-                            ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1, j + 14 + 19 * i1, 0, 204, 108, 19);
+                            ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1, j + 14 + 19 * i1, 0, 204, 108, 19);
                             j2 = 16777088;
                             j3 = 16777088;
                         } else {
-                            ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
+                            ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1, j + 14 + 19 * i1, 0, 166, 108, 19);
                         }
 
-                        ms.blit(ENCHANTMENT_TABLE_BOOK_TEXTURE, j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
+                        ms.blit(ENCHANTMENT_TABLE_GUI_TEXTURE, j1 + 1, j + 15 + 19 * i1, 16 * i1, 223, 16, 16);
                         ms.pose().pushPose();
                         ms.pose().translate(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
                         ms.pose().scale(textScale, textScale, 1);

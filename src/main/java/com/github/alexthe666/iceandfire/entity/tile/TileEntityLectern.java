@@ -69,10 +69,6 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
         super(IafTileEntityRegistry.IAF_LECTERN.get(), pos, state);
     }
 
-    public static String getGuiID() {
-        return IceAndFire.MODID + ":lectern";
-    }
-
     public static void bookAnimationTick(Level p_155504_, BlockPos p_155505_, BlockState p_155506_, TileEntityLectern p_155507_) {
         float f1 = p_155507_.pageHelp1;
         do {
@@ -127,16 +123,6 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
         }
     }
 
-    public ItemStack getStackInSlotOnClosing(int index) {
-        if (!this.stacks.get(index).isEmpty()) {
-            ItemStack itemstack = this.stacks.get(index);
-            this.stacks.set(index, ItemStack.EMPTY);
-            return itemstack;
-        } else {
-            return ItemStack.EMPTY;
-        }
-    }
-
     @Override
     public void setItem(int index, ItemStack stack) {
         boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, this.stacks.get(index)) && ItemStack.matches(stack, this.stacks.get(index));
@@ -176,7 +162,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
             int page1 = selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
             int page2 = selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
             int page3 = selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
-            IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), page1, page2, page3, false, 0));
+            IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), page1, page2, page3));
         }
         return selectedPages;
     }
