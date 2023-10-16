@@ -168,7 +168,6 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         BlockPos blockpos = new BlockPos(i, j, k);
         this.level().getBlockState(blockpos.below()).is(BlockTags.SAND);
         return this.level().getBlockState(blockpos.below()).is(BlockTags.SAND)
-                && this.getRandom().nextInt(1 + IafConfig.deathWormSpawnCheckChance) == 0
                 && this.level().getMaxLocalRawBrightness(blockpos) > 8;
     }
 

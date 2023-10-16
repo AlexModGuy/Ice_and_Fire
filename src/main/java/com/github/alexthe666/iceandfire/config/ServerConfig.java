@@ -62,14 +62,12 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue deathWormAttackStrength;
     public final ForgeConfigSpec.BooleanValue deathWormAttackMonsters;
     public final ForgeConfigSpec.IntValue deathWormSpawnRate;
-    public final ForgeConfigSpec.IntValue deathWormSpawnCheckChance;
     public final ForgeConfigSpec.IntValue cockatriceChickenSearchLength;
     public final ForgeConfigSpec.IntValue cockatriceEggChance;
     public final ForgeConfigSpec.DoubleValue cockatriceMaxHealth;
     public final ForgeConfigSpec.BooleanValue chickensLayRottenEggs;
     public final ForgeConfigSpec.BooleanValue spawnCockatrices;
     public final ForgeConfigSpec.IntValue cockatriceSpawnRate;
-    public final ForgeConfigSpec.IntValue cockatriceSpawnCheckChance;
     public final ForgeConfigSpec.IntValue stymphalianBirdTargetSearchLength;
     public final ForgeConfigSpec.IntValue stymphalianBirdFeatherDropChance ;
     public final ForgeConfigSpec.DoubleValue stymphalianBirdFeatherAttackStength;
@@ -80,7 +78,6 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue stymphalianBirdSpawnChance;
     public final ForgeConfigSpec.BooleanValue spawnTrolls;
     public final ForgeConfigSpec.IntValue trollSpawnRate;
-    public final ForgeConfigSpec.IntValue trollSpawnCheckChance;
     public final ForgeConfigSpec.BooleanValue trollsDropWeapon;
     public final ForgeConfigSpec.DoubleValue trollMaxHealth;
     public final ForgeConfigSpec.DoubleValue trollAttackStrength;
@@ -239,7 +236,6 @@ public class ServerConfig {
         this.deathWormAttackStrength = buildDouble(builder, "Death Worm Base Attack Strength", "all", 3, 1, 10000, "Default deathworm attack strength, this is scaled to the worm's particular size");
         this.deathWormAttackMonsters = buildBoolean(builder, "Death Worms Target Monsters", "all", true, "True if wild deathworms are allowed to target and attack monsters");
         this.deathWormSpawnRate = buildInt(builder, "Death Worm Spawn Weight", "all", 30, 1, 10000, "Deathworm spawn weight. Higher = lower chance to spawn");
-        this.deathWormSpawnCheckChance = buildInt(builder, "Death Worm Spawn Check Chance", "all", 3, 0, 10000, "A double check to see if the game can spawn death worms. Higher number = lower chance to spawn.");
         builder.pop();
         builder.push("Cockatrice");
         this.cockatriceMaxHealth = buildDouble(builder, "Cockatrice Health", "all", 40, 1, 10000, "Maximum cockatrice health");
@@ -248,7 +244,6 @@ public class ServerConfig {
         this.chickensLayRottenEggs = buildBoolean(builder, "Chickens Lay Rotten Eggs", "all", true, "True if chickens lay rotten eggs.");
         this.spawnCockatrices = buildBoolean(builder, "Spawn Cockatrices", "all", true, "True if cockatrices are allowed to spawn");
         this.cockatriceSpawnRate = buildInt(builder, "Cockatrice Spawn Weight", "all", 4, 1, 10000, "Cockatrice spawn weight. Lower = lower chance to spawn");
-        this.cockatriceSpawnCheckChance = buildInt(builder, "Cockatrice Spawn Check Chance", "all", 0, 0, 10000, "A double check to see if the game can spawn cockatrices. Higher number = lower chance to spawn.");
         builder.pop();
         builder.push("Stymphalians");
         this.stymphalianBirdTargetSearchLength = buildInt(builder, "Stymphalian Bird Target Search Length", "all", 64, 1, 10000, "How many blocks away can stymphalian birds spot potential prey. Note that increasing this could cause lag.");
@@ -264,7 +259,6 @@ public class ServerConfig {
         this.spawnTrolls = buildBoolean(builder, "Spawn Trolls", "all", true, "True if trolls are allowed to spawn");
         this.trollsDropWeapon = buildBoolean(builder, "Trolls Drop Weapon", "all", true, "True if trolls are allowed to drop their weapon on death.");
         this.trollSpawnRate = buildInt(builder, "Troll Spawn Weight", "all", 40, 1, 10000, "Troll spawn weight. Lower = lower chance to spawn");
-        this.trollSpawnCheckChance = buildInt(builder, "Troll Spawn Check Chance", "all", 2, 0, 10000, "A double check to see if the game can spawn trolls. Higher number = lower chance to spawn.");
         this.trollMaxHealth = buildDouble(builder, "Troll Max Health", "all", 50, 1, 10000, "Maximum troll health");
         this.trollAttackStrength = buildDouble(builder, "Troll Attack Strength", "all", 10, 1, 10000, "Troll attack strength");
         builder.pop();

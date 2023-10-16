@@ -118,9 +118,6 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         BlockPos pos = this.blockPosition();
         BlockPos heightAt = worldIn.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
         boolean rngCheck = true;
-        if (IafConfig.trollSpawnCheckChance > 0) {
-            rngCheck = this.getRandom().nextInt(IafConfig.trollSpawnCheckChance) == 0;
-        }
         return rngCheck && pos.getY() < heightAt.getY() - 10 && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 

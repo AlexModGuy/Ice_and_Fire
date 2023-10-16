@@ -159,8 +159,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
         BlockPos radialPos = BlockPos.containing(orbit.getX() + extraX, orbit.getY(),orbit.getZ() + extraZ);
-        //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
-        // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
         entity.orbitRadius = possibleOrbitRadius;
         return radialPos;
     }
@@ -632,6 +630,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         this.setCommand(compound.getInt("Command"));
     }
 
+    //TODO: Create entity placements
     public boolean getCanSpawnHere() {
         int i = Mth.floor(this.getX());
         int j = Mth.floor(this.getBoundingBox().minY);

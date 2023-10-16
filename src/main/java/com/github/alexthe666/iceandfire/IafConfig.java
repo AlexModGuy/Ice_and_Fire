@@ -69,14 +69,12 @@ public class IafConfig {
     public static double deathWormAttackStrength = 3D;
     public static boolean deathWormAttackMonsters = true;
     public static int deathWormSpawnRate = 30;
-    public static int deathWormSpawnCheckChance = 3;
     public static int cockatriceChickenSearchLength = 32;
     public static int cockatriceEggChance = 30;
     public static double cockatriceMaxHealth = 40.0D;
     public static boolean chickensLayRottenEggs = true;
     public static boolean spawnCockatrices = true;
     public static int cockatriceSpawnRate = 4;
-    public static int cockatriceSpawnCheckChance = 0;
     public static int stymphalianBirdTargetSearchLength = 48;
     public static int stymphalianBirdFeatherDropChance = 25;
     public static double stymphalianBirdFeatherAttackStength = 1F;
@@ -87,7 +85,6 @@ public class IafConfig {
     public static int stymphalianBirdSpawnChance = 80;
     public static boolean spawnTrolls = true;
     public static int trollSpawnRate = 60;
-    public static int trollSpawnCheckChance = 2;
     public static boolean trollsDropWeapon = true;
     public static double trollMaxHealth = 50;
     public static double trollAttackStrength = 10;
@@ -219,14 +216,12 @@ public class IafConfig {
             deathWormAttackStrength = ConfigHolder.SERVER.deathWormAttackStrength.get();
             deathWormAttackMonsters = ConfigHolder.SERVER.deathWormAttackMonsters.get();
             deathWormSpawnRate = ConfigHolder.SERVER.deathWormSpawnRate.get();
-            deathWormSpawnCheckChance = ConfigHolder.SERVER.deathWormSpawnCheckChance.get();
             cockatriceChickenSearchLength = ConfigHolder.SERVER.cockatriceChickenSearchLength.get();
             cockatriceEggChance = ConfigHolder.SERVER.cockatriceEggChance.get();
             cockatriceMaxHealth = ConfigHolder.SERVER.cockatriceMaxHealth.get();
             chickensLayRottenEggs = ConfigHolder.SERVER.chickensLayRottenEggs.get();
             spawnCockatrices = ConfigHolder.SERVER.spawnCockatrices.get();
             cockatriceSpawnRate = ConfigHolder.SERVER.cockatriceSpawnRate.get();
-            cockatriceSpawnCheckChance = ConfigHolder.SERVER.cockatriceSpawnCheckChance.get();
             stymphalianBirdTargetSearchLength = ConfigHolder.SERVER.stymphalianBirdTargetSearchLength.get();
             stymphalianBirdFeatherDropChance = ConfigHolder.SERVER.stymphalianBirdFeatherDropChance.get();
             stymphalianBirdFeatherAttackStength = ConfigHolder.SERVER.stymphalianBirdFeatherAttackStength.get();
@@ -237,7 +232,6 @@ public class IafConfig {
             stymphalianBirdSpawnChance = ConfigHolder.SERVER.stymphalianBirdSpawnChance.get();
             spawnTrolls = ConfigHolder.SERVER.spawnTrolls.get();
             trollSpawnRate = ConfigHolder.SERVER.trollSpawnRate.get();
-            trollSpawnCheckChance = ConfigHolder.SERVER.trollSpawnCheckChance.get();
             trollsDropWeapon = ConfigHolder.SERVER.trollsDropWeapon.get();
             trollMaxHealth = ConfigHolder.SERVER.trollMaxHealth.get();
             trollAttackStrength = ConfigHolder.SERVER.trollAttackStrength.get();

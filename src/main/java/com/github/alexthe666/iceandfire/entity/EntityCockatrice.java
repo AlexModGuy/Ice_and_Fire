@@ -110,10 +110,6 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         return 10;
     }
 
-    public boolean getCanSpawnHere() {
-        return this.getRandom().nextInt(IafConfig.cockatriceSpawnCheckChance + 1) == 0;
-    }
-
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
