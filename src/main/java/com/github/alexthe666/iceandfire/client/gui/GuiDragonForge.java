@@ -37,9 +37,9 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
         Font font = this.getMinecraft().font;
         if (tileFurnace != null) {
             String s = I18n.get("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");
-            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752);
+            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752, false);
         }
-        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
     }
 
     @Override

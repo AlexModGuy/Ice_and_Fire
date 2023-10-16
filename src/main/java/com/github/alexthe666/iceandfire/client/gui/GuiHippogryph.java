@@ -30,9 +30,9 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
         Font font = this.getMinecraft().font;
         if (entity instanceof EntityHippogryph) {
             EntityHippogryph hippo = (EntityHippogryph) entity;
-            pGuiGraphics.drawString(font, hippo.getDisplayName().getString(), 8, 6, 4210752);
+            pGuiGraphics.drawString(font, hippo.getDisplayName().getString(), 8, 6, 4210752, false);
         }
-        pGuiGraphics.drawString(font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+        pGuiGraphics.drawString(font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
     }
 
     @Override

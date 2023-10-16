@@ -22,9 +22,9 @@ public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
     protected void renderLabels(GuiGraphics pGuiGraphics, int x, int y) {
         if (menu != null) {
             String s = I18n.get("block.iceandfire.podium");
-            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752);
+            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752, false);
         }
-        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
     }
 
 
