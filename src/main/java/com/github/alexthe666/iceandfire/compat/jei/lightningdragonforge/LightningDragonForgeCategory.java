@@ -19,12 +19,6 @@ public class LightningDragonForgeCategory implements IRecipeCategory<DragonForge
         drawable = new LightningDragonForgeDrawable();
     }
 
-
-/*    @Override
-    public @NotNull ResourceLocation getUid() {
-        return IceAndFireJEIPlugin.LIGHTNING_DRAGON_FORGE_ID;
-    }*/
-
     @Override
     public @NotNull RecipeType<DragonForgeRecipe> getRecipeType() {
         return DragonForgeRecipe.LIGHTNING_DRAGON_FORGE_RECIPE_TYPE;
@@ -45,21 +39,12 @@ public class LightningDragonForgeCategory implements IRecipeCategory<DragonForge
         return null;
     }
 
-/*    @Override
-    public void setIngredients(DragonForgeRecipe dragonForgeRecipe, IIngredients iIngredients) {
-        List<Ingredient> ingredientsList = new ArrayList<>();
-        ingredientsList.add(dragonForgeRecipe.getInput());
-        ingredientsList.add(dragonForgeRecipe.getBlood());
-        iIngredients.setInputIngredients(ingredientsList);
-        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getResultItem());
-    }*/
-
     @Override
     public void setRecipe(IRecipeLayoutBuilder recipeLayoutBuilder, @NotNull DragonForgeRecipe dragonForgeRecipe, @NotNull IFocusGroup focuses) {
         recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 64, 29)
-                .addIngredients(dragonForgeRecipe.getBlood());
-        recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 82, 29)
                 .addIngredients(dragonForgeRecipe.getInput());
+        recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 82, 29)
+                .addIngredients(dragonForgeRecipe.getBlood());
         recipeLayoutBuilder.addSlot(RecipeIngredientRole.OUTPUT, 144, 30)
                 .addItemStack(dragonForgeRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
     }

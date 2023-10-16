@@ -20,11 +20,6 @@ public class FireDragonForgeCategory implements IRecipeCategory<DragonForgeRecip
         drawable = new FireDragonForgeDrawable();
     }
 
-/*    @Override
-    public @NotNull ResourceLocation getRegistryName() {
-        return IceAndFireJEIPlugin.FIRE_DRAGON_FORGE_ID;
-    }*/
-
     @Override
     public @NotNull RecipeType<DragonForgeRecipe> getRecipeType() {
         return DragonForgeRecipe.FIRE_DRAGON_FORGE_RECIPE_TYPE;
@@ -45,23 +40,13 @@ public class FireDragonForgeCategory implements IRecipeCategory<DragonForgeRecip
         return null;
     }
 
-/*    @Override
-    public void setIngredients(DragonForgeRecipe dragonForgeRecipe, Ingredient iIngredients) {
-        List<Ingredient> ingredientsList = new ArrayList<>();
-        ingredientsList.add(dragonForgeRecipe.getInput());
-        ingredientsList.add(dragonForgeRecipe.getBlood());
-        iIngredients.setInputIngredients(ingredientsList);
-        iIngredients.setOutput(VanillaTypes.ITEM, dragonForgeRecipe.getResultItem());
-
-    }*/
-
     @Override
     public void setRecipe(IRecipeLayoutBuilder recipeLayoutBuilder, @NotNull DragonForgeRecipe dragonForgeRecipe, @NotNull IFocusGroup  focuses) {
         Level level = Minecraft.getInstance().level;
         recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 64, 29)
-                .addIngredients(dragonForgeRecipe.getBlood());
-        recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 82, 29)
                 .addIngredients(dragonForgeRecipe.getInput());
+        recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 82, 29)
+                .addIngredients(dragonForgeRecipe.getBlood());
         if (level != null) {
             recipeLayoutBuilder.addSlot(RecipeIngredientRole.OUTPUT, 144, 30)
                     .addItemStack(dragonForgeRecipe.getResultItem(level.registryAccess()));
