@@ -1,64 +1,44 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.IafProcessorLists;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.world.gen.processor.VillageHouseProcessor;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.*;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class IafVillagerRegistry {
 
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, IceAndFire.MODID);
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, IceAndFire.MODID);
     public static final RegistryObject<PoiType> SCRIBE_POI = POI_TYPES.register("scribe", () -> new PoiType(ImmutableSet.copyOf(IafBlockRegistry.LECTERN.get().getStateDefinition().getPossibleStates()), 1, 1));
-//    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", Predicate.isEqual(SCRIBE_POI.getHolder().get()), Predicate.isEqual(SCRIBE_POI.getHolder().get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
-
-    private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final ResourceKey<StructureProcessorList> HOUSE_PROCESSOR = ResourceKey.create(Registries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"));
-    private static StructureProcessorList genVillageHouseProcessor() {
-        RuleProcessor mossify = new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockMatchTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.defaultBlockState())));
-        return new StructureProcessorList(ImmutableList.of(mossify, new VillageHouseProcessor()));
-    }
-
-    public static void setup(BootstapContext<StructureTemplatePool> pContext) {
-        if (IafConfig.villagerHouseWeight > 0) {
-            PlainVillagePools.bootstrap(pContext);
-            SnowyVillagePools.bootstrap(pContext);
-            SavannaVillagePools.bootstrap(pContext);
-            DesertVillagePools.bootstrap(pContext);
-            TaigaVillagePools.bootstrap(pContext);
-
-            for (String type : VILLAGE_TYPES) {
-                addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
-            }
-        }
-
-    }
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, IceAndFire.MODID);
+    public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", (entry) -> entry.value().equals(SCRIBE_POI.get()), (entry) -> entry.value().equals(SCRIBE_POI.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
     public static void addScribeTrades(Int2ObjectMap<List<VillagerTrades.ItemListing>> trades) {
+
         final float emeraldForItemsMultiplier = 0.05F; //Values taken from VillagerTrades.java
         final float itemForEmeraldMultiplier = 0.05F;
         final float rareItemForEmeraldMultiplier = 0.2F;
@@ -92,32 +72,36 @@ public class IafVillagerRegistry {
         trades.get(5).add((entity, random) -> new MerchantOffer(new ItemStack(IafItemRegistry.ECTOPLASM.get(), 6), new ItemStack(Items.EMERALD, 1), 7, 3, itemForEmeraldMultiplier));
     }
 
-    private static void addStructureToPool(ResourceLocation pool, ResourceLocation toAdd, int weight) {
-        /*
-        TODO:
-        StructureTemplatePool old = Registries.TEMPLATE_POOL;
-        List<StructurePoolElement> shuffled = old != null ? old.getShuffledTemplates(new Random()) : ImmutableList.of();
-        Object2IntMap<StructurePoolElement> recomputedPieces = new Object2IntLinkedOpenHashMap<>();
+    public static void addBuildingToPool(Registry<StructureTemplatePool> templatePoolRegistry,
+                                         Registry<StructureProcessorList> processorListRegistry,
+                                         ResourceLocation poolRL,
+                                         String nbtPieceRL,
+                                         int weight) {
 
-        // Recompute the weights
-        for (StructurePoolElement p : shuffled)
-            recomputedPieces.computeInt(p, (StructurePoolElement pTemp, Integer i) -> (i == null ? 0 : i) + 1);
+        Holder<StructureProcessorList> villageHouseProcessorList = processorListRegistry.getHolderOrThrow(IafProcessorLists.HOUSE_PROCESSOR);
 
-        // Create the needed list
-        List<Pair<StructurePoolElement, Integer>> newPieces = recomputedPieces.object2IntEntrySet().stream()
-                .map(e -> Pair.of(e.getKey(), e.getIntValue()))
-                .collect(Collectors.toList());
+        // Grab the pool we want to add to
+        StructureTemplatePool pool = templatePoolRegistry.get(poolRL);
+        if (pool == null) return;
 
-        // Add the element with the appropriate weight
-        newPieces.add(new Pair<>(StructurePoolElement.legacy(toAdd.toString(), HOUSE_PROCESSOR).apply(StructureTemplatePool.Projection.RIGID), weight));
+        // Grabs the nbt piece and creates a SinglePoolElement of it that we can add to a structure's pool.
+        // Use .legacy( for villages/outposts and .single( for everything else
+        SinglePoolElement piece = SinglePoolElement.legacy(nbtPieceRL, villageHouseProcessorList).apply(StructureTemplatePool.Projection.RIGID);
 
-        ResourceLocation name = old.getName();
-        int id = Registries.TEMPLATE_POOL.getId(old);
-        ((WritableRegistry<StructureTemplatePool>) Registries.TEMPLATE_POOL).registerOrOverride(
-                OptionalInt.of(id),
-                ResourceKey.create(BuiltinRegistries.TEMPLATE_POOL.key(), name),
-                new StructureTemplatePool(pool, name, newPieces),
-                Lifecycle.stable());*/
+        // Use AccessTransformer or Accessor Mixin to make StructureTemplatePool's templates field public for us to see.
+        // Weight is handled by how many times the entry appears in this list.
+        // We do not need to worry about immutability as this field is created using Lists.newArrayList(); which makes a mutable list.
+        for (int i = 0; i < weight; i++) {
+            pool.templates.add(piece);
+        }
+
+        // Use AccessTransformer or Accessor Mixin to make StructureTemplatePool's rawTemplates field public for us to see.
+        // This list of pairs of pieces and weights is not used by vanilla by default but another mod may need it for efficiency.
+        // So lets add to this list for completeness. We need to make a copy of the array as it can be an immutable list.
+        List<Pair<StructurePoolElement, Integer>> listOfPieceEntries = new ArrayList<>(pool.rawTemplates);
+        listOfPieceEntries.add(new Pair<>(piece, weight));
+        pool.rawTemplates = listOfPieceEntries;
     }
+
 
 }

@@ -26,7 +26,6 @@ plugins {
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 
-
 repositories {
     maven {
         // location of a maven mirror for JEI files, as a fallback
@@ -127,7 +126,7 @@ processResources {
 }
 
 dependencies {
-    minecraft 'net.neoforged:forge:1.20.1-47.1.65'
+    minecraft 'net.neoforged:forge:1.20.1-47.1.79'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     // compile against the JEI API but do not include it at runtime

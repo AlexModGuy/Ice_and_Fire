@@ -98,7 +98,6 @@ public class IceAndFire {
         IafRecipeRegistry.RECIPE_TYPE.register(modBus);
         IafBannerPatterns.BANNERS.register(modBus);
         IafStructureTypes.STRUCTURE_TYPES.register(modBus);
-        //IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
         IafProcessors.PROCESSORS.register(modBus);
@@ -108,7 +107,6 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
-
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
         modBus.addListener(this::setupClient);
@@ -160,8 +158,6 @@ public class IceAndFire {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
         event.enqueueWork(() -> {
             PROXY.setup();
-            //TODO: IafVillagerRegistry.setup();
-            // TODO: We might able to do this differently
             IafLootRegistry.init();
         });
     }
