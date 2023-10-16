@@ -253,11 +253,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public boolean isControlledByLocalInstance() {
-        return false;
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -266,7 +261,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     public boolean shouldRiderSit() {
         return false;
     }
-
 
     @Override
     public void aiStep() {

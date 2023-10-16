@@ -224,16 +224,6 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean isControlledByLocalInstance() {
-        return super.isControlledByLocalInstance();
-    }
-
-/*    @Override
-    public boolean canBeControlledByRider() {
-        return true;
-    }*/
-
-    @Override
     public void positionRider(@NotNull Entity passenger, @NotNull MoveFunction callback) {
         super.positionRider(passenger, callback);
         if (this.hasPassenger(passenger)) {

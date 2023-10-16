@@ -989,11 +989,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public boolean isControlledByLocalInstance() {
-        return false;
-    }
-
-    @Override
     public double getFlightSpeedModifier() {
         return 0.555D;
     }

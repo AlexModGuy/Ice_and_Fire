@@ -749,16 +749,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         return false;
     }
 
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return false;
-    }
-
-/*    @Override
-    public boolean canBeControlledByRider() {
-        return true;
-    }*/
-
     @Nullable
     public Player getRidingPlayer() {
         if (this.getControllingPassenger() instanceof Player) {

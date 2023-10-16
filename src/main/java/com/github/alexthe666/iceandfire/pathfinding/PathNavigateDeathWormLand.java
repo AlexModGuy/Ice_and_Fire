@@ -133,12 +133,17 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     /**
      * Checks if the specified entity can safely walk to the specified location.
      */
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+    @Override
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
         int i = Mth.floor(posVec31.x);
         int j = Mth.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
         double d1 = posVec32.z - posVec31.z;
         double d2 = d0 * d0 + d1 * d1;
+        int sizeX = (int) worm.getBoundingBox().getXsize();
+        int sizeY = (int) worm.getBoundingBox().getYsize();
+        int sizeZ = (int) worm.getBoundingBox().getZsize();
+
 
         if (d2 < 1.0E-8D) {
             return false;

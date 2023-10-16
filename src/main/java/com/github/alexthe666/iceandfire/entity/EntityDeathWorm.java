@@ -800,16 +800,6 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public boolean isControlledByLocalInstance() {
-        return false;
-    }
-
-    @Override
-    public void travel(@NotNull Vec3 vec) {
-        super.travel(vec);
-    }
-
-    @Override
     public boolean shouldAnimalsFear(Entity entity) {
         return true;
     }

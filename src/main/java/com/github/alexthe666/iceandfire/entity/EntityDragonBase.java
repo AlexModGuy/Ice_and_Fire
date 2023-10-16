@@ -1975,17 +1975,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public abstract Item getVariantEgg(int variant);
 
     public abstract Item getSummoningCrystal();
-
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return super.isControlledByLocalInstance();
-    }
-
-/*    @Override
-    public boolean canBeControlledByRider() {
-        return true;
-    }*/
-
     @Override
     public boolean isImmobile() {
         return this.getHealth() <= 0.0F || isOrderedToSit() && !this.isVehicle() || this.isModelDead() || this.isPassenger();

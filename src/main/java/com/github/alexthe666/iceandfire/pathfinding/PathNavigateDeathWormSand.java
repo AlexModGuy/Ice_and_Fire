@@ -20,11 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
-    private final EntityDeathWorm worm;
 
     public PathNavigateDeathWormSand(EntityDeathWorm deathworm, Level worldIn) {
         super(deathworm, worldIn);
-        worm = deathworm;
     }
 
     @Override
@@ -40,9 +38,6 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return new PathFinder(this.nodeEvaluator, i);
     }
 
-    /**
-     * If on ground or swimming and can swim
-     */
     @Override
     protected boolean canUpdatePath() {
         return true;
@@ -53,11 +48,8 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return new Vec3(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ());
     }
 
-
-    /**
-     * Checks if the specified entity can safely walk to the specified location.
-     */
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+    @Override
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
         HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(posVec31, posVec32, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
         if (raytraceresult != null && raytraceresult.getType() == HitResult.Type.BLOCK) {
             Vec3 vec3i = raytraceresult.getLocation();

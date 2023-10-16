@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.entity.Mob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,7 @@ public class AiDebug {
     }
 
     public static boolean isEnabled() {
-        return false;
+        return IceAndFire.VERSION.equals("0.0NONE");
     }
 
     public static void logData() {
