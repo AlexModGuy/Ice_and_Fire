@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.client.model.container.JsonUtils;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
 import com.google.gson.JsonObject;
-import mezz.jei.api.constants.ModIds;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -22,10 +21,6 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     private final String dragonType;
     private final int cookTime;
     private final ResourceLocation recipeId;
-    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> FIRE_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "firedragonforge", DragonForgeRecipe.class);
-    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> ICE_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "icedragonforge", DragonForgeRecipe.class);
-    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> LIGHTNING_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "lightningdragonforge", DragonForgeRecipe.class);
-
 
     public DragonForgeRecipe(ResourceLocation recipeId, Ingredient input, Ingredient blood, ItemStack result, String dragonType, int cookTime) {
         this.recipeId = recipeId;

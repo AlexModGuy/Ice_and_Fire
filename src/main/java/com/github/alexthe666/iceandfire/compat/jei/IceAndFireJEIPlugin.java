@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.ModIds;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -27,6 +28,11 @@ import java.util.stream.Collectors;
 public class IceAndFireJEIPlugin implements IModPlugin {
 
     public static final ResourceLocation MOD = new ResourceLocation("iceandfire:iceandfire");
+    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> FIRE_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "firedragonforge", DragonForgeRecipe.class);
+    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> ICE_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "icedragonforge", DragonForgeRecipe.class);
+    public static final mezz.jei.api.recipe.RecipeType<DragonForgeRecipe> LIGHTNING_DRAGON_FORGE_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(ModIds.MINECRAFT_ID, "lightningdragonforge", DragonForgeRecipe.class);
+
+
     public static final ResourceLocation FIRE_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:fire_dragon_forge");
     public static final ResourceLocation ICE_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:ice_dragon_forge");
     public static final ResourceLocation LIGHTNING_DRAGON_FORGE_ID = new ResourceLocation("iceandfire:lightning_dragon_forge");
@@ -44,9 +50,9 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         List<DragonForgeRecipe> lightning = forgeRecipeList.stream().filter(item -> item.getDragonType().equals("lightning")).collect(Collectors.toList());
 
 
-        registry.addRecipes(DragonForgeRecipe.FIRE_DRAGON_FORGE_RECIPE_TYPE, fire);
-        registry.addRecipes(DragonForgeRecipe.ICE_DRAGON_FORGE_RECIPE_TYPE, ice);
-        registry.addRecipes(DragonForgeRecipe.LIGHTNING_DRAGON_FORGE_RECIPE_TYPE, lightning);
+        registry.addRecipes(FIRE_DRAGON_FORGE_RECIPE_TYPE, fire);
+        registry.addRecipes(ICE_DRAGON_FORGE_RECIPE_TYPE, ice);
+        registry.addRecipes(LIGHTNING_DRAGON_FORGE_RECIPE_TYPE, lightning);
 
         addDescription(registry, new ItemStack(IafItemRegistry.FIRE_DRAGON_BLOOD.get()));
         addDescription(registry, new ItemStack(IafItemRegistry.ICE_DRAGON_BLOOD.get()));
@@ -103,9 +109,9 @@ public class IceAndFireJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
-        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get()), DragonForgeRecipe.FIRE_DRAGON_FORGE_RECIPE_TYPE);
-        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE.get()), DragonForgeRecipe.ICE_DRAGON_FORGE_RECIPE_TYPE);
-        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.get()), DragonForgeRecipe.LIGHTNING_DRAGON_FORGE_RECIPE_TYPE);
+        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get()), FIRE_DRAGON_FORGE_RECIPE_TYPE);
+        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_ICE_CORE.get()), ICE_DRAGON_FORGE_RECIPE_TYPE);
+        registry.addRecipeCatalyst(new ItemStack(IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.get()), LIGHTNING_DRAGON_FORGE_RECIPE_TYPE);
     }
 
     @Override

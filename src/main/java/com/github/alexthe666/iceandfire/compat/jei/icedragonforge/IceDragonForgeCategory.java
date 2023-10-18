@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.compat.jei.icedragonforge;
 
+import com.github.alexthe666.iceandfire.compat.jei.IceAndFireJEIPlugin;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -22,7 +23,7 @@ public class IceDragonForgeCategory implements IRecipeCategory<DragonForgeRecipe
 
     @Override
     public @NotNull RecipeType<DragonForgeRecipe> getRecipeType() {
-        return DragonForgeRecipe.ICE_DRAGON_FORGE_RECIPE_TYPE;
+        return IceAndFireJEIPlugin.ICE_DRAGON_FORGE_RECIPE_TYPE;
     }
 
     @Override
