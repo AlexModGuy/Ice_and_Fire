@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath 'org.parchmentmc:librarian:1.+'
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
@@ -21,6 +20,7 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.gradle' version '[6.0.18,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
@@ -129,11 +129,8 @@ dependencies {
     minecraft 'net.neoforged:forge:1.20.1-47.1.79'
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
     //compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.25")
     //compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.25")
     //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
