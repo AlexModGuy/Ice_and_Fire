@@ -50,6 +50,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -86,9 +87,15 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public EntitySiren(EntityType<EntitySiren> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.switchNavigator(true);
-        this.setMaxUpStep(2);
+        if (worldIn.isClientSide) {
+            tail_buffer = new ChainBuffer();
+        }
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(0, new SirenAIFindWaterTarget(this));
         this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
@@ -109,9 +116,6 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
                 return EntitySiren.this.isAgressive();
             }
         }));
-        if (worldIn.isClientSide) {
-            tail_buffer = new ChainBuffer();
-        }
     }
 
     public static boolean isWearingEarplugs(LivingEntity entity) {
@@ -351,7 +355,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         this.setSinging(tag.getBoolean("Singing"));
         this.setSwimming(tag.getBoolean("Swimming"));
         this.setCharmed(tag.getBoolean("Passive"));
-
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     public boolean isSinging() {
@@ -432,12 +436,13 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.25D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, 6.0D);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(ForgeMod.STEP_HEIGHT.get(), 2.0F);
     }
 
     @Override

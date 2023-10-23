@@ -105,7 +105,6 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
 
     public EntitySeaSerpent(EntityType<EntitySeaSerpent> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         switchNavigator(false);
         this.noCulling = true;
         resetParts(1.0F);
@@ -389,6 +388,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         attackDecision = compound.getBoolean("AttackDecision");
         this.setBreathing(compound.getBoolean("Breathing"));
         this.setAncient(compound.getBoolean("Ancient"));
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     private void updateAttributes() {

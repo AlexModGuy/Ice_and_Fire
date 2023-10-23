@@ -58,6 +58,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
@@ -96,14 +97,16 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
-        this.setMaxUpStep(1);
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
         this.switchNavigator(false);
+    }
+
+    @Override
+    protected void registerGoals() {
         this.goalSelector.addGoal(0, new EntityGroundAIRide<>(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new DeathWormAIAttack(this));
@@ -122,11 +125,11 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
                     return input instanceof Monster;
                 } else {
                     return (IafConfig.deathWormAttackMonsters ?
-                        input instanceof LivingEntity && DragonUtils.isAlive(input) && !input.isInWater() :
-                        (input instanceof Animal || input instanceof Player)) &&
-                        DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase &&
-                        ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwnedBy(input)
-                        && !input.isInWater();
+                            input instanceof LivingEntity && DragonUtils.isAlive(input) && !input.isInWater() :
+                            (input instanceof Animal || input instanceof Player)) &&
+                            DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase &&
+                            ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwnedBy(input)
+                            && !input.isInWater();
                 }
             }
         }));
@@ -134,16 +137,17 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, IafConfig.deathWormMaxHealth)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.15D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, IafConfig.deathWormAttackStrength)
-            //FOLLOW RANGE
-            .add(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
-            //ARMOR
-            .add(Attributes.ARMOR, 3);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, IafConfig.deathWormMaxHealth)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.15D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, IafConfig.deathWormAttackStrength)
+                //FOLLOW RANGE
+                .add(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
+                //ARMOR
+                .add(Attributes.ARMOR, 3)
+                .add(ForgeMod.STEP_HEIGHT.get(), 1.0F);
     }
 
     @Override
@@ -303,6 +307,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         this.setWormAge(compound.getInt("WormAge"));
         this.setWormHome(BlockPos.of(compound.getLong("WormHome")));
         this.willExplode = compound.getBoolean("WillExplode");
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     private void setStateField(int i, boolean newState) {
@@ -477,7 +482,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         for (Direction direction1 : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST, Direction.UP}) {
             blockpos$mutable.setWithOffset(vec3i, direction1);
             if (!this.level().getBlockState(blockpos$mutable).isCollisionShapeFullBlock(this.level(), blockpos$mutable)
-                || level().getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
+                    || level().getBlockState(blockpos$mutable).is(BlockTags.SAND)) {
                 double d1 = vector3d.get(direction1.getAxis());
                 double d2 = direction1.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0D - d1 : d1;
                 if (d2 < d0) {

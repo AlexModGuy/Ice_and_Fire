@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,7 +48,6 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
 
     public EntityGorgon(EntityType<EntityGorgon> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
     }
@@ -288,6 +288,11 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
     }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+    }
 
     @Override
     public int getAnimationTick() {

@@ -14,12 +14,12 @@ import java.util.Map;
 public interface IHasCustomizableAttributes {
     Map<EntityType<? extends LivingEntity>, AttributeSupplier> ATTRIBUTE_MODIFIER_MAP = new HashMap<>();
 
-    static <T extends LivingEntity & IHasCustomizableAttributes, M extends LivingEntity & IHasCustomizableAttributes> void applyAttributesForEntity(EntityType<T> type, M entity) {
+    default <T extends LivingEntity & IHasCustomizableAttributes> void applyAttributesForEntity(EntityType<? extends LivingEntity> type, T entity) {
         entity.attributes = new AttributeMap(getAttributesForEntity(type, entity));
         entity.setHealth(entity.getMaxHealth());
     }
 
-    static <T extends LivingEntity & IHasCustomizableAttributes, M extends LivingEntity & IHasCustomizableAttributes> AttributeSupplier getAttributesForEntity(EntityType<T> type, M entity) {
+    default <T extends LivingEntity & IHasCustomizableAttributes> AttributeSupplier getAttributesForEntity(EntityType<? extends LivingEntity> type, T entity) {
         if (!IafConfig.allowAttributeOverriding)
             return DefaultAttributes.getSupplier(type);
         if (ATTRIBUTE_MODIFIER_MAP.containsKey(type)) {

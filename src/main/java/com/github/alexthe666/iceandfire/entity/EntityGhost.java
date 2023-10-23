@@ -64,7 +64,6 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     public EntityGhost(EntityType<EntityGhost> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
         this.moveControl = new MoveHelper(this);
@@ -343,21 +342,24 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
         this.setColor(compound.getInt("Color"));
         this.setDaytimeMode(compound.getBoolean("DaytimeMode"));
         this.setDaytimeCounter(compound.getInt("DaytimeCounter"));
         this.setFromChest(compound.getBoolean("FromChest"));
-        super.readAdditionalSaveData(compound);
+
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Color", this.getColor());
         compound.putBoolean("DaytimeMode", this.isDaytimeMode());
         compound.putInt("DaytimeCounter", this.getDaytimeCounter());
         compound.putBoolean("FromChest", this.wasFromChest());
-        super.addAdditionalSaveData(compound);
+
     }
 
     public boolean isHauntedShoppingList() {

@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +69,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     public EntityCyclops(EntityType<EntityCyclops> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.setMaxUpStep(2.5F);
         this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, 0.0F);
@@ -90,7 +90,8 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             //FOLLOW RANGE
             .add(Attributes.FOLLOW_RANGE, 32D)
             //ARMOR
-            .add(Attributes.ARMOR, 20.0D);
+            .add(Attributes.ARMOR, 20.0D)
+            .add(ForgeMod.STEP_HEIGHT.get(), 2.5F);
     }
 
     @Override
@@ -202,6 +203,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         super.readAdditionalSaveData(compound);
         this.setBlinded(compound.getBoolean("Blind"));
         this.setVariant(compound.getInt("Variant"));
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     public int getVariant() {

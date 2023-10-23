@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -99,8 +100,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     public EntityAmphithere(EntityType<EntityAmphithere> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
-        this.setMaxUpStep(1);
         if (worldIn.isClientSide) {
             roll_buffer = new IFChainBuffer();
             pitch_buffer = new IFChainBuffer();
@@ -158,7 +157,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         float angle = (0.01745329251F * possibleOrbitRadius);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = BlockPos.containing(orbit.getX() + extraX, orbit.getY(),orbit.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
         entity.orbitRadius = possibleOrbitRadius;
         return radialPos;
     }
@@ -236,7 +235,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DragonAIRide(this));
+        this.goalSelector.addGoal(0, new DragonAIRide<>(this));
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AmphithereAIAttackMelee(this, 1.0D, true));
@@ -250,7 +249,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.addGoal(3, new AmphithereAITargetItems(this, false));
+        this.targetSelector.addGoal(3, new AmphithereAITargetItems<>(this, false));
     }
 
     public boolean isStill() {
@@ -267,7 +266,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.navigation = new PathNavigateFlyingCreature(this, level());
             this.navigatorType = 1;
         } else {
-            this.moveControl = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
+            this.moveControl = new IafDragonFlightManager.PlayerFlightMoveHelper<>(this);
             this.navigation = new PathNavigateFlyingCreature(this, level());
             this.navigatorType = 2;
         }
@@ -575,14 +574,15 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, IafConfig.amphithereMaxHealth)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.4D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
-            //FOLLOW RANGE
-            .add(Attributes.FOLLOW_RANGE, 32.0D);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, IafConfig.amphithereMaxHealth)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
+                //FOLLOW RANGE
+                .add(Attributes.FOLLOW_RANGE, 32.0D)
+                .add(ForgeMod.STEP_HEIGHT.get(), 1);
     }
 
     @Override
@@ -628,6 +628,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
         this.setCommand(compound.getInt("Command"));
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     //TODO: Create entity placements
@@ -929,7 +930,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
 
-
     public void fall(float distance, float damageMultiplier) {
     }
 
@@ -1071,6 +1071,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 }
             }
         }
+
         @Override
         public boolean requiresUpdateEveryTick() {
             return true;
@@ -1119,6 +1120,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 }
             }
         }
+
         @Override
         public boolean requiresUpdateEveryTick() {
             return true;

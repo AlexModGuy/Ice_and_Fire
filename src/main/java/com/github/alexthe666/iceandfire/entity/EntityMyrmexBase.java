@@ -84,15 +84,11 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     private boolean leveledUp;
     @Nullable
     private Player customer;
-    private float flyingSpeed = 0.2F;
 
 
     public EntityMyrmexBase(EntityType<? extends EntityMyrmexBase> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        this.setMaxUpStep(1);
         this.navigation = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
-        //this.moveController = new GroundMoveHelper(this);
     }
 
     private static boolean isJungleBiome(Level world, BlockPos position) {
@@ -317,6 +313,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
                 this.villagerInventory.addItem(itemstack);
             }
         }
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
 
     }
 

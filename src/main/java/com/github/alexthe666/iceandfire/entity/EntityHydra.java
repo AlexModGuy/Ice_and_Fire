@@ -75,7 +75,6 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     public EntityHydra(EntityType<EntityHydra> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         resetParts();
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
@@ -341,6 +340,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         for (int i = 0; i < HEADS; i++) {
             headDamageTracker[i] = compound.getFloat("HeadDamage" + i);
         }
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     @Override

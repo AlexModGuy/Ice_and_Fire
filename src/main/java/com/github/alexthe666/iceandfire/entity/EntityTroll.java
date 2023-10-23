@@ -70,7 +70,6 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
 
     public EntityTroll(EntityType<EntityTroll> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
     }
 
     public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
@@ -199,6 +198,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         this.setVariant(compound.getInt("Variant"));
         this.setWeapon(compound.getInt("Weapon"));
         this.stoneProgress = compound.getFloat("StoneProgress");
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     @Override

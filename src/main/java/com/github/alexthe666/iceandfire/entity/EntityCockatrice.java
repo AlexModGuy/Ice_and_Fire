@@ -88,7 +88,6 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         this.lookControl = new IAFLookHelper(this);
         aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F);
         aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -362,6 +361,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         if (hasHomePosition && tag.getInt("HomeAreaX") != 0 && tag.getInt("HomeAreaY") != 0 && tag.getInt("HomeAreaZ") != 0) {
             homePos = new HomePosition(tag, this.level());
         }
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     @Override

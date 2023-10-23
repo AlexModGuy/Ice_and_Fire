@@ -47,6 +47,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -88,8 +89,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     public EntityHippocampus(EntityType<EntityHippocampus> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        this.setMaxUpStep(1);
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
         if (worldIn.isClientSide) {
@@ -113,12 +112,13 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, 40.0D)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.3D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, 1.0D);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, 40.0D)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, 1.0D)
+                .add(ForgeMod.STEP_HEIGHT.get(), 1.0F);
     }
 
     @Override
@@ -384,6 +384,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 this.inventory.setItem(j, ItemStack.of(CompoundNBT));
             }
         }
+        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     protected int getInventorySize() {
