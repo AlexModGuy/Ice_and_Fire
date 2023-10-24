@@ -105,6 +105,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             pitch_buffer = new IFChainBuffer();
             tail_buffer = new IFChainBuffer();
         }
+        this.setMaxUpStep(1F);
         switchNavigator(0);
     }
 
@@ -581,8 +582,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 //ATTACK
                 .add(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
                 //FOLLOW RANGE
-                .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(ForgeMod.STEP_HEIGHT.get(), 1);
+                .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override

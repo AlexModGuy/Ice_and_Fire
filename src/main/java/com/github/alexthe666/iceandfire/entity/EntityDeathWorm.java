@@ -102,6 +102,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
+        this.setMaxUpStep(1F);
         this.switchNavigator(false);
     }
 
@@ -146,8 +147,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
                 //FOLLOW RANGE
                 .add(Attributes.FOLLOW_RANGE, IafConfig.deathWormTargetSearchLength)
                 //ARMOR
-                .add(Attributes.ARMOR, 3)
-                .add(ForgeMod.STEP_HEIGHT.get(), 1.0F);
+                .add(Attributes.ARMOR, 3);
     }
 
     @Override

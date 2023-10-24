@@ -91,6 +91,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         super(t, worldIn);
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
+        this.setMaxUpStep(1F);
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
@@ -117,8 +118,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 //SPEED
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 //ATTACK
-                .add(Attributes.ATTACK_DAMAGE, 1.0D)
-                .add(ForgeMod.STEP_HEIGHT.get(), 1.0F);
+                .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
     @Override

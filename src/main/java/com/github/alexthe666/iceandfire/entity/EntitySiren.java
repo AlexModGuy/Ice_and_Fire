@@ -91,6 +91,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
+        this.setMaxUpStep(1F);
     }
 
     @Override
@@ -441,8 +442,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
                 //SPEED
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 //ATTACK
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
-                .add(ForgeMod.STEP_HEIGHT.get(), 2.0F);
+                .add(Attributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override

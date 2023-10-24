@@ -90,8 +90,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             //FOLLOW RANGE
             .add(Attributes.FOLLOW_RANGE, 32D)
             //ARMOR
-            .add(Attributes.ARMOR, 20.0D)
-            .add(ForgeMod.STEP_HEIGHT.get(), 2.5F);
+            .add(Attributes.ARMOR, 20.0D);
     }
 
     @Override
