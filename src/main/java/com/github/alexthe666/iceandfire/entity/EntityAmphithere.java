@@ -48,7 +48,6 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -586,8 +585,9 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.amphithereMaxHealth);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.amphithereAttackStrength);
     }
 
     @Override
@@ -628,7 +628,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             homePos = new BlockPos(compound.getInt("HomeAreaX"), compound.getInt("HomeAreaY"), compound.getInt("HomeAreaZ"));
         }
         this.setCommand(compound.getInt("Command"));
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     //TODO: Create entity placements

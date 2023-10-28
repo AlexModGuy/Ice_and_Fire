@@ -92,8 +92,8 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.hydraMaxHealth);
     }
 
     @Override
@@ -340,7 +340,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         for (int i = 0; i < HEADS; i++) {
             headDamageTracker[i] = compound.getFloat("HeadDamage" + i);
         }
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     @Override

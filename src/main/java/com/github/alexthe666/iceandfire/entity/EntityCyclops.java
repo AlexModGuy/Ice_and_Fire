@@ -48,7 +48,6 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +75,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
         ANIMATION_ROAR = Animation.create(30);
-
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -94,8 +92,9 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.cyclopsMaxHealth);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35D);
     }
 
     @Override
@@ -202,7 +201,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         super.readAdditionalSaveData(compound);
         this.setBlinded(compound.getBoolean("Blind"));
         this.setVariant(compound.getInt("Variant"));
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     public int getVariant() {

@@ -108,8 +108,9 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.ghostMaxHealth);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.ghostAttackStrength);
     }
 
     @Override
@@ -349,7 +350,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         this.setDaytimeCounter(compound.getInt("DaytimeCounter"));
         this.setFromChest(compound.getBoolean("FromChest"));
 
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     @Override

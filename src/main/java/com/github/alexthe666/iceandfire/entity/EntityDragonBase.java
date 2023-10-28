@@ -64,8 +64,6 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -268,8 +266,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
 
     @Override
@@ -821,7 +819,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setCustomName(Component.Serializer.fromJson(compound.getString("CustomName")));
         }
 
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
 
         this.updateAttributes();
     }

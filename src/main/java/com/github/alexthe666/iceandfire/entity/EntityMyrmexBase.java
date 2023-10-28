@@ -313,7 +313,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
                 this.villagerInventory.addItem(itemstack);
             }
         }
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
 
     }
 

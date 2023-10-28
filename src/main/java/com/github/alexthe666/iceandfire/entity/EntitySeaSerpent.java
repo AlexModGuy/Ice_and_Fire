@@ -201,9 +201,11 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
             .add(Attributes.ARMOR, 3.0D);
     }
 
+
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.seaSerpentBaseHealth);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
     }
 
     public void resetParts(float scale) {
@@ -388,7 +390,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         attackDecision = compound.getBoolean("AttackDecision");
         this.setBreathing(compound.getBoolean("Breathing"));
         this.setAncient(compound.getBoolean("Ancient"));
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     private void updateAttributes() {

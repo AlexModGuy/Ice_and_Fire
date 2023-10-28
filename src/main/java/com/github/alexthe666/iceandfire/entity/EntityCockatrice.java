@@ -105,6 +105,11 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
     }
 
     @Override
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.cockatriceMaxHealth);
+    }
+
+    @Override
     public int getExperienceReward() {
         return 10;
     }
@@ -243,11 +248,6 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
     }
 
-    @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
-    }
-
     public boolean canMove() {
         return !this.isOrderedToSit() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 7);
     }
@@ -361,7 +361,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         if (hasHomePosition && tag.getInt("HomeAreaX") != 0 && tag.getInt("HomeAreaY") != 0 && tag.getInt("HomeAreaZ") != 0) {
             homePos = new HomePosition(tag, this.level());
         }
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     @Override

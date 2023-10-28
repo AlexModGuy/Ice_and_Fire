@@ -50,7 +50,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -356,7 +355,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         this.setSinging(tag.getBoolean("Singing"));
         this.setSwimming(tag.getBoolean("Swimming"));
         this.setCharmed(tag.getBoolean("Passive"));
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     public boolean isSinging() {
@@ -446,8 +445,8 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
     }
 
     @Override

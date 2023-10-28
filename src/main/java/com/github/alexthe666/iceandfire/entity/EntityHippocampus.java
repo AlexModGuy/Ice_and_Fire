@@ -58,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAnimatedEntity, IHasCustomizableAttributes, ICustomMoveController, ContainerListener, Saddleable {
+public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAnimatedEntity, ICustomMoveController, ContainerListener, Saddleable {
 
     public static final int INV_SLOT_SADDLE = 0;
     public static final int INV_SLOT_CHEST = 1;
@@ -266,11 +266,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
-    }
-
-    @Override
     public boolean canRide(Entity rider) {
         return true;
     }
@@ -384,7 +379,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 this.inventory.setItem(j, ItemStack.of(CompoundNBT));
             }
         }
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
     }
 
     protected int getInventorySize() {

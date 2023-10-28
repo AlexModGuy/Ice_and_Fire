@@ -58,7 +58,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
@@ -151,8 +150,10 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.max(6, IafConfig.deathWormMaxHealth));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IafConfig.deathWormAttackStrength));
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(IafConfig.deathWormTargetSearchLength);
     }
 
     @Override
@@ -307,7 +308,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         this.setWormAge(compound.getInt("WormAge"));
         this.setWormHome(BlockPos.of(compound.getLong("WormHome")));
         this.willExplode = compound.getBoolean("WillExplode");
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     private void setStateField(int i, boolean newState) {

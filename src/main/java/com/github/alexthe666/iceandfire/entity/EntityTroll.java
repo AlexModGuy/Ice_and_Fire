@@ -92,8 +92,9 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.trollMaxHealth);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.trollAttackStrength);
     }
 
     private void setAvoidSun(boolean day) {
@@ -198,7 +199,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         this.setVariant(compound.getInt("Variant"));
         this.setWeapon(compound.getInt("Weapon"));
         this.stoneProgress = compound.getFloat("StoneProgress");
-        this.applyAttributesForEntity((EntityType<? extends LivingEntity>) this.getType(), this);
+        this.setConfigurableAttributes();
     }
 
     @Override

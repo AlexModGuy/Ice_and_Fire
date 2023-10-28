@@ -36,15 +36,6 @@ public class CommonProxy {
         }
     }
 
-    @SubscribeEvent
-    public static void onModConfigChanged(final ModConfigEvent.Reloading event) {
-        final ModConfig config = event.getConfig();
-        // In case we reload the config clear the attribute cache to allow for values to be modified
-        if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
-            IHasCustomizableAttributes.ATTRIBUTE_MODIFIER_MAP.clear();
-        }
-    }
-
     public void setReferencedHive(MyrmexHive hive) {
 
     }

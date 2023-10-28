@@ -65,6 +65,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength);
+    }
+
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
@@ -178,11 +183,6 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     @Override
     protected VillagerTrades.ItemListing[] getLevel2Trades() {
         return isJungle() ? MyrmexTrades.JUNGLE_WORKER.get(2) : MyrmexTrades.DESERT_WORKER.get(2);
-    }
-
-    @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
     }
 
     @Override
