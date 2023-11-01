@@ -926,9 +926,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         final double speedStep = (maximumSpeed - minimumSpeed) / 125F;
         final double armorStep = (maximumArmor - minimumArmor) / 125F;
 
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * Math.min(this.getAgeInDays(), 125)));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * age)));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * age)));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * age));
         final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
         if (!this.level.isClientSide) {
