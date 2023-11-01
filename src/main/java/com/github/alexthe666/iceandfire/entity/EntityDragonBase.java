@@ -615,6 +615,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.isModelDead() || super.isNoAi();
     }
 
+    public boolean isAiDisabled() {
+        return super.isNoAi();
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
