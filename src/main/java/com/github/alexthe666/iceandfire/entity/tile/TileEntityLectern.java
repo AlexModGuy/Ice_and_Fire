@@ -135,6 +135,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
             this.setChanged();
             selectedPages = randomizePages(getItem(0), getItem(1));
         }
+
     }
 
     public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
@@ -162,7 +163,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
             int page1 = selectedPages[0] == null ? -1 : selectedPages[0].ordinal();
             int page2 = selectedPages[1] == null ? -1 : selectedPages[1].ordinal();
             int page3 = selectedPages[2] == null ? -1 : selectedPages[2].ordinal();
-            IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), page1, page2, page3));
+            IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), page1, page2, page3, false, 0));
         }
         return selectedPages;
     }
@@ -177,6 +178,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public void saveAdditional(@NotNull CompoundTag compound) {
+        super.saveAdditional(compound);
         ContainerHelper.saveAllItems(compound, this.stacks);
     }
 

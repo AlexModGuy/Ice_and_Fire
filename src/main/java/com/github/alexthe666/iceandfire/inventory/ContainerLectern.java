@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemBestiary;
+import com.github.alexthe666.iceandfire.message.MessageUpdateLectern;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -176,6 +177,9 @@ public class ContainerLectern extends AbstractContainerMenu {
                                 entityLectern.randomizePages(bookStack, manuscriptStack);
                             }
 
+                        }
+                        else {
+                            IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getBlockPos().asLong(), 0, 0, 0, true, page.ordinal()));
                         }
 
                     }
