@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.message.MessageUpdateDragonforge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -255,7 +254,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     private ItemStack getCurrentResult() {
         Optional<DragonForgeRecipe> recipe = getCurrentRecipe();
-        return recipe.map(dragonForgeRecipe -> dragonForgeRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()))
+        return recipe.map(DragonForgeRecipe::getResultItem)
                 .orElseGet(() -> new ItemStack(getDefaultOutput()));
     }
 
