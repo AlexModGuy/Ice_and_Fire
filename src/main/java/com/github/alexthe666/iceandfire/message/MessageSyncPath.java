@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.client.render.pathfinding.PathfindingDebugRenderer;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.network.FriendlyByteBuf;
@@ -86,9 +87,9 @@ public class MessageSyncPath
             contextSupplier.get().setPacketHandled(true);
 
             if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-                Pathfinding.lastDebugNodesVisited = lastDebugNodesVisited;
-                Pathfinding.lastDebugNodesNotVisited = lastDebugNodesNotVisited;
-                Pathfinding.lastDebugNodesPath = lastDebugNodesPath;
+                PathfindingDebugRenderer.lastDebugNodesVisited = lastDebugNodesVisited;
+                PathfindingDebugRenderer.lastDebugNodesNotVisited = lastDebugNodesNotVisited;
+                PathfindingDebugRenderer.lastDebugNodesPath = lastDebugNodesPath;
             }
         });
         return true;

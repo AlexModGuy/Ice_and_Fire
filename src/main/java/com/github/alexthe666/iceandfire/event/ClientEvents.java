@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.client.IafKeybindRegistry;
 import com.github.alexthe666.iceandfire.client.gui.IceAndFireMainMenu;
 import com.github.alexthe666.iceandfire.client.particle.CockatriceBeamRender;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderChain;
-import com.github.alexthe666.iceandfire.client.render.pathfinding.RenderPath;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderFrozenState;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
@@ -17,7 +16,7 @@ import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
+import com.github.alexthe666.iceandfire.pathfinding.raycoms.WorldEventContext;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -34,8 +33,10 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -54,11 +55,10 @@ public class ClientEvents {
         return false;
     }
 
-    @SubscribeEvent
-    public void renderWorldLastEvent(RenderLevelStageEvent event) {
-        if (Pathfinding.isDebug()) {
-            RenderPath.debugDraw(event.getPartialTick(), event.getPoseStack());
-        }
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void renderWorldLastEvent(@NotNull final RenderLevelStageEvent event)
+    {
+        WorldEventContext.INSTANCE.renderWorldLastEvent(event);
     }
 
     @SubscribeEvent
