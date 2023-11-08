@@ -45,7 +45,7 @@ public enum SurfaceType {
             return SurfaceType.NOT_PASSABLE;
         }
 
-        if ((block instanceof HorizontalDirectionalBlock || block instanceof TrapDoorBlock) && !blockState.getValue(TrapDoorBlock.OPEN))
+        if ((block instanceof TrapDoorBlock) && !blockState.getValue(TrapDoorBlock.OPEN))
         {
             return SurfaceType.WALKABLE;
         }

@@ -283,7 +283,8 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             isSneaking = false;
             mob.setShiftKeyDown(false);
         }
-        //this.ourEntity.setMoveVertical(0);
+
+        this.ourEntity.setYya(0);
         if (handleLadders(oldIndex)) {
             followThePath();
             stuckHandler.checkStuck(this);
