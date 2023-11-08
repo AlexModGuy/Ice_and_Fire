@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
+import com.github.alexthe666.iceandfire.client.render.pathfinding.PathfindingDebugRenderer;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.core.BlockPos;
@@ -15,8 +16,7 @@ import java.util.function.Supplier;
 /**
  * Message to sync the reached positions over to the client for rendering.
  */
-public class MessageSyncPathReached
-{
+public class MessageSyncPathReached {
     /**
      * Set of reached positions.
      */
@@ -24,10 +24,8 @@ public class MessageSyncPathReached
 
     /**
      * Create the message to send a set of positions over to the client side.
-     *
      */
-    public MessageSyncPathReached(final Set<BlockPos> reached)
-    {
+    public MessageSyncPathReached(final Set<BlockPos> reached) {
         super();
         this.reached = reached;
     }
@@ -49,8 +47,7 @@ public class MessageSyncPathReached
         return new MessageSyncPathReached(reached);
     }
 
-    public LogicalSide getExecutionSide()
-    {
+    public LogicalSide getExecutionSide() {
         return LogicalSide.CLIENT;
     }
 
@@ -59,7 +56,7 @@ public class MessageSyncPathReached
             contextSupplier.get().setPacketHandled(true);
 
             if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-                for (final MNode node : Pathfinding.lastDebugNodesPath) {
+                for (final MNode node : PathfindingDebugRenderer.lastDebugNodesPath) {
                     if (reached.contains(node.pos)) {
                         node.setReachedByWorker(true);
                     }

@@ -23,21 +23,6 @@ public final class Pathfinding {
     private static final BlockingQueue<Runnable> jobQueue = new LinkedBlockingDeque<>();
     private static ThreadPoolExecutor executor;
 
-    /**
-     * Set of visited nodes.
-     */
-    public static Set<MNode> lastDebugNodesVisited = new HashSet<>();
-
-    /**
-     * Set of not visited nodes.
-     */
-    public static Set<MNode> lastDebugNodesNotVisited = new HashSet<>();
-
-    /**
-     * Set of nodes that belong to the chosen path.
-     */
-    public static Set<MNode> lastDebugNodesPath = new HashSet<>();
-
     private Pathfinding() {
         //Hides default constructor.
     }
