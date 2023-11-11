@@ -125,7 +125,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new HippocampusAIRide(this));
+//        this.goalSelector.addGoal(0, new HippocampusAIRide(this));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.KELP, false));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.PRISMARINE_CRYSTALS, false));
         this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
@@ -308,16 +308,16 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         if (level.isClientSide) {
             tail_buffer.calculateChainSwingBuffer(40, 10, 1F, this);
         }
-        if (this.up()) {
-            if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround) {
+        if (this.isGoingUp()) {
+            if (!this.isInWater() && this.airBorneCounter == 0 && this.onGround && this.getControllingPassenger() == null) {
                 this.jumpFromGround();
             } else if (this.isInWater()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4D, 0));
+//                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4D, 0));
             }
         }
-        if (this.down()) {
-            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4D, 0));
-        }
+//        if (this.isGoingDown()) {
+//            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4D, 0));
+//        }
         if (this.isInWater() && this.isLandNavigator) {
             switchNavigator(false);
         }
@@ -338,11 +338,11 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         }
     }
 
-    public boolean up() {
+    public boolean isGoingUp() {
         return (entityData.get(CONTROL_STATE) & 1) == 1;
     }
 
-    public boolean down() {
+    public boolean isGoingDown() {
         return (entityData.get(CONTROL_STATE) >> 1 & 1) == 1;
     }
 
@@ -567,31 +567,109 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         return true;
     }
 
+    public final boolean DISABLE_MOVEMENT_CHECK = true;
+
     @Override
-    public void travel(@NotNull Vec3 vec) {
-        float f4;
+    public void travel(@NotNull Vec3 pTravelVector) {
+        float baseSpeed;
         if (this.isOrderedToSit()) {
             super.travel(Vec3.ZERO);
             return;
         }
+        if (this.isAlive()) {
+            // Handle riding movement
+            if (this.isVehicle() && this.canBeControlledByRider() && this.isSaddled()
+                    && this.getControllingPassenger() instanceof LivingEntity rider) {
+                // Mouse controlled yaw
+                this.setYRot(rider.getYRot());
+                this.yRotO = this.getYRot();
+                this.setXRot(rider.getXRot() * 0.5F);
+                this.setRot(this.getYRot(), this.getXRot());
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
+
+                float sideway = rider.xxa;
+                float forward = rider.zza;
+                float vertical = this.isGoingUp() ? 1.0F : this.isGoingDown() ? -1.0F : 0F;
+
+                float speedFactor = 0.6f;
+                float waterSpeedFactor = 1.0f;
+                float landSpeedFactor = 1.0f;
+                float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * speedFactor;
+                if (!this.isInWater()) {
+                    vertical = (float) pTravelVector.y;
+                    speed *= .3f;
+                }
+
+                Vec3 travelVector = new Vec3(
+                        sideway,
+                        vertical,
+                        forward
+                );
+                if (this.isControlledByLocalInstance()) {
+                    if (this.isInWater()) {
+                        this.flyingSpeed = this.getSpeed() * 0.1f;
+                        this.setSpeed(speed);
+
+                        this.moveRelative(this.getSpeed(), travelVector);
+                        this.move(MoverType.SELF, this.getDeltaMovement());
+
+                        Vec3 currentMotion = this.getDeltaMovement();
+                        if (this.horizontalCollision) {
+                            currentMotion = new Vec3(currentMotion.x, 0.2D, currentMotion.z);
+                        }
+                        this.setDeltaMovement(currentMotion.scale(0.7D));
+
+                        this.calculateEntityAnimation(this, false);
+
+
+                        // Vanilla travel has a smaller friction factor for Y axis
+                        // Add more friction in case moving too fast on Y axis
+//                    if (this.isFlying() || this.isHovering()) {
+//                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.92f, 1.0f));
+//                    }
+                    } else {
+                        this.flyingSpeed = this.getSpeed();
+                        this.setSpeed(speed);
+                        super.travel(new Vec3(sideway, vertical, forward));
+                    }
+
+                } else if (rider instanceof Player) {
+                    this.setDeltaMovement(Vec3.ZERO);
+                    // Disable server side vehicle movement check, in case of console log spam
+                    // Happens when stepping up blocks
+                    // Might because client & server's onGround flag is out of sync
+                    // I can't get it fixed, so it's disabled
+//                    this.noPhysics = DISABLE_MOVEMENT_CHECK;
+                }
+            } else {
+
         if (this.isEffectiveAi()) {
+                    // Handle AI movement
             if (this.isInWater()) {
-                this.moveRelative(0.1F, vec);
-                f4 = 0.6F;
-                float d0 = EnchantmentHelper.getDepthStrider(this);
-                if (d0 > 3.0F) {
-                    d0 = 3.0F;
+                        this.moveRelative(0.1F, pTravelVector);
+                        baseSpeed = 0.6F;
+                        // 深海探索者（不包括骑手）
+                        float speedBonus = EnchantmentHelper.getDepthStrider(this);
+                        if (speedBonus > 3.0F) {
+                            speedBonus = 3.0F;
                 }
                 if (!this.onGround) {
-                    d0 *= 0.5F;
+                            speedBonus *= 0.5F;
                 }
-                if (d0 > 0.0F) {
-                    f4 += (0.54600006F - f4) * d0 / 3.0F;
+                        if (speedBonus > 0.0F) {
+                            baseSpeed += (0.54600006F - baseSpeed) * speedBonus / 3.0F;
                 }
                 this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().multiply(f4 * 0.9D, f4 * 0.9D, f4 * 0.9D));
+                        // Friction
+                        this.setDeltaMovement(this.getDeltaMovement().multiply(baseSpeed * 0.9D,
+                                                                               baseSpeed * 0.9D,
+                                                                               baseSpeed * 0.9D
+                        ));
             } else {
-                super.travel(vec);
+                        super.travel(pTravelVector);
+                    }
+                }
             }
         }
         this.animationSpeedOld = this.animationSpeed;
@@ -753,7 +831,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return false;
+        return super.isControlledByLocalInstance();
     }
 
     @Override

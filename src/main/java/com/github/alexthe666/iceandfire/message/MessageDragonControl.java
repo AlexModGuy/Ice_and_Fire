@@ -88,7 +88,7 @@ public class MessageDragonControl {
                             if (hippo.isOwnedBy(player)) {
                                 hippo.setControlState(message.controlState);
                             }
-                            hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+//                            hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
                         } else if (entity instanceof EntityDeathWorm) {
                             EntityDeathWorm deathworm = (EntityDeathWorm) entity;
                             deathworm.setControlState(message.controlState);
