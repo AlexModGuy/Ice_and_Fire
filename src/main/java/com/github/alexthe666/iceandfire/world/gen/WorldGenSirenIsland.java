@@ -39,7 +39,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         int layer = 0;
         int sirens = 0;
         int sirensMax = 1 + rand.nextInt(3);
-        while (!worldIn.getBlockState(center).canOcclude() && center.getY() >= 0) {
+        while (!worldIn.getBlockState(center).canOcclude() && center.getY() >= worldIn.getMinBuildHeight()) {
             layer++;
             for (float i = 0; i < getRadius(layer, up); i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
