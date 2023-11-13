@@ -569,6 +569,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     public final boolean DISABLE_MOVEMENT_CHECK = true;
 
+    public boolean allowMousePitchControl = true;
     @Override
     public void travel(@NotNull Vec3 pTravelVector) {
         float baseSpeed;
@@ -596,7 +597,29 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 float waterSpeedFactor = 1.0f;
                 float landSpeedFactor = 1.0f;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * speedFactor;
-                if (!this.isInWater()) {
+                if (this.isInWater()) {
+                    if (allowMousePitchControl) {
+                        // TODO: travel vector does not match the actual movement direction, might be friction issue again
+                        forward = forward * Mth.abs(Mth.cos(this.getXRot() * ((float) Math.PI / 180F)));
+                        vertical = forward * Mth.abs(Mth.sin(this.getXRot() * ((float) Math.PI / 180F)));
+
+                        if (isGoingUp() && !isGoingDown()) {
+                            vertical = (float) Math.max(vertical, 0.5);
+                        } else if (isGoingDown() && !isGoingUp()) {
+                            vertical = (float) Math.min(vertical, -0.5);
+                        } else if (isGoingUp() && isGoingDown()) {
+                            vertical = 0;
+                        }
+                        // X rotation takes minus on looking upward
+                        else if (this.getXRot() < 0) {
+                            vertical *= 1;
+                        } else if (this.getXRot() > 0) {
+                            vertical *= -1;
+                        } else if (isControlledByLocalInstance()) {
+//                        this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.8f, 1.0f));
+                        }
+                    }
+                } else {
                     vertical = (float) pTravelVector.y;
                     speed *= .3f;
                 }
