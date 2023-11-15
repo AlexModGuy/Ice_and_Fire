@@ -295,8 +295,8 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger) && this.isTame()) {
-            this.setYBodyRot(passenger.getYRot());
-            this.setYHeadRot(passenger.getYHeadRot());
+//            this.setYBodyRot(passenger.getYRot());
+//            this.setYHeadRot(passenger.getYHeadRot());
         }
         if (!this.level.isClientSide && !this.isTame() && passenger instanceof Player && this.getAnimation() == NO_ANIMATION && random.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
@@ -425,7 +425,8 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         } else if (!diving && diveProgress > 0.0F) {
             diveProgress -= 1F;
         }
-        if (this.isFlying()) {
+        // TODO: ??
+        if (this.isFlying() && this.getControllingPassenger() == null) {
             this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.08D, this.getDeltaMovement().z);
         }
         if (this.isFallen && this.flightBehavior != FlightBehavior.NONE) {
@@ -939,6 +940,11 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return world.getBlockState(pos).getBlock() instanceof LeavesBlock;
     }
 
+    @Override
+    public void setDeltaMovement(double pX, double pY, double pZ) {
+        super.setDeltaMovement(pX, pY, pZ);
+    }
+
     public boolean allowLocalMotionControl = true;
     public boolean allowMousePitchControl = true;
     protected boolean gliding = false;
@@ -957,7 +963,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         //  1. In air flight forward
         //  2. Flies like elytra (as book described)
         //  3. Fastest (as book described)
-        //  4. Has roll, but no pitch (maybe it needs one)
+        //  4. Has roll, but no pitch (TODO: maybe it needs one)
         // How original amphithere flies:
         //  - fliesLikeElytra() -> true
         //  - DragonAIRide#61, x,y will always advance
@@ -975,8 +981,19 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 return;
             }
 
+
+//            final int i = rider.getPassengers().indexOf(this);
+//            final float radius = (i == 2 ? -0.2F : 0.5F) + (((Player) rider).isFallFlying() ? 2 : 0);
+//            final float angle = (0.01745329251F * ((Player) rider).yBodyRot) + (i == 1 ? 90 : i == 0 ? -90 : 0);
+//            final double extraX = radius * Mth.sin((float) (Math.PI + angle));
+//            final double extraZ = radius * Mth.cos(angle);
+//            final double extraY = (rider.isShiftKeyDown() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
+//            this.yHeadRot = ((Player) rider).yHeadRot;
+//            this.setYRot(((Player) rider).yHeadRot);
             this.setYRot(rider.getYRot());
             this.yRotO = this.getYRot();
+//            this.yHeadRotO = this.getYRot();
+//            this.yBodyRotO = this.getYRot();
             this.setXRot(rider.getXRot() * 0.5F);
             this.setRot(this.getYRot(), this.getXRot());
             this.yBodyRot = this.getYRot();
