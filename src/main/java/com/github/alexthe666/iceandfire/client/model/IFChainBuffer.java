@@ -167,17 +167,11 @@ public class IFChainBuffer {
      * @param entity         the entity with this ChainBuffer
      */
     public void calculateChainFlapBufferHead(float maxAngle, int bufferTime, float angleDecrement, float divisor, LivingEntity entity) {
-//        if (entity.isVehicle()) {
-//            return;
-//        }
-
-        // TODO: why is this reverted??
         this.prevYawVariation = this.yawVariation;
-        this.yawVariation = -this.yawVariation;
 
         if (!compareDouble(entity.yHeadRotO, entity.yHeadRot) && Mth.abs(this.yawVariation) < maxAngle) {
-            this.yawVariation += Mth.clamp((entity.yHeadRot - entity.yHeadRotO) / divisor, -maxAngle, maxAngle);
-            if (entity instanceof IFlapable && Math.abs(entity.yHeadRot - entity.yHeadRotO) > 15D) {
+            this.yawVariation += Mth.clamp((entity.yHeadRotO - entity.yHeadRot) / divisor, -maxAngle, maxAngle);
+            if (entity instanceof IFlapable && Math.abs(entity.yHeadRotO - entity.yHeadRot) > 15D) {
                 ((IFlapable) entity).flapWings();
             }
         }
@@ -202,8 +196,6 @@ public class IFChainBuffer {
                 this.yawTimer++;
             }
         }
-
-        this.yawVariation = -this.yawVariation;
     }
 
 

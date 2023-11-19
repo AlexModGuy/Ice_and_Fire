@@ -295,8 +295,8 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public void positionRider(@NotNull Entity passenger) {
         super.positionRider(passenger);
         if (this.hasPassenger(passenger) && this.isTame()) {
-//            this.setYBodyRot(passenger.getYRot());
-//            this.setYHeadRot(passenger.getYHeadRot());
+            this.setYBodyRot(passenger.getYRot());
+            this.setYHeadRot(passenger.getYHeadRot());
         }
         if (!this.level.isClientSide && !this.isTame() && passenger instanceof Player && this.getAnimation() == NO_ANIMATION && random.nextInt(15) == 0) {
             this.setAnimation(ANIMATION_BITE_RIDER);
@@ -997,6 +997,8 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.setXRot(rider.getXRot() * 0.5F);
             this.setRot(this.getYRot(), this.getXRot());
             this.yBodyRot = this.getYRot();
+
+            this.yHeadRotO = this.yHeadRot;
             this.yHeadRot = this.yBodyRot;
 
             // Flying control, include flying through waterfalls
