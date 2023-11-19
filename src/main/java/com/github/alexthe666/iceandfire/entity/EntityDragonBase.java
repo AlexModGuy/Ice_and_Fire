@@ -2641,7 +2641,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         // Extra delta when moving
         // The linear part of the tuning
-        final float linearFactor = Mth.map(Math.max(this.getAgeInDays() - 50, 0), 0, 75, 0, 1);
+        final float linearFactor = Mth.map(Math.max(Math.min(this.getAgeInDays(), 125) - 50, 0), 0, 75, 0, 1);
         if (this.getControllingPassenger() instanceof LivingEntity rider) {
             // Extra height when rider and the dragon look upwards, this will reduce model clipping
             if (rider.getXRot() < 0) {
