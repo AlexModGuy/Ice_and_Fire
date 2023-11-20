@@ -331,7 +331,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
-        if (this.isInWater() && this.jumping) {
+        if (this.isInWater() && this.jumping && this.getControllingPassenger() == null) {
             this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1D, this.getDeltaMovement().z);
         }
         if (this.isBaby() && this.getTarget() != null) {
@@ -405,17 +405,17 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.5D, this.getDeltaMovement().z);
             this.setFlying(true);
         }
-        if (this.getControllingPassenger() != null && this.isFlying() && !this.onGround) {
-
-            if (this.getControllingPassenger().getXRot() > 25 && this.getDeltaMovement().y > -1.0F) {
-                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.1D, this.getDeltaMovement().z);
-
-            }
-            if (this.getControllingPassenger().getXRot() < -25 && this.getDeltaMovement().y < 1.0F) {
-                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1D, this.getDeltaMovement().z);
-
-            }
-        }
+//        if (this.getControllingPassenger() != null && this.isFlying() && !this.onGround) {
+//
+//            if (this.getControllingPassenger().getXRot() > 25 && this.getDeltaMovement().y > -1.0F) {
+//                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.1D, this.getDeltaMovement().z);
+//
+//            }
+//            if (this.getControllingPassenger().getXRot() < -25 && this.getDeltaMovement().y < 1.0F) {
+//                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1D, this.getDeltaMovement().z);
+//
+//            }
+//        }
         if (notGrounded && groundProgress > 0.0F) {
             groundProgress -= 2F;
         } else if (!notGrounded && groundProgress < 20.0F) {
@@ -699,6 +699,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         }
         if (this.isGoingUp() && !level.isClientSide) {
             if (!this.isFlying()) {
+                // TODO: separate take off with rider logic
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 1, 0));
                 this.setFlying(true);
             }
@@ -1015,7 +1016,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 gliding = true;
                 if (!gliding) {
                     // Mouse controlled yaw
-                    speed += glidingSpeedBonus;
+                    speed += glidingSpeedBonus * (rider.isSprinting() ? 1.5f : 1.0f);
                     // Slower on going astern
                     forward *= rider.zza > 0 ? 1.0f : 0.5f;
                     // Slower on going sideways
