@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.datagen.IafConfiguredFeatures;
+import com.github.alexthe666.iceandfire.datagen.IafPlacedFeatures;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
@@ -94,7 +95,6 @@ public class IceAndFire {
 //        IafTabRegistry.TAB_REGISTER.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
-        IafConfiguredFeatures.CONFIGURED_FEATURES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
         IafRecipeRegistry.RECIPE_TYPE.register(modBus);
         IafBannerPatterns.BANNERS.register(modBus);

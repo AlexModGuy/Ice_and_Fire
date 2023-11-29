@@ -9,7 +9,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -17,6 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -40,22 +43,31 @@ public class DataGenerators {
 
         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 
-        event.getGenerator().addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                Registry.PROCESSOR_LIST_REGISTRY,
+                IafProcessorLists.gather()
+        ));
+
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
                 generator,
                 helper,
                 IceAndFire.MODID,
                 registryOps,
                 Registry.CONFIGURED_FEATURE_REGISTRY,
-                IafConfiguredFeatures.CONFIGURED_FEATURES.getEntries().stream().collect(Collectors.toMap(RegistryObject<ConfiguredFeature<?,?>>::getId, RegistryObject<ConfiguredFeature<?,?>>::get))
+                IafConfiguredFeatures.gather(registryOps)
         ));
 
-//        event.getGenerator().addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
-//                generator,
-//                helper,
-//                IceAndFire.MODID,
-//                registryOps,
-//                Registry.PLACED_FEATURE_REGISTRY,
-//                IafPlacedFeatures.PLACED_FEATURES.getEntries().stream().collect(Collectors.toMap(RegistryObject<Feature<?>>::getId, RegistryObject<Feature<?>>::get))
-//        ));
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                Registry.PLACED_FEATURE_REGISTRY,
+                IafPlacedFeatures.gather(registryOps)
+        ));
     }
 }
