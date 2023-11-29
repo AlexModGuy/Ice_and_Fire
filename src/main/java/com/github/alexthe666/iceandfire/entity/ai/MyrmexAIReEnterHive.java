@@ -38,7 +38,7 @@ public class MyrmexAIReEnterHive extends Goal {
         }
         MyrmexHive village = this.myrmex.getHive();
         if (village == null) {
-            village = MyrmexWorldData.get(this.myrmex.level()).getNearestHive(this.myrmex.blockPosition(), 500);
+            village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 500);
         }
         if (!(this.myrmex.getNavigation() instanceof AdvancedPathNavigate) || this.myrmex.isPassenger()) {
             return false;
@@ -47,7 +47,7 @@ public class MyrmexAIReEnterHive extends Goal {
             return false;
         } else {
             this.hive = village;
-            currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level(), hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRandom(), false));
+            currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRandom(), false));
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 1);
             currentPhase = Phases.GOTOENTRANCE;
             return this.path != null;
@@ -58,7 +58,7 @@ public class MyrmexAIReEnterHive extends Goal {
     public void tick() {
         //Fallback for if for some reason the myrmex can't reach the entrance try a different one (random)
         if (currentPhase == Phases.GOTOENTRANCE && !this.myrmex.pathReachesTarget(path, currentTarget, 12)) {
-            currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level(), hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRandom(), true));
+            currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level, hive.getClosestEntranceToEntity(this.myrmex, this.myrmex.getRandom(), true));
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), movementSpeed);
         }
         if (currentPhase == Phases.GOTOENTRANCE && this.myrmex.isCloseEnoughToTarget(currentTarget, 12)) {
@@ -70,7 +70,7 @@ public class MyrmexAIReEnterHive extends Goal {
         }
         if (currentPhase == Phases.GOTOEXIT && this.myrmex.isCloseEnoughToTarget(currentTarget, 12)) {
             if (hive != null) {
-                currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level(), hive.getCenter());
+                currentTarget = MyrmexHive.getGroundedPos(this.myrmex.level, hive.getCenter());
                 currentPhase = Phases.GOTOCENTER;
                 this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 1);
             }

@@ -61,8 +61,8 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
             return false;
         } else {
 
-            if (this.mob.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.mob.level().getEntitiesOfClass(ItemEntity.class,
+            if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
                     this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
             if (list.isEmpty()) {

@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateCyclops;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -68,7 +69,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     public EntityCyclops(EntityType<EntityCyclops> type, Level worldIn) {
         super(type, worldIn);
-        this.setMaxUpStep(2.5F);
+        this.maxUpStep = 2.5f;
         this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, 0.0F);
         ANIMATION_STOMP = Animation.create(27);
@@ -99,7 +100,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
-        return new PathNavigateCyclops(this, level());
+        return new PathNavigateCyclops(this, level);
     }
 
     @Override
@@ -221,8 +222,8 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger, @NotNull MoveFunction callback) {
-        super.positionRider(passenger, callback);
+    public void positionRider(@NotNull Entity passenger) {
+        super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             passenger.setDeltaMovement(0, passenger.getDeltaMovement().y, 0);
             this.setAnimation(ANIMATION_EATPLAYER);
@@ -237,7 +238,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             double extraY = raiseUp;
             passenger.setPos(this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.hurt(this.level().damageSources().mobAttack(this), (float) IafConfig.cyclopsBiteStrength);
+                passenger.hurt(DamageSource.mobAttack(this), (float) IafConfig.cyclopsBiteStrength);
                 passenger.stopRiding();
             }
         }
@@ -269,7 +270,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.6F, 1);
             eyeEntity.copyPosition(this);
         }
-        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         if (this.isBlinded() && this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 6) {
@@ -282,10 +283,10 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             this.playSound(IafSoundRegistry.CYCLOPS_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_STOMP && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 12D && this.getAnimationTick() == 14) {
-            this.getTarget().hurt(this.level().damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 14D && this.getAnimationTick() == 12) {
-            this.getTarget().hurt(this.level().damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             this.getTarget().knockback(2, this.getX() - this.getTarget().getX(), this.getZ() - this.getTarget().getZ());
 
         }
@@ -306,10 +307,10 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level().getBlockState(BlockPos.containing(this.getX() + extraX, this.getY() + extraY - 1, this.getZ() + extraZ));
+                BlockState BlockState = this.level.getBlockState(WorldUtil.containing(this.getX() + extraX, this.getY() + extraY - 1, this.getZ() + extraZ));
                 if (BlockState.isAir()) {
-                    if (level().isClientSide) {
-                        level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
+                    if (level.isClientSide) {
+                        level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
             }
@@ -322,7 +323,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
         }
         if (!eyeEntity.shouldContinuePersisting()) {
-            level().addFreshEntity(eyeEntity);
+            level.addFreshEntity(eyeEntity);
         }
         eyeEntity.setParent(this);
         breakBlock();
@@ -342,14 +343,14 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 for (int b = (int) Math.round(this.getBoundingBox().minY) + 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ) - 1; c <= (int) Math.round(this.getBoundingBox().maxZ) + 1; c++) {
                         BlockPos pos = new BlockPos(a, b, c);
-                        BlockState state = level().getBlockState(pos);
+                        BlockState state = level.getBlockState(pos);
                         Block block = state.getBlock();
-                        if (!state.isAir() && !state.getShape(level(), pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
+                        if (!state.isAir() && !state.getShape(level, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
                             this.getDeltaMovement().scale(0.6D);
                             if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {
-                                if (!level().isClientSide) {
-                                    level().destroyBlock(pos, true);
+                                if (!level.isClientSide) {
+                                    level.destroyBlock(pos, true);
                                 }
                             }
                         }

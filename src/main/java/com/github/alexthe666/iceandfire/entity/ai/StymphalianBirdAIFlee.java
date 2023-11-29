@@ -38,7 +38,7 @@ public class StymphalianBirdAIFlee extends Goal {
         if (this.stymphalianBird.getVictor() == null) {
             return false;
         }
-        List<LivingEntity> list = this.stymphalianBird.level().getEntitiesOfClass(LivingEntity.class, this.stymphalianBird.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance),
+        List<LivingEntity> list = this.stymphalianBird.level.getEntitiesOfClass(LivingEntity.class, this.stymphalianBird.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance),
             this.canBeSeenSelector);
 
         if (list.isEmpty())

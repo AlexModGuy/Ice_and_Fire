@@ -417,7 +417,7 @@ public class IafDragonDestructionManager {
     }
 
     private static void causeExplosion(Level world, BlockPos center, EntityDragonBase destroyer, DamageSource source, int stage) {
-        Explosion.BlockInteraction mode = ForgeEventFactory.getMobGriefingEvent(world, destroyer) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
+        Explosion.BlockInteraction mode = ForgeEventFactory.getMobGriefingEvent(world, destroyer) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
         BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, source, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2), mode);
         explosion.explode();
         explosion.finalizeExplosion(true);
@@ -429,7 +429,7 @@ public class IafDragonDestructionManager {
             BlockState transformState = transformBlockFire(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
                 world.setBlockAndUpdate(pos, transformState);
-            if (world.random.nextBoolean() && transformState.isSolid() &&
+            if (world.random.nextBoolean() && transformState.getMaterial().isSolid() &&
                     world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
                     world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock(),destroyer)) {
                 world.setBlockAndUpdate(pos.above(), Blocks.FIRE.defaultBlockState());
@@ -442,7 +442,7 @@ public class IafDragonDestructionManager {
             BlockState transformState = transformBlockIce(world.getBlockState(pos));
             if (transformState.getBlock() != world.getBlockState(pos).getBlock())
                 world.setBlockAndUpdate(pos, transformState);
-            if (world.random.nextInt(9) == 0 && transformState.isSolid() &&
+            if (world.random.nextInt(9) == 0 && transformState.getMaterial().isSolid() &&
                     world.getFluidState(pos.above()).isEmpty() && !world.getBlockState(pos.above()).canOcclude() &&
                     world.getBlockState(pos).canOcclude() && DragonUtils.canDragonBreak(world.getBlockState(pos.above()).getBlock(), destroyer)) {
                 world.setBlockAndUpdate(pos.above(), IafBlockRegistry.DRAGON_ICE_SPIKES.get().defaultBlockState());

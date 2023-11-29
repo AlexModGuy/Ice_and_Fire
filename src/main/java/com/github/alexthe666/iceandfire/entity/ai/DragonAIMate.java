@@ -27,7 +27,7 @@ public class DragonAIMate extends Goal {
 
     public DragonAIMate(EntityDragonBase dragon, double speedIn) {
         this.dragon = dragon;
-        this.theWorld = dragon.level();
+        this.theWorld = dragon.level;
         this.moveSpeed = speedIn;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
@@ -135,12 +135,12 @@ public class DragonAIMate extends Goal {
                 for (int z = 0; z < 3; z++) {
                     BlockPos add = eggPos.offset(x, 0, z);
                     BlockState prevState = theWorld.getBlockState(add);
-                    if (prevState.canBeReplaced() || theWorld.getBlockState(add).is(BlockTags.DIRT) || theWorld.getBlockState(add).getDestroySpeed(theWorld, add) < 5F || theWorld.getBlockState(add).getDestroySpeed(theWorld, add) >= 0F) {
+                    if (prevState.getMaterial().isReplaceable() || theWorld.getBlockState(add).is(BlockTags.DIRT) || theWorld.getBlockState(add).getDestroySpeed(theWorld, add) < 5F || theWorld.getBlockState(add).getDestroySpeed(theWorld, add) >= 0F) {
                         theWorld.setBlockAndUpdate(add, NEST);
                     }
                 }
             }
-            if (theWorld.getBlockState(dirtPos).canBeReplaced() || theWorld.getBlockState(dirtPos) == NEST) {
+            if (theWorld.getBlockState(dirtPos).getMaterial().isReplaceable() || theWorld.getBlockState(dirtPos) == NEST) {
                 theWorld.setBlockAndUpdate(dirtPos, Blocks.DIRT_PATH.defaultBlockState());
             }
             if (this.theWorld.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {

@@ -98,9 +98,9 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         matrixStackIn.translate(0.0D, -1.501F, 0.0D);
         float f8 = 0.0F;
         float f5 = 0.0F;
-        if (!shouldSit && entityIn.isAlive()) { // TODO :: 1.19.2
-            f8 = entityIn.walkAnimation.speed();
-            f5 = entityIn.walkAnimation.position();
+        if (!shouldSit && entityIn.isAlive()) {
+            f8 = entityIn.animationSpeed;
+            f5 = entityIn.animationPosition;
             if (entityIn.isBaby()) {
                 f5 *= 3.0F;
             }

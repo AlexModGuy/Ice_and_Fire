@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -124,26 +123,26 @@ public class EntityChainTie extends HangingEntity {
     public void remove(Entity.@NotNull RemovalReason removalReason) {
         super.remove(removalReason);
         double d0 = 30D;
-        List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
         for (LivingEntity livingEntity : list) {
             if (ChainProperties.isChainedTo(livingEntity, this)) {
                 ChainProperties.removeChain(livingEntity, this);
-                ItemEntity entityitem = new ItemEntity(this.level(), this.getX(), this.getY() + 1, this.getZ(),
+                ItemEntity entityitem = new ItemEntity(this.level, this.getX(), this.getY() + 1, this.getZ(),
                     new ItemStack(IafItemRegistry.CHAIN.get()));
                 entityitem.setDefaultPickUpDelay();
-                this.level().addFreshEntity(entityitem);
+                this.level.addFreshEntity(entityitem);
             }
         }
     }
 
     @Override
     public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (this.level().isClientSide) {
+        if (this.level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             boolean flag = false;
             double d0 = 30D;
-            List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+            List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
 
             for (LivingEntity livingEntity : list) {
                 if (ChainProperties.isChainedTo(livingEntity, player)) {
@@ -164,13 +163,13 @@ public class EntityChainTie extends HangingEntity {
 
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public boolean survives() {
-        return this.level().getBlockState(this.pos).getBlock() instanceof WallBlock;
+        return this.level.getBlockState(this.pos).getBlock() instanceof WallBlock;
     }
 
     @Override

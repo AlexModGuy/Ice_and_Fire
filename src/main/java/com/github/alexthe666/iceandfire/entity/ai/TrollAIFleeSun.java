@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -21,7 +22,7 @@ public class TrollAIFleeSun extends Goal {
     public TrollAIFleeSun(EntityTroll theCreatureIn, double movementSpeedIn) {
         this.troll = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
-        this.world = theCreatureIn.level();
+        this.world = theCreatureIn.level;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -29,7 +30,7 @@ public class TrollAIFleeSun extends Goal {
     public boolean canUse() {
         if (!this.world.isDay()) {
             return false;
-        } else if (!this.world.canSeeSky(BlockPos.containing(this.troll.getBlockX(), this.troll.getBoundingBox().minY, this.troll.getBlockZ()))) {
+        } else if (!this.world.canSeeSky(WorldUtil.containing(this.troll.getBlockX(), this.troll.getBoundingBox().minY, this.troll.getBlockZ()))) {
             return false;
         } else {
             Vec3 Vector3d = this.findPossibleShelter();
@@ -64,7 +65,7 @@ public class TrollAIFleeSun extends Goal {
     @Nullable
     private Vec3 findPossibleShelter() {
         RandomSource random = this.troll.getRandom();
-        BlockPos blockpos = BlockPos.containing(this.troll.getBlockX(), this.troll.getBoundingBox().minY, this.troll.getBlockZ());
+        BlockPos blockpos = WorldUtil.containing(this.troll.getBlockX(), this.troll.getBoundingBox().minY, this.troll.getBlockZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);

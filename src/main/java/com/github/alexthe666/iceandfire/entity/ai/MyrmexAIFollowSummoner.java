@@ -23,7 +23,7 @@ public class MyrmexAIFollowSummoner extends Goal {
 
     public MyrmexAIFollowSummoner(EntityMyrmexSwarmer tameableIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.tameable = tameableIn;
-        this.world = tameableIn.level();
+        this.world = tameableIn.level;
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
         this.setFlags(EnumSet.of(Flag.MOVE));

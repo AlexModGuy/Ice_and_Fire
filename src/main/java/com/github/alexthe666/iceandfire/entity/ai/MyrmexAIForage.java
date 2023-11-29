@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -106,30 +107,30 @@ public class MyrmexAIForage extends Goal {
             // if we have found an edible block
         } else if (!this.myrmex.keepSearching) {
             failedToFindPath = 0;
-            BlockState block = this.myrmex.level().getBlockState(this.targetBlock);
+            BlockState block = this.myrmex.level.getBlockState(this.targetBlock);
             // Test if the block is edible
             if (EntityMyrmexBase.isEdibleBlock(block)) {
                 final double distance = this.getDistanceSq(this.targetBlock);
                 if (distance < 6) {
                     block.getBlock();
                     // Routine to break block and add item to myrmex
-                    List<ItemStack> drops = Block.getDrops(block, (ServerLevel) this.myrmex.level(), this.targetBlock,
-                        this.myrmex.level().getBlockEntity(targetBlock)); // use the old method until it gets removed, for
+                    List<ItemStack> drops = Block.getDrops(block, (ServerLevel) this.myrmex.level, this.targetBlock,
+                        this.myrmex.level.getBlockEntity(targetBlock)); // use the old method until it gets removed, for
                     // backward compatibility
                     if (!drops.isEmpty()) {
-                        this.myrmex.level().destroyBlock(this.targetBlock, false);
+                        this.myrmex.level.destroyBlock(this.targetBlock, false);
                         ItemStack heldStack = drops.get(0).copy();
                         heldStack.setCount(1);
                         drops.get(0).shrink(1);
                         this.myrmex.setItemInHand(InteractionHand.MAIN_HAND, heldStack);
                         for (ItemStack stack : drops) {
-                            ItemEntity itemEntity = new ItemEntity(this.myrmex.level(),
+                            ItemEntity itemEntity = new ItemEntity(this.myrmex.level,
                                 this.targetBlock.getX() + this.myrmex.getRandom().nextDouble(),
                                 this.targetBlock.getY() + this.myrmex.getRandom().nextDouble(),
                                 this.targetBlock.getZ() + this.myrmex.getRandom().nextDouble(), stack);
                             itemEntity.setDefaultPickUpDelay();
-                            if (!this.myrmex.level().isClientSide) {
-                                this.myrmex.level().addFreshEntity(itemEntity);
+                            if (!this.myrmex.level.isClientSide) {
+                                this.myrmex.level.addFreshEntity(itemEntity);
                             }
                         }
                         this.targetBlock = null;
@@ -187,7 +188,7 @@ public class MyrmexAIForage extends Goal {
             this.myrmex.blockPosition().offset(RADIUS, RADIUS / 2, RADIUS)).map(BlockPos::immutable).forEach(pos -> {
             if (!MinecraftForge.EVENT_BUS
                 .post(new GenericGriefEvent(this.myrmex, pos.getX(), pos.getY(), pos.getZ()))) {
-                if (EntityMyrmexBase.isEdibleBlock(this.myrmex.level().getBlockState(pos))) {
+                if (EntityMyrmexBase.isEdibleBlock(this.myrmex.level.getBlockState(pos))) {
                     allBlocks.add(pos);
                     this.myrmex.keepSearching = false;
                 }
@@ -218,7 +219,7 @@ public class MyrmexAIForage extends Goal {
         }
         Vec3 vec = DefaultRandomPos.getPos(this.myrmex, wanderRadius, 7);
         if (vec != null) {
-            this.targetBlock = BlockPos.containing(vec);
+            this.targetBlock = WorldUtil.containing(vec);
         }
         if (this.targetBlock != null) {
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(targetBlock.getX(),

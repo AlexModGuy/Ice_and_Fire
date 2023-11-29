@@ -58,7 +58,7 @@ public class DeathWormAIFindSandTarget extends Goal {
                 for (int x = this.mob.getWormHome().getX() - range; x < this.mob.getWormHome().getX() + range; x++) {
                     for (int y = this.mob.getWormHome().getY() - range; y < this.mob.getWormHome().getY() + range; y++) {
                         for (int z = this.mob.getWormHome().getZ() - range; z < this.mob.getWormHome().getZ() + range; z++) {
-                            if (this.mob.level().getBlockState(new BlockPos(x, y, z)).is(BlockTags.SAND) && isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vec3(x, y, z))) {
+                            if (this.mob.level.getBlockState(new BlockPos(x, y, z)).is(BlockTags.SAND) && isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vec3(x, y, z))) {
                                 sand.add(new BlockPos(x, y, z));
                             }
                         }
@@ -68,7 +68,7 @@ public class DeathWormAIFindSandTarget extends Goal {
                 for (int x = (int) this.mob.getX() - range; x < (int) this.mob.getX() + range; x++) {
                     for (int y = (int) this.mob.getY() - range; y < (int) this.mob.getY() + range; y++) {
                         for (int z = (int) this.mob.getZ() - range; z < (int) this.mob.getZ() + range; z++) {
-                            if (this.mob.level().getBlockState(new BlockPos(x, y, z)).is(BlockTags.SAND) && isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vec3(x, y, z))) {
+                            if (this.mob.level.getBlockState(new BlockPos(x, y, z)).is(BlockTags.SAND) && isDirectPathBetweenPoints(this.mob, this.mob.position(), new Vec3(x, y, z))) {
                                 sand.add(new BlockPos(x, y, z));
                             }
 

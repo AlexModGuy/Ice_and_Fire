@@ -23,7 +23,7 @@ public class MyrmexAITradePlayer extends Goal {
             return false;
         } else if (this.myrmex.isInWater()) {
             return false;
-        } else if (!this.myrmex.onGround()) {
+        } else if (!this.myrmex.isOnGround()) {
             return false;
         } else if (this.myrmex.hurtMarked) {
             return false;

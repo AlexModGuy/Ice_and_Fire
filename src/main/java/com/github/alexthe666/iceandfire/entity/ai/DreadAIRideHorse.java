@@ -28,8 +28,8 @@ public class DreadAIRideHorse extends Goal {
             return false;
         } else {
 
-            if (this.knight.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.knight.level().getEntitiesOfClass(AbstractHorse.class,
+            if (this.knight.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+                list = this.knight.level.getEntitiesOfClass(AbstractHorse.class,
                     this.knight.getBoundingBox().inflate(16.0D, 7.0D, 16.0D), entity -> !entity.isVehicle());
 
             if (list.isEmpty()) {

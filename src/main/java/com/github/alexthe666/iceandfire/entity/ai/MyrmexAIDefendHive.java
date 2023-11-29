@@ -29,7 +29,7 @@ public class MyrmexAIDefendHive extends TargetGoal {
             if (this.canAttack(this.villageAgressorTarget, TargetingConditions.DEFAULT)) {
                 return true;
             } else if (this.mob.getRandom().nextInt(20) == 0) {
-                this.villageAgressorTarget = village.getNearestTargetPlayer(this.myrmex, this.myrmex.level());
+                this.villageAgressorTarget = village.getNearestTargetPlayer(this.myrmex, this.myrmex.level);
                 return this.canAttack(this.villageAgressorTarget, TargetingConditions.DEFAULT);
             } else {
                 return false;

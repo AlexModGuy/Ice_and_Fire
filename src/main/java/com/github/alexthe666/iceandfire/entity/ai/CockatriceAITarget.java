@@ -20,7 +20,7 @@ public class CockatriceAITarget<T extends LivingEntity> extends NearestAttackabl
 
     @Override
     public boolean canUse() {
-        if (this.mob.getRandom().nextInt(20) != 0 || this.cockatrice.level().getDifficulty() == Difficulty.PEACEFUL) {
+        if (this.mob.getRandom().nextInt(20) != 0 || this.cockatrice.level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
         if (super.canUse() && target != null && !target.getClass().equals(this.cockatrice.getClass())) {

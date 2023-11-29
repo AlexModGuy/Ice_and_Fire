@@ -38,7 +38,7 @@ public class PixieAISteal extends Goal {
             --this.delayTemptCounter;
             return false;
         } else {
-            this.temptingPlayer = this.temptedEntity.level().getNearestPlayer(this.temptedEntity, 10.0D);
+            this.temptingPlayer = this.temptedEntity.level.getNearestPlayer(this.temptedEntity, 10.0D);
             return this.temptingPlayer != null && (this.temptedEntity.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.temptingPlayer.getInventory().isEmpty() && !this.temptingPlayer.isCreative());
         }
     }
@@ -86,7 +86,7 @@ public class PixieAISteal extends Goal {
                 this.temptedEntity.flipAI(true);
                 this.temptedEntity.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
 
-                for (EntityPixie pixie : this.temptingPlayer.level().getEntitiesOfClass(EntityPixie.class, temptedEntity.getBoundingBox().inflate(40))) {
+                for (EntityPixie pixie : this.temptingPlayer.level.getEntitiesOfClass(EntityPixie.class, temptedEntity.getBoundingBox().inflate(40))) {
                     pixie.stealCooldown = 1000 + pixie.getRandom().nextInt(3000);
                 }
                 if (temptingPlayer != null) {

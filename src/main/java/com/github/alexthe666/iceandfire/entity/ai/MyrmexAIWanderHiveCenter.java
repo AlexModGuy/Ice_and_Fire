@@ -26,14 +26,14 @@ public class MyrmexAIWanderHiveCenter extends Goal {
         if (!this.myrmex.canMove() || !this.myrmex.shouldEnterHive() && !this.myrmex.getNavigation().isDone() || this.myrmex.canSeeSky()) {
             return false;
         }
-        MyrmexHive village = MyrmexWorldData.get(this.myrmex.level()).getNearestHive(this.myrmex.blockPosition(), 300);
+        MyrmexHive village = MyrmexWorldData.get(this.myrmex.level).getNearestHive(this.myrmex.blockPosition(), 300);
         if (village == null) {
             village = this.myrmex.getHive();
         }
         if (village == null) {
             return false;
         } else {
-            target = getNearPos(MyrmexHive.getGroundedPos(this.myrmex.level(), village.getCenter()));
+            target = getNearPos(MyrmexHive.getGroundedPos(this.myrmex.level, village.getCenter()));
 
             this.path = this.myrmex.getNavigation().createPath(target, 0);
             return this.path != null;

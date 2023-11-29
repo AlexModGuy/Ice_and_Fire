@@ -624,25 +624,25 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent // TODO :: 1.19.2 -> EntityJoinLevelEvent (need to be careful with chunk acccess)?
-    public void onEntityJoinWorld(MobSpawnEvent.FinalizeSpawn event) {
-        try {
-            if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal) {
-                Animal animal = (Animal) event.getEntity();
-                animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
-            }
-            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() != null && IafConfig.villagersFearDragons) {
-                Mob villager = event.getEntity();
-                villager.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) villager, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
-            }
-            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() != null && IafConfig.animalsFearDragons) {
-                Mob animal = event.getEntity();
-                animal.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) animal, LivingEntity.class, 30, 1.0D, 0.5D, entity -> entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal)));
-            }
-        } catch (Exception e) {
-            IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
-        }
-    }
+//    @SubscribeEvent // TODO :: 1.19.2 -> EntityJoinLevelEvent (need to be careful with chunk acccess)?
+//    public void onEntityJoinWorld(MobSpawnEvent.FinalizeSpawn event) {
+//        try {
+//            if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal) {
+//                Animal animal = (Animal) event.getEntity();
+//                animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+//            }
+//            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() != null && IafConfig.villagersFearDragons) {
+//                Mob villager = event.getEntity();
+//                villager.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) villager, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
+//            }
+//            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() != null && IafConfig.animalsFearDragons) {
+//                Mob animal = event.getEntity();
+//                animal.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) animal, LivingEntity.class, 30, 1.0D, 0.5D, entity -> entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal)));
+//            }
+//        } catch (Exception e) {
+//            IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
+//        }
+//    }
 
     @SubscribeEvent
     public void onVillagerTrades(VillagerTradesEvent event) {

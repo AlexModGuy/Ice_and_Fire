@@ -1066,7 +1066,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         for (int i = 2; i <= 10; i++) {
             final BlockState below = world.getBlockState(pos.below(i));
-            if (isWalkableSurface(below, pos) == SurfaceType.WALKABLE && i <= 4 || below.liquid()) {
+            if (isWalkableSurface(below, pos) == SurfaceType.WALKABLE && i <= 4 || below.getMaterial().isLiquid()) {
                 //  Level path
                 return pos.getY() - i + 1;
             } else if (below.isAir()) {
@@ -1275,7 +1275,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
         if (!block.isAir()) {
             final VoxelShape shape = block.getBlockSupportShape(world, pos);
-            if (block.blocksMotion() && !(shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.1)) {
+            if (block.getMaterial().blocksMotion() && !(shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.1)) {
                 if (block.getBlock() instanceof TrapDoorBlock) {
                     final BlockPos dir = pos.subtract(parentPos);
                     if (dir.getY() != 0 && dir.getX() == 0 && dir.getZ() == 0) {
@@ -1433,7 +1433,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooStalkBlock
             || block instanceof BambooSaplingBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;
@@ -1448,7 +1447,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             return SurfaceType.DROPABLE;
         }
 
-        if (blockState.isSolid()
+        if (blockState.getMaterial().isSolid()
             || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowLayerBlock.LAYERS) > 1)
             || block instanceof WoolCarpetBlock) {
             return SurfaceType.WALKABLE;

@@ -43,7 +43,7 @@ public class DragonAIReturnToRoost extends Goal {
                 double yAddition = 15 + dragon.getRandom().nextInt(3);
                 if (xzDist < 40) {
                     yAddition = 0;
-                    if (this.dragon.onGround()) {
+                    if (this.dragon.isOnGround()) {
                         this.dragon.setFlying(false);
                         this.dragon.setHovering(false);
                         this.dragon.flightManager.setFlightTarget(

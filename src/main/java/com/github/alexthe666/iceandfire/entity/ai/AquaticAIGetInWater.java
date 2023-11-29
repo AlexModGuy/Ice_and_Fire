@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
@@ -25,7 +26,7 @@ public class AquaticAIGetInWater extends Goal {
     public AquaticAIGetInWater(Mob theCreatureIn, double movementSpeedIn) {
         this.creature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
-        this.world = theCreatureIn.level();
+        this.world = theCreatureIn.level;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -77,7 +78,7 @@ public class AquaticAIGetInWater extends Goal {
     @Nullable
     protected Vec3 findPossibleShelter(int xz, int y) {
         RandomSource random = this.creature.getRandom();
-        BlockPos blockpos = BlockPos.containing(this.creature.getBlockX(), this.creature.getBoundingBox().minY, this.creature.getBlockZ());
+        BlockPos blockpos = WorldUtil.containing(this.creature.getBlockX(), this.creature.getBoundingBox().minY, this.creature.getBlockZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y,

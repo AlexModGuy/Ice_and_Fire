@@ -55,15 +55,15 @@ public class GuiMyrmexStaff extends Screen {
             return;
         }
         populateRoomMap();
-        this.addWidget(
-                Button.builder( // TODO :: 1.19.2
-                        ClientProxy.getReferedClientHive().reproduces ? Component.translatable("myrmex.message.disablebreeding") : Component.translatable("myrmex.message.enablebreeding"), (p_214132_1_) -> {
-                            boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
-                            ClientProxy.getReferedClientHive().reproduces = opposite;
-                    })
-                        .pos(i + 124, j + 15)
-                        .size(120, 20)
-                        .build());
+        this.addWidget(new Button(
+                i + 124, j + 15,
+                120, 20,
+                ClientProxy.getReferedClientHive().reproduces ? Component.translatable("myrmex.message.disablebreeding") : Component.translatable("myrmex.message.enablebreeding"),
+                (p_214132_1_) -> {
+                    boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
+                    ClientProxy.getReferedClientHive().reproduces = opposite;
+                }
+                ));
         this.addWidget(
             this.previousPage = new ChangePageButton(i + 5, j + 150, false, this.jungle ? 2 : 1, (p_214132_1_) -> {
                 if (this.currentPage > 0) {

@@ -38,8 +38,8 @@ public class PixieAIFlee<T extends Entity> extends Goal {
             return false;
         }
 
-        if (this.pixie.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.pixie.level().getEntitiesOfClass(this.classToAvoid, this.pixie.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance), EntitySelector.NO_SPECTATORS);
+        if (this.pixie.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.pixie.level.getEntitiesOfClass(this.classToAvoid, this.pixie.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance), EntitySelector.NO_SPECTATORS);
 
         if (list.isEmpty())
             return false;

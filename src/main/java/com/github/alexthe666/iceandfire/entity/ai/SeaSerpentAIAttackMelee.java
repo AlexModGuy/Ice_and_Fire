@@ -39,7 +39,7 @@ public class SeaSerpentAIAttackMelee extends Goal {
 
     public SeaSerpentAIAttackMelee(EntitySeaSerpent amphithere, double speedIn, boolean useLongMemory) {
         this.attacker = amphithere;
-        this.world = amphithere.level();
+        this.world = amphithere.level;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
         this.setFlags(EnumSet.of(Flag.MOVE));

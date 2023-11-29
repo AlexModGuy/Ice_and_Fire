@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
@@ -16,14 +17,14 @@ public class StymphalianBirdAIAirTarget extends Goal {
     public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
         if (bird.getTarget() == null) {
             BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
-            if (pos != null && bird.level().getBlockState(pos).isAir()) {
+            if (pos != null && bird.level.getBlockState(pos).isAir()) {
                 return pos;
             }
             if (bird.flock != null && bird.flock.isLeader(bird)) {
                 bird.flock.setTarget(bird.airTarget);
             }
         } else {
-            return BlockPos.containing(bird.getTarget().getBlockX(), bird.getTarget().getY() + bird.getTarget().getEyeHeight(), bird.getTarget().getBlockZ());
+            return WorldUtil.containing(bird.getTarget().getBlockX(), bird.getTarget().getY() + bird.getTarget().getEyeHeight(), bird.getTarget().getBlockZ());
         }
         return bird.blockPosition();
     }
@@ -49,7 +50,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
                 if (vec == null) {
                     return false;
                 } else {
-                    bird.airTarget = BlockPos.containing(vec);
+                    bird.airTarget = WorldUtil.containing(vec);
                     return true;
                 }
             }

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -50,11 +51,11 @@ public class AquaticAIFindWaterTarget extends Goal {
     }
 
     public BlockPos findWaterTarget() {
-        BlockPos blockpos = BlockPos.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY, mob.getBlockZ());
+        BlockPos blockpos = WorldUtil.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY, mob.getBlockZ());
         if (this.mob.getTarget() == null || !this.mob.getTarget().isAlive()) {
             for (int i = 0; i < 10; ++i) {
                 BlockPos blockpos1 = blockpos.offset(mob.getRandom().nextInt(20) - 10, mob.getRandom().nextInt(6) - 3, mob.getRandom().nextInt(20) - 10);
-                if (mob.level().getBlockState(blockpos1).is(Blocks.WATER)) {
+                if (mob.level.getBlockState(blockpos1).is(Blocks.WATER)) {
                     return blockpos1;
                 }
             }
@@ -65,7 +66,7 @@ public class AquaticAIFindWaterTarget extends Goal {
     }
 
     public boolean isDirectPathBetweenPoints(Entity entity, Vec3 vec1, Vec3 vec2) {
-        return mob.level().clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
+        return mob.level.clip(new ClipContext(vec1, vec2, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
 
     }
 

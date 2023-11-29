@@ -45,13 +45,13 @@ public class SeaSerpentAIJump extends JumpGoal {
 
     private boolean canJumpTo(BlockPos pos, int dx, int dz, int scale) {
         BlockPos blockpos = pos.offset(dx * scale, 0, dz * scale);
-        return this.serpent.level().getFluidState(blockpos).is(FluidTags.WATER)
-            && !this.serpent.level().getBlockState(blockpos).blocksMotion();
+        return this.serpent.level.getFluidState(blockpos).is(FluidTags.WATER)
+            && !this.serpent.level.getBlockState(blockpos).getMaterial().blocksMotion();
     }
 
     private boolean isAirAbove(BlockPos pos, int dx, int dz, int scale) {
-        return this.serpent.level().getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir()
-            && this.serpent.level().getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
+        return this.serpent.level.getBlockState(pos.offset(dx * scale, 1, dz * scale)).isAir()
+            && this.serpent.level.getBlockState(pos.offset(dx * scale, 2, dz * scale)).isAir();
     }
 
     /**
@@ -62,7 +62,7 @@ public class SeaSerpentAIJump extends JumpGoal {
         double d0 = this.serpent.getDeltaMovement().y;
         return serpent.jumpCooldown > 0 && (d0 * d0 >= 0.03F || this.serpent.getXRot() == 0.0F
             || Math.abs(this.serpent.getXRot()) >= 10.0F || !this.serpent.isInWater())
-            && !this.serpent.onGround();
+            && !this.serpent.isOnGround();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class SeaSerpentAIJump extends JumpGoal {
     public void tick() {
         final boolean flag = this.inWater;
         if (!flag) {
-            FluidState fluidstate = this.serpent.level().getFluidState(this.serpent.blockPosition());
+            FluidState fluidstate = this.serpent.level.getFluidState(this.serpent.blockPosition());
             this.inWater = fluidstate.is(FluidTags.WATER);
         }
 

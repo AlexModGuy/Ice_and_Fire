@@ -104,8 +104,8 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
         blit(ms, i, j, 0, 0, this.imageWidth, this.imageHeight);
         int k = (int) this.minecraft.getWindow().getGuiScale();
         RenderSystem.viewport((this.width - 320) / 2 * k, (this.height - 240) / 2 * k, 320 * k, 240 * k);
-        Matrix4f matrix4f = new Matrix4f().m03(-0.34F).m13(0.23F); // TODO :: 1.19.2
-        matrix4f.mul(new Matrix4f().perspective(90.0F, 1.3333334F, 9.0F, 80.0F));
+        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-0.34F, 0.23F, 0.0F);
+        matrix4f.multiply(Matrix4f.perspective(90.0D, 1.3333334F, 9.0F, 80.0F));
         RenderSystem.backupProjectionMatrix();
         RenderSystem.setProjectionMatrix(matrix4f);
         ms.pushPose();

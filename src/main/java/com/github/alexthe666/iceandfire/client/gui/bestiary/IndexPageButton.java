@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,17 +23,16 @@ public class IndexPageButton extends Button {
     @Override
     public void renderButton(PoseStack ms, int mouseX, int mouseY, float partial) {
         if (this.active) {
-            // TODO :: 1.19.2
-            ms.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
             Font font = IafConfig.useVanillaFont ? Minecraft.getInstance().font : (Font) IceAndFire.PROXY.getFontRenderer();
             boolean flag = isHoveredOrFocused();
             RenderSystem.setShaderTexture(0, new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
             blit(ms, this.x, this.y, 0, flag ? 32 : 0, this.width, this.height);
-            ms.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = getFGColor();
-            this.renderString(ms, font, i | Mth.ceil(this.alpha * 255.0F) << 24);
+            font.draw(ms, this.getMessage().getVisualOrderText(), (this.x + this.width / 2 - font.width(this.getMessage().getString()) / 2), this.y + (this.height - 8) / 2, i | Mth.ceil(this.alpha * 255.0F) << 24);
         }
     }
 }

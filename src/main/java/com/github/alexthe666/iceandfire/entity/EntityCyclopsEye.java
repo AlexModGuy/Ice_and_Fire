@@ -26,6 +26,7 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
     @Override
     public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
+        // TODO :: 1.19.2 -> check projectile or if indirect entity is arrow?
         if (parent instanceof EntityCyclops && source.is(DamageTypes.ARROW)) {
             ((EntityCyclops) parent).onHitEye(source, damage);
             return true;

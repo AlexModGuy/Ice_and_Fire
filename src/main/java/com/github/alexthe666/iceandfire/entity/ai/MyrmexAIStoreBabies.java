@@ -27,7 +27,7 @@ public class MyrmexAIStoreBabies extends Goal {
         if (village == null) {
             return false;
         } else {
-            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.level(), village.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.myrmex.getRandom(), this.myrmex.blockPosition())).above();
+            nextRoom = MyrmexHive.getGroundedPos(this.myrmex.level, village.getRandomRoom(WorldGenMyrmexHive.RoomType.NURSERY, this.myrmex.getRandom(), this.myrmex.blockPosition())).above();
             return true;
         }
     }

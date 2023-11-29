@@ -60,11 +60,11 @@ public class SirenAIFindWaterTarget extends Goal {
                 for (int y = posY - 5; y < posY + 5; y++) {
                     for (int z = posZ - 5; z < posZ + 5; z++) {
                         if (mob.wantsToSing()) {
-                            if (this.mob.level().getBlockState(new BlockPos(x, y, z)).isSolid() && this.mob.level().isEmptyBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y + 1, z))) {
+                            if (this.mob.level.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid() && this.mob.level.isEmptyBlock(new BlockPos(x, y + 1, z)) && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y + 1, z))) {
                                 singTargets.add(new Vec3(x, y + 1, z));
                             }
                         }
-                        if (this.mob.level().getBlockState(new BlockPos(x, y, z)).is(Blocks.WATER) && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y, z))) {
+                        if (this.mob.level.getBlockState(new BlockPos(x, y, z)).is(Blocks.WATER) && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y, z))) {
                             water.add(new Vec3(x, y, z));
                         }
 

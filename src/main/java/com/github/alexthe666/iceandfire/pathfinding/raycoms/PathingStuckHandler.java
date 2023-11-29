@@ -6,6 +6,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -232,8 +233,8 @@ public class PathingStuckHandler implements IStuckHandler
                 entity.teleportTo(tpPos.getX() + 0.5, tpPos.getY(), tpPos.getZ() + 0.5);
             }
         }
-        if (takeDamageOnCompleteStuck) { // TODO 1.19.2 :: Entity reference needed?
-            entity.hurt(new DamageSource(entity.level.damageSources().inWall().typeHolder(), entity), entity.getMaxHealth() * damagePct);
+        if (takeDamageOnCompleteStuck) {
+            entity.hurt(new EntityDamageSource(DamageSource.IN_WALL.msgId, entity), entity.getMaxHealth() * damagePct);
         }
 
         if (completeStuckBlockBreakRange > 0)

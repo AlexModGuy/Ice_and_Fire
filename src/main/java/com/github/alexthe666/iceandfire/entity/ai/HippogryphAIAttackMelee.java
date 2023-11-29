@@ -27,7 +27,7 @@ public class HippogryphAIAttackMelee extends Goal {
 
     public HippogryphAIAttackMelee(Mob creature, double speedIn, boolean useLongMemory) {
         this.attacker = creature;
-        this.world = creature.level();
+        this.world = creature.level;
         this.speedTowardsTarget = speedIn;
         this.longMemory = useLongMemory;
         this.setFlags(EnumSet.of(Flag.TARGET, Flag.MOVE));

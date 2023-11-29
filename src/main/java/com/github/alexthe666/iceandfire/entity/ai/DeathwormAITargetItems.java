@@ -44,7 +44,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem() &&
-                    item.level().getBlockState(item.blockPosition().below()).is(BlockTags.SAND);
+                    item.level.getBlockState(item.blockPosition().below()).is(BlockTags.SAND);
             }
         };
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -56,7 +56,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
             return false;
         }
-        List<ItemEntity> list = this.mob.level().getEntitiesOfClass(ItemEntity.class,
+        List<ItemEntity> list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
             this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
@@ -110,7 +110,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             Player thrower = null;
             if (this.targetEntity.getOwner() != null)
-                thrower = this.targetEntity.level().getPlayerByUUID(this.targetEntity.getOwner().getUUID());
+                thrower = this.targetEntity.level.getPlayerByUUID(this.targetEntity.getOwner());
             deathWorm.setExplosive(true, thrower);
             stop();
         }

@@ -48,7 +48,7 @@ public class AquaticAITempt extends Goal {
             --this.delayTemptCounter;
             return false;
         } else {
-            this.temptingPlayer = this.temptedEntity.level().getNearestPlayer(this.temptedEntity, 10.0D);
+            this.temptingPlayer = this.temptedEntity.level.getNearestPlayer(this.temptedEntity, 10.0D);
 
             if (this.temptingPlayer == null) {
                 return false;

@@ -47,56 +47,57 @@ public class GuiMyrmexAddRoom extends Screen {
         int j = (this.height - 166) / 2;
         if (ClientProxy.getReferedClientHive() != null) {
             Player player = Minecraft.getInstance().player;
-            this.addWidget( // TODO :: 1.19.2
-                    Button.builder (
-                            Component.translatable("myrmex.message.establishroom_food"), (p_214132_1_) -> {
-                                ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
-                                onGuiClosed();
-                                Minecraft.getInstance().setScreen(null);
-                                })
-                            .pos(i + 50, j + 35)
-                            .size(150, 20)
-                            .build());
-            this.addWidget(
-                    Button.builder(
-                            Component.translatable("myrmex.message.establishroom_nursery"), (p_214132_1_) -> {
-                                ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.NURSERY);
-                                onGuiClosed();
-                                Minecraft.getInstance().setScreen(null);
-                            })
-                            .pos(i + 50, j + 60)
-                            .size(150, 20)
-                            .build());
+            this.addWidget(new Button(
+                    i + 50, j + 35,
+                    150, 20,
+                    Component.translatable("myrmex.message.establishroom_food"),
+                    (p_214132_1_) -> {
+                        ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.FOOD);
+                        onGuiClosed();
+                        Minecraft.getInstance().setScreen(null);
+                    }
+            ));
+            this.addWidget(new Button(
+                    i + 50, j + 60,
+                    150, 20,
+                    Component.translatable("myrmex.message.establishroom_nursery"),
+                    (p_214132_1_) -> {
+                        ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.NURSERY);
+                        onGuiClosed();
+                        Minecraft.getInstance().setScreen(null);
+                    }
+            ));
 
-            this.addWidget(
-                    Button.builder(
-                            Component.translatable("myrmex.message.establishroom_enterance_surface"), (p_214132_1_) -> {
-                                ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, false, interactPos, facing);
-                                onGuiClosed();
-                                Minecraft.getInstance().setScreen(null);
-                            })
-                            .pos(i + 50, j + 85)
-                            .size(150, 20)
-                            .build());
-            this.addWidget(
-                    Button.builder(
-                            Component.translatable("myrmex.message.establishroom_enterance_bottom"), (p_214132_1_) -> {
-                                ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, true, interactPos, facing);
-                                onGuiClosed();
-                                Minecraft.getInstance().setScreen(null);
-                            })
-                            .pos(i + 50, j + 110)
-                            .size(150, 20)
-                            .build());
-            this.addWidget(
-                    Button.builder(Component.translatable("myrmex.message.establishroom_misc"), (p_214132_1_) -> {
+            this.addWidget(new Button(
+                    i + 50, j + 85,
+                    150, 20,
+                    Component.translatable("myrmex.message.establishroom_enterance_surface"),
+                    (p_214132_1_) -> {
+                        ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, false, interactPos, facing);
+                        onGuiClosed();
+                        Minecraft.getInstance().setScreen(null);
+                    }
+            ));
+            this.addWidget(new Button(
+                    i + 50, j + 110,
+                    150, 20,
+                    Component.translatable("myrmex.message.establishroom_enterance_bottom"),
+                    (p_214132_1_) -> {
+                        ClientProxy.getReferedClientHive().addEnteranceWithMessage(player, true, interactPos, facing);
+                        onGuiClosed();
+                        Minecraft.getInstance().setScreen(null);
+                    }
+            ));
+            this.addWidget(new Button(
+                    i + 50, j + 135,
+                    150, 20,
+                    Component.translatable("myrmex.message.establishroom_misc"),
+                    (p_214132_1_) -> {
                         ClientProxy.getReferedClientHive().addRoomWithMessage(player, interactPos, WorldGenMyrmexHive.RoomType.EMPTY);
                         onGuiClosed();
                         Minecraft.getInstance().setScreen(null);
-                    })
-                            .pos(i + 50, j + 135)
-                            .size(150, 20)
-                            .build());
+                    }
+            ));
         }
     }
 
