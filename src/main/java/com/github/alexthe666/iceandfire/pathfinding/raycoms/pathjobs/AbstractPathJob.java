@@ -182,7 +182,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             passabilityNavigator = (IPassabilityNavigator) entity;
             maxRange = passabilityNavigator.maxSearchNodes();
         }
-        maxJumpHeight = (float) Math.floor(entity.maxUpStep() - 0.2F) + 1.3F;
+        maxJumpHeight = (float) Math.floor(entity.maxUpStep - 0.2F) + 1.3F;
         this.entity = new WeakReference<>(entity);
     }
 
@@ -215,7 +215,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             passabilityNavigator = (IPassabilityNavigator) entity;
             maxRange = passabilityNavigator.maxSearchNodes();
         }
-        maxJumpHeight = (float) Math.floor(entity.maxUpStep() - 0.2F) + 1.3F;
+        maxJumpHeight = (float) Math.floor(entity.maxUpStep - 0.2F) + 1.3F;
     }
 
     /**
@@ -304,12 +304,12 @@ public abstract class AbstractPathJob implements Callable<Path> {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(entity.getBlockX(),
             entity.getBlockY(),
             entity.getBlockZ());
-        final Level world = entity.level();
+        final Level world = entity.level;
 
         BlockState bs = world.getBlockState(pos);
         // 1 Up when we're standing within this collision shape
         final VoxelShape collisionShape = bs.getBlockSupportShape(world, pos);
-        if (bs.blocksMotion() && collisionShape.max(Direction.Axis.X) > 0) {
+        if (bs.getMaterial().blocksMotion() && collisionShape.max(Direction.Axis.X) > 0) {
             final double relPosX = Math.abs(entity.getX() % 1);
             final double relPosZ = Math.abs(entity.getZ() % 1);
 
@@ -325,7 +325,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         }
 
         BlockState down = world.getBlockState(pos.below());
-        while (!bs.blocksMotion() && !down.blocksMotion() && !down.getBlock().isLadder(down, world, pos.below(), entity) && bs.getFluidState().isEmpty()) {
+        while (!bs.getMaterial().blocksMotion() && !down.getMaterial().blocksMotion() && !down.getBlock().isLadder(down, world, pos.below(), entity) && bs.getFluidState().isEmpty()) {
             pos.move(Direction.DOWN, 1);
             bs = down;
             down = world.getBlockState(pos.below());
@@ -342,7 +342,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
                 pos.set(pos.getX(), pos.getY() + 1, pos.getZ());
                 bs = world.getBlockState(pos);
             }
-        } else if (b instanceof FenceBlock || b instanceof WallBlock || bs.isSolid()) {
+        } else if (b instanceof FenceBlock || b instanceof WallBlock || bs.getMaterial().isSolid()) {
             //Push away from fence
             final double dX = entity.getX() - Math.floor(entity.getX());
             final double dZ = entity.getZ() - Math.floor(entity.getZ());
@@ -720,7 +720,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return true if so.
      */
     public boolean isLiquid(final BlockState state) {
-        return state.liquid() || (!state.blocksMotion() && !state.getFluidState().isEmpty());
+        return state.getMaterial().isLiquid() || (!state.getMaterial().blocksMotion() && !state.getFluidState().isEmpty());
     }
 
     /**

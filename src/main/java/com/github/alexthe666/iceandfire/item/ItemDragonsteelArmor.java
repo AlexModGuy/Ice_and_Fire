@@ -32,7 +32,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     private final ArmorMaterial material;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, ArmorItem.Type slot) {
+    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
         this.material = material;
         this.attributeModifierMultimap = createAttributeMap();
@@ -63,8 +63,8 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     //Workaround for armor attributes being registered before the config gets loaded
     private Multimap<Attribute, AttributeModifier> createAttributeMap() {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        UUID uuid = ARMOR_MODIFIERS[type.getSlot().getIndex()];
-        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", material.getDefenseForType(type), AttributeModifier.Operation.ADDITION));
+        UUID uuid = ARMOR_MODIFIERS[getSlot().getIndex()];
+        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", material.getDefenseForSlot(getSlot()), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", material.getToughness(), AttributeModifier.Operation.ADDITION));
         if (this.knockbackResistance > 0) {
             builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
@@ -87,8 +87,8 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        if (this.type != null) {
-            return (this.getMaterial()).getDurabilityForType(this.type);
+        if (this.getSlot() != null) {
+            return (this.getMaterial()).getDurabilityForSlot(getSlot());
         }
         return super.getMaxDamage(stack);
     }
@@ -100,13 +100,13 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
 
     @Override
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot equipmentSlot) {
-        return equipmentSlot == this.type.getSlot() ? getOrUpdateAttributeMap() : super.getDefaultAttributeModifiers(equipmentSlot);
+        return equipmentSlot == getSlot() ? getOrUpdateAttributeMap() : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
     @Override
     public int getDefense() {
         if (this.material != null)
-            return this.material.getDefenseForType(this.getType());
+            return this.material.getDefenseForSlot(getSlot());
         return super.getDefense();
     }
 

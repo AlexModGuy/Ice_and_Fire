@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.message;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,14 +45,14 @@ public class MessageMultipartInteract {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
-                    Entity entity = player.level().getEntity(message.creatureID);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.creatureID);
                     if (entity != null && entity instanceof LivingEntity) {
                         double dist = player.distanceTo(entity);
                         LivingEntity mob = (LivingEntity) entity;
                         if (dist < 100) {
                             if (message.dmg > 0F) {
-                                mob.hurt(player.level().damageSources().mobAttack(player), message.dmg);
+                                mob.hurt(DamageSource.mobAttack(player), message.dmg);
                             } else {
                                 mob.interact(player, InteractionHand.MAIN_HAND);
                             }

@@ -57,9 +57,9 @@ public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
             boolean flag = false;
             if (dragon.getEggType().dragonType == DragonType.FIRE) {
-                flag = dragon.level().getBlockState(dragon.blockPosition()).isBurning(entity.level(), new BlockPos(entity.getBlockX(), entity.getBlockY(), entity.getBlockZ()));
+                flag = dragon.level.getBlockState(dragon.blockPosition()).isBurning(entity.level, new BlockPos(entity.getBlockX(), entity.getBlockY(), entity.getBlockZ()));
             } else if (dragon.getEggType().dragonType == DragonType.LIGHTNING) {
-                flag = dragon.level().isRainingAt(dragon.blockPosition());
+                flag = dragon.level.isRainingAt(dragon.blockPosition());
             }
             if (flag) {
                 this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, f2, 1);

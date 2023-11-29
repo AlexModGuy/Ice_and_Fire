@@ -38,10 +38,10 @@ public class DreadPortalProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader world, @NotNull BlockPos pos, @NotNull BlockPos p_230386_3_, StructureTemplate.@NotNull StructureBlockInfo blockInfoIn, StructureTemplate.@NotNull StructureBlockInfo p_230386_5_, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
         RandomSource random = settings.getRandom(pos);
         if (random.nextFloat() <= integrity) {
-            if (blockInfoIn.state().getBlock() == Blocks.DIAMOND_BLOCK) {
+            if (blockInfoIn.state.getBlock() == Blocks.DIAMOND_BLOCK) {
                 return new StructureTemplate.StructureBlockInfo(pos, IafBlockRegistry.DREAD_PORTAL.get().defaultBlockState(), null);
             }
-            if (blockInfoIn.state().getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
+            if (blockInfoIn.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
                 BlockState state = getRandomCrackedBlock(null, random);
                 return new StructureTemplate.StructureBlockInfo(pos, state, null);
             }

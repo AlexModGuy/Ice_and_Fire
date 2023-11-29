@@ -28,7 +28,7 @@ public class NodeProcessorDeathWorm extends NodeEvaluator {
     }
 
     @Override
-    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter blockaccessIn, int x, int y, int z, @NotNull Mob entitylivingIn) {
+    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter blockaccessIn, int x, int y, int z, @NotNull Mob entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoors, boolean canEnterDoors) {
         return this.getBlockPathType(blockaccessIn, x, y, z);
     }
 

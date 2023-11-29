@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public class ItemDeathwormArmor extends ArmorItem {
 
-    public ItemDeathwormArmor(ArmorMaterial material, ArmorItem.Type slot) {
+    public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
     }
 

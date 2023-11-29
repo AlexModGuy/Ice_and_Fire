@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.google.common.collect.Multimap;
+import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -20,7 +21,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,12 +42,12 @@ public class ItemGhostSword extends SwordItem {
             totalDmg += modifier.getAmount();
         }
         playerEntity.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
-        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.level(), playerEntity,
+        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.level, playerEntity,
             totalDmg * 0.5F);
         Vec3 vector3d = playerEntity.getViewVector(1.0F);
         Vector3f vector3f = new Vector3f((int) Math.round(vector3d.x), (int) Math.round(vector3d.y), (int) Math.round(vector3d.z));
         shot.shoot(vector3f.x(), vector3f.y(), vector3f.z(), 1.0F, 0.5F);
-        playerEntity.level().addFreshEntity(shot);
+        playerEntity.level.addFreshEntity(shot);
         stack.hurtAndBreak(1, playerEntity, (entity) -> {
             entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
         });

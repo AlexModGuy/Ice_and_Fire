@@ -97,7 +97,7 @@ public class ItemTideTrident extends TridentItem {
                         lvt_12_1_ *= lvt_14_1_ / lvt_13_1_;
                         lvt_5_1_.push(lvt_10_1_, lvt_11_1_, lvt_12_1_);
                         lvt_5_1_.startAutoSpinAttack(20);
-                        if (lvt_5_1_.onGround()) {
+                        if (lvt_5_1_.isOnGround()) {
                             float lvt_15_1_ = 1.1999999F;
                             lvt_5_1_.move(MoverType.SELF, new Vec3(0.0D, 1.1999999284744263D, 0.0D));
                         }

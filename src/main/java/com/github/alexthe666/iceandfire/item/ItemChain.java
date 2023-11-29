@@ -75,7 +75,7 @@ public class ItemChain extends Item {
                 double j = playerIn.getY();
                 double k = playerIn.getZ();
                 boolean flag = false;
-                List<LivingEntity> nearbyEntities = playerIn.level().getEntitiesOfClass(LivingEntity.class, new AABB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
+                List<LivingEntity> nearbyEntities = playerIn.level.getEntitiesOfClass(LivingEntity.class, new AABB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
                 if (playerIn.isCrouching()) {
                     ChainProperties.clearChainData(target);
                     for (LivingEntity livingEntity : nearbyEntities) {

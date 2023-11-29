@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -36,8 +36,7 @@ public class BlockGoldPile extends Block {
     public BlockGoldPile() {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.DIRT)
+                .of(Material.DIRT)
                 .strength(0.3F, 1)
                 .randomTicks()
                 .sound(IafBlockRegistry.SOUND_TYPE_GOLD)

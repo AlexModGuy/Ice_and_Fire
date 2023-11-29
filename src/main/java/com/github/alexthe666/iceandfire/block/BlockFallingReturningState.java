@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockFallingReturningState extends FallingBlock {
@@ -19,11 +19,10 @@ public class BlockFallingReturningState extends FallingBlock {
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockFallingReturningState(float hardness, float resistance, SoundType sound, MapColor color, BlockState revertState) {
+    public BlockFallingReturningState(float hardness, float resistance, SoundType sound, Material material, BlockState revertState) {
         super(
             BlockBehaviour.Properties
-                .of()
-                .mapColor(color)
+                .of(material)
                 .sound(sound)
                 .strength(hardness, resistance)
                 .randomTicks()
@@ -34,11 +33,10 @@ public class BlockFallingReturningState extends FallingBlock {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingReturningState(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, BlockState revertState) {
+    public BlockFallingReturningState(float hardness, float resistance, SoundType sound, boolean slippery, Material material, BlockState revertState) {
         super(
             BlockBehaviour.Properties
-                .of()
-                .mapColor(color)
+                .of(material)
                 .sound(sound)
                 .strength(hardness, resistance)
                 .randomTicks()

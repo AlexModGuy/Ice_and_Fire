@@ -103,7 +103,7 @@ public class ItemSummoningCrystal extends Item {
                         if (id != null) {
                             if (!context.getLevel().isClientSide) {
                                 try {
-                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
+                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
                                     if (entity != null) {
                                         flag = true;
                                         summonEntity(entity, context.getLevel(), offsetPos, yaw);
@@ -142,7 +142,7 @@ public class ItemSummoningCrystal extends Item {
                                         }
                                         if (flag2) {
                                             try {
-                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
+                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
                                                 if (entity != null) {
                                                     flag = true;
                                                     summonEntity(entity, context.getLevel(), offsetPos, yaw);

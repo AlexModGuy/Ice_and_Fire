@@ -7,9 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 
 public class BlockGeneric extends Block {
 /*    public BlockGeneric(float hardness, float resistance, SoundType sound) {
@@ -32,39 +30,19 @@ public class BlockGeneric extends Block {
         );
     }*/
 
-    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
-                .mapColor(color)
+    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, Material material) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of(material)
                 .sound(sound)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops();
-        if (instrument != null) {
-            props.instrument(instrument);
-        }
-        if (reaction != null) {
-            props.pushReaction(reaction);
-        }
-        if (ignited) {
-            props.ignitedByLava();
-        }
         return new BlockGeneric(props);
     }
 
-    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
-                .mapColor(color)
+    public static BlockGeneric builder(float hardness, float resistance, SoundType sound, boolean slippery, Material material) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of(material)
                 .sound(sound)
                 .strength(hardness, resistance)
                 .friction(0.98F);
-        if (instrument != null) {
-            props.instrument(instrument);
-        }
-        if (reaction != null) {
-            props.pushReaction(reaction);
-        }
-        if (ignited) {
-            props.ignitedByLava();
-        }
         return new BlockGeneric(props);
     }
 

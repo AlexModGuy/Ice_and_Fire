@@ -7,11 +7,9 @@ import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -227,16 +225,6 @@ public class ChunkCache implements LevelReader {
     @Override
     public int getDirectSignal(BlockPos pos, Direction direction) {
         return this.getBlockState(pos).getDirectSignal(this, pos, direction);
-    }
-
-    @Override
-    public RegistryAccess registryAccess() {
-        return RegistryAccess.EMPTY;
-    }
-
-    @Override
-    public FeatureFlagSet enabledFeatures() {
-        return FeatureFlagSet.of();
     }
 
     @Override

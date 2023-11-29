@@ -55,7 +55,7 @@ public class IafStructure extends Structure {
     }
 
     @Override
-    protected Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
+    public Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
         return Optional.empty();
     }
 

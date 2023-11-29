@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class ItemCopperArmor extends ArmorItem {
 
-    public ItemCopperArmor(ArmorMaterial material, ArmorItem.Type slot) {
+    public ItemCopperArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
     }
 

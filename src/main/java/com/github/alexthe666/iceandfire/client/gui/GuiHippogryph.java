@@ -4,8 +4,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.inventory.ContainerHippogryph;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -25,41 +26,38 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack ms, int mouseX, int mouseY) {
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         Font font = this.getMinecraft().font;
-        if (entity instanceof EntityHippogryph) {
-            EntityHippogryph hippo = (EntityHippogryph) entity;
-            pGuiGraphics.drawString(font, hippo.getDisplayName().getString(), 8, 6, 4210752, false);
+        if (entity instanceof EntityHippogryph hippo) {
+            Screen.drawString(ms, font, hippo.getDisplayName().getString(), 8, 6, 4210752/*, false*/);
         }
-        pGuiGraphics.drawString(font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
+        Screen.drawString(ms, font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752/*, false*/);
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(pGuiGraphics);
+    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(ms);
         this.mousePosx = mouseX;
         this.mousePosY = mouseY;
-        super.render(pGuiGraphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(pGuiGraphics, mouseX, mouseY);
+        super.render(ms, mouseX, mouseY, partialTicks);
+        this.renderTooltip(ms, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics pGuiGraphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack ms, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        pGuiGraphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        blit(ms, i, j, 0, 0, this.imageWidth, this.imageHeight);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
-        if (entity instanceof EntityHippogryph) {
-            EntityHippogryph hippo = (EntityHippogryph) entity;
+        if (entity instanceof EntityHippogryph hippo) {
             if (hippo.isChested()) {
-                pGuiGraphics.blit(TEXTURE, i + 79, j + 17, 0, this.imageHeight, 5 * 18, 54);
+                blit(ms, i + 79, j + 17, 0, this.imageHeight, 5 * 18, 54);
             }
-            InventoryScreen.renderEntityInInventoryFollowsMouse(pGuiGraphics,i + 51, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY,
-                hippo);
+            InventoryScreen.renderEntityInInventory(i + 51, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY, hippo);
         }
     }
 

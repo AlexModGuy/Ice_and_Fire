@@ -12,7 +12,7 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PigModel;
@@ -110,8 +110,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         }
         preRenderCallback(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0, 1.5F, 0);
-        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw));
         if (model instanceof ICustomStatueModel && fakeEntity != null) {
             ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, fakeEntity);
             if (model instanceof ModelHydraBody && fakeEntity instanceof EntityHydra) {
@@ -131,8 +131,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             matrixStackIn.pushPose();
             preRenderCallback(entityIn, matrixStackIn, partialTicks);
             matrixStackIn.translate(0, 1.5F, 0);
-            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
-            matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw));
             if (model instanceof ICustomStatueModel) {
                 ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder2, packedLightIn, fakeEntity);
             } else {

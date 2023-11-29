@@ -50,7 +50,7 @@ public class FireDragonForgeCategory implements IRecipeCategory<DragonForgeRecip
                 .addIngredients(dragonForgeRecipe.getBlood());
         if (level != null) {
             recipeLayoutBuilder.addSlot(RecipeIngredientRole.OUTPUT, 144, 30)
-                    .addItemStack(dragonForgeRecipe.getResultItem(level.registryAccess()));
+                    .addItemStack(dragonForgeRecipe.getResultItem());
         }
     }
 

@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,7 +14,6 @@ import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
 
 import java.util.ConcurrentModificationException;
 import java.util.function.Supplier;
@@ -169,14 +169,14 @@ public class RenderPath {
         final MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 
         matrixStack.translate(0.0F, -5F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880, false);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880, false);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
 
         matrixStack.translate(0.0F, -8F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880, false);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880, false);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         buffer.endBatch();
 
         matrixStack.popPose();

@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -62,16 +63,16 @@ public interface DragonSteelOverrides<T extends TieredItem> {
     default void hurtEnemy(T item, ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (item.getTier() == IafItemRegistry.SILVER_TOOL_MATERIAL) {
             if (target.getMobType() == MobType.UNDEAD) {
-                target.hurt(attacker.level().damageSources().magic(), getAttackDamage(item) + 3.0F);
+                target.hurt(DamageSource.MAGIC, getAttackDamage(item) + 3.0F);
             }
         }
 
         if (item.getTier() == IafItemRegistry.MYRMEX_CHITIN_TOOL_MATERIAL) {
             if (target.getMobType() != MobType.ARTHROPOD) {
-                target.hurt(attacker.level().damageSources().generic(), getAttackDamage(item) + 5.0F);
+                target.hurt(DamageSource.GENERIC, getAttackDamage(item) + 5.0F);
             }
             if (target instanceof EntityDeathWorm) {
-                target.hurt(attacker.level().damageSources().generic(), getAttackDamage(item) + 5.0F);
+                target.hurt(DamageSource.GENERIC, getAttackDamage(item) + 5.0F);
             }
         }
         if (isDragonsteelFire(item.getTier()) && IafConfig.dragonWeaponFireAbility) {
@@ -90,11 +91,11 @@ public interface DragonSteelOverrides<T extends TieredItem> {
                     flag = false;
                 }
             }
-            if (!attacker.level().isClientSide && flag) {
-                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level());
+            if (!attacker.level.isClientSide && flag) {
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
                 lightningboltentity.moveTo(target.position());
-                if (!target.level().isClientSide) {
-                    target.level().addFreshEntity(lightningboltentity);
+                if (!target.level.isClientSide) {
+                    target.level.addFreshEntity(lightningboltentity);
                 }
             }
             target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());

@@ -66,8 +66,8 @@ public class MessageDragonControl {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
-                    Entity entity = player.level().getEntity(message.dragonId);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.dragonId);
                     if (ServerEvents.isRidingOrBeingRiddenBy(entity, player)) {
                         if (entity != null && entity instanceof EntityDragonBase) {
                             EntityDragonBase dragon = (EntityDragonBase) entity;

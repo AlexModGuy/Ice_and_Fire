@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class DragonsteelArmorMaterial extends IafArmorMaterial {
 
@@ -11,9 +11,9 @@ public class DragonsteelArmorMaterial extends IafArmorMaterial {
     }
 
     @Override
-    public int getDefenseForType(ArmorItem.Type slotIn) {
+    public int getDefenseForSlot(EquipmentSlot slotIn) {
         int[] damageReduction = new int[]{IafConfig.dragonsteelBaseArmor - 6, IafConfig.dragonsteelBaseArmor - 3, IafConfig.dragonsteelBaseArmor, IafConfig.dragonsteelBaseArmor - 5};
-        return damageReduction[slotIn.getSlot().getIndex()];
+        return damageReduction[slotIn.getIndex()];
     }
 
     @Override
@@ -22,7 +22,7 @@ public class DragonsteelArmorMaterial extends IafArmorMaterial {
     }
 
     @Override
-    public int getDurabilityForType(ArmorItem.Type slotIn) {
-        return (int) (MAX_DAMAGE_ARRAY[slotIn.getSlot().getIndex()] * 0.02D * IafConfig.dragonsteelBaseDurabilityEquipment);
+    public int getDurabilityForSlot(EquipmentSlot slotIn) {
+        return (int) (MAX_DAMAGE_ARRAY[slotIn.getIndex()] * 0.02D * IafConfig.dragonsteelBaseDurabilityEquipment);
     }
 }

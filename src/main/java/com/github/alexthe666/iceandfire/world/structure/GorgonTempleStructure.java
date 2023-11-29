@@ -2,29 +2,20 @@ package com.github.alexthe666.iceandfire.world.structure;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
-import com.github.alexthe666.iceandfire.datagen.IafBiomeTagGenerator;
-import com.github.alexthe666.iceandfire.datagen.IafStructurePieces;
 import com.github.alexthe666.iceandfire.world.IafStructureTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
-import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 public class GorgonTempleStructure extends IafStructure {
@@ -44,7 +35,7 @@ public class GorgonTempleStructure extends IafStructure {
     }
 
     @Override
-    protected Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
+    public Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
         if (!IafConfig.generateGorgonTemple)
             return Optional.empty();
         ChunkPos pos = pContext.chunkPos();
@@ -75,23 +66,23 @@ public class GorgonTempleStructure extends IafStructure {
         return IafStructureTypes.GORGON_TEMPLE.get();
     }
 
-    public static GorgonTempleStructure buildStructureConfig(BootstapContext<Structure> context) {
-        HolderGetter<StructureTemplatePool> templatePoolHolderGetter = context.lookup(Registries.TEMPLATE_POOL);
-        Holder<StructureTemplatePool> graveyardHolder = templatePoolHolderGetter.getOrThrow(IafStructurePieces.GORGON_TEMPLE_START);
-
-        return new GorgonTempleStructure(
-                new Structure.StructureSettings(
-                        context.lookup(Registries.BIOME).getOrThrow(IafBiomeTagGenerator.HAS_MAUSOLEUM),
-                        new HashMap<>(),
-                        GenerationStep.Decoration.SURFACE_STRUCTURES,
-                        TerrainAdjustment.BEARD_THIN
-                ),
-                graveyardHolder,
-                Optional.empty(),
-                2,
-                ConstantHeight.ZERO,
-                Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
-                16
-        );
-    }
+//    public static GorgonTempleStructure buildStructureConfig(BootstapContext<Structure> context) {
+//        HolderGetter<StructureTemplatePool> templatePoolHolderGetter = context.lookup(Registries.TEMPLATE_POOL);
+//        Holder<StructureTemplatePool> graveyardHolder = templatePoolHolderGetter.getOrThrow(IafStructurePieces.GORGON_TEMPLE_START);
+//
+//        return new GorgonTempleStructure(
+//                new Structure.StructureSettings(
+//                        context.lookup(Registries.BIOME).getOrThrow(IafBiomeTagGenerator.HAS_MAUSOLEUM),
+//                        new HashMap<>(),
+//                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+//                        TerrainAdjustment.BEARD_THIN
+//                ),
+//                graveyardHolder,
+//                Optional.empty(),
+//                2,
+//                ConstantHeight.ZERO,
+//                Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
+//                16
+//        );
+//    }
 }

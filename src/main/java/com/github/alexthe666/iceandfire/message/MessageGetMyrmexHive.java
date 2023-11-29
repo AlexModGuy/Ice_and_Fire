@@ -45,8 +45,8 @@ public class MessageGetMyrmexHive {
             if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }else {
-                if (MyrmexWorldData.get(player.level()) != null) {
-                    MyrmexHive realHive = MyrmexWorldData.get(player.level()).getHiveFromUUID(serverHive.hiveUUID);
+                if (MyrmexWorldData.get(player.level) != null) {
+                    MyrmexHive realHive = MyrmexWorldData.get(player.level).getHiveFromUUID(serverHive.hiveUUID);
                     realHive.readVillageDataFromNBT(serverHive.toNBT());
                 }
             }

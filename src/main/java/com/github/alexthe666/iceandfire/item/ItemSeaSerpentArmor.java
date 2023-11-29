@@ -28,21 +28,21 @@ public class ItemSeaSerpentArmor extends ArmorItem {
 
     public EnumSeaSerpent armor_type;
 
-    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, CustomArmorMaterial material, ArmorItem.Type slot) {
+    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, CustomArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
         this.armor_type = armorType;
     }
 
     @Override
     public @NotNull String getDescriptionId() {
-        switch (this.type) {
-            case HELMET:
+        switch (getSlot()) {
+            case HEAD:
                 return "item.iceandfire.sea_serpent_helmet";
-            case CHESTPLATE:
+            case CHEST:
                 return "item.iceandfire.sea_serpent_chestplate";
-            case LEGGINGS:
+            case LEGS:
                 return "item.iceandfire.sea_serpent_leggings";
-            case BOOTS:
+            case FEET:
                 return "item.iceandfire.sea_serpent_boots";
         }
         return "item.iceandfire.sea_serpent_helmet";

@@ -560,7 +560,7 @@ public class ModelAmphithere extends ModelDragonBase<EntityAmphithere> {
             progressRotation(Neck3, sitProgress, 0.18203784098300857F, -0.0F, 0.0F);
         }
 
-        if (amphithere.groundProgress <= 0 && amphithere.getAnimation() != EntityAmphithere.ANIMATION_WING_BLAST && !amphithere.onGround()) {
+        if (amphithere.groundProgress <= 0 && amphithere.getAnimation() != EntityAmphithere.ANIMATION_WING_BLAST && !amphithere.isOnGround()) {
             amphithere.roll_buffer.applyChainFlapBuffer(BodyUpper);
             amphithere.pitch_buffer.applyChainWaveBuffer(BodyUpper);
             amphithere.tail_buffer.applyChainSwingBuffer(TAIL);

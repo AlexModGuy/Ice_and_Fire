@@ -47,6 +47,6 @@ public class LightningDragonForgeCategory implements IRecipeCategory<DragonForge
         recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 82, 29)
                 .addIngredients(dragonForgeRecipe.getBlood());
         recipeLayoutBuilder.addSlot(RecipeIngredientRole.OUTPUT, 144, 30)
-                .addItemStack(dragonForgeRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                .addItemStack(dragonForgeRecipe.getResultItem());
     }
 }

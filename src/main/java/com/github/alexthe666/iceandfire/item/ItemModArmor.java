@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ItemModArmor extends ArmorItem {
 
-    public ItemModArmor(ArmorMaterial material, ArmorItem.Type slot) {
+    public ItemModArmor(ArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
     }
 

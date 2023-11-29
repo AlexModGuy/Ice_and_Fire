@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockMyrmexBiolight extends BushBlock {
@@ -24,9 +23,7 @@ public class BlockMyrmexBiolight extends BushBlock {
     public BlockMyrmexBiolight() {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.PLANT)
-                .pushReaction(PushReaction.DESTROY)
+                .of(Material.PLANT)
                 .noOcclusion()
                 .noCollission()
                 .dynamicShape()

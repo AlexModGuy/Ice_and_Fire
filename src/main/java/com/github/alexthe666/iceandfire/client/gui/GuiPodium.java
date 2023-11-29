@@ -2,7 +2,8 @@ package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.inventory.ContainerPodium;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -19,29 +20,29 @@ public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int x, int y) {
+    protected void renderLabels(PoseStack ms, int x, int y) {
         if (menu != null) {
             String s = I18n.get("block.iceandfire.podium");
-            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752, false);
+            Screen.drawString(ms, this.font, s, this.imageWidth / 2 - this.getMinecraft().font.width(s) / 2, 6, 4210752/*, false*/);
         }
-        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
+        Screen.drawString(ms, this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752/*, false*/);
     }
 
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(pGuiGraphics);
-        super.render(pGuiGraphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(pGuiGraphics, mouseX, mouseY);
+    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(ms);
+        super.render(ms, mouseX, mouseY, partialTicks);
+        this.renderTooltip(ms, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics pGuiGraphics, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack ms, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, PODUIM_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        pGuiGraphics.blit(PODUIM_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        blit(ms, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
 }

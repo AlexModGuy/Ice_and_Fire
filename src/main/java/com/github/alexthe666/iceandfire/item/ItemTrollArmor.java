@@ -23,7 +23,7 @@ public class ItemTrollArmor extends ArmorItem{
 
     public EnumTroll troll;
 
-    public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, ArmorItem.Type slot) {
+    public ItemTrollArmor(EnumTroll troll, CustomArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
         this.troll = troll;
     }
@@ -65,6 +65,6 @@ public class ItemTrollArmor extends ArmorItem{
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("item.iceandfire.troll_leather_armor_" + getArmorPart(type.getSlot()) + ".desc").withStyle(ChatFormatting.GREEN));
+        tooltip.add(Component.translatable("item.iceandfire.troll_leather_armor_" + getArmorPart(getSlot()) + ".desc").withStyle(ChatFormatting.GREEN));
     }
 }

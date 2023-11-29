@@ -5,8 +5,10 @@ import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -36,10 +38,10 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
             matrixStackIn.pushPose();
             postRender(StreamSupport.stream(this.renderer.getModel().getAllParts().spliterator(), false).filter(cube -> cube.boxName.equals("BodyUpper")).findFirst().get(), matrixStackIn, 0.0625F);
             matrixStackIn.translate(0, -0.2F, 0.4F);
-            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
             matrixStackIn.pushPose();
             matrixStackIn.scale(f2, f2, f2);
-            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, Minecraft.getInstance().level, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
             matrixStackIn.popPose();
             matrixStackIn.popPose();
         }
@@ -54,15 +56,15 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
         } else {
             matrixStackIn.translate(renderer.rotationPointX * scale, renderer.rotationPointY * scale, renderer.rotationPointZ * scale);
             if (renderer.rotateAngleZ != 0.0F) {
-                matrixStackIn.mulPose(Axis.ZP.rotation(renderer.rotateAngleZ));
+                matrixStackIn.mulPose(Vector3f.ZP.rotation(renderer.rotateAngleZ));
             }
 
             if (renderer.rotateAngleY != 0.0F) {
-                matrixStackIn.mulPose(Axis.YP.rotation(renderer.rotateAngleY));
+                matrixStackIn.mulPose(Vector3f.YP.rotation(renderer.rotateAngleY));
             }
 
             if (renderer.rotateAngleX != 0.0F) {
-                matrixStackIn.mulPose(Axis.XP.rotation(renderer.rotateAngleX));
+                matrixStackIn.mulPose(Vector3f.XP.rotation(renderer.rotateAngleX));
             }
         }
     }

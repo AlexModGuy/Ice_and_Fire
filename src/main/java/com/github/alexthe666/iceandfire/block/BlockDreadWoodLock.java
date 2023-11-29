@@ -17,8 +17,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,10 +27,7 @@ public class BlockDreadWoodLock extends Block implements IDragonProof, IDreadBlo
     public BlockDreadWoodLock() {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.WOOD)
-                .instrument(NoteBlockInstrument.BASS)
-                .ignitedByLava()
+                .of(Material.WOOD)
                 .strength(-1.0F, 1000000F)
                 .sound(SoundType.WOOD)
         );

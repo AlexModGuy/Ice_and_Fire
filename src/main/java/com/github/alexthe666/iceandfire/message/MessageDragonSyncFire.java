@@ -52,8 +52,8 @@ public class MessageDragonSyncFire {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
-                    Entity entity = player.level().getEntity(message.dragonId);
+                if (player.level != null) {
+                    Entity entity = player.level.getEntity(message.dragonId);
                     if (entity != null && entity instanceof EntityDragonBase) {
                         EntityDragonBase dragon = (EntityDragonBase) entity;
                         dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);

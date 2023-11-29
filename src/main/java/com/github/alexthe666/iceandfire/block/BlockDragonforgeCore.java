@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +36,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
     public BlockDragonforgeCore(int isFire, boolean activated) {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.METAL)
+                .of(Material.METAL)
                 .dynamicShape()
                 .strength(40, 500)
                 .sound(SoundType.METAL)

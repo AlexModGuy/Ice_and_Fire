@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -28,8 +28,7 @@ public class BlockEggInIce extends BaseEntityBlock {
     public BlockEggInIce() {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.ICE)
+                .of(Material.ICE)
                 .noOcclusion()
                 .dynamicShape()
                 .strength(0.5F)

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.world.gen.mixin;
 
 import com.github.alexthe666.iceandfire.datagen.IafStructures;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -30,7 +29,7 @@ public class NoLakesInStructuresMixin {
         if(!(context.level() instanceof WorldGenRegion)) {
             return;
         }
-        Registry<Structure> configuredStructureFeatureRegistry = context.level().registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> configuredStructureFeatureRegistry = context.level().registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
         StructureManager structureManager = (context.level()).getLevel().structureManager();
         var availableStructures  = List.of(configuredStructureFeatureRegistry.getOptional(IafStructures.MAUSOLEUM),configuredStructureFeatureRegistry.getOptional(IafStructures.GRAVEYARD),configuredStructureFeatureRegistry.getOptional(IafStructures.GORGON_TEMPLE));
         for (var structure : availableStructures) {

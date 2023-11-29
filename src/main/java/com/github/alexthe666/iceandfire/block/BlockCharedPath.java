@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockCharedPath extends DirtPathBlock {
@@ -25,9 +24,7 @@ public class BlockCharedPath extends DirtPathBlock {
     public BlockCharedPath(int dragonType) {
         super(
             BlockBehaviour.Properties
-                .of()
-                .mapColor(MapColor.PLANT)
-                .pushReaction(PushReaction.DESTROY)
+                .of(Material.PLANT)
                 .sound(dragonType != 1 ? SoundType.GRAVEL : SoundType.GLASS)
                 .strength(0.6F)
                 .friction(dragonType != 1 ? 0.6F : 0.98F)
@@ -68,14 +65,14 @@ public class BlockCharedPath extends DirtPathBlock {
                 worldIn.setBlockAndUpdate(pos, Blocks.DIRT_PATH.defaultBlockState());
             }
         }
-        if (worldIn.getBlockState(pos.above()).isSolid()) {
+        if (worldIn.getBlockState(pos.above()).getMaterial().isSolid()) {
             worldIn.setBlockAndUpdate(pos, getSmushedState(dragonType));
         }
         updateBlockState(worldIn, pos);
     }
 
     private void updateBlockState(Level worldIn, BlockPos pos) {
-        if (worldIn.getBlockState(pos.above()).isSolid()) {
+        if (worldIn.getBlockState(pos.above()).getMaterial().isSolid()) {
             worldIn.setBlockAndUpdate(pos, getSmushedState(dragonType));
         }
     }

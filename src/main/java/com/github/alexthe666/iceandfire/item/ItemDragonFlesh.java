@@ -34,11 +34,11 @@ public class ItemDragonFlesh extends ItemGenericFood {
             } else if (dragonType == 1) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
             } else {
-                if (!livingEntity.level().isClientSide) {
-                    LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.level());
+                if (!livingEntity.level.isClientSide) {
+                    LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(livingEntity.level);
                     lightningboltentity.moveTo(livingEntity.position());
-                    if (!livingEntity.level().isClientSide) {
-                        livingEntity.level().addFreshEntity(lightningboltentity);
+                    if (!livingEntity.level.isClientSide) {
+                        livingEntity.level.addFreshEntity(lightningboltentity);
                     }
                 }
             }

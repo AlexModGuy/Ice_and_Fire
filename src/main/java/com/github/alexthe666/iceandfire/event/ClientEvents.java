@@ -98,7 +98,7 @@ public class ClientEvents {
             }
         }
         if (event.getEntity() instanceof Player player) {
-            if (player.level().isClientSide) {
+            if (player.level.isClientSide) {
 
                 if (player.getVehicle() instanceof ICustomMoveController) {
                     Entity entity = player.getVehicle();
@@ -115,7 +115,7 @@ public class ClientEvents {
                     }
                 }
             }
-            if (player.level().isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
+            if (player.level.isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
                     currentView = 0;
@@ -125,7 +125,7 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            if (player.level().isClientSide) {
+            if (player.level.isClientSide) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
                 EntitySiren siren = SirenProperties.getSiren(player);
 
@@ -144,7 +144,7 @@ public class ClientEvents {
                 }
 
                 if (isCharmed) {
-                    if (player.level().isClientSide && rand.nextInt(40) == 0) {
+                    if (player.level.isClientSide && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getX(), player.getY(), player.getZ(), siren.getHairColor(), 0, 0);
                     }
 

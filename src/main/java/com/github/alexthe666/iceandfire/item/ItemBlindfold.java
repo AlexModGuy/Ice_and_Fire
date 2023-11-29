@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class ItemBlindfold extends ArmorItem {
 
     public ItemBlindfold() {
-        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, Type.HELMET, new Item.Properties());
+        super(IafItemRegistry.BLINDFOLD_ARMOR_MATERIAL, EquipmentSlot.HEAD, new Item.Properties());
     }
 
     @Override

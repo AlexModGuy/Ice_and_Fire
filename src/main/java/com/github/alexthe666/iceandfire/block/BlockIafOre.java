@@ -8,8 +8,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -19,9 +18,7 @@ public class BlockIafOre extends Block {
     public BlockIafOre(int toollevel, float hardness, float resistance) {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.STONE)
-                .instrument(NoteBlockInstrument.BASEDRUM)
+                .of(Material.STONE)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
 		);

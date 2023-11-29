@@ -8,7 +8,7 @@ public class MyrmexDeleteButton extends Button {
     public BlockPos pos;
 
     public MyrmexDeleteButton(int x, int y, BlockPos pos, Component delete, Button.OnPress onPress) {
-        super(x, y, 50, 20, delete, onPress, DEFAULT_NARRATION);
+        super(x, y, 50, 20, delete, onPress);
         this.pos = pos;
     }
 }

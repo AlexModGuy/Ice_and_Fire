@@ -27,12 +27,12 @@ public class VillageHouseProcessor extends StructureProcessor {
 
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        RandomSource random = settings.getRandom(infoIn2.pos());
-        if (infoIn2.state().getBlock() == Blocks.CHEST) {
+        RandomSource random = settings.getRandom(infoIn2.pos);
+        if (infoIn2.state.getBlock() == Blocks.CHEST) {
             CompoundTag tag = new CompoundTag();
             tag.putString("LootTable", LOOT.toString());
             tag.putLong("LootTableSeed", random.nextLong());
-            return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), infoIn2.state(), tag);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos, infoIn2.state, tag);
         }
         return infoIn2;
     }

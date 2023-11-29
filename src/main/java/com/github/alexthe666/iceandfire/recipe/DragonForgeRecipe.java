@@ -66,16 +66,12 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
-        return result;
-    }
-
     public @NotNull ItemStack getResultItem() {
         return result;
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull TileEntityDragonforge dragonforge, RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull TileEntityDragonforge dragonforge) {
         return result;
     }
 

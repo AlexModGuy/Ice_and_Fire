@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
@@ -26,17 +25,10 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
         this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.FALSE));
     }*/
 
-    public static BlockDreadBase builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, boolean ignited) {
-        Properties props = Properties.of()
-                .mapColor(color)
+    public static BlockDreadBase builder(float hardness, float resistance, SoundType sound, Material material) {
+        Properties props = Properties.of(material)
                 .sound(sound)
                 .strength(hardness, resistance);
-        if (instrument != null) {
-            props.instrument(instrument);
-        }
-        if (ignited) {
-            props.ignitedByLava();
-        }
         return new BlockDreadBase(props);
     }
 

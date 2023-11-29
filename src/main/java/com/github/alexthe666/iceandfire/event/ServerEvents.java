@@ -25,16 +25,14 @@ import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
 import com.google.common.base.Predicate;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.CombatTracker;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
@@ -64,7 +62,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -94,7 +92,7 @@ public class ServerEvents {
 
     private static void signalChickenAlarm(LivingEntity chicken, LivingEntity attacker) {
         final float d0 = IafConfig.cockatriceChickenSearchLength;
-        final List<EntityCockatrice> list = chicken.level().getEntitiesOfClass(EntityCockatrice.class, (new AABB(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getX() + 1.0D, chicken.getY() + 1.0D, chicken.getZ() + 1.0D)).inflate(d0, 10.0D, d0));
+        final List<EntityCockatrice> list = chicken.level.getEntitiesOfClass(EntityCockatrice.class, (new AABB(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getX() + 1.0D, chicken.getY() + 1.0D, chicken.getZ() + 1.0D)).inflate(d0, 10.0D, d0));
         if (list.isEmpty()) return;
 
         for (final EntityCockatrice cockatrice : list) {
@@ -115,7 +113,7 @@ public class ServerEvents {
 
     private static void signalAmphithereAlarm(LivingEntity villager, LivingEntity attacker) {
         final float d0 = IafConfig.amphithereVillagerSearchLength;
-        final List<EntityAmphithere> list = villager.level().getEntitiesOfClass(EntityAmphithere.class, (new AABB(villager.getX() - 1.0D, villager.getY() - 1.0D, villager.getZ() - 1.0D, villager.getX() + 1.0D, villager.getY() + 1.0D, villager.getZ() + 1.0D)).inflate(d0, d0, d0));
+        final List<EntityAmphithere> list = villager.level.getEntitiesOfClass(EntityAmphithere.class, (new AABB(villager.getX() - 1.0D, villager.getY() - 1.0D, villager.getZ() - 1.0D, villager.getX() + 1.0D, villager.getY() + 1.0D, villager.getZ() + 1.0D)).inflate(d0, d0, d0));
         if (list.isEmpty()) return;
 
         for (final Entity entity : list) {
@@ -196,8 +194,8 @@ public class ServerEvents {
     @SubscribeEvent
     public static void addNewVillageBuilding(final ServerAboutToStartEvent event) {
         if (IafConfig.villagerHouseWeight > 0) {
-            Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registries.TEMPLATE_POOL).orElseThrow();
-            Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).orElseThrow();
+            Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
+            Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
             for (String type : VILLAGE_TYPES) {
                 IafVillagerRegistry.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("village/" + type + "/houses"), "iceandfire:village/" + type + "_scriber_1", IafConfig.villagerHouseWeight);
             }
@@ -222,7 +220,7 @@ public class ServerEvents {
                 extraData = ((EntityHydraHead) event.getTarget()).headIndex;
                 ((EntityHydra) parent).triggerHeadFlags(extraData);
             }
-            if (event.getTarget().level().isClientSide && parent != null) {
+            if (event.getTarget().level.isClientSide && parent != null) {
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getId(), extraData));
             }
         }
@@ -241,7 +239,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDamage(LivingHurtEvent event) {
-        if (event.getSource().is(DamageTypeTags.IS_PROJECTILE)) {
+        if (event.getSource().isProjectile()) {
             float multi = 1;
             if (event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
                 multi -= 0.1;
@@ -284,7 +282,7 @@ public class ServerEvents {
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
         if (event.getEntity() instanceof WitherSkeleton) {
-            event.getDrops().add(new ItemEntity(event.getEntity().level(), event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
+            event.getDrops().add(new ItemEntity(event.getEntity().level, event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
                 new ItemStack(IafItemRegistry.WITHERBONE.get(), event.getEntity().getRandom().nextInt(2))));
         }
     }
@@ -324,7 +322,7 @@ public class ServerEvents {
     public void onPlayerAttack(AttackEntityEvent event) {
         if (event.getTarget() != null && isSheep(event.getTarget())) {
             float dist = IafConfig.cyclopesSheepSearchLength;
-            final List<Entity> list = event.getTarget().level().getEntities(event.getEntity(), event.getEntity().getBoundingBox().expandTowards(dist, dist, dist));
+            final List<Entity> list = event.getTarget().level.getEntities(event.getEntity(), event.getEntity().getBoundingBox().expandTowards(dist, dist, dist));
             if (!list.isEmpty()) {
                 for (final Entity entity : list) {
                     if (entity instanceof EntityCyclops) {
@@ -360,11 +358,11 @@ public class ServerEvents {
                             statuette.getTag().putString("IAFStoneStatueEntityID", statue.getTrappedEntityTypeString());
                             statuette.getTag().put("IAFStoneStatueNBT", writtenTag);
                             ((LivingEntity) event.getTarget()).addAdditionalSaveData(statuette.getTag());
-                            if (!event.getTarget().level().isClientSide) {
+                            if (!event.getTarget().level.isClientSide) {
                                 event.getTarget().spawnAtLocation(statuette, 1);
                             }
                         } else {
-                            if (!event.getTarget().level().isClientSide) {
+                            if (!event.getTarget().level.isClientSide) {
                                 event.getTarget().spawnAtLocation(Blocks.COBBLESTONE.asItem(), 2 + event.getEntity().getRandom().nextInt(4));
                             }
                         }
@@ -377,14 +375,14 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
-        if (!event.getEntity().level().isClientSide && ChainProperties.hasChainData(event.getEntity())) {
-            ItemEntity entityitem = new ItemEntity(event.getEntity().level(),
+        if (!event.getEntity().level.isClientSide && ChainProperties.hasChainData(event.getEntity())) {
+            ItemEntity entityitem = new ItemEntity(event.getEntity().level,
                 event.getEntity().getX(),
                 event.getEntity().getY() + 1,
                 event.getEntity().getZ(),
                 new ItemStack(IafItemRegistry.CHAIN.get(), ChainProperties.getChainedTo(event.getEntity()).size()));
             entityitem.setDefaultPickUpDelay();
-            event.getEntity().level().addFreshEntity(entityitem);
+            event.getEntity().level.addFreshEntity(entityitem);
             ChainProperties.clearChainData(event.getEntity());
         }
         if (event.getEntity().getUUID().equals(ServerEvents.ALEX_UUID)) {
@@ -395,12 +393,12 @@ public class ServerEvents {
             if (attacker instanceof Player && event.getEntity().getRandom().nextInt(3) == 0) {
                 CombatTracker combat = event.getEntity().getCombatTracker();
                 CombatEntry entry = combat.getMostSignificantFall();
-                boolean flag = entry != null && (entry.source().is(DamageTypes.FALL) || entry.source().is(DamageTypes.DROWN) || entry.source().is(DamageTypes.LAVA));
+                boolean flag = entry != null && (entry.getSource() == DamageSource.FALL || entry.getSource() == DamageSource.DROWN || entry.getSource() == DamageSource.LAVA);
                 if (event.getEntity().hasEffect(MobEffects.POISON)) {
                     flag = true;
                 }
                 if (flag) {
-                    Level world = event.getEntity().level();
+                    Level world = event.getEntity().level;
                     EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
                     ghost.copyPosition(event.getEntity());
                     if (!world.isClientSide) {
@@ -438,7 +436,7 @@ public class ServerEvents {
             ChainProperties.tickChain(event.getEntity());
         }
 
-        if (IafConfig.chickensLayRottenEggs && !event.getEntity().level().isClientSide && isChicken(event.getEntity()) && !event.getEntity().isBaby() && event.getEntity() instanceof Animal) {
+        if (IafConfig.chickensLayRottenEggs && !event.getEntity().level.isClientSide && isChicken(event.getEntity()) && !event.getEntity().isBaby() && event.getEntity() instanceof Animal) {
             ChickenProperties.tickChicken(event.getEntity());
         }
 
@@ -447,7 +445,7 @@ public class ServerEvents {
 
             if (!(event.getEntity() instanceof Player && ((Player) event.getEntity()).isCreative())) {
                 event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().multiply(0.25F, 1, 0.25F));
-                if (!(event.getEntity() instanceof EnderDragon) && !event.getEntity().onGround()) {
+                if (!(event.getEntity() instanceof EnderDragon) && !event.getEntity().isOnGround()) {
                     event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().add(0, -0.2, 0));
                 }
 
@@ -626,7 +624,7 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent // TODO :: 1.19.2 -> EntityJoinLevelEvent (need to be careful with chunk acccess)?
     public void onEntityJoinWorld(MobSpawnEvent.FinalizeSpawn event) {
         try {
             if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal) {

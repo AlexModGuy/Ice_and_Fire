@@ -43,8 +43,8 @@ public class MessageSirenSong {
             if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
-            if (player != null && player.level()!= null) {
-                Entity entity = player.level().getEntity(message.sirenId);
+            if (player != null && player.level != null) {
+                Entity entity = player.level.getEntity(message.sirenId);
                 if (entity != null && entity instanceof EntitySiren) {
                     EntitySiren siren = (EntitySiren) entity;
                     siren.setSinging(message.isSinging);

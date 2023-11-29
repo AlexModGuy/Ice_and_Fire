@@ -71,9 +71,9 @@ public class MessageUpdateLectern {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level() != null) {
+                if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level().hasChunkAt(pos) && player.level().getBlockEntity(pos) instanceof TileEntityLectern lectern) {
+                    if (player.level.hasChunkAt(pos) && player.level.getBlockEntity(pos) instanceof TileEntityLectern lectern) {
                         if (message.updateStack) {
                             ItemStack bookStack = lectern.getItem(0);
                             if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {

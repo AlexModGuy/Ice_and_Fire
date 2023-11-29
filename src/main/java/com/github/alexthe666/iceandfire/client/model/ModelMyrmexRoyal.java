@@ -337,7 +337,7 @@ public class ModelMyrmexRoyal extends ModelMyrmexBase {
         this.swing(MandibleL, speed_idle * 2F, degree_idle * -0.75F, true, 1, 0.2F, f2, 1);
 
         EntityMyrmexRoyal myrmex = (EntityMyrmexRoyal) entity;
-        if (myrmex.isFlying() && !myrmex.onGround()) {
+        if (myrmex.isFlying() && !myrmex.isOnGround()) {
             this.chainWave(LEFT_WINGS, speed_fly, degree_fly * 0.75F, 2, f2, 1);
             this.chainWave(RIGHT_WINGS, speed_fly, degree_fly * 0.75F, 2, f2, 1);
             this.bob(Body2, speed_fly, degree_fly * 10, false, 0, 0);

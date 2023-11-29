@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -64,8 +65,8 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEn
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.501F, 0.5F);
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(rotation));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotation));
         if (entity != null && entity.getLevel() != null && entity.hasPixie) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0F, 0.95F, 0F);

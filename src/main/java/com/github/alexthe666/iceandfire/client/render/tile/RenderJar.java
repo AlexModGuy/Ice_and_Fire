@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityJar;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -46,7 +47,7 @@ public class RenderJar<T extends TileEntityJar> implements BlockEntityRenderer<T
         if (hasPixie) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0.5F, 1.501F, 0.5F);
-            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
             matrixStackIn.pushPose();
             RenderType type = TEXTURE_0;
             RenderType typeGlow = TEXTURE_0_GLO;
@@ -80,7 +81,7 @@ public class RenderJar<T extends TileEntityJar> implements BlockEntityRenderer<T
                 } else {
                     matrixStackIn.translate(0F, 0.60F, 0F);
                 }
-                matrixStackIn.mulPose(Axis.YP.rotationDegrees(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks)));
+                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks)));
                 matrixStackIn.scale(0.50F, 0.50F, 0.50F);
                 MODEL_PIXIE.animateInJar(entity.hasProduced, entity, 0);
                 MODEL_PIXIE.renderToBuffer(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);

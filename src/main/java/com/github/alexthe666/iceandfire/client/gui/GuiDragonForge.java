@@ -7,8 +7,9 @@ import com.github.alexthe666.iceandfire.inventory.ContainerDragonForge;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -33,17 +34,17 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
     }
 
     @Override
-    protected void renderLabels(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack ms, int mouseX, int mouseY) {
         Font font = this.getMinecraft().font;
         if (tileFurnace != null) {
             String s = I18n.get("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");
-            pGuiGraphics.drawString(this.font, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752, false);
+            Screen.drawString(ms, this.font, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752/*, false*/);
         }
-        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
+        Screen.drawString(ms, this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752/*, false*/);
     }
 
     @Override
-    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(PoseStack ms, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         ResourceLocation texture = TEXTURE_FIRE;
         if (dragonType == 0) {
@@ -56,9 +57,9 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
 
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        pGuiGraphics.blit(texture, k, l, 0, 0, this.imageWidth, this.imageHeight);
+        blit(ms, k, l, 0, 0, this.imageWidth, this.imageHeight);
         int i1 = this.getCookTime(126);
-        pGuiGraphics.blit(texture, k + 12, l + 23, 0, 166, i1, 38);
+        blit(ms, k + 12, l + 23, 0, 166, i1, 38);
     }
 
     private int getCookTime(int p_175381_1_) {
@@ -77,10 +78,10 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(pGuiGraphics);
-        super.render(pGuiGraphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(pGuiGraphics, mouseX, mouseY);
+    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(ms);
+        super.render(ms, mouseX, mouseY, partialTicks);
+        this.renderTooltip(ms, mouseX, mouseY);
     }
 
 }

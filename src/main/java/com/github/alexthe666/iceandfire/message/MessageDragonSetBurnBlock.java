@@ -54,9 +54,9 @@ public class MessageDragonSetBurnBlock {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
-                    if (player.level()!= null) {
-                        Entity entity = player.level().getEntity(message.dragonId);
+                if (player.level != null) {
+                    if (player.level != null) {
+                        Entity entity = player.level.getEntity(message.dragonId);
                         if (entity != null && entity instanceof EntityDragonBase) {
                             EntityDragonBase dragon = (EntityDragonBase) entity;
                             dragon.setBreathingFire(message.breathingFire);

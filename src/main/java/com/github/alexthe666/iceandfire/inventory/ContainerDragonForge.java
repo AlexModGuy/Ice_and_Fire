@@ -26,7 +26,7 @@ public class ContainerDragonForge extends AbstractContainerMenu {
     public ContainerDragonForge(int id, Container furnaceInventory, Inventory playerInventory, ContainerData vars) {
         super(IafContainerRegistry.DRAGON_FORGE_CONTAINER.get(), id);
         this.tileFurnace = furnaceInventory;
-        this.world = playerInventory.player.level();
+        this.world = playerInventory.player.level;
         if (furnaceInventory instanceof TileEntityDragonforge) {
             fireType = ((TileEntityDragonforge) furnaceInventory).fireType;
         } else if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityDragonforge) {

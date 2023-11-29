@@ -10,7 +10,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +21,7 @@ public class BlockGraveyardSoil extends Block {
     public BlockGraveyardSoil() {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.DIRT)
+                .of(Material.DIRT)
                 .sound(SoundType.GRAVEL)
                 .strength(5, 1F)
                 .randomTicks()

@@ -30,7 +30,7 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     public EnumDragonArmor armor_type;
     public EnumDragonEgg eggType;
 
-    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, CustomArmorMaterial material, ArmorItem.Type slot) {
+    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, CustomArmorMaterial material, EquipmentSlot slot) {
         super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
         this.armor_type = armorType;
         this.eggType = eggType;
@@ -38,14 +38,14 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
 
     @Override
     public @NotNull String getDescriptionId() {
-        switch (this.type) {
-            case HELMET:
+        switch (getSlot()) {
+            case HEAD:
                 return "item.iceandfire.dragon_helmet";
-            case CHESTPLATE:
+            case CHEST:
                 return "item.iceandfire.dragon_chestplate";
-            case LEGGINGS:
+            case LEGS:
                 return "item.iceandfire.dragon_leggings";
-            case BOOTS:
+            case FEET:
                 return "item.iceandfire.dragon_boots";
         }
         return "item.iceandfire.dragon_helmet";

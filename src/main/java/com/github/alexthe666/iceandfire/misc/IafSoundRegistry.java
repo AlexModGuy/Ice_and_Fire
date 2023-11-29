@@ -270,7 +270,7 @@ public final class IafSoundRegistry {
 
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
-        return SoundEvent.createVariableRangeEvent(soundID);
+        return new SoundEvent(soundID);
     }
 
     @SubscribeEvent

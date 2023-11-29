@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
@@ -31,10 +30,8 @@ public class BlockFallingGeneric extends FallingBlock {
         );
     }*/
 
-    public static BlockFallingGeneric builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
-                .mapColor(color)
-                .instrument(instrument)
+    public static BlockFallingGeneric builder(float hardness, float resistance, SoundType sound, Material material) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of(material)
                 .sound(sound)
                 .strength(hardness, resistance);
         return new BlockFallingGeneric(props);

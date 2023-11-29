@@ -1,13 +1,15 @@
 package com.github.alexthe666.iceandfire.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
@@ -169,14 +171,14 @@ public class WorldUtil {
      */
     public static boolean isOfWorldType(@NotNull final Level world, @NotNull final ResourceKey<DimensionType> type) {
         RegistryAccess dynRegistries = world.registryAccess();
-        ResourceLocation loc = dynRegistries.registry(Registries.DIMENSION_TYPE).get().getKey(world.dimensionType());
+        ResourceLocation loc = dynRegistries.registry(Registry.DIMENSION_TYPE_REGISTRY).get().getKey(world.dimensionType());
         if (loc == null) {
             if (world.isClientSide) {
                 return world.dimensionType().effectsLocation().equals(type.location());
             }
             return false;
         }
-        ResourceKey<DimensionType> regKey = ResourceKey.create(Registries.DIMENSION_TYPE, loc);
+        ResourceKey<DimensionType> regKey = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, loc);
         return regKey == type;
     }
 
@@ -222,5 +224,15 @@ public class WorldUtil {
     public static boolean isInWorldHeight(final int yBlock, final Level world) {
         final DimensionType dimensionType = world.dimensionType();
         return yBlock > getDimensionMinHeight(dimensionType) && yBlock < getDimensionMaxHeight(dimensionType);
+    }
+
+    /** > 1.19.2 Mojang method */
+    public static BlockPos containing(double d, double e, double f) {
+        return new BlockPos(Mth.floor(d), Mth.floor(e), Mth.floor(f));
+    }
+
+    /** > 1.19.2 Mojang method */
+    public static BlockPos containing(Position position) {
+        return containing(position.x(), position.y(), position.z());
     }
 }

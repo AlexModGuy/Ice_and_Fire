@@ -37,7 +37,6 @@ public enum SurfaceType {
                 || block instanceof WallBlock
                 || block instanceof FireBlock
                 || block instanceof CampfireBlock
-                || block instanceof BambooStalkBlock
                 || block instanceof BambooSaplingBlock
                 || block instanceof DoorBlock
                 || block instanceof MagmaBlock
@@ -72,7 +71,7 @@ public enum SurfaceType {
             return SurfaceType.DROPABLE;
         }
 
-        if ((blockState.isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
+        if ((blockState.getMaterial().isSolid() && (shape.max(Direction.Axis.X) - shape.min(Direction.Axis.X)) > 0.75
                 && (shape.max(Direction.Axis.Z) - shape.min(Direction.Axis.Z)) > 0.75)
                 || (blockState.getBlock() == Blocks.SNOW && blockState.getValue(SnowLayerBlock.LAYERS) > 1)
                 || block instanceof CarpetBlock)

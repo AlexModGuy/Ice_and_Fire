@@ -48,14 +48,12 @@ public class MessageUpdatePixieHouse {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
+                if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level().getBlockEntity(pos) != null && player.level().getBlockEntity(pos) instanceof TileEntityPixieHouse) {
-                        TileEntityPixieHouse house = (TileEntityPixieHouse) player.level().getBlockEntity(pos);
+                    if (player.level.getBlockEntity(pos) != null && player.level.getBlockEntity(pos) instanceof TileEntityPixieHouse house) {
                         house.hasPixie = message.hasPixie;
                         house.pixieType = message.pixieType;
-                    } else if (player.level().getBlockEntity(pos) != null && player.level().getBlockEntity(pos) instanceof TileEntityJar) {
-                        TileEntityJar jar = (TileEntityJar) player.level().getBlockEntity(pos);
+                    } else if (player.level.getBlockEntity(pos) != null && player.level.getBlockEntity(pos) instanceof TileEntityJar jar) {
                         jar.hasPixie = message.hasPixie;
                         jar.pixieType = message.pixieType;
                     }

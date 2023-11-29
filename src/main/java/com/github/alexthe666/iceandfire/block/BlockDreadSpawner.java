@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -22,9 +21,7 @@ public class BlockDreadSpawner extends SpawnerBlock implements IDreadBlock {
     public BlockDreadSpawner() {
         super(
             BlockBehaviour.Properties
-                .of()
-                .mapColor(MapColor.STONE)
-                .instrument(NoteBlockInstrument.BASEDRUM)
+                .of(Material.STONE)
                 .strength(10.0F, 10000F)
                 .sound(SoundType.METAL)
                 .noOcclusion()

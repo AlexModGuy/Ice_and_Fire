@@ -7,8 +7,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -20,9 +19,7 @@ public class BlockDragonScales extends Block implements IDragonProof {
     public BlockDragonScales(EnumDragonEgg type) {
         super(
             Properties
-                .of()
-                .mapColor(MapColor.STONE)
-                .instrument(NoteBlockInstrument.BASEDRUM)
+                .of(Material.STONE)
                 .dynamicShape()
                 .strength(30F, 500)
                 .sound(SoundType.STONE)

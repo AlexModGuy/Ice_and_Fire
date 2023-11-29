@@ -126,7 +126,7 @@ public class IafClientSetup {
 
     @SubscribeEvent
     public static void setupShaders(RegisterShadersEvent event) throws IOException {
-        ResourceProvider provider = event.getResourceProvider();
+        ResourceProvider provider = event.getResourceManager();
         event.registerShader(new ShaderInstance(provider, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
             rendertypeDreadPortalShader = p_172782_;
         });

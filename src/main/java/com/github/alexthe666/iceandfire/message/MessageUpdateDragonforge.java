@@ -45,11 +45,10 @@ public class MessageUpdateDragonforge {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level()!= null) {
+                if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level().getBlockEntity(pos) != null) {
-                        if (player.level().getBlockEntity(pos) instanceof TileEntityDragonforge) {
-                            TileEntityDragonforge house = (TileEntityDragonforge) player.level().getBlockEntity(pos);
+                    if (player.level.getBlockEntity(pos) != null) {
+                        if (player.level.getBlockEntity(pos) instanceof TileEntityDragonforge house) {
                             house.cookTime = message.cookTime;
                             if (message.cookTime > 0) {
                                 house.lastDragonFlameTimer = 40;
