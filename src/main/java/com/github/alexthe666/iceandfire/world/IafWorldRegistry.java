@@ -65,6 +65,7 @@ public class IafWorldRegistry {
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> SPAWN_WANDERING_CYCLOPS = register("spawn_wandering_cyclops",
             () -> new SpawnWanderingCyclops(NoneFeatureConfiguration.CODEC));
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <T extends RegistryObject<EntityType<? extends EntityDragonBase>>> T castToBase(final RegistryObject entityType) {
         return (T) entityType;
     }
