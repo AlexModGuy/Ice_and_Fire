@@ -1,13 +1,19 @@
 package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.world.structure.GorgonTempleStructure;
+import com.github.alexthe666.iceandfire.world.structure.GraveyardStructure;
+import com.github.alexthe666.iceandfire.world.structure.MausoleumStructure;
+import com.google.gson.JsonElement;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
-public class IafStructures {
+import java.util.Map;
 
+public class IafStructures {
     public static final ResourceKey<Structure> GRAVEYARD = registerKey("graveyard");
     public static final ResourceKey<Structure> MAUSOLEUM = registerKey("mausoleum");
     public static final ResourceKey<Structure> GORGON_TEMPLE = registerKey("gorgon_temple");
@@ -16,9 +22,11 @@ public class IafStructures {
         return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(IceAndFire.MODID, name));
     }
 
-//    public static void bootstrap(BootstapContext<Structure> context) {
-//        context.register(GRAVEYARD, GraveyardStructure.buildStructureConfig(context));
-//        context.register(MAUSOLEUM, MausoleumStructure.buildStructureConfig(context));
-//        context.register(GORGON_TEMPLE, GorgonTempleStructure.buildStructureConfig(context));
-//    }
+    public static Map<ResourceLocation, Structure> gather(RegistryOps<JsonElement> registryOps) {
+        return Map.of(
+                GRAVEYARD.location(), GraveyardStructure.buildStructureConfig(registryOps),
+                MAUSOLEUM.location(), MausoleumStructure.buildStructureConfig(registryOps),
+                GORGON_TEMPLE.location(), GorgonTempleStructure.buildStructureConfig(registryOps)
+        );
+    }
 }

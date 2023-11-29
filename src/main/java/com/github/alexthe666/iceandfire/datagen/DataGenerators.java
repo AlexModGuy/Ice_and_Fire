@@ -17,6 +17,7 @@ import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
@@ -68,6 +69,42 @@ public class DataGenerators {
                 registryOps,
                 Registry.PLACED_FEATURE_REGISTRY,
                 IafPlacedFeatures.gather(registryOps)
+        ));
+
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                ForgeRegistries.Keys.BIOME_MODIFIERS,
+                IafBiomeModifierSerializers.gather(registryOps)
+        ));
+
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                Registry.TEMPLATE_POOL_REGISTRY,
+                IafStructurePieces.gather(registryOps)
+        ));
+
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                Registry.STRUCTURE_REGISTRY,
+                IafStructures.gather(registryOps)
+        ));
+
+        generator.addProvider(event.includeServer(), JsonCodecProvider.forDatapackRegistry(
+                generator,
+                helper,
+                IceAndFire.MODID,
+                registryOps,
+                Registry.STRUCTURE_SET_REGISTRY,
+                IafStructureSets.gather(registryOps)
         ));
     }
 }
