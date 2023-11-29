@@ -98,13 +98,13 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
     @Override
     public void startOpen(Player player) {
         this.unpackLootTable(null);
-        player.level().playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 1, 1, false);
+        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 1, 1, false);
     }
 
     @Override
     public void stopOpen(Player player) {
         this.unpackLootTable(null);
-        player.level().playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 1, 1, false);
+        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 1, 1, false);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
 
     public boolean isFull(ItemStack heldStack) {
         for (ItemStack itemstack : chestContents) {
-            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && ItemStack.isSameItem(itemstack, heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
+            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && ItemStack.isSame(itemstack, heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
                 return false;
             }
         }

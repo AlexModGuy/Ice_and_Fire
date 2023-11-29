@@ -37,7 +37,7 @@ public class EntityDragonIceCharge extends EntityDragonCharge {
 
     @Override
     public void tick() {
-        if (this.level().isClientSide) {
+        if (this.level.isClientSide) {
             for (int i = 0; i < 10; ++i) {
                 IceAndFire.PROXY.spawnParticle(EnumParticles.DragonIce, this.getX() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 1 * (this.random.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
             }

@@ -2,9 +2,8 @@ package com.github.alexthe666.iceandfire.datagen.tags;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.recipe.IafBannerPatterns;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.Registry;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.CompletableFuture;
 
 public class BannerPatternTagGenerator extends TagsProvider<BannerPattern> {
     public static final TagKey<BannerPattern> FIRE_BANNER_PATTERN = create("pattern_item/fire");
@@ -35,12 +33,12 @@ public class BannerPatternTagGenerator extends TagsProvider<BannerPattern> {
     public static final TagKey<BannerPattern> WEEZER_BANNER_PATTERN = create("pattern_item/weezer");
     public static final TagKey<BannerPattern> DREAD_BANNER_PATTERN = create("pattern_item/dread");
 
-    public BannerPatternTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, Registries.BANNER_PATTERN, provider, IceAndFire.MODID, existingFileHelper);
+    public BannerPatternTagGenerator(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper) {
+        super(generator, Registry.BANNER_PATTERN, IceAndFire.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider pProvider) {
+    protected void addTags() {
         this.tag(FIRE_BANNER_PATTERN).add(IafBannerPatterns.PATTERN_FIRE.getKey());
         this.tag(ICE_BANNER_PATTERN).add(IafBannerPatterns.PATTERN_ICE.getKey());
         this.tag(LIGHTNING_BANNER_PATTERN).add(IafBannerPatterns.PATTERN_LIGHTNING.getKey());
@@ -63,7 +61,7 @@ public class BannerPatternTagGenerator extends TagsProvider<BannerPattern> {
     }
 
     private static TagKey<BannerPattern> create(String name) {
-        return TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(IceAndFire.MODID, name));
+        return TagKey.create(Registry.BANNER_PATTERN_REGISTRY, new ResourceLocation(IceAndFire.MODID, name));
     }
 
     @Override

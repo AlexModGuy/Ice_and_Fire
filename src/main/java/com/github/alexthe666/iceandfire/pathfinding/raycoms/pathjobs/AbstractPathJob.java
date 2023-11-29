@@ -1411,7 +1411,6 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooStalkBlock
             || block instanceof BambooSaplingBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;

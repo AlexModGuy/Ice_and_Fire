@@ -17,6 +17,7 @@ import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.google.common.base.Predicate;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -112,7 +113,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         ANIMATION_SCRATCH = Animation.create(25);
         ANIMATION_BITE = Animation.create(20);
         initHippogryphInv();
-        this.setMaxUpStep(1);
+        this.maxUpStep = 1;
     }
 
     public static int getIntFromArmor(ItemStack stack) {
@@ -144,14 +145,14 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if (this.isVehicle() && this.isOverAir()) {
             if (navigatorType != 1) {
                 this.moveControl = new IafDragonFlightManager.PlayerFlightMoveHelper(this);
-                this.navigation = new PathNavigateFlyingCreature(this, level());
+                this.navigation = new PathNavigateFlyingCreature(this,level);
                 navigatorType = 1;
             }
         }
         if (!this.isVehicle() || !this.isOverAir()) {
             if (navigatorType != 0) {
                 this.moveControl = new MoveControl(this);
-                this.navigation = new GroundPathNavigation(this, level());
+                this.navigation = new GroundPathNavigation(this,level);
                 navigatorType = 0;
             }
         }
@@ -162,7 +163,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     private boolean isOverAirLogic() {
-        return level().isEmptyBlock(BlockPos.containing(this.getBlockX(), this.getBoundingBox().minY - 1, this.getBlockZ()));
+        return level.isEmptyBlock(WorldUtil.containing(this.getBlockX(), this.getBoundingBox().minY - 1, this.getBlockZ()));
     }
 
     @Override
@@ -224,8 +225,8 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger, @NotNull MoveFunction callback) {
-        super.positionRider(passenger, callback);
+    public void positionRider(@NotNull Entity passenger) {
+        super.positionRider(passenger);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
             setYHeadRot(passenger.getYHeadRot());
@@ -246,7 +247,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
             }
 
-            if (level().isClientSide) {
+            if (level.isClientSide) {
                 ItemStack saddle = animalchest.getItem(0);
                 ItemStack chest = animalchest.getItem(1);
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
@@ -287,7 +288,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
                 this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.level().addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
+                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -298,7 +299,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
                 this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.level().addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
+                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -340,7 +341,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
                 this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                 for (int i = 0; i < 20; i++) {
-                    this.level().addParticle(ParticleTypes.ENCHANT, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
+                    this.level.addParticle(ParticleTypes.ENCHANT, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -348,7 +349,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 this.heal(5);
                 this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemstack), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
+                    this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemstack), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), 0, 0, 0);
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -369,7 +370,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public void openGUI(Player playerEntity) {
-        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger(playerEntity))) {
+        if (!this.level.isClientSide && (!this.isVehicle() || this.hasPassenger(playerEntity))) {
             NetworkHooks.openScreen((ServerPlayer) playerEntity, new MenuProvider() {
                 @Override
                 public AbstractContainerMenu createMenu(int p_createMenu_1_, @NotNull Inventory p_createMenu_2_, @NotNull Player p_createMenu_3_) {
@@ -517,7 +518,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
                 ItemStack saddle = hippogryphInventory.getItem(0);
                 ItemStack chest = hippogryphInventory.getItem(1);
-                if (level().isClientSide) {
+                if (level.isClientSide) {
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 1, chest != null && chest.getItem() == Blocks.CHEST.asItem() && !chest.isEmpty() ? 1 : 0));
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getId(), 2, getIntFromArmor(hippogryphInventory.getItem(2))));
@@ -570,7 +571,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isOrderedToSit() {
-        if (level().isClientSide) {
+        if (level.isClientSide) {
             boolean isSitting = (this.entityData.get(DATA_FLAGS_ID).byteValue() & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
@@ -580,7 +581,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public void setOrderedToSit(boolean sitting) {
-        if (!level().isClientSide) {
+        if (!level.isClientSide) {
             this.isSitting = sitting;
         }
         byte b0 = this.entityData.get(DATA_FLAGS_ID).byteValue();
@@ -593,7 +594,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isHovering() {
-        if (level().isClientSide) {
+        if (level.isClientSide) {
             return this.isHovering = this.entityData.get(HOVERING).booleanValue();
         }
         return isHovering;
@@ -601,7 +602,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     public void setHovering(boolean hovering) {
         this.entityData.set(HOVERING, hovering);
-        if (!level().isClientSide) {
+        if (!level.isClientSide) {
             this.isHovering = hovering;
         }
     }
@@ -626,7 +627,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isFlying() {
-        if (level().isClientSide) {
+        if (level.isClientSide) {
             return this.isFlying = this.entityData.get(FLYING).booleanValue();
         }
         return isFlying;
@@ -634,7 +635,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     public void setFlying(boolean flying) {
         this.entityData.set(FLYING, flying);
-        if (!level().isClientSide) {
+        if (!level.isClientSide) {
             this.isFlying = flying;
         }
     }
@@ -749,7 +750,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2) {
-        HitResult movingobjectposition = this.level().clip(new ClipContext(vec1, new Vec3(vec2.x, vec2.y + (double) this.getBbHeight() * 0.5D, vec2.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        HitResult movingobjectposition = this.level.clip(new ClipContext(vec1, new Vec3(vec2.x, vec2.y + (double) this.getBbHeight() * 0.5D, vec2.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 
         return movingobjectposition == null || movingobjectposition.getType() != HitResult.Type.BLOCK;
     }
@@ -822,7 +823,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                     this.noPhysics = DISABLE_MOVEMENT_CHECK;
                 }
 
-                this.calculateEntityAnimation(false);
+                this.calculateEntityAnimation(this, false);
                 this.tryCheckInsideBlocks();
             } else {
                 this.setNoGravity(false);
@@ -853,7 +854,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         int j = Mth.floor(this.getY());
         int k = Mth.floor(this.getZ());
         ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG.get());
-        ItemEntity egg = new ItemEntity(this.level(), i, j, k, stack);
+        ItemEntity egg = new ItemEntity(this.level, i, j, k, stack);
         return egg;
     }
 
@@ -864,10 +865,10 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     public void aiStep() {
         super.aiStep();
         //switchNavigator();
-        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level.isClientSide) {
             if (this.isOrderedToSit() && (this.getCommand() != 1 || this.getControllingPassenger() != null)) {
                 this.setOrderedToSit(false);
             }
@@ -884,7 +885,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if (this.getAnimation() == ANIMATION_BITE && this.getTarget() != null && this.getAnimationTick() == 6) {
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < 8) {
-                this.getTarget().hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         LivingEntity attackTarget = this.getTarget();
@@ -892,18 +893,18 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             double dist = this.distanceToSqr(attackTarget);
 
             if (dist < 8) {
-                attackTarget.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                attackTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 attackTarget.hasImpulse = true;
                 float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().multiply(0.5D, 1, 0.5D));
 
-                if (attackTarget.onGround()) {
+                if (attackTarget.isOnGround()) {
                     attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(0, 0.3, 0));
                 }
             }
         }
-        if (!level().isClientSide && !this.isOverAir() && this.getNavigation().isDone() && attackTarget != null && attackTarget.getY() - 3 > this.getY() && this.getRandom().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
+        if (!level.isClientSide && !this.isOverAir() && this.getNavigation().isDone() && attackTarget != null && attackTarget.getY() - 3 > this.getY() && this.getRandom().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;
@@ -916,7 +917,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if (hasChestVarChanged && hippogryphInventory != null && !this.isChested()) {
             for (int i = 3; i < 18; i++) {
                 if (!hippogryphInventory.getItem(i).isEmpty()) {
-                    if (!level().isClientSide) {
+                    if (!level.isClientSide) {
                         this.spawnAtLocation(hippogryphInventory.getItem(i), 1);
                     }
                     hippogryphInventory.removeItemNoUpdate(i);
@@ -967,7 +968,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if ((flying || hovering) && tickCount % 20 == 0 && this.isOverAir()) {
             this.playSound(SoundEvents.ENDER_DRAGON_FLAP, this.getSoundVolume() * (IafConfig.dragonFlapNoiseDistance / 2), 0.6F + this.random.nextFloat() * 0.6F * this.getVoicePitch());
         }
-        if (this.onGround() && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
+        if (this.isOnGround() && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
             this.setFlying(false);
             this.setHovering(false);
         }
@@ -995,12 +996,12 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         if (this.isOrderedToSit()) {
             this.getNavigation().stop();
         }
-        if (this.onGround() && flyTicks != 0) {
+        if (this.isOnGround() && flyTicks != 0) {
             flyTicks = 0;
         }
         if (this.isFlying() && this.doesWantToLand() && this.getControllingPassenger() == null) {
             this.setHovering(false);
-            if (this.onGround()) {
+            if (isOnGround()) {
                 flyTicks = 0;
             }
             this.setFlying(false);
@@ -1012,11 +1013,11 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             this.setFlying(false);
             this.setHovering(false);
         }
-        if (this.isVehicle() && this.isGoingDown() && this.onGround()) {
+        if (this.isVehicle() && this.isGoingDown() && isOnGround()) {
             this.setHovering(false);
             this.setFlying(false);
         }
-        if ((!level().isClientSide && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isOrderedToSit() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && !this.isHovering() && !this.isOrderedToSit() && this.canMove() && !this.isOverAir() || this.getY() < -1)) {
+        if ((!level.isClientSide && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isOrderedToSit() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && !this.isHovering() && !this.isOrderedToSit() && this.canMove() && !this.isOverAir() || this.getY() < -1)) {
             this.setHovering(true);
             this.hoverTicks = 0;
             this.flyTicks = 0;
@@ -1054,7 +1055,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 this.setAnimation(this.getRandom().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
             }
             if (target != null && this.getAnimationTick() >= 10 && this.getAnimationTick() < 13) {
-                target.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
@@ -1084,11 +1085,11 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     public boolean isTargetBlocked(Vec3 target) {
         if (target != null) {
-            BlockHitResult rayTrace = this.level().clip(new ClipContext(this.getEyePosition(1.0F), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            BlockHitResult rayTrace = this.level.clip(new ClipContext(this.getEyePosition(1.0F), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 
             if (rayTrace != null && rayTrace.getLocation() != null) {
                 BlockPos pos = rayTrace.getBlockPos();
-                return !level().isEmptyBlock(pos);
+                return !level.isEmptyBlock(pos);
             }
         }
         return false;
@@ -1114,7 +1115,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     @Override
     public void die(@NotNull DamageSource cause) {
         super.die(cause);
-        if (hippogryphInventory != null && !this.level().isClientSide) {
+        if (hippogryphInventory != null && !this.level.isClientSide) {
             for (int i = 0; i < hippogryphInventory.getContainerSize(); ++i) {
                 ItemStack itemstack = hippogryphInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
@@ -1126,7 +1127,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     public void refreshInventory() {
         //This isn't needed (anymore) since it's already being handled by minecraft
-        if (!this.level().isClientSide) {
+        if (!this.level.isClientSide) {
             ItemStack saddle = this.hippogryphInventory.getItem(0);
             ItemStack chest = this.hippogryphInventory.getItem(1);
             this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
@@ -1144,11 +1145,11 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveControl = new MoveControl(this);
-            this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.CLIMBING);
+            this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.CLIMBING);
             this.isLandNavigator = true;
         } else {
             this.moveControl = new EntityHippogryph.FlyMoveHelper(this);
-            this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.FLYING);
+            this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
             this.isLandNavigator = false;
         }
     }
@@ -1163,7 +1164,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     protected PathNavigation createNavigator(Level worldIn, AdvancedPathNavigate.MovementType type, float width, float height) {
-        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, level(), type, width, height);
+        AdvancedPathNavigate newNavigator = new AdvancedPathNavigate(this, level, type, width, height);
         this.navigation = newNavigator;
         newNavigator.setCanFloat(true);
         newNavigator.getNodeEvaluator().setCanOpenDoors(true);
@@ -1205,7 +1206,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public void dropArmor() {
-        if (hippogryphInventory != null && !this.level().isClientSide) {
+        if (hippogryphInventory != null && !this.level.isClientSide) {
             for (int i = 0; i < hippogryphInventory.getContainerSize(); ++i) {
                 ItemStack itemstack = hippogryphInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
@@ -1295,14 +1296,14 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 } else {
                     target = DragonUtils.getBlockInViewHippogryph(EntityHippogryph.this, 0);
                     if (EntityHippogryph.this.doesWantToLand()) {
-                        while (target != null && target.getY() > 3 && EntityHippogryph.this.level().isEmptyBlock(target)) {
+                        while (target != null && target.getY() > 3 && EntityHippogryph.this.level.isEmptyBlock(target)) {
                             target = target.below();
                         }
                     }
                 }
             }
 
-            if (target != null && (EntityHippogryph.this.doesWantToLand() || EntityHippogryph.this.level().isEmptyBlock(target))) {
+            if (target != null && (EntityHippogryph.this.doesWantToLand() || EntityHippogryph.this.level.isEmptyBlock(target))) {
                 EntityHippogryph.this.getMoveControl().setWantedPosition((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.75D);
                 if (EntityHippogryph.this.getTarget() == null) {
                     EntityHippogryph.this.getLookControl().setLookAt((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 180.0F, 20.0F);

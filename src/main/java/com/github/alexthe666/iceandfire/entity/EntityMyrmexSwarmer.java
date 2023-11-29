@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -34,7 +35,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public EntityMyrmexSwarmer(EntityType type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new EntityMyrmexRoyal.FlyMoveHelper(this);
-        this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.FLYING);
+        this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
         switchNavigator(false);
     }
 
@@ -103,7 +104,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public LivingEntity getSummoner() {
         try {
             UUID uuid = this.getSummonerUUID();
-            return uuid == null ? null : this.level().getPlayerByUUID(uuid);
+            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }
@@ -177,7 +178,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public void aiStep() {
         super.aiStep();
         setFlying(true);
-        boolean flying = this.isFlying() && !this.onGround();
+        boolean flying = this.isFlying() && !this.isOnGround();
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.08D, 0));
@@ -185,7 +186,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
             }
         }
-        if (this.onGround()) {
+        if (isOnGround()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.2D, 0));
         }
         if (this.getTarget() != null) {
@@ -201,14 +202,14 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.playBiteSound();
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getTarget().hurt(level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getTarget().hurt(level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
                 this.getTarget().addEffect(new MobEffectInstance(MobEffects.POISON, 70, 1));
             }
         }

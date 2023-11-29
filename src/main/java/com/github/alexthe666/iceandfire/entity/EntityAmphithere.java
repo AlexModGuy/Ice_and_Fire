@@ -637,7 +637,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         int j = Mth.floor(this.getBoundingBox().minY);
         int k = Mth.floor(this.getZ());
         BlockPos blockpos = new BlockPos(i, j, k);
-//        Block block = this.level().getBlockState(blockpos.below()).getBlock(); // TODO :: Unused
+//        Block block = this.level.getBlockState(blockpos.below()).getBlock(); // TODO :: Unused
         return this.level.canSeeSkyFromBelowWater(blockpos.above());
     }
 

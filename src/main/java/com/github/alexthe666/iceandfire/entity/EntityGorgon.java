@@ -89,7 +89,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
 
     public boolean isTargetBlocked(Vec3 target) {
         Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
-        HitResult result = this.level().clip(new ClipContext(Vector3d, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        HitResult result = this.level.clip(new ClipContext(Vector3d, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return result.getType() != HitResult.Type.MISS;
     }
 
@@ -156,7 +156,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     @Override
     public void setTarget(@Nullable LivingEntity LivingEntityIn) {
         super.setTarget(LivingEntityIn);
-        if (LivingEntityIn != null && !level().isClientSide) {
+        if (LivingEntityIn != null && !level.isClientSide) {
 
 
             boolean blindness = this.hasEffect(MobEffects.BLINDNESS) || LivingEntityIn.hasEffect(MobEffects.BLINDNESS) || LivingEntityIn instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) LivingEntityIn).canBeTurnedToStone() || isBlindfolded(LivingEntityIn);
@@ -179,7 +179,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     protected void tickDeath() {
         ++this.deathTime;
         this.ambientSoundTime = 20;
-        if (this.level().isClientSide) {
+        if (this.level.isClientSide) {
             for (int k = 0; k < 5; ++k) {
                 double d2 = 0.4;
                 double d0 = 0.1;
@@ -188,13 +188,13 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
             }
         }
         if (this.deathTime >= 200) {
-            if (!this.level().isClientSide && (this.isAlwaysExperienceDropper() || this.lastHurtByPlayerTime > 0 && this.shouldDropExperience() && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))) {
+            if (!this.level.isClientSide && (this.isAlwaysExperienceDropper() || this.lastHurtByPlayerTime > 0 && this.shouldDropExperience() && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))) {
                 int i = this.getExperienceReward();
                 i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
                 while (i > 0) {
                     int j = ExperienceOrb.getExperienceValue(i);
                     i -= j;
-                    this.level().addFreshEntity(new ExperienceOrb(this.level(), this.getX(), this.getY(), this.getZ(), j));
+                    this.level.addFreshEntity(new ExperienceOrb(this.level, this.getX(), this.getY(), this.getZ(), j));
                 }
             }
             this.remove(RemovalReason.KILLED);
@@ -203,7 +203,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
                 double d2 = this.random.nextGaussian() * 0.02D;
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
-                this.level().addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), d2, d0, d1);
+                this.level.addParticle(ParticleTypes.CLOUD, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), d2, d0, d1);
             }
         }
     }
@@ -235,12 +235,12 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
                 }
                 if (this.getAnimation() == ANIMATION_SCARE) {
                     if (this.getAnimationTick() > 10) {
-                        if (!level().isClientSide) {
+                        if (!level.isClientSide) {
                             if (playerStatueCooldown == 0) {
                                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(attackTarget);
                                 statue.absMoveTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), attackTarget.getYRot(), attackTarget.getXRot());
-                                if (!level().isClientSide) {
-                                    level().addFreshEntity(statue);
+                                if (!level.isClientSide) {
+                                    level.addFreshEntity(statue);
                                 }
                                 statue.setYRot(attackTarget.getYRot());
                                 statue.setYRot(attackTarget.getYRot());

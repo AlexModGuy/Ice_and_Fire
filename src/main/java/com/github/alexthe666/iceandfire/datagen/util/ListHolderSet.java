@@ -27,9 +27,4 @@ public class ListHolderSet<T> extends HolderSet.ListBacked<T> {
     public boolean contains(Holder<T> pHolder) {
         return contents.contains(pHolder);
     }
-
-    @Override
-    public Optional<TagKey<T>> unwrapKey() {
-        return Optional.empty();
-    }
 }

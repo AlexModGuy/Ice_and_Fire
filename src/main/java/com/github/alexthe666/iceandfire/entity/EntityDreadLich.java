@@ -116,16 +116,16 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     public void aiStep() {
         super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = level().getBlockState(this.blockPosition().below());
+            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             this.setDeltaMovement(0, this.getDeltaMovement().y, this.getDeltaMovement().z);
 
         }
-        if (this.level().isClientSide && this.getAnimation() == ANIMATION_SUMMON) {
+        if (this.level.isClientSide && this.getAnimation() == ANIMATION_SUMMON) {
             double d0 = 0;
             double d1 = 0;
             double d2 = 0;
@@ -236,13 +236,13 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     public void setItemSlot(@NotNull EquipmentSlot slotIn, @NotNull ItemStack stack) {
         super.setItemSlot(slotIn, stack);
 
-        if (!this.level().isClientSide && slotIn == EquipmentSlot.MAINHAND) {
+        if (!this.level.isClientSide && slotIn == EquipmentSlot.MAINHAND) {
             this.setCombatTask();
         }
     }
 
     public void setCombatTask() {
-        if (this.level()!= null && !this.level().isClientSide) {
+        if (this.level!= null && !this.level.isClientSide) {
             this.goalSelector.removeGoal(this.aiAttackOnCollide);
             this.goalSelector.removeGoal(this.aiArrowAttack);
             ItemStack itemstack = this.getMainHandItem();
@@ -268,7 +268,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
             double y = getHeightFromXZ(x, z);
             minion.moveTo(x + 0.5D, y, z + 0.5D, this.getYRot(), this.getXRot());
             minion.setTarget(target);
-            Level currentLevel = level();
+            Level currentLevel = level;
             if (currentLevel instanceof ServerLevelAccessor) {
                 minion.finalizeSpawn((ServerLevelAccessor) currentLevel, currentLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
@@ -285,14 +285,14 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
         if (fireCooldown == 0 && !flag) {
             this.swing(InteractionHand.MAIN_HAND);
             this.playSound(SoundEvents.ZOMBIE_INFECT, this.getSoundVolume(), this.getVoicePitch());
-            EntityDreadLichSkull skull = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL.get(), level(), this,
+            EntityDreadLichSkull skull = new EntityDreadLichSkull(IafEntityRegistry.DREAD_LICH_SKULL.get(), level, this,
                 6);
             double d0 = target.getX() - this.getX();
             double d1 = target.getBoundingBox().minY + target.getBbHeight() * 2 - skull.getY();
             double d2 = target.getZ() - this.getZ();
             double d3 = Math.sqrt((float) (d0 * d0 + d2 * d2));
-            skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, 14 - this.level().getDifficulty().getId() * 4);
-            this.level().addFreshEntity(skull);
+            skull.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 0.0F, 14 - this.level.getDifficulty().getId() * 4);
+            this.level.addFreshEntity(skull);
             fireCooldown = 100;
         }
     }
@@ -300,19 +300,19 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     private Mob getRandomNewMinion() {
         float chance = random.nextFloat();
         if (chance > 0.5F) {
-            return new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(), level());
+            return new EntityDreadThrall(IafEntityRegistry.DREAD_THRALL.get(),level);
         } else if (chance > 0.35F) {
-            return new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(), level());
+            return new EntityDreadGhoul(IafEntityRegistry.DREAD_GHOUL.get(),level);
         } else if (chance > 0.15F) {
-            return new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(), level());
+            return new EntityDreadBeast(IafEntityRegistry.DREAD_BEAST.get(),level);
         } else {
-            return new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(), level());
+            return new EntityDreadScuttler(IafEntityRegistry.DREAD_SCUTTLER.get(),level);
         }
     }
 
     private double getHeightFromXZ(int x, int z) {
         BlockPos thisPos = new BlockPos(x, (int) (this.getY() + 7), z);
-        while (level().isEmptyBlock(thisPos) && thisPos.getY() > 2) {
+        while (level.isEmptyBlock(thisPos) && thisPos.getY() > 2) {
             thisPos = thisPos.below();
         }
         double height = thisPos.getY() + 1.0D;

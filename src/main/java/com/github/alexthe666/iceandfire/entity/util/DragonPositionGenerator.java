@@ -90,12 +90,12 @@ public class DragonPositionGenerator {
     }
 
     private static BlockPos moveAboveSolid(BlockPos pos, Mob mob) {
-        if (!mob.level().getBlockState(pos).isSolid()) {
+        if (!mob.level.getBlockState(pos).getMaterial().isSolid()) {
             return pos;
         } else {
             BlockPos blockpos;
 
-            for (blockpos = pos.above(); blockpos.getY() < mob.level().getMaxBuildHeight() && mob.level().getBlockState(blockpos).isSolid(); blockpos = blockpos.above()) {
+            for (blockpos = pos.above(); blockpos.getY() < mob.level.getMaxBuildHeight() && mob.level.getBlockState(blockpos).getMaterial().isSolid(); blockpos = blockpos.above()) {
             }
 
             return blockpos;
@@ -103,6 +103,6 @@ public class DragonPositionGenerator {
     }
 
     private static boolean isWaterDestination(BlockPos pos, Mob mob) {
-        return mob.level().getBlockState(pos).is(Blocks.WATER);
+        return mob.level.getBlockState(pos).is(Blocks.WATER);
     }
 }

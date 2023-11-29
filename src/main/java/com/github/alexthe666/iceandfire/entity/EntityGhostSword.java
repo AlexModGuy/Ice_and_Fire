@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -78,7 +77,7 @@ public class EntityGhostSword extends AbstractArrow {
         double z = this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth();
         float f = (this.getBbWidth() + this.getBbHeight() + this.getBbWidth()) * 0.333F + 0.5F;
         if (particleDistSq(x, y, z) < f * f) {
-            this.level().addParticle(ParticleTypes.SNEEZE, x, y + 0.5D, z, d0, d1, d2);
+            this.level.addParticle(ParticleTypes.SNEEZE, x, y + 0.5D, z, d0, d1, d2);
         }
         Vec3 vector3d = this.getDeltaMovement();
         double f3 = vector3d.horizontalDistance();
@@ -88,7 +87,7 @@ public class EntityGhostSword extends AbstractArrow {
         this.xRotO = this.getXRot();
         Vec3 vector3d2 = this.position();
         Vec3 vector3d3 = vector3d2.add(vector3d);
-        HitResult raytraceresult = this.level().clip(new ClipContext(vector3d2, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        HitResult raytraceresult = this.level.clip(new ClipContext(vector3d2, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         if (raytraceresult.getType() != HitResult.Type.MISS) {
             vector3d3 = raytraceresult.getLocation();
         }
@@ -134,7 +133,7 @@ public class EntityGhostSword extends AbstractArrow {
     @Override
     public void playSound(@NotNull SoundEvent soundIn, float volume, float pitch) {
         if (!this.isSilent() && soundIn != SoundEvents.ARROW_HIT && soundIn != SoundEvents.ARROW_HIT_PLAYER) {
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), soundIn, this.getSoundSource(), volume, pitch);
+            this.level.playSound(null, this.getX(), this.getY(), this.getZ(), soundIn, this.getSoundSource(), volume, pitch);
         }
     }
 
@@ -149,7 +148,7 @@ public class EntityGhostSword extends AbstractArrow {
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -189,11 +188,11 @@ public class EntityGhostSword extends AbstractArrow {
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = level().damageSources().magic();
+        DamageSource damagesource = DamageSource.MAGIC;
 
         if (entity1 != null) {
             if (entity1 instanceof LivingEntity) {
-                damagesource = level().damageSources().indirectMagic(this, entity1);
+                damagesource = DamageSource.indirectMagic(this, entity1);
                 ((LivingEntity) entity1).setLastHurtMob(entity);
             }
         }
@@ -238,7 +237,7 @@ public class EntityGhostSword extends AbstractArrow {
         } else {
             this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
             //this.ticksInAir = 0;
-            if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
+            if (!this.level.isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
                 this.remove(RemovalReason.DISCARDED);
             }
         }

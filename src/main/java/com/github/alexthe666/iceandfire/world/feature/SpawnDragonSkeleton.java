@@ -12,11 +12,13 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
+import java.util.function.Supplier;
+
 public class SpawnDragonSkeleton extends Feature<NoneFeatureConfiguration> {
 
-    protected EntityType<? extends EntityDragonBase> dragonType;
+    protected Supplier<EntityType<? extends EntityDragonBase>> dragonType;
 
-    public SpawnDragonSkeleton(EntityType<? extends EntityDragonBase> dt, Codec<NoneFeatureConfiguration> configFactoryIn) {
+    public SpawnDragonSkeleton(Supplier<EntityType<? extends EntityDragonBase>> dt, Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
         dragonType = dt;
     }
@@ -31,7 +33,7 @@ public class SpawnDragonSkeleton extends Feature<NoneFeatureConfiguration> {
 
         if (IafConfig.generateDragonSkeletons) {
             if (rand.nextInt(IafConfig.generateDragonSkeletonChance + 1) == 0) {
-                EntityDragonBase dragon = dragonType.create(worldIn.getLevel());
+                EntityDragonBase dragon = dragonType.get().create(worldIn.getLevel());
                 dragon.setPos(position.getX() + 0.5F, position.getY() + 1, position.getZ() + 0.5F);
                 int dragonage = 10 + rand.nextInt(100);
                 dragon.growDragon(dragonage);

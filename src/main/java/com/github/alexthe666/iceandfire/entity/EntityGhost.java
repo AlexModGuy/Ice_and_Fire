@@ -19,13 +19,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -120,8 +118,8 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        return super.isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.CACTUS)
-            || source.is(DamageTypes.DROWN) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.FALLING_ANVIL) || source.is(DamageTypes.SWEET_BERRY_BUSH);
+        return super.isInvulnerableTo(source) || source.isFire() || source == DamageSource.IN_WALL || source == DamageSource.CACTUS
+            || source == DamageSource.DROWN || source == DamageSource.FALLING_BLOCK || source == DamageSource.SWEET_BERRY_BUSH;
     }
 
     @Override
@@ -215,7 +213,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     public void aiStep() {
         super.aiStep();
         this.noPhysics = true;
-        if (!level().isClientSide) {
+        if (!level.isClientSide) {
             boolean day = isSunBurnTick() && !this.wasFromChest();
             if (day) {
                 if (!this.isDaytimeMode()) {
@@ -239,7 +237,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         } else {
             if (this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && random.nextInt(3) == 0) {
                 this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getVoicePitch());
-                if (level().isClientSide) {
+                if (level.isClientSide) {
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Ghost_Appearance, this.getX(), this.getY(), this.getZ(), this.getId(), 0, 0);
                 }
             }
@@ -265,10 +263,10 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     @Override
     protected boolean isSunBurnTick() {
-        if (this.level().isDay() && !this.level().isClientSide) {
-            float f = this.level().getBrightness(LightLayer.BLOCK, this.blockPosition());
+        if (this.level.isDay() && !this.level.isClientSide) {
+            float f = this.level.getBrightness(LightLayer.BLOCK, this.blockPosition());
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getBlockX(), this.getBlockY(), this.getBlockZ())).above() : new BlockPos(this.getBlockX(), this.getBlockY() + 4, this.getBlockZ());
-            return f > 0.5F && this.level().canSeeSky(blockpos);
+            return f > 0.5F && this.level.canSeeSky(blockpos);
         }
 
         return false;

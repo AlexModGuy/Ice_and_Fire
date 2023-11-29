@@ -145,25 +145,25 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> GHOST_CHEST = registerWithRender("ghost_chest", BlockGhostChest::new);
     public static final RegistryObject<Block> GRAVEYARD_SOIL = register("graveyard_soil", BlockGraveyardSoil::new);
 
-
+    // TODO :: 1.19.2
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
         IafItemRegistry.registerItem(name, () -> new BlockItem(ret.get(), new Item.Properties()), false);
-        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
+//        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
     public static <T extends TorchBlock> RegistryObject<T> registerWallBlock(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
         IafItemRegistry.registerItem(name, () -> new StandingAndWallBlockItem(ret.get(), ((IWallBlock) ret.get()).wallBlock(), new Item.Properties()), false);
-        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
+//        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 
     public static <T extends Block> RegistryObject<T> registerWithRender(String name, Supplier<T> block) {
         RegistryObject<T> ret = BLOCKS.register(name, block);
         IafItemRegistry.registerItem(name, () -> new BlockItemWithRender(ret.get(), new Item.Properties()), false);
-        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
+//        IafTabRegistry.TAB_BLOCKS_LIST.add(ret);
         return ret;
     }
 

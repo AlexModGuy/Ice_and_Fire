@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.google.common.base.Predicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -171,7 +172,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             this.setAnimation(this.getRandom().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
             float f = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
             this.setLastHurtMob(entityIn);
-            boolean flag = entityIn.hurt(level().damageSources().mobAttack(this), f);
+            boolean flag = entityIn.hurt(DamageSource.mobAttack(this), f);
             if (this.getAnimation() == ANIMATION_STING && flag) {
                 this.playStingSound();
                 if (entityIn instanceof LivingEntity) {
@@ -181,7 +182,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             } else {
                 this.playBiteSound();
             }
-            if (!this.level().isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
+            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
@@ -217,6 +218,6 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     @Override
     public boolean isClientSide() {
-        return this.level().isClientSide;
+        return this.level.isClientSide;
     }
 }

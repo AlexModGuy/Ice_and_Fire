@@ -182,7 +182,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
-        boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, itemstack)
+        boolean flag = !stack.isEmpty() && ItemStack.isSame(stack, itemstack)
             && ItemStack.matches(stack, itemstack);
         this.forgeItemStacks.set(index, stack);
 
@@ -277,7 +277,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             return false;
 
         ItemStack outputStack = this.forgeItemStacks.get(2);
-        if (!outputStack.isEmpty() && !ItemStack.isSameItem(outputStack, forgeRecipeOutput))
+        if (!outputStack.isEmpty() && !ItemStack.isSame(outputStack, forgeRecipeOutput))
             return false;
 
         int calculatedOutputCount = outputStack.getCount() + forgeRecipeOutput.getCount();
@@ -287,7 +287,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        if (player.level().getBlockEntity(this.worldPosition) != this) {
+        if (player.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
             return player.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D,

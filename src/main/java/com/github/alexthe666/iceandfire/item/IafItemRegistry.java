@@ -402,8 +402,8 @@ public class IafItemRegistry {
 
     public static <I extends Item> RegistryObject<I> registerItem(String name, Supplier<I> item, boolean putInTab) {
         RegistryObject<I> itemRegistryObject = ITEMS.register(name, item);
-        if (putInTab)
-            IafTabRegistry.TAB_ITEMS_LIST.add(itemRegistryObject);
+//        if (putInTab) // TODO :: 1.19.2
+//            IafTabRegistry.TAB_ITEMS_LIST.add(itemRegistryObject);
         return itemRegistryObject;
     }
 

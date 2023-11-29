@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -21,10 +21,12 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MyrmexTrades {
@@ -262,9 +264,7 @@ public class MyrmexTrades {
         @Override
         public MerchantOffer getOffer(@NotNull Entity trader, RandomSource rand) {
             ItemStack lvt_3_1_ = new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN.get(), this.emeraldCount);
-            List<Potion> lvt_4_1_ = BuiltInRegistries.POTION.stream().filter((potion) -> {
-                return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
-            }).collect(Collectors.toList());
+            List<Potion> lvt_4_1_ = ForgeRegistries.POTIONS.getEntries().stream().filter((potionEntry) -> !potionEntry.getValue().getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potionEntry.getValue())).map(Map.Entry::getValue).toList();
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));
             ItemStack lvt_6_1_ = PotionUtils.setPotion(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
             return new MerchantOffer(lvt_3_1_, new ItemStack(this.buyingItem, this.buyingItemCount), lvt_6_1_, this.maxUses, this.xpValue, this.priceMultiplier);
@@ -442,9 +442,7 @@ public class MyrmexTrades {
         @Override
         public MerchantOffer getOffer(@NotNull Entity trader, RandomSource rand) {
             ItemStack lvt_3_1_ = new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN.get(), this.emeraldCount);
-            List<Potion> lvt_4_1_ = BuiltInRegistries.POTION.stream().filter((potion) -> {
-                return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
-            }).collect(Collectors.toList());
+            List<Potion> lvt_4_1_ = ForgeRegistries.POTIONS.getEntries().stream().filter((potionEntry) -> !potionEntry.getValue().getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potionEntry.getValue())).map(Map.Entry::getValue).toList();
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));
             ItemStack lvt_6_1_ = PotionUtils.setPotion(new ItemStack(this.potionStack.getItem(), this.potionCount), lvt_5_1_);
             return new MerchantOffer(lvt_3_1_, new ItemStack(this.buyingItem, this.buyingItemCount), lvt_6_1_, this.maxUses, this.xpValue, this.priceMultiplier);
