@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -37,7 +38,7 @@ public class ItemCockatriceScepter extends Item {
     private int specialWeaponDmg;
 
     public ItemCockatriceScepter() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(700));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(700));
     }
 
     @Override

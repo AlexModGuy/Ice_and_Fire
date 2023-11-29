@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
 public class ItemSirenFlute extends Item {
 
     public ItemSirenFlute() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(200));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(200));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHydraArrow;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
@@ -19,7 +20,7 @@ import java.util.List;
 public class ItemHydraArrow extends ArrowItem {
 
     public ItemHydraArrow() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +55,7 @@ public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
             EntityDragonBase dragon = (EntityDragonBase) entity;
 
             Font font = this.getMinecraft().font;
+            // TODO :: 1.19.2
             MultiBufferSource.BufferSource bufferSource = getMinecraft().renderBuffers().bufferSource();
             String s3 = dragon.getCustomName() == null ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + " " + dragon.getCustomName().getString();
             font.drawInBatch(s3, k + this.imageWidth / 2 - font.width(s3) / 2, l + 75, 0XFFFFFF, false, matrixStack.last().pose(), bufferSource, false, 0, 15728880);

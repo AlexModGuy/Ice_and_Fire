@@ -11,7 +11,7 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:any_of",
+                  "condition": "minecraft:alternative",
                   "terms": [
                     {
                       "condition": "minecraft:match_tool",

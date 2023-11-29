@@ -30,7 +30,7 @@ public class ItemSummoningCrystal extends Item {
 
 
     public ItemSummoningCrystal() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
     }
 
     public static boolean hasDragon(ItemStack stack) {

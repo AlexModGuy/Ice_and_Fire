@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.google.common.collect.Multimap;
@@ -28,7 +29,7 @@ import java.util.List;
 public class ItemGhostSword extends SwordItem {
 
     public ItemGhostSword() {
-        super(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, 5, -1.0F, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, 5, -1.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
     public static void spawnGhostSwordEntity(ItemStack stack, Player playerEntity) {

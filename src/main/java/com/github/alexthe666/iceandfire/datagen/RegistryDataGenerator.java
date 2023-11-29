@@ -1,11 +1,5 @@
 package com.github.alexthe666.iceandfire.datagen;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.core.HolderLookup;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Set;
-
 // TODO :: 1.19.2
 //public class RegistryDataGenerator extends DatapackBuiltinEntriesProvider {
 //    public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()

@@ -30,9 +30,9 @@ public class GuiHippocampus extends AbstractContainerScreen<HippocampusContainer
         Font font = this.getMinecraft().font;
         if (entity instanceof EntityHippocampus) {
             EntityHippocampus hippo = (EntityHippocampus) entity;
-            Screen.drawString(ms, font, hippo.getDisplayName().getString(), l + 8, 6, 4210752/*, false*/);
+            font.draw(ms, hippo.getDisplayName().getString(), l + 8, 6, 4210752);
         }
-        Screen.drawString(ms, font, this.playerInventoryTitle, k + 8, l + this.imageHeight - 96 + 2, 4210752/*, false*/);
+        font.draw(ms, this.playerInventoryTitle, k + 8, l + this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override

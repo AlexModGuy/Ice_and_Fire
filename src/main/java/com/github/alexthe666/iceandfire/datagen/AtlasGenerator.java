@@ -1,13 +1,5 @@
 package com.github.alexthe666.iceandfire.datagen;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraftforge.client.event.RegisterTextureAtlasSpriteLoadersEvent;
-import net.minecraftforge.common.data.ExistingFileHelper;
-
-import java.util.Optional;
-
-import static com.github.alexthe666.iceandfire.client.IafClientSetup.*;
-
 // TODO :: 1.19.2 -> Use TextureStitchEvent.Pre instead?
 //public class AtlasGenerator extends SpriteSourceProvider {
 //    public AtlasGenerator(PackOutput output, ExistingFileHelper helper) {

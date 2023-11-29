@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import java.util.List;
 public class ItemCyclopsEye extends Item {
 
     public ItemCyclopsEye() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(500));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(500));
     }
 
     @Override

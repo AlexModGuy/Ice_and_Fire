@@ -30,9 +30,9 @@ public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> 
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         Font font = this.getMinecraft().font;
         if (entity instanceof EntityHippogryph hippo) {
-            Screen.drawString(ms, font, hippo.getDisplayName().getString(), 8, 6, 4210752/*, false*/);
+            font.draw(ms, hippo.getDisplayName().getString(), 8, 6, 4210752);
         }
-        Screen.drawString(ms, font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752/*, false*/);
+        font.draw(ms, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override

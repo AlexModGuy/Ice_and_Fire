@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -15,11 +16,11 @@ public class ItemGeneric extends Item {
     int description = 0;
 
     public ItemGeneric() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
     public ItemGeneric(int textLength) {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.description = textLength;
     }
 
@@ -29,7 +30,7 @@ public class ItemGeneric extends Item {
     }
 
     public ItemGeneric(int textLength, int stacksize) {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
         this.description = textLength;
     }
 

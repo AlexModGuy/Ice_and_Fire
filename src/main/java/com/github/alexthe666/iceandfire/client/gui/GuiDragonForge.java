@@ -38,23 +38,22 @@ public class GuiDragonForge extends AbstractContainerScreen<ContainerDragonForge
         Font font = this.getMinecraft().font;
         if (tileFurnace != null) {
             String s = I18n.get("block.iceandfire.dragonforge_" + DragonType.getNameFromInt(dragonType) + "_core");
-            Screen.drawString(ms, this.font, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752/*, false*/);
+            font.draw(ms, s, this.imageWidth / 2 - font.width(s) / 2, 6, 4210752);
         }
-        Screen.drawString(ms, this.font, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752/*, false*/);
+        font.draw(ms, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
     protected void renderBg(PoseStack ms, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        ResourceLocation texture = TEXTURE_FIRE;
+        ResourceLocation texture = TEXTURE_LIGHTNING;
         if (dragonType == 0) {
             texture = TEXTURE_FIRE;
         } else if (dragonType == 1) {
             texture = TEXTURE_ICE;
-        } else {
-            texture = TEXTURE_LIGHTNING;
         }
 
+        RenderSystem.setShaderTexture(0, texture);
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
         blit(ms, k, l, 0, 0, this.imageWidth, this.imageHeight);

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderGorgonHead;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -38,7 +39,7 @@ import java.util.function.Consumer;
 public class ItemGorgonHead extends Item {
 
     public ItemGorgonHead() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(1));
     }
 
     @Override

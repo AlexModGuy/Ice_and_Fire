@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ public class ItemDragonScales extends Item {
     EnumDragonEgg type;
 
     public ItemDragonScales(EnumDragonEgg type) {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.type = type;
     }
 

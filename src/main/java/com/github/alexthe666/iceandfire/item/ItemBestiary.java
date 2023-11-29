@@ -24,7 +24,7 @@ import java.util.Set;
 public class ItemBestiary extends Item {
 
     public ItemBestiary() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
     }
 
     @Override

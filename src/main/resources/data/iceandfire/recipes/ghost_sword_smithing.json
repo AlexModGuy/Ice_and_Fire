@@ -1,10 +1,7 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "minecraft:smithing",
   "base": {
     "item": "iceandfire:dragonbone_sword"
-  },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
   },
   "addition": {
     "item": "iceandfire:ghost_ingot"

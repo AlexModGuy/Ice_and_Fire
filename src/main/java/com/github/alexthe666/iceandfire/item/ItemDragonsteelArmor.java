@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelFireArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelIceArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelLightningArmor;
@@ -33,7 +34,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
     public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
         this.material = material;
         this.attributeModifierMultimap = createAttributeMap();
     }

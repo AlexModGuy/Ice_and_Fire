@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
@@ -30,7 +31,7 @@ import java.util.List;
 public class ItemDragonHorn extends Item {
 
     public ItemDragonHorn() {
-        super((new Item.Properties())/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
+        super((new Item.Properties()).tab(IceAndFire.TAB_ITEMS).stacksTo(1));
     }
 
     public static int getDragonType(ItemStack stack) {

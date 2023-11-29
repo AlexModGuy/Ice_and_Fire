@@ -19,7 +19,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -169,9 +168,8 @@ public class GuiBestiary extends Screen {
             drawPerPage(ms, bookPages);
             int pageLeft = bookPages * 2 + 1;
             int pageRight = pageLeft + 1;
-            MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-            font.drawInBatch("" + pageLeft, (float) centerX, (float) (centerY - (Y * 0.13)), 0X303030, false, ms.last().pose(), bufferSource, false, 0, 15728880);
-            font.drawInBatch("" + pageRight, (float) centerX, (float) (centerY - (Y * 0.13)), 0X303030, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+            font.draw(ms, "" + pageLeft, centerX, centerY - (int) (Y * 0.13), 0X303030);
+            font.draw(ms, "" + pageRight, centerX, centerY - (int) (Y * 0.13), 0X303030);
         }
         ms.popPose();
         this.renderables.forEach((widget -> widget.render(ms, mouseX, mouseY, partialTicks)));
@@ -904,8 +902,6 @@ public class GuiBestiary extends Screen {
             resource = Minecraft.getInstance().getResourceManager().getResource(backupLoc);
         }
 
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-
         try {
             final List<String> lines = IOUtils.readLines(resource.get().open(), "UTF-8");
             int linenumber = 0;
@@ -920,9 +916,9 @@ public class GuiBestiary extends Screen {
                     ms.translate(0, 5.5F, 0);
                 }
                 if (linenumber <= 19) {
-                    font.drawInBatch(line, 15, 20 + linenumber * 10, 0X303030, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+                    font.draw(ms, line, 15, 20 + linenumber * 10, 0x303030);
                 } else {
-                    font.drawInBatch(line, 220, (linenumber - 19) * 10, 0X303030, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+                    font.draw(ms, line, 220, (linenumber - 19) * 10, 0x303030);
                 }
                 linenumber++;
                 ms.popPose();
@@ -934,7 +930,7 @@ public class GuiBestiary extends Screen {
         String s = StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase(Locale.ROOT));
         float scale = font.width(s) <= 100 ? 2 : font.width(s) * 0.0125F;
         ms.scale(scale, scale, scale);
-        font.drawInBatch(s, 10, 2, 0X7A756A, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+        font.draw(ms, s, 10, 2, 0X7A756A);
         ms.popPose();
     }
 
@@ -956,12 +952,16 @@ public class GuiBestiary extends Screen {
 
         // TODO :: 1.19.2 - RenderSystem.getModelViewStack() & RenderSystem.applyModelViewMatrix() needed?
         ms.pushPose();
-        ms.translate(cornerX, cornerY, 0.0D);
-        ms.scale(scale* 0.92f, scale* 0.92f,scale* 0.92f);
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        poseStack.pushPose();
+        poseStack.translate(cornerX, cornerY, 0.0D);
+        poseStack.scale(scale* 0.92f, scale* 0.92f,scale* 0.92f);
         itemRenderer.blitOffset = -100;
         itemRenderer.renderAndDecorateItem(stack, x, y);
         itemRenderer.blitOffset = 0;
+        poseStack.popPose();
         ms.popPose();
+        RenderSystem.applyModelViewMatrix();
     }
 
 

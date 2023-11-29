@@ -168,14 +168,14 @@ public class IceAndFireMainMenu extends TitleScreen {
         RenderSystem.setShaderTexture(0, TABLE_TEXTURE);
         int width = this.width;
         int height = this.height;
-        Screen.blit(ms, 0, 0, 0, 0, width, height, width, height);
+        blit(ms, 0, 0, 0, 0, width, height, width, height);
         RenderSystem.setShaderTexture(0, BESTIARY_TEXTURE);
-        Screen.blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
+        blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
         float f11 = 1.0F;
         int l = Mth.ceil(f11 * 255.0F) << 24;
         if (this.isFlippingPage) {
             RenderSystem.setShaderTexture(0, pageFlipTextures[Math.min(5, pageFlip)]);
-            Screen.blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
+            blit(ms, 50, 0, 0, 0, width - 100, height, width - 100, height);
         } else {
             int middleX = width / 2;
             int middleY = height / 5;
@@ -183,20 +183,20 @@ public class IceAndFireMainMenu extends TitleScreen {
             float heightScale = height / 427F;
             float imageScale = Math.min(widthScale, heightScale) * 192;
             for (Picture picture : drawnPictures) {
-                float alpha = (picture.alpha * globalAlpha + 0.01F);
+//                float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
                 RenderSystem.setShaderColor(1, 1, 1, 1);
-                Screen.blit(ms, (int) (picture.x * widthScale) + middleX, (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
+                blit(ms, (int) (picture.x * widthScale) + middleX, (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
                 RenderSystem.disableBlend();
             }
         }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager._enableBlend();
-        this.getMinecraft().font.drawInBatch("Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF, false, ms.last().pose(), getMinecraft().renderBuffers().bufferSource(), false, 0, 15728880);
+        this.getMinecraft().font.draw(ms, "Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
         RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        Screen.blit(ms, width / 2 - 256 / 2, 10, 0, 0, 256, 64, 256, 64);
+        blit(ms, width / 2 - 256 / 2, 10, 0, 0, 256, 64, 256, 64);
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().font, width, height, l);
         if (this.splashText != null) {
@@ -206,15 +206,14 @@ public class IceAndFireMainMenu extends TitleScreen {
             float f2 = 1.8F - Mth.abs(Mth.sin((float) (Util.getMillis() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
             f2 = f2 * 100.0F / (float) (this.font.width(this.splashText) + 32);
             ms.scale(f2, f2, f2);
-            Screen.drawCenteredString(ms, this.font, this.splashText, 0, -8, 16776960 | l);
+            drawCenteredString(ms, this.font, this.splashText, 0, -8, 16776960 | l);
             ms.popPose();
         }
 
 
         String s1 = "Copyright Mojang AB. Do not distribute!";
         Font font = this.getMinecraft().font;
-        Screen.drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2,
-            height - 10, 0xFFFFFFFF);
+        drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2, height - 10, 0xFFFFFFFF);
         for (int i = 0; i < this.renderables.size(); ++i) {
             this.renderables.get(i).render(ms, mouseX, mouseY, partialTicks);
         }

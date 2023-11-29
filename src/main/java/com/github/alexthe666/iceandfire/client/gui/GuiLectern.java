@@ -63,9 +63,8 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
     @Override
     protected void renderLabels(@NotNull PoseStack ms, int mouseX, int mouseY) {
         Font font = this.getMinecraft().font;
-        MultiBufferSource.BufferSource bufferSource = getMinecraft().renderBuffers().bufferSource();
-        font.drawInBatch(this.nameable.getString(), 12, 4, 4210752, false, ms.last().pose(), bufferSource, false, 0, 15728880);
-        font.drawInBatch(this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+        font.draw(ms, this.nameable.getString(), 12, 4, 4210752);
+        font.draw(ms, this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
     }
 
     @Override
@@ -191,12 +190,10 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                         ms.pushPose();
                         ms.translate(width / 2F - 10, height / 2F - 83 + (1.0F - textScale) * 55, 2);
                         ms.scale(textScale, textScale, 1);
-                        MultiBufferSource.BufferSource bufferSource = getMinecraft().renderBuffers().bufferSource();
-                        fontrenderer.drawInBatch(s1, 0, 20 + 19 * i1, j2, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+                        fontrenderer.draw(ms, s1, 0, 20 + 19 * i1, j2);
                         ms.popPose();
                         fontrenderer = this.getMinecraft().font;
-                        fontrenderer.drawInBatch(s, k1 + 84 - fontrenderer.width(s),
-                            j + 13 + 19 * i1 + 7, j3, true, ms.last().pose(), bufferSource, false, 0, 15728880);
+                        fontrenderer.drawShadow(ms, s, k1 + 84 - fontrenderer.width(s), j + 13 + 19 * i1 + 7, j3);
                     } else {
                         blit(ms, j1, j + 14 + 19 * i1, 0, 185, 108, 19);
                         blit(ms, j1 + 1, j + 15 + 19 * i1, 16 * i1, 239, 16, 16);

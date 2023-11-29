@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -23,7 +24,7 @@ import java.util.List;
 public class ItemPixieWand extends Item {
 
     public ItemPixieWand() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1).durability(500));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1).durability(500));
     }
 
 

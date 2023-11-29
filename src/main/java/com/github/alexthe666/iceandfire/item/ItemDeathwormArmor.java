@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDeathWormArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
 public class ItemDeathwormArmor extends ArmorItem {
 
     public ItemDeathwormArmor(ArmorMaterial material, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
 

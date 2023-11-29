@@ -3,8 +3,6 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
-import com.github.alexthe666.iceandfire.datagen.IafConfiguredFeatures;
-import com.github.alexthe666.iceandfire.datagen.IafPlacedFeatures;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry;
@@ -19,6 +17,8 @@ import com.github.alexthe666.iceandfire.world.*;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -42,6 +42,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(IceAndFire.MODID)
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
@@ -173,4 +174,17 @@ public class IceAndFire {
         PROXY.postInit();
     }
 
+    public static CreativeModeTab TAB_ITEMS = new CreativeModeTab(MODID + ".items") {
+        @Override
+        public @NotNull ItemStack makeIcon() {
+            return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
+        }
+    };
+
+    public static CreativeModeTab TAB_BLOCKS = new CreativeModeTab(MODID + ".blocks") {
+        @Override
+        public @NotNull ItemStack makeIcon() {
+            return new ItemStack(IafBlockRegistry.DRAGON_SCALE_RED.get());
+        }
+    };
 }

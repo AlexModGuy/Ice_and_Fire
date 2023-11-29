@@ -13,7 +13,7 @@ public class ChangePageButton extends Button {
     private final int color;
 
     public ChangePageButton(int x, int y, boolean right, int color, OnPress press) {
-        super(x, y, 23, 10, Component.literal(""), press);
+        super(x, y, 23, 10, Component.empty(), press);
         this.right = right;
         this.color = color;
     }

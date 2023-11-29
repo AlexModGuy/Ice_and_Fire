@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderTideTridentItem;
 import com.github.alexthe666.iceandfire.entity.EntityTideTrident;
 import com.google.common.collect.ImmutableMultimap;
@@ -40,7 +41,7 @@ import java.util.function.Consumer;
 public class ItemTideTrident extends TridentItem {
 
     public ItemTideTrident() {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.durability(400));
+        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(400));
     }
 
     @Override

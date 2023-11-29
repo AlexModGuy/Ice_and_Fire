@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderDeathWormGauntlet;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -37,7 +38,7 @@ public class ItemDeathwormGauntlet extends Item {
     private int specialDamage = 0;
 
     public ItemDeathwormGauntlet() {
-        super(new Item.Properties().durability(500)/*.tab(IceAndFire.TAB_ITEMS)*/);
+        super(new Item.Properties().durability(500).tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

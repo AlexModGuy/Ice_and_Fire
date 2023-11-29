@@ -120,14 +120,13 @@ public class GuiMyrmexAddRoom extends Screen {
         super.render(ms, mouseX, mouseY, partialTicks);
         int color = this.jungle ? 0X35EA15 : 0XFFBF00;
         if (ClientProxy.getReferedClientHive() != null) {
-            MultiBufferSource.BufferSource bufferSource = getMinecraft().renderBuffers().bufferSource();
             if (!ClientProxy.getReferedClientHive().colonyName.isEmpty()) {
                 String title = I18n.get("myrmex.message.colony_named", ClientProxy.getReferedClientHive().colonyName);
-                this.getMinecraft().font.drawInBatch(title, i + 40 - title.length() / 2, j - 3, color,false, ms.last().pose(), bufferSource, false, 0, 15728880);
+                this.getMinecraft().font.draw(ms, title, i + 40 - title.length() / 2, j - 3, color);
             } else {
-                this.getMinecraft().font.drawInBatch(I18n.get("myrmex.message.colony"), i + 80, j - 3, color, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+                this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.colony"), i + 80, j - 3, color);
             }
-            this.getMinecraft().font.drawInBatch(I18n.get("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color, false, ms.last().pose(), bufferSource, false, 0, 15728880);
+            this.getMinecraft().font.draw(ms, I18n.get("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color);
         }
     }
 
