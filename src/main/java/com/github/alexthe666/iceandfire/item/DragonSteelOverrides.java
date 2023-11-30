@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -92,6 +93,7 @@ public interface DragonSteelOverrides<T extends TieredItem> {
             }
             if (!attacker.level().isClientSide && flag) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level());
+                lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_ITEMS);
                 lightningboltentity.moveTo(target.position());
                 if (!target.level().isClientSide) {
                     target.level().addFreshEntity(lightningboltentity);

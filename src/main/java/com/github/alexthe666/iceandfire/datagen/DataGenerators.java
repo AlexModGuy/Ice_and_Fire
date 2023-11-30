@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.datagen.tags.BannerPatternTagGenerator;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.datagen.tags.POITagGenerator;
 import net.minecraft.DetectedVersion;
 import net.minecraft.core.HolderLookup;
@@ -11,6 +13,7 @@ import net.minecraft.data.metadata.PackMetadataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -43,6 +46,9 @@ public class DataGenerators {
                 Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
         generator.addProvider(event.includeServer(), new IafBiomeTagGenerator(output, lookupProvider, helper));
         generator.addProvider(event.includeClient(), new AtlasGenerator(output, helper));
+        BlockTagsProvider blocktags  = new IafBlockTags(output, provider, helper);
+        generator.addProvider(event.includeServer(), blocktags);
+        generator.addProvider(event.includeServer(), new IafItemTags(output, provider, blocktags.contentsGetter(), helper));
 
     }
 }
