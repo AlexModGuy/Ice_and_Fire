@@ -59,6 +59,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -67,12 +68,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
@@ -267,6 +270,29 @@ public class ServerEvents {
         if (event.getEntityLiving() instanceof WitherSkeleton) {
             event.getDrops().add(new ItemEntity(event.getEntity().level, event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
                 new ItemStack(IafItemRegistry.WITHERBONE.get(), event.getEntityLiving().getRandom().nextInt(2))));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void makeItemDropsFireImmune(LivingDropsEvent event) {
+        boolean makeFireImmune = false;
+
+        if (event.getSource().getDirectEntity() instanceof LightningBolt bolt && bolt.getTags().contains(BOLT_DONT_DESTROY_ITEMS)) {
+            makeFireImmune = true;
+        } else if (event.getSource().getEntity() instanceof Player player && player.getItemInHand(player.getUsedItemHand()).is(ForgeRegistries.ITEMS.tags().createTagKey(IafTagRegistry.MAKE_ITEM_DROPS_FIREIMMUNE))) {
+            makeFireImmune = true;
+        }
+
+        if (makeFireImmune) {
+            Set<ItemEntity> fireImmuneDrops = event.getDrops().stream().map(itemEntity -> new ItemEntity(itemEntity.level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), itemEntity.getItem()) {
+                @Override
+                public boolean fireImmune() {
+                    return true;
+                }
+            }).collect(Collectors.toSet());
+
+            event.getDrops().clear();
+            event.getDrops().addAll(fireImmuneDrops);
         }
     }
 
@@ -640,6 +666,15 @@ public class ServerEvents {
     public void onVillagerTrades(VillagerTradesEvent event) {
         if (event.getType() == IafVillagerRegistry.SCRIBE.get()) {
             IafVillagerRegistry.addScribeTrades(event.getTrades());
+        }
+    }
+
+    public static String BOLT_DONT_DESTROY_ITEMS = "skip_items";
+
+    @SubscribeEvent
+    public void onLightningHit(EntityStruckByLightningEvent event) {
+        if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_ITEMS) && event.getEntity() instanceof ItemEntity) {
+            event.setCanceled(true);
         }
     }
 }

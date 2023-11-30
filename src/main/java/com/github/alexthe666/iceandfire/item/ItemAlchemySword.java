@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -55,6 +56,7 @@ public class ItemAlchemySword extends SwordItem {
             }
             if (!attacker.level.isClientSide && flag) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
+                lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_ITEMS);
                 lightningboltentity.moveTo(target.position());
                 if (!target.level.isClientSide) {
                     target.level.addFreshEntity(lightningboltentity);
