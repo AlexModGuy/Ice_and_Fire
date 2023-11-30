@@ -792,7 +792,9 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 float vertical = this.isGoingUp() ? 1.0F : this.isGoingDown() ? -1.0F : 0F;
 
                 float speedFactor = 1.0f;
-                if (this.isFlying() || this.isHovering()) {
+                boolean isFlying = this.isFlying() || this.isHovering();
+
+                if (isFlying) {
                     speedFactor *= flightSpeedFactor;
                     // Let server know we're flying before they kick us
                     this.setNoGravity(true);
@@ -818,7 +820,9 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
                     // Vanilla travel has a smaller friction factor for Y axis
                     // Add more friction in case moving too fast on Y axis
-                    if (this.isFlying() || this.isHovering()) {
+                    if (isFlying) {
+                        // See LivingEntity#getFrictionInfluencedSpeed -> flyingSpeed (default: 0.02) is used when not on ground
+                        this.flyingSpeed = getSpeed();
                         this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.92f, 1.0f));
                     }
                 } else if (rider instanceof Player) {
@@ -830,13 +834,14 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                     this.noPhysics = IGNORE_PHYSICS_ON_SERVER;
                 }
 
-                this.calculateEntityAnimation(this, false);
+                this.calculateEntityAnimation(this, isFlying);
                 this.tryCheckInsideBlocks();
             } else {
                 this.setNoGravity(false);
                 this.noPhysics = false;
 
-                this.flyingSpeed = 0.02F;
+                this.setSpeed(0.02F);
+                this.flyingSpeed = getSpeed();
                 super.travel(pTravelVector);
             }
         } else {
@@ -856,6 +861,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return false;
     }
 
+    // FIXME :: Unused
     public ItemEntity createEgg(EntityHippogryph partner) {
         int i = Mth.floor(this.getX());
         int j = Mth.floor(this.getY());
