@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMobSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.enums.EnumSkullType;
@@ -17,7 +18,7 @@ public class ItemMobSkull extends Item {
     private final EnumSkullType skull;
 
     public ItemMobSkull(EnumSkullType skull) {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
         this.skull = skull;
     }
 

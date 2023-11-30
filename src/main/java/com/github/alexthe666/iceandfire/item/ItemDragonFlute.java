@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import net.minecraft.sounds.SoundSource;
@@ -20,7 +21,7 @@ import java.util.*;
 public class ItemDragonFlute extends Item {
 
     public ItemDragonFlute() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

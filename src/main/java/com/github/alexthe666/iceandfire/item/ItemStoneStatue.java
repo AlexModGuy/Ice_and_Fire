@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
@@ -24,7 +25,7 @@ import java.util.List;
 public class ItemStoneStatue extends Item {
 
     public ItemStoneStatue() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

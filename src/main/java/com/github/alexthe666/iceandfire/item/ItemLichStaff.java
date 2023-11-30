@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.sounds.SoundEvents;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
-        super(new Item.Properties().durability(100));
+        super(new Item.Properties().durability(100).tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

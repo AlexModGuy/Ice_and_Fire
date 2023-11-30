@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ public class ItemModPickaxe extends PickaxeItem implements DragonSteelOverrides<
     private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
 
     public ItemModPickaxe(Tier toolmaterial) {
-        super(toolmaterial, 1, -2.8F, new Item.Properties());
+        super(toolmaterial, 1, -2.8F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override

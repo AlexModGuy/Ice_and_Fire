@@ -560,7 +560,7 @@ public class ServerEvents {
         }
     }
 
-    //@SubscribeEvent
+    //@SubscribeEvent // FIXME :: Unused
     public static void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(BuiltInLootTables.SIMPLE_DUNGEON)
@@ -626,7 +626,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        // Avoid world (chunk) interaction with not-fully-loaded chunks
+        // Note: Avoid world (chunk) interaction with not-fully-loaded chunks
         if (event.getEntity() instanceof Mob mob) {
             try {
                 if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal animal) {
