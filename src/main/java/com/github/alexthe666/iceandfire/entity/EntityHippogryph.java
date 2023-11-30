@@ -786,7 +786,9 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 float vertical = this.isGoingUp() ? 1.0F : this.isGoingDown() ? -1.0F : 0F;
 
                 float speedFactor = 1.0f;
-                if (this.isFlying() || this.isHovering()) {
+                boolean isFlying = this.isFlying() || this.isHovering();
+
+                if (isFlying) {
                     speedFactor *= flightSpeedFactor;
                     // Let server know we're flying before they kick us
                     this.setNoGravity(true);
@@ -811,7 +813,9 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
                     // Vanilla travel has a smaller friction factor for Y axis
                     // Add more friction in case moving too fast on Y axis
-                    if (this.isFlying() || this.isHovering()) {
+                    if (isFlying) {
+                        // See LivingEntity#getFrictionInfluencedSpeed -> flyingSpeed (default: 0.02) is used when not on ground
+                        this.flyingSpeed = getSpeed();
                         this.setDeltaMovement(this.getDeltaMovement().multiply(1.0f, 0.92f, 1.0f));
                     }
                 } else if (rider instanceof Player) {
@@ -820,16 +824,18 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                     // Happens when stepping up blocks
                     // Might because client & server's onGround flag is out of sync
                     // I can't get it fixed, so it's disabled
-                    this.noPhysics = DISABLE_MOVEMENT_CHECK;
+//                    this.noPhysics = DISABLE_MOVEMENT_CHECK;
                 }
 
-                this.calculateEntityAnimation(this, false);
+                this.calculateEntityAnimation(this, isFlying);
                 this.tryCheckInsideBlocks();
             } else {
                 this.setNoGravity(false);
                 this.noPhysics = false;
 
                 this.setSpeed(0.02F);
+                flyingSpeed = getSpeed();
+
                 super.travel(pTravelVector);
             }
         } else {
@@ -849,6 +855,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return false;
     }
 
+    // FIXME :: Unused
     public ItemEntity createEgg(EntityHippogryph partner) {
         int i = Mth.floor(this.getX());
         int j = Mth.floor(this.getY());
@@ -895,6 +902,8 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             if (dist < 8) {
                 attackTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 attackTarget.hasImpulse = true;
+                /*
+                // Disabled because it causes the target (player) to bounce upward
                 float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(-0.5 / (double) f, 1, -0.5 / (double) f));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().multiply(0.5D, 1, 0.5D));
@@ -902,6 +911,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 if (attackTarget.isOnGround()) {
                     attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(0, 0.3, 0));
                 }
+                */
             }
         }
         if (!level.isClientSide && !this.isOverAir() && this.getNavigation().isDone() && attackTarget != null && attackTarget.getY() - 3 > this.getY() && this.getRandom().nextInt(15) == 0 && this.canMove() && !this.isHovering() && !this.isFlying()) {

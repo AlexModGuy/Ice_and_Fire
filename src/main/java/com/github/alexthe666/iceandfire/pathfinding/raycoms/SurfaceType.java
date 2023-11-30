@@ -118,13 +118,15 @@ public enum SurfaceType {
             fluidState = world.getFluidState(pos);
         }
 
-        if (fluidState == null || fluidState.isEmpty()) {
+        if (fluidState.isEmpty()) {
             return false;
         }
 
-        if (state.getBlock() instanceof TrapDoorBlock || state.getBlock() instanceof HorizontalDirectionalBlock && !state.getValue(TrapDoorBlock.OPEN) && state.getValue(TrapDoorBlock.HALF) == Half.TOP)
-        {
-            return false;
+        if (state.getBlock() instanceof TrapDoorBlock || state.getBlock() instanceof HorizontalDirectionalBlock) {
+            // getvalue() will throw an exception if the property does not exist
+            if (state.hasProperty(TrapDoorBlock.OPEN) && !state.getValue(TrapDoorBlock.OPEN) && state.hasProperty(TrapDoorBlock.HALF) && state.getValue(TrapDoorBlock.HALF) == Half.TOP) {
+                return false;
+            }
         }
 
         final Fluid fluid = fluidState.getType();
