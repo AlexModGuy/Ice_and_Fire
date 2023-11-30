@@ -18,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
     dragon logic separation for client, server and shared sides.
  */
 public class IafDragonLogic {
-
     private final EntityDragonBase dragon;
 
     public IafDragonLogic(EntityDragonBase dragon) {
@@ -272,7 +271,6 @@ public class IafDragonLogic {
                 dragon.randomizeAttacks();
             }
         }
-
     }
 
     public void attackTarget(Entity target, Player ridingPlayer, float damage) {

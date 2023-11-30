@@ -683,6 +683,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onLightningHit(final EntityStruckByLightningEvent event) {
+        // TODO :: Set owner UUID in the tags as well to prevent damage to them?
         if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_ITEMS) && (event.getEntity() instanceof ItemEntity || event.getEntity() instanceof ExperienceOrb)) {
             event.setCanceled(true);
         }
