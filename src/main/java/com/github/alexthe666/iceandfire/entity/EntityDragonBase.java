@@ -1160,8 +1160,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        int lastDeathStage = this.getAgeInDays() / 5;
+        // Interaction usually means right-click but the relevant item is often in the main hand
+        ItemStack stack = player.getMainHandItem();
+
+        if (stack == ItemStack.EMPTY) {
+            stack = player.getItemInHand(hand);
+        }
+
         if (stack.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
             logic.debug();
             return InteractionResult.SUCCESS;
@@ -1191,11 +1196,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             if (this.isOwnedBy(player)) {
                 if (stack.getItem() == getSummoningCrystal() && !ItemSummoningCrystal.hasDragon(stack)) {
                     this.setCrystalBound(true);
-                    CompoundTag compound = stack.getTag();
-                    if (compound == null) {
-                        compound = new CompoundTag();
-                        stack.setTag(compound);
-                    }
+                    CompoundTag compound = stack.getOrCreateTag();
                     CompoundTag dragonTag = new CompoundTag();
                     dragonTag.putUUID("DragonUUID", this.getUUID());
                     if (this.getCustomName() != null) {
@@ -1233,7 +1234,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 } else {
                     int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, dragonType.isPiscivore());
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
-                        //this.growDragon(1);
                         this.setHunger(this.getHunger() + itemFoodAmount);
                         this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
                         this.playSound(SoundEvents.GENERIC_EAT, this.getSoundVolume(), this.getVoicePitch());
