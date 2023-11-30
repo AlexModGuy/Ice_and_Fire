@@ -950,12 +950,11 @@ public class GuiBestiary extends Screen {
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;
 
-        // TODO :: 1.19.2 - RenderSystem.getModelViewStack() & RenderSystem.applyModelViewMatrix() needed?
         ms.pushPose();
         PoseStack poseStack = RenderSystem.getModelViewStack();
         poseStack.pushPose();
         poseStack.translate(cornerX, cornerY, 0.0D);
-        poseStack.scale(scale* 0.92f, scale* 0.92f,scale* 0.92f);
+        poseStack.scale(scale, scale, scale);
         itemRenderer.blitOffset = -100;
         itemRenderer.renderAndDecorateItem(stack, x, y);
         itemRenderer.blitOffset = 0;

@@ -1587,6 +1587,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setAnimation(ANIMATION_SHAKEPREY);
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
+            // TODO :: Why is damage to player hardcoded
             prey.hurt(DamageSource.mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
@@ -2411,7 +2412,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 super.move(pType, pPos);
             } else {
                 // Use noPhysics tag to disable server side collision check
-                this.noPhysics = true;
+                // It is unsafe to do this
+//                this.noPhysics = true;
                 super.move(pType, pPos);
             }
             // Set no gravity flag to prevent getting kicked by flight disabled servers
@@ -2504,7 +2506,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     if (entity instanceof LivingEntity living && !isStrongerDragon) {
                         if (this.isOwnedBy(living) || this.isOwnersPet(living)) {
                             living.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 30 * size));
-                        } else {
+                        } else { // TODO :: No earplug check?
                             living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 30 * size));
                         }
                     }

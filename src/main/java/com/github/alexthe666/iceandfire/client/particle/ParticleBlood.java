@@ -38,7 +38,7 @@ public class ParticleBlood extends TextureSheetParticle {
         float f = (float) (Mth.lerp(partialTicks, this.xo, this.x) - Vector3d.x());
         float f1 = (float) (Mth.lerp(partialTicks, this.yo, this.y) - Vector3d.y());
         float f2 = (float) (Mth.lerp(partialTicks, this.zo, this.z) - Vector3d.z());
-        Quaternion quaternion; // TODO :: 1.19.2
+        Quaternion quaternion;
         if (this.roll == 0.0F) {
             quaternion = renderInfo.rotation();
         } else {

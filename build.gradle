@@ -116,6 +116,10 @@ dependencies {
     //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
     implementation fg.deobf("curse.maven:citadel-331936:4556677")
 
+    // Debug
+    implementation fg.deobf("curse.maven:atlasviewer-633577:4420382")
+    implementation fg.deobf("curse.maven:mob-entity-path-visualizer-590716:4063117")
+
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 

@@ -1,18 +1,20 @@
 package com.github.alexthe666.iceandfire.datagen;
 
-// TODO :: 1.19.2 -> Use TextureStitchEvent.Pre instead?
-//public class AtlasGenerator extends SpriteSourceProvider {
-//    public AtlasGenerator(PackOutput output, ExistingFileHelper helper) {
-//        super(output, helper, IceAndFire.MODID);
-//    }
-//    @Override
-//    protected void addSources() {
-//        this.atlas(CHESTS_ATLAS).addSource(new SingleFile(GHOST_CHEST_LOCATION, Optional.empty()));
-//        this.atlas(CHESTS_ATLAS).addSource(new SingleFile(GHOST_CHEST_LEFT_LOCATION, Optional.empty()));
-//        this.atlas(CHESTS_ATLAS).addSource(new SingleFile(GHOST_CHEST_RIGHT_LOCATION, Optional.empty()));
-//
-//        //this.atlas(SHIELD_PATTERNS_ATLAS).addSource(new SingleFile(TwilightForestMod.prefix("model/knightmetal_shield"), Optional.empty()));
-//
-//
-//    }
-//}
+import com.github.alexthe666.iceandfire.client.IafClientSetup;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+public class AtlasGenerator {
+    @SubscribeEvent
+    public static void addTextures(TextureStitchEvent.Pre event) {
+        if (event.getAtlas().location() == Sheets.CHEST_SHEET) {
+            event.addSprite(IafClientSetup.GHOST_CHEST_LOCATION);
+            event.addSprite(IafClientSetup.GHOST_CHEST_LEFT_LOCATION);
+            event.addSprite(IafClientSetup.GHOST_CHEST_RIGHT_LOCATION);
+        }
+    }
+}

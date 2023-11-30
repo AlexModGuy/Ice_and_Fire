@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.api;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 public class FoodUtils {
@@ -25,9 +25,9 @@ public class FoodUtils {
             int food = item.getItem().getFoodProperties().getNutrition() * 10;
             if (!meatOnly) {
                 return food;
-            } else if (item.getItem().getFoodProperties().isMeat()) {
+            } else if (item.getItem().getFoodProperties().isMeat()) { // FIXME :: Use tag
                 return food;
-            } else if (includeFish && item.getItem() == Items.COD) {
+            } else if (includeFish && item.is(ItemTags.FISHES)) {
                 return food;
             }
         }
