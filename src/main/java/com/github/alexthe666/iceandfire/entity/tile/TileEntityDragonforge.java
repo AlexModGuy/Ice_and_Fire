@@ -45,13 +45,13 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     private static final int[] SLOTS_BOTTOM = new int[]{2};
     private static final int[] SLOTS_SIDES = new int[]{0, 1};
     private static final Direction[] HORIZONTALS = new Direction[]{
-        Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
+            Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
     };
     public int fireType;
     public int cookTime;
     public int lastDragonFlameTimer = 0;
     net.minecraftforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
-        .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+            .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
@@ -104,7 +104,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
                 }
             } else if (!entityDragonforge.isBurning() && entityDragonforge.cookTime > 0) {
                 entityDragonforge.cookTime = Mth.clamp(entityDragonforge.cookTime - 2, 0,
-                    entityDragonforge.getMaxCookTime());
+                        entityDragonforge.getMaxCookTime());
             }
 
             if (flag != entityDragonforge.isBurning()) {
@@ -190,7 +190,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
         boolean flag = !stack.isEmpty() && stack.sameItem(itemstack)
-            && ItemStack.tagMatches(stack, itemstack);
+                && ItemStack.tagMatches(stack, itemstack);
         this.forgeItemStacks.set(index, stack);
 
         if (stack.getCount() > this.getMaxStackSize()) {
@@ -198,7 +198,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         }
 
         if (index == 0 && !flag
-            || this.cookTime > this.getMaxCookTime()) {
+                || this.cookTime > this.getMaxCookTime()) {
             this.cookTime = 0;
             this.setChanged();
         }
@@ -229,14 +229,14 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     public int getFireType(Block block) {
         if (block == IafBlockRegistry.DRAGONFORGE_FIRE_CORE.get()
-            || block == IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get()) {
+                || block == IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get()) {
             return 0;
         }
         if (block == IafBlockRegistry.DRAGONFORGE_ICE_CORE.get() || block == IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get()) {
             return 1;
         }
         if (block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE.get()
-            || block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get()) {
+                || block == IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get()) {
             return 2;
         }
         return 0;
@@ -271,11 +271,11 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     public Optional<DragonForgeRecipe> getCurrentRecipe() {
-        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE, this, level);
+        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get(), this, level);
     }
 
     public List<DragonForgeRecipe> getRecipes() {
-        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE);
+        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get());
     }
 
     public boolean canSmelt() {
@@ -294,7 +294,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
         int calculatedOutputCount = outputStack.getCount() + forgeRecipeOutput.getCount();
         return (calculatedOutputCount <= this.getMaxStackSize()
-            && calculatedOutputCount <= outputStack.getMaxStackSize());
+                && calculatedOutputCount <= outputStack.getMaxStackSize());
     }
 
     @Override
@@ -303,7 +303,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             return false;
         } else {
             return player.distanceToSqr(this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D,
-                this.worldPosition.getZ() + 0.5D) <= 64.0D;
+                    this.worldPosition.getZ() + 0.5D) <= 64.0D;
         }
     }
 
@@ -371,9 +371,9 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(
-        net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
+            net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
         if (!this.remove && facing != null
-            && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+                && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.UP)
                 return handlers[0].cast();
             if (facing == Direction.DOWN)
@@ -394,7 +394,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             if (this.canSmelt()) {
                 if (canAddFlameAgain) {
                     cookTime = Math.min(this.getMaxCookTime() + 1,
-                        cookTime + i);
+                            cookTime + i);
                     canAddFlameAgain = false;
                 }
             } else {
@@ -407,19 +407,19 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     private boolean checkBoneCorners(BlockPos pos) {
         return doesBlockEqual(pos.north().east(), IafBlockRegistry.DRAGON_BONE_BLOCK.get())
-            && doesBlockEqual(pos.north().west(), IafBlockRegistry.DRAGON_BONE_BLOCK.get())
-            && doesBlockEqual(pos.south().east(), IafBlockRegistry.DRAGON_BONE_BLOCK.get())
-            && doesBlockEqual(pos.south().west(), IafBlockRegistry.DRAGON_BONE_BLOCK.get());
+                && doesBlockEqual(pos.north().west(), IafBlockRegistry.DRAGON_BONE_BLOCK.get())
+                && doesBlockEqual(pos.south().east(), IafBlockRegistry.DRAGON_BONE_BLOCK.get())
+                && doesBlockEqual(pos.south().west(), IafBlockRegistry.DRAGON_BONE_BLOCK.get());
     }
 
     private boolean checkBrickCorners(BlockPos pos) {
         return doesBlockEqual(pos.north().east(), getBrick()) && doesBlockEqual(pos.north().west(), getBrick())
-            && doesBlockEqual(pos.south().east(), getBrick()) && doesBlockEqual(pos.south().west(), getBrick());
+                && doesBlockEqual(pos.south().east(), getBrick()) && doesBlockEqual(pos.south().west(), getBrick());
     }
 
     private boolean checkBrickSlots(BlockPos pos) {
         return doesBlockEqual(pos.north(), getBrick()) && doesBlockEqual(pos.east(), getBrick())
-            && doesBlockEqual(pos.west(), getBrick()) && doesBlockEqual(pos.south(), getBrick());
+                && doesBlockEqual(pos.west(), getBrick()) && doesBlockEqual(pos.south(), getBrick());
     }
 
     private boolean checkY(BlockPos pos) {
@@ -443,7 +443,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     public boolean assembled() {
         return checkBoneCorners(worldPosition.below()) && checkBrickSlots(worldPosition.below()) && checkBrickCorners(worldPosition)
-            && atleastThreeAreBricks(worldPosition) && checkY(worldPosition) && checkBoneCorners(worldPosition.above()) && checkBrickSlots(worldPosition.above());
+                && atleastThreeAreBricks(worldPosition) && checkY(worldPosition) && checkBoneCorners(worldPosition.above()) && checkBrickSlots(worldPosition.above());
     }
 
     private Block getBrick() {

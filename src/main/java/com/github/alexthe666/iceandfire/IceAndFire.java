@@ -119,6 +119,7 @@ public class IceAndFire {
         IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
+        IafRecipeRegistry.RECIPE_TYPE.register(modBus);
         IafProcessors.PROCESSORS.register(modBus);
 
         IafVillagerRegistry.POI_TYPES.register(modBus);
