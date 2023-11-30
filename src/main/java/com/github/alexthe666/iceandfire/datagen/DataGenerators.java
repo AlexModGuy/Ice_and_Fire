@@ -2,12 +2,14 @@ package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.datagen.tags.BannerPatternTagGenerator;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.datagen.tags.POITagGenerator;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
@@ -32,6 +34,8 @@ public class DataGenerators {
 //                DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
 //                Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
         generator.addProvider(event.includeServer(), new IafBiomeTagGenerator(generator, helper));
+        BlockTagsProvider blockTagsProvider = new BlockTagsProvider(generator, IceAndFire.MODID, helper);
+        generator.addProvider(event.includeServer(), new IafItemTags(generator, blockTagsProvider, helper));
 
         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 
