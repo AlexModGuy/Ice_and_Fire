@@ -125,17 +125,25 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, this.stacks.get(index)) && ItemStack.matches(stack, this.stacks.get(index));
+        boolean isSame = !stack.isEmpty() && ItemStack.isSameItem(stack, this.stacks.get(index)) && ItemStack.matches(stack, this.stacks.get(index));
         this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
         }
-        if (index == 0 && !flag) {
-            this.setChanged();
-            selectedPages = randomizePages(getItem(0), getItem(1));
-        }
 
+        if (!isSame) {
+            this.setChanged();
+
+            if (/* Manuscripts */ this.stacks.get(1).isEmpty()) {
+                selectedPages[0] = null;
+                selectedPages[1] = null;
+                selectedPages[2] = null;
+                IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), -1, -1, -1, false, 0));
+            } else {
+                selectedPages = randomizePages(getItem(0), getItem(1));
+            }
+        }
     }
 
     public EnumBestiaryPages[] randomizePages(ItemStack bestiary, ItemStack manuscript) {
