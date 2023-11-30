@@ -292,7 +292,7 @@ public class ServerEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void makeItemDropsFireImmune(LivingDropsEvent event) {
+    public void makeItemDropsFireImmune(final LivingDropsEvent event) {
         boolean makeFireImmune = false;
 
         if (event.getSource().getDirectEntity() instanceof LightningBolt bolt && bolt.getTags().contains(BOLT_DONT_DESTROY_ITEMS)) {
@@ -681,8 +681,8 @@ public class ServerEvents {
     public static String BOLT_DONT_DESTROY_ITEMS = "skip_items";
 
     @SubscribeEvent
-    public void onLightningHit(EntityStruckByLightningEvent event) {
-        if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_ITEMS) && event.getEntity() instanceof ItemEntity) {
+    public void onLightningHit(final EntityStruckByLightningEvent event) {
+        if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_ITEMS) && (event.getEntity() instanceof ItemEntity || event.getEntity() instanceof ExperienceOrb)) {
             event.setCanceled(true);
         }
     }
