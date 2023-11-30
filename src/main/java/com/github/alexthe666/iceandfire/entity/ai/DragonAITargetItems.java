@@ -60,18 +60,21 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
             list = IAFMath.emptyItemEntityList;
             return false;
         } else {
+            return updateList();
+        }
+    }
 
-            if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-                list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
+    private boolean updateList() {
+        if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
                     this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
-            if (list.isEmpty()) {
-                return false;
-            } else {
-                list.sort(this.theNearestAttackableTargetSorter);
-                this.targetEntity = list.get(0);
-                return true;
-            }
+        if (list.isEmpty()) {
+            return false;
+        } else {
+            list.sort(this.theNearestAttackableTargetSorter);
+            this.targetEntity = list.get(0);
+            return true;
         }
     }
 
@@ -110,6 +113,8 @@ public class DragonAITargetItems<T extends ItemEntity> extends TargetGoal {
             }
             this.targetEntity.getItem().shrink(1);
             stop();
+        } else {
+            updateList();
         }
     }
 
