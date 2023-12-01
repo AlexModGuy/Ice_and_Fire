@@ -20,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
     dragon logic separation for client, server and shared sides.
  */
 public class IafDragonLogic {
+    long ticksAfterClearingTarget;
 
     private final EntityDragonBase dragon;
 
@@ -49,7 +50,7 @@ public class IafDragonLogic {
                 dragon.lookingForRoostAIFlag = true;
             } else {
                 dragon.lookingForRoostAIFlag = false;
-                if (!dragon.isInWater() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
+                if ((/* Avoid immediately sleeping after killing the target */ dragon.level.getGameTime() - ticksAfterClearingTarget >= 20) && !dragon.isInWater() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
                     dragon.setInSittingPose(true);
                 }
             }
@@ -126,6 +127,7 @@ public class IafDragonLogic {
         if (!dragon.canMove()) {
             if (dragon.getTarget() != null) {
                 dragon.setTarget(null);
+                ticksAfterClearingTarget = dragon.level.getGameTime();
             }
             dragon.getNavigation().stop();
         }
@@ -219,6 +221,7 @@ public class IafDragonLogic {
         if (dragon.getTarget() != null) {
             if (!DragonUtils.isAlive(dragon.getTarget())) {
                 dragon.setTarget(null);
+                ticksAfterClearingTarget = dragon.level.getGameTime();
             }
         }
         if (!dragon.isAgingDisabled()) {

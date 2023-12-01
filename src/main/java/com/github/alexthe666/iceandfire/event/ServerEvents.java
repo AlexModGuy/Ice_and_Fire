@@ -277,7 +277,7 @@ public class ServerEvents {
     public void makeItemDropsFireImmune(final LivingDropsEvent event) {
         boolean makeFireImmune = false;
 
-        if (event.getSource().getDirectEntity() instanceof LightningBolt bolt && bolt.getTags().contains(BOLT_DONT_DESTROY_ITEMS)) {
+        if (event.getSource().getDirectEntity() instanceof LightningBolt bolt && bolt.getTags().contains(BOLT_DONT_DESTROY_LOOT)) {
             makeFireImmune = true;
         } else if (event.getSource().getEntity() instanceof Player player && player.getItemInHand(player.getUsedItemHand()).is(ForgeRegistries.ITEMS.tags().createTagKey(IafTagRegistry.MAKE_ITEM_DROPS_FIREIMMUNE))) {
             makeFireImmune = true;
@@ -669,11 +669,12 @@ public class ServerEvents {
         }
     }
 
-    public static String BOLT_DONT_DESTROY_ITEMS = "skip_items";
+    public static String BOLT_DONT_DESTROY_LOOT = "iceandfire.bolt_skip_loot";
 
     @SubscribeEvent
     public void onLightningHit(final EntityStruckByLightningEvent event) {
-        if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_ITEMS) && (event.getEntity() instanceof ItemEntity || event.getEntity() instanceof ExperienceOrb)) {
+        // TODO :: Set owner UUID in the tags as well to prevent damage to them?
+        if (event.getLightning().getTags().contains(BOLT_DONT_DESTROY_LOOT) && (event.getEntity() instanceof ItemEntity || event.getEntity() instanceof ExperienceOrb)) {
             event.setCanceled(true);
         }
     }
