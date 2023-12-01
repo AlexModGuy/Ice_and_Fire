@@ -55,7 +55,7 @@ public class ItemAlchemySword extends SwordItem {
             }
             if (!attacker.level.isClientSide && flag) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
-                lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_ITEMS);
+                lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_LOOT);
                 lightningboltentity.moveTo(target.position());
                 if (!target.level.isClientSide) {
                     target.level.addFreshEntity(lightningboltentity);
