@@ -155,16 +155,45 @@ public class IafItemTags extends ItemTagsProvider {
             }
         });
 
+        // Not sure if this should be in the forge namespace or not (or if the recipes should be using tags here)
+        tag(createForgeKey("ingots/dragonsteel_fire")).add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get());
+        tag(createForgeKey("ingots/dragonsteel_ice")).add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get());
+        tag(createForgeKey("ingots/dragonsteel_lightning")).add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
+        tag(createForgeKey("storage_blocks/dragonsteel_fire")).add(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get().asItem());
+        tag(createForgeKey("storage_blocks/dragonsteel_ice")).add(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get().asItem());
+        tag(createForgeKey("storage_blocks/dragonsteel_lightning")).add(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get().asItem());
+        tag(createForgeKey("storage_blocks/fire_dragon_scale"))
+                .add(IafBlockRegistry.DRAGON_SCALE_RED.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_GREEN.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_BRONZE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_GRAY.get().asItem());
+        tag(createForgeKey("storage_blocks/ice_dragon_scale"))
+                .add(IafBlockRegistry.DRAGON_SCALE_BLUE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_WHITE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_SAPPHIRE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_SILVER.get().asItem());
+        tag(createForgeKey("storage_blocks/lightning_dragon_scale"))
+                .add(IafBlockRegistry.DRAGON_SCALE_ELECTRIC.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_AMYTHEST.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_COPPER.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_BLACK.get().asItem());
+
         // These are also used / created by other mods
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.SILVER_ORE.get().asItem());
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ingots/copper"))).add(IafItemRegistry.COPPER_INGOT.get().asItem());
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ingots/silver"))).add(IafItemRegistry.SILVER_INGOT.get().asItem());
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "nuggets/copper"))).add(IafItemRegistry.COPPER_NUGGET.get());
-        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "nuggets/silver"))).add(IafItemRegistry.SILVER_NUGGET.get());
+        tag(createForgeKey("ores/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
+        tag(createForgeKey("ores/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+        tag(createForgeKey("ingots/copper")).add(IafItemRegistry.COPPER_INGOT.get().asItem());
+        tag(createForgeKey("ingots/silver")).add(IafItemRegistry.SILVER_INGOT.get().asItem());
+        tag(createForgeKey("nuggets/copper")).add(IafItemRegistry.COPPER_NUGGET.get());
+        tag(createForgeKey("nuggets/silver")).add(IafItemRegistry.SILVER_NUGGET.get());
+        tag(createForgeKey("storage_blocks/silver")).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
+        tag(createForgeKey("storage_blocks/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
     }
 
     private static TagKey<Item> createKey(final String name) {
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(IceAndFire.MODID, name));
+    }
+
+    private static TagKey<Item> createForgeKey(final String name) {
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", name));
     }
 }
