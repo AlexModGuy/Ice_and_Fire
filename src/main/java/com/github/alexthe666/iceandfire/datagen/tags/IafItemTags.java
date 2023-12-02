@@ -156,6 +156,7 @@ public class IafItemTags extends ItemTagsProvider {
         });
 
         // Not sure if this should be in the forge namespace or not (or if the recipes should be using tags here)
+        tag(createForgeKey("bones/wither")).add(IafItemRegistry.WITHERBONE.get());
         tag(createForgeKey("ingots/dragonsteel_fire")).add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get());
         tag(createForgeKey("ingots/dragonsteel_ice")).add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get());
         tag(createForgeKey("ingots/dragonsteel_lightning")).add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
