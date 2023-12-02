@@ -6,9 +6,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +20,10 @@ public class IafBlockTags extends BlockTagsProvider {
     public static TagKey<Block> DRAGON_CAVE_RARE_ORES = createKey("dragon_cave_rare_ores");
     public static TagKey<Block> DRAGON_CAVE_UNCOMMON_ORES = createKey("dragon_cave_uncommon_ores");
     public static TagKey<Block> DRAGON_CAVE_COMMON_ORES = createKey("dragon_cave_common_ores");
+
+    public static TagKey<Block> FIRE_DRAGON_CAVE_ORES = createKey("fire_dragon_cave_ores");
+    public static TagKey<Block> ICE_DRAGON_CAVE_ORES = createKey("ice_dragon_cave_ores");
+    public static TagKey<Block> LIGHTNING_DRAGON_CAVE_ORES = createKey("lightning_dragon_cave_ores");
 
     public IafBlockTags(final DataGenerator generator, @Nullable final ExistingFileHelper existingFileHelper) {
         super(generator, IceAndFire.MODID, existingFileHelper);
@@ -59,6 +65,40 @@ public class IafBlockTags extends BlockTagsProvider {
                 .add(Blocks.COAL_ORE)
                 .add(Blocks.COPPER_ORE)
                 .add(Blocks.IRON_ORE);
+
+        tag(FIRE_DRAGON_CAVE_ORES)
+                .add(Blocks.EMERALD_ORE);
+
+        tag(ICE_DRAGON_CAVE_ORES)
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get());
+
+        tag(LIGHTNING_DRAGON_CAVE_ORES)
+                .add(Blocks.BUDDING_AMETHYST);
+
+        tag(BlockTags.NEEDS_STONE_TOOL)
+                .add(IafBlockRegistry.SILVER_ORE.get())
+                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get())
+                .add(IafBlockRegistry.SILVER_BLOCK.get());
+
+        tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get())
+                .add(IafBlockRegistry.SAPPHIRE_BLOCK.get());
+
+        tag(Tags.Blocks.ORES)
+                .add(IafBlockRegistry.SILVER_ORE.get())
+                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get())
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get());
+
+        tag(Tags.Blocks.ORES_IN_GROUND_STONE)
+                .add(IafBlockRegistry.SILVER_ORE.get())
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get());
+
+        tag(Tags.Blocks.ORE_BEARING_GROUND_DEEPSLATE)
+                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get());
+
+        // These are also used / created by other mods
+        tag(TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.SILVER_ORE.get());
+        tag(TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get());
     }
 
     private static TagKey<Block> createKey(final String name) {

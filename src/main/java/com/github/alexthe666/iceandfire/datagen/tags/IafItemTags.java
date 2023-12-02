@@ -9,6 +9,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.Tags;
@@ -46,8 +47,8 @@ public class IafItemTags extends ItemTagsProvider {
 
         tag(Tags.Items.ORES)
                 .add(IafBlockRegistry.SILVER_ORE.get().asItem())
-                .add(IafBlockRegistry.SAPPHIRE_ORE.get().asItem())
-                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem())
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get().asItem());
 
         tag(Tags.Items.GEMS)
                 .add(IafItemRegistry.SAPPHIRE_GEM.get());
@@ -122,6 +123,8 @@ public class IafItemTags extends ItemTagsProvider {
 
             if (item instanceof ItemSeaSerpentScales) {
                 tag(seaSerpentScales).add(item);
+            } else if (item instanceof ArrowItem) {
+                tag(ItemTags.ARROWS).add(item);
             } else if (item instanceof SwordItem) {
                 tag(Tags.Items.TOOLS_SWORDS).add(item);
             } else if (item instanceof PickaxeItem) {
@@ -154,6 +157,9 @@ public class IafItemTags extends ItemTagsProvider {
 
         // These are also used / created by other mods
         tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.SILVER_ORE.get().asItem());
+        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ingots/copper"))).add(IafItemRegistry.COPPER_INGOT.get().asItem());
+        tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "ingots/silver"))).add(IafItemRegistry.SILVER_INGOT.get().asItem());
         tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "nuggets/copper"))).add(IafItemRegistry.COPPER_NUGGET.get());
         tag(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "nuggets/silver"))).add(IafItemRegistry.SILVER_NUGGET.get());
     }

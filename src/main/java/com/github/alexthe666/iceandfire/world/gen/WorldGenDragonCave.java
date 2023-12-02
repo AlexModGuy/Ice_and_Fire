@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
@@ -35,18 +36,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> {
-
     public ResourceLocation DRAGON_CHEST;
     public ResourceLocation DRAGON_MALE_CHEST;
     public WorldGenCaveStalactites CEILING_DECO;
     public BlockState PALETTE_BLOCK1;
     public BlockState PALETTE_BLOCK2;
-    public BlockState PALETTE_ORE1;
-    public BlockState PALETTE_ORE2;
+    public TagKey<Block> dragonTypeOreTag;
     public BlockState TREASURE_PILE;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     public boolean isMale;
-    public boolean generateGemOre = false;
 
     protected WorldGenDragonCave(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -122,6 +120,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         List<Block> rareOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_RARE_ORES).stream().toList();
         List<Block> uncommonOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_UNCOMMON_ORES).stream().toList();
         List<Block> commonOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_COMMON_ORES).stream().toList();
+        List<Block> dragonTypeOres = ForgeRegistries.BLOCKS.tags().getTag(dragonTypeOreTag).stream().toList();
 
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BaseEntityBlock) && worldIn.getBlockState(blockPos).getDestroySpeed(worldIn, blockPos) >= 0) {
@@ -129,21 +128,20 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
 
                 if (doOres) {
                     int chance = rand.nextInt(199) + 1;
-                    BlockState toPlace;
+                    Block toPlace;
 
                     if (chance < 15) {
-                        toPlace = rareOres.get(rand.nextInt(rareOres.size())).defaultBlockState();
+                        toPlace = rareOres.get(rand.nextInt(rareOres.size()));
                     } else if (chance < 45) {
-                        toPlace = uncommonOres.get(rand.nextInt(rareOres.size())).defaultBlockState();
+                        toPlace = uncommonOres.get(rand.nextInt(rareOres.size()));
                     } else if (chance < 90) {
-                        toPlace = commonOres.get(rand.nextInt(rareOres.size())).defaultBlockState();
+                        toPlace = commonOres.get(rand.nextInt(rareOres.size()));
                     } else {
-                        toPlace = generateGemOre ? PALETTE_ORE1 : PALETTE_ORE2;
+                        toPlace = dragonTypeOres.get(rand.nextInt(dragonTypeOres.size()));
                     }
 
-                    worldIn.setBlock(blockPos, toPlace, Block.UPDATE_CLIENTS);
+                    worldIn.setBlock(blockPos, toPlace.defaultBlockState(), Block.UPDATE_CLIENTS);
                 } else {
-                    // TODO :: Also replace with tags?
                     worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, Block.UPDATE_CLIENTS);
                 }
             }

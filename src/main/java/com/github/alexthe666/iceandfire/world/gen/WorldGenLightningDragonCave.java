@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -27,9 +28,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
         PALETTE_BLOCK1 = IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState();
         PALETTE_BLOCK2 = IafBlockRegistry.CRACKLED_COBBLESTONE.get().defaultBlockState();
         TREASURE_PILE = IafBlockRegistry.COPPER_PILE.get().defaultBlockState();
-        PALETTE_ORE1 = Blocks.BUDDING_AMETHYST.defaultBlockState();
-        PALETTE_ORE2 = IafBlockRegistry.CRACKLED_STONE.get().defaultBlockState();
-        generateGemOre = true;
+        dragonTypeOreTag = IafBlockTags.LIGHTNING_DRAGON_CAVE_ORES;
     }
 
     @Override

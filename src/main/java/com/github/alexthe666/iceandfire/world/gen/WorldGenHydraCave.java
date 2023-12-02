@@ -119,7 +119,6 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
                     }
                     if (rand.nextInt(45) == 0 && isTouchingAir(worldIn, blockpos.above())) {
                         worldIn.setBlock(blockpos.above(), Blocks.SKELETON_SKULL.defaultBlockState().setValue(SkullBlock.ROTATION, rand.nextInt(15)), 2);
-                        BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
                         continue;
                     }
                     if (rand.nextInt(35) == 0 && isTouchingAir(worldIn, blockpos.above())) {
