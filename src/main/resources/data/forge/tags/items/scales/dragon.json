@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#forge:scales/fire_dragon",
-    "#forge:scales/ice_dragon",
-    "#forge:scales/lightning_dragon"
-  ]
-}

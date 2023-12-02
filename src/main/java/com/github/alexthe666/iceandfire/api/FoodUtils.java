@@ -25,7 +25,7 @@ public class FoodUtils {
             int food = item.getItem().getFoodProperties().getNutrition() * 10;
             if (!meatOnly) {
                 return food;
-            } else if (item.getItem().getFoodProperties().isMeat()) { // FIXME :: Use tag
+            } else if (item.getItem().getFoodProperties().isMeat()) {
                 return food;
             } else if (includeFish && item.is(ItemTags.FISHES)) {
                 return food;
