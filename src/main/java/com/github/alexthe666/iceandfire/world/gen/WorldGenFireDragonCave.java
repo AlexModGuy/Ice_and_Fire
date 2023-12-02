@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -27,9 +28,7 @@ public class WorldGenFireDragonCave extends WorldGenDragonCave {
         PALETTE_BLOCK1 = IafBlockRegistry.CHARRED_STONE.get().defaultBlockState();
         PALETTE_BLOCK2 = IafBlockRegistry.CHARRED_COBBLESTONE.get().defaultBlockState();
         TREASURE_PILE = IafBlockRegistry.GOLD_PILE.get().defaultBlockState();
-        PALETTE_ORE1 = Blocks.EMERALD_ORE.defaultBlockState();
-        PALETTE_ORE2 = Blocks.EMERALD_ORE.defaultBlockState();
-        generateGemOre = true;
+        dragonTypeOreTag = IafBlockTags.FIRE_DRAGON_CAVE_ORES;
     }
 
     @Override

@@ -50,8 +50,8 @@ public class IafItemTags extends ItemTagsProvider {
 
         tag(Tags.Items.ORES)
                 .add(IafBlockRegistry.SILVER_ORE.get().asItem())
-                .add(IafBlockRegistry.SAPPHIRE_ORE.get().asItem())
-                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+                .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem())
+                .add(IafBlockRegistry.SAPPHIRE_ORE.get().asItem());
 
         tag(Tags.Items.GEMS)
                 .add(IafItemRegistry.SAPPHIRE_GEM.get());
@@ -126,6 +126,8 @@ public class IafItemTags extends ItemTagsProvider {
 
             if (item instanceof ItemSeaSerpentScales) {
                 tag(seaSerpentScales).add(item);
+            } else if (item instanceof ArrowItem) {
+                tag(ItemTags.ARROWS).add(item);
             } else if (item instanceof SwordItem) {
                 tag(Tags.Items.TOOLS).add(item);
             } else if (item instanceof PickaxeItem) {
@@ -143,11 +145,11 @@ public class IafItemTags extends ItemTagsProvider {
             } else if (item instanceof ArmorItem armorItem) {
                 tag(Tags.Items.ARMORS).add(item);
 
-                switch (armorItem.getSlot()) {
-                    case HEAD -> tag(Tags.Items.ARMORS_HELMETS).add(item);
-                    case CHEST -> tag(Tags.Items.ARMORS_CHESTPLATES).add(item);
-                    case LEGS -> tag(Tags.Items.ARMORS_LEGGINGS).add(item);
-                    case FEET -> tag(Tags.Items.ARMORS_BOOTS).add(item);
+                switch (armorItem.getType()) {
+                    case HELMET -> tag(Tags.Items.ARMORS_HELMETS).add(item);
+                    case CHESTPLATE -> tag(Tags.Items.ARMORS_CHESTPLATES).add(item);
+                    case LEGGINGS -> tag(Tags.Items.ARMORS_LEGGINGS).add(item);
+                    case BOOTS -> tag(Tags.Items.ARMORS_BOOTS).add(item);
                 }
             }
 
@@ -158,6 +160,9 @@ public class IafItemTags extends ItemTagsProvider {
 
         // These are also used / created by other mods
         tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.SILVER_ORE.get().asItem());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ores/silver"))).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ingots/copper"))).add(IafItemRegistry.COPPER_INGOT.get().asItem());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ingots/silver"))).add(IafItemRegistry.SILVER_INGOT.get().asItem());
         tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "nuggets/copper"))).add(IafItemRegistry.COPPER_NUGGET.get());
         tag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", "nuggets/silver"))).add(IafItemRegistry.SILVER_NUGGET.get());
     }
