@@ -140,6 +140,15 @@ public class IafItemTags extends ItemTagsProvider {
                 tag(Tags.Items.TOOLS_BOWS).add(item);
             } else if (item instanceof TridentItem) {
                 tag(Tags.Items.TOOLS_TRIDENTS).add(item);
+            } else if (item instanceof ArmorItem armorItem) {
+                tag(Tags.Items.ARMORS).add(item);
+
+                switch (armorItem.getSlot()) {
+                    case HEAD -> tag(Tags.Items.ARMORS_HELMETS).add(item);
+                    case CHEST -> tag(Tags.Items.ARMORS_CHESTPLATES).add(item);
+                    case LEGS -> tag(Tags.Items.ARMORS_LEGGINGS).add(item);
+                    case FEET -> tag(Tags.Items.ARMORS_BOOTS).add(item);
+                }
             }
 
             if (item instanceof TieredItem || item instanceof BowItem || item instanceof TridentItem) {
