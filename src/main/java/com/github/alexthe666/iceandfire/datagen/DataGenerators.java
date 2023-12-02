@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.datagen.tags.BannerPatternTagGenerator;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.datagen.tags.POITagGenerator;
 import com.google.gson.JsonElement;
@@ -34,7 +35,8 @@ public class DataGenerators {
 //                DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
 //                Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
         generator.addProvider(event.includeServer(), new IafBiomeTagGenerator(generator, helper));
-        BlockTagsProvider blockTagsProvider = new BlockTagsProvider(generator, IceAndFire.MODID, helper);
+        IafBlockTags blockTagsProvider = new IafBlockTags(generator, helper);
+        generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new IafItemTags(generator, blockTagsProvider, helper));
 
         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
