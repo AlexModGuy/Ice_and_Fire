@@ -71,7 +71,7 @@ public class IceAndFire {
     public IceAndFire() {
         try {
             ModContainer mod = ModList.get().getModContainerById(IceAndFire.MODID).orElseThrow(NullPointerException::new);
-            VERSION = mod.getModInfo().getVersion().toString();
+            VERSION = mod.getModInfo().getVersion().toString(); // FIXME :: Does not get the correct version (maybe only in IDE)?
         } catch (Exception ignored) {
         }
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

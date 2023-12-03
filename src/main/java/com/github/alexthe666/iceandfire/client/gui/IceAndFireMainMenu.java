@@ -1,14 +1,13 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -163,6 +162,7 @@ public class IceAndFireMainMenu extends TitleScreen {
 
     @Override
     public void render(@NotNull PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+        RenderSystem.enableTexture();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, TABLE_TEXTURE);
@@ -183,20 +183,20 @@ public class IceAndFireMainMenu extends TitleScreen {
             float heightScale = height / 427F;
             float imageScale = Math.min(widthScale, heightScale) * 192;
             for (Picture picture : drawnPictures) {
-//                float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
                 RenderSystem.setShaderColor(1, 1, 1, 1);
-                blit(ms, (int) (picture.x * widthScale) + middleX, (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
+                blit(ms, (int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
                 RenderSystem.disableBlend();
             }
         }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager._enableBlend();
+        RenderSystem.enableBlend();
         this.getMinecraft().font.draw(ms, "Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
         RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        blit(ms, width / 2 - 256 / 2, 10, 0, 0, 256, 64, 256, 64);
+        blit(ms, width / 2 - 274 / 2, 10, 0, 0, 155, 44);
+        blit(ms, width / 2 - 274 / 2 + 155, 10, 0, 45, 155, 44);
 
         ForgeHooksClient.renderMainMenu(this, ms, this.getMinecraft().font, width, height, l);
         if (this.splashText != null) {
@@ -213,7 +213,8 @@ public class IceAndFireMainMenu extends TitleScreen {
 
         String s1 = "Copyright Mojang AB. Do not distribute!";
         Font font = this.getMinecraft().font;
-        drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2, height - 10, 0xFFFFFFFF);
+        GuiComponent.drawString(ms, font, s1, width - this.getMinecraft().font.width(s1) - 2,
+            height - 10, 0xFFFFFFFF);
         for (int i = 0; i < this.renderables.size(); ++i) {
             this.renderables.get(i).render(ms, mouseX, mouseY, partialTicks);
         }
