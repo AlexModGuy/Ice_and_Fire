@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
@@ -34,7 +35,6 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -83,8 +83,7 @@ public class EntityPixie extends TamableAnimal {
         for (int xSearch = -10; xSearch < 10; xSearch++) {
             for (int ySearch = -10; ySearch < 10; ySearch++) {
                 for (int zSearch = -10; zSearch < 10; zSearch++) {
-                    if (world.getBlockEntity(entity.blockPosition().offset(xSearch, ySearch, zSearch)) != null && world.getBlockEntity(entity.blockPosition().offset(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse) {
-                        TileEntityPixieHouse house = (TileEntityPixieHouse) world.getBlockEntity(entity.blockPosition().offset(xSearch, ySearch, zSearch));
+                    if (world.getBlockEntity(entity.blockPosition().offset(xSearch, ySearch, zSearch)) != null && world.getBlockEntity(entity.blockPosition().offset(xSearch, ySearch, zSearch)) instanceof TileEntityPixieHouse house) {
                         if (!house.hasPixie) {
                             return entity.blockPosition().offset(xSearch, ySearch, zSearch);
                         }
@@ -196,7 +195,7 @@ public class EntityPixie extends TamableAnimal {
     public @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         if (this.isOwnedBy(player)) {
 
-            if (player.getItemInHand(hand).getItem() == Items.SUGAR && this.getHealth() < this.getMaxHealth()) {
+            if (player.getItemInHand(hand).is(IafItemTags.HEAL_PIXIE) && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
                 player.getItemInHand(hand).shrink(1);
                 this.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
@@ -258,13 +257,8 @@ public class EntityPixie extends TamableAnimal {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
-        this.goalSelector.addGoal(2, new PixieAIPickupItem(this, false));
-        this.goalSelector.addGoal(2, new PixieAIFlee(this, Player.class, 10, new Predicate<Player>() {
-            @Override
-            public boolean apply(@Nullable Player entity) {
-                return true;
-            }
-        }));
+        this.goalSelector.addGoal(2, new PixieAIPickupItem<>(this, false));
+        this.goalSelector.addGoal(2, new PixieAIFlee<>(this, Player.class, 10, (Predicate<Player>) entity -> true));
         this.goalSelector.addGoal(2, new PixieAISteal(this, 1.0D));
         this.goalSelector.addGoal(3, new PixieAIMoveRandom(this));
         this.goalSelector.addGoal(4, new PixieAIEnterHouse(this));
@@ -343,8 +337,7 @@ public class EntityPixie extends TamableAnimal {
             ticksUntilHouseAI--;
         }
         if (!level.isClientSide) {
-            if (housePos != null && this.distanceToSqr(Vec3.atCenterOf(housePos)) < 1.5F && level.getBlockEntity(housePos) != null && level.getBlockEntity(housePos) instanceof TileEntityPixieHouse) {
-                TileEntityPixieHouse house = (TileEntityPixieHouse) level.getBlockEntity(housePos);
+            if (housePos != null && this.distanceToSqr(Vec3.atCenterOf(housePos)) < 1.5F && level.getBlockEntity(housePos) != null && level.getBlockEntity(housePos) instanceof TileEntityPixieHouse house) {
                 if (house.hasPixie) {
                     this.housePos = null;
                 } else {

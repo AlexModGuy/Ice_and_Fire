@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.*;
@@ -183,7 +184,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
+        if (itemstack != null && itemstack.is(IafItemTags.BREED_AMPITHERE)) {
             if (this.getAge() == 0 && !isInLove()) {
                 this.setOrderedToSit(false);
                 this.setInLove(player);
@@ -194,7 +195,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             }
             return InteractionResult.SUCCESS;
         }
-        if (itemstack != null && itemstack.getItem() == Items.COCOA_BEANS && this.getHealth() < this.getMaxHealth()) {
+        if (itemstack != null && itemstack.is(IafItemTags.HEAL_AMPITHERE) && this.getHealth() < this.getMaxHealth()) {
             this.heal(5);
             this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
@@ -318,7 +319,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.getItem() == Items.COOKIE;
+        return stack.is(IafItemTags.BREED_AMPITHERE);
     }
 
     @Override

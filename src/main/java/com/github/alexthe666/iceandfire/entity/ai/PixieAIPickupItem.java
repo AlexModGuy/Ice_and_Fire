@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.util.IAFMath;
@@ -94,9 +95,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
         } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
             EntityPixie pixie = (EntityPixie) this.mob;
             if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null)
-                if (this.targetEntity.getItem().getItem() == Items.SUGAR) {
+                if (this.targetEntity.getItem().is(IafItemTags.HEAL_PIXIE)) {
                     pixie.heal(5);
-                } else if (this.targetEntity.getItem().getItem() == Items.CAKE) {
+                } else if (this.targetEntity.getItem().is(IafItemTags.TAME_PIXIE)) {
                     if (!pixie.isTame() && this.targetEntity.getThrowingEntity() instanceof Player player) {
                         pixie.tame(player);
                         pixie.setPixieSitting(true);

@@ -5,7 +5,6 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags;
 
 public class FoodUtils {
 
@@ -32,9 +31,5 @@ public class FoodUtils {
             }
         }
         return 0;
-    }
-
-    public static boolean isSeeds(ItemStack stack) {
-        return stack.is(Tags.Items.SEEDS);
     }
 }

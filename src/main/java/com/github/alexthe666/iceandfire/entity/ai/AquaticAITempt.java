@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.google.common.collect.Sets;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
@@ -8,16 +8,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class AquaticAITempt extends Goal {
     private final Mob temptedEntity;
     private final double speed;
-    private Set<Item> temptItems = null;
     private final boolean scaredByPlayerMovement;
-    private final Set<Supplier<Item>> temptItemSuppliers;
+    private final TagKey<Item> temptItems;
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -27,14 +23,10 @@ public class AquaticAITempt extends Goal {
     private int delayTemptCounter;
     private boolean isRunning;
 
-    public AquaticAITempt(Mob temptedEntityIn, double speedIn, Supplier<Item> temptItemSupplier, boolean scaredByPlayerMovementIn) {
-        this(temptedEntityIn, speedIn, scaredByPlayerMovementIn, Sets.newHashSet(temptItemSupplier));
-    }
-
-    public AquaticAITempt(Mob temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, Set<Supplier<Item>> temptItemSuppliers) {
+    public AquaticAITempt(Mob temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn, final TagKey<Item> temptItems) {
         this.temptedEntity = temptedEntityIn;
         this.speed = speedIn;
-        this.temptItemSuppliers = temptItemSuppliers;
+        this.temptItems = temptItems;
         this.scaredByPlayerMovement = scaredByPlayerMovementIn;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
@@ -58,10 +50,8 @@ public class AquaticAITempt extends Goal {
         }
     }
 
-    protected boolean isTempting(ItemStack stack) {
-        if (this.temptItems == null)
-            this.temptItems = temptItemSuppliers.stream().map(Supplier::get).collect(Collectors.toSet());
-        return this.temptItems.contains(stack.getItem());
+    protected boolean isTempting(final ItemStack stack) {
+        return stack.is(temptItems);
     }
 
     /**

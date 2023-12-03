@@ -28,6 +28,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,35 +118,52 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
     }
 
     public void createShell(LevelAccessor worldIn, RandomSource rand, Set<BlockPos> positions) {
-        List<Block> rareOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_RARE_ORES).stream().toList();
-        List<Block> uncommonOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_UNCOMMON_ORES).stream().toList();
-        List<Block> commonOres = ForgeRegistries.BLOCKS.tags().getTag(IafBlockTags.DRAGON_CAVE_COMMON_ORES).stream().toList();
-        List<Block> dragonTypeOres = ForgeRegistries.BLOCKS.tags().getTag(dragonTypeOreTag).stream().toList();
+        ITagManager<Block> tagManager = ForgeRegistries.BLOCKS.tags();
+
+        List<Block> rareOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_RARE_ORES);
+        List<Block> uncommonOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_UNCOMMON_ORES);
+        List<Block> commonOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_COMMON_ORES);
+        List<Block> dragonTypeOres = getBlockList(tagManager, dragonTypeOreTag);
 
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BaseEntityBlock) && worldIn.getBlockState(blockPos).getDestroySpeed(worldIn, blockPos) >= 0) {
                 boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
 
                 if (doOres) {
-                    int chance = rand.nextInt(199) + 1;
-                    Block toPlace;
+                    Block toPlace = null;
 
-                    if (chance < 15) {
-                        toPlace = rareOres.get(rand.nextInt(rareOres.size()));
-                    } else if (chance < 45) {
-                        toPlace = uncommonOres.get(rand.nextInt(rareOres.size()));
-                    } else if (chance < 90) {
-                        toPlace = commonOres.get(rand.nextInt(rareOres.size()));
+                    if (rand.nextBoolean()) {
+                        toPlace = !dragonTypeOres.isEmpty() ? dragonTypeOres.get(rand.nextInt(dragonTypeOres.size())) : null;
                     } else {
-                        toPlace = dragonTypeOres.get(rand.nextInt(dragonTypeOres.size()));
+                        double chance = rand.nextDouble();
+
+                        if (!rareOres.isEmpty() && chance <= 0.15) {
+                            toPlace = rareOres.get(rand.nextInt(rareOres.size()));
+                        } else if (!uncommonOres.isEmpty() && chance <= 0.45) {
+                            toPlace = uncommonOres.get(rand.nextInt(uncommonOres.size()));
+                        } else if (!commonOres.isEmpty()) {
+                            toPlace = commonOres.get(rand.nextInt(commonOres.size()));
+                        }
                     }
 
-                    worldIn.setBlock(blockPos, toPlace.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    if (toPlace != null) {
+                        worldIn.setBlock(blockPos, toPlace.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    } else {
+                        worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, Block.UPDATE_CLIENTS);
+                    }
                 } else {
                     worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, Block.UPDATE_CLIENTS);
                 }
             }
         });
+    }
+
+    private List<Block> getBlockList(final ITagManager<Block> tagManager, final TagKey<Block> tagKey) {
+        if (tagManager == null) {
+            return List.of();
+        }
+
+        return tagManager.getTag(tagKey).stream().toList();
     }
 
     public void hollowOut(LevelAccessor worldIn, Set<BlockPos> positions) {

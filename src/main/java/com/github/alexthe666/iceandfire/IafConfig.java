@@ -111,6 +111,7 @@ public class IafConfig {
     public static double seaSerpentAttackStrength = 4D;
     public static double dragonsteelBaseDamage = 25F;
     public static int dragonsteelBaseArmor = 12;
+    public static float dragonsteelBaseArmorToughness = 6;
     public static int dragonsteelBaseDurability = 8000;
     public static int dragonsteelBaseDurabilityEquipment = 8000;
     public static boolean spawnStructuresOnSuperflat = true;
@@ -258,6 +259,7 @@ public class IafConfig {
             seaSerpentAttackStrength = ConfigHolder.SERVER.seaSerpentAttackStrength.get();
             dragonsteelBaseDamage = ConfigHolder.SERVER.dragonsteelBaseDamage.get();
             dragonsteelBaseArmor = ConfigHolder.SERVER.dragonsteelBaseArmor.get();
+            dragonsteelBaseArmorToughness = ConfigHolder.SERVER.dragonsteelBaseArmorToughness.get().floatValue();
             dragonsteelBaseDurability = ConfigHolder.SERVER.dragonsteelBaseDurability.get();
             dragonsteelBaseDurabilityEquipment = ConfigHolder.SERVER.dragonsteelBaseDurabilityEquipment.get();
             dragonMovedWronglyFix = ConfigHolder.SERVER.dragonMovedWronglyFix.get();
