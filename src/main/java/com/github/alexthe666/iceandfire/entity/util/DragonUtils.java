@@ -341,18 +341,18 @@ public class DragonUtils {
     }
 
     public static boolean hasSameOwner(TamableAnimal cockatrice, Entity entity) {
-        if (entity instanceof TamableAnimal) {
-            TamableAnimal tameable = (TamableAnimal) entity;
+        if (entity instanceof TamableAnimal tameable) {
             return tameable.getOwnerUUID() != null && cockatrice.getOwnerUUID() != null && tameable.getOwnerUUID().equals(cockatrice.getOwnerUUID());
         }
         return false;
     }
 
-    public static boolean isAlive(LivingEntity entity) {
-        if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isMobDead()) {
+    public static boolean isAlive(final LivingEntity entity) {
+        if (entity instanceof EntityDragonBase dragon && dragon.isMobDead()) {
             return false;
         }
-        return (!(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead()) && !EntityGorgon.isStoneMob(entity);
+
+        return (!(entity instanceof IDeadMob deadMob) || !deadMob.isMobDead()) && !EntityGorgon.isStoneMob(entity);
     }
 
 

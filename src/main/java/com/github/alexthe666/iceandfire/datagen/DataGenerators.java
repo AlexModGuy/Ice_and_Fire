@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.datagen.tags.BannerPatternTagGenerator;
-import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
-import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
-import com.github.alexthe666.iceandfire.datagen.tags.POITagGenerator;
+import com.github.alexthe666.iceandfire.datagen.tags.*;
 import net.minecraft.DetectedVersion;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -49,6 +46,7 @@ public class DataGenerators {
         BlockTagsProvider blocktags  = new IafBlockTags(output, provider, helper);
         generator.addProvider(event.includeServer(), blocktags);
         generator.addProvider(event.includeServer(), new IafItemTags(output, provider, blocktags.contentsGetter(), helper));
+        generator.addProvider(event.includeServer(), new IafEntityTags(output, provider, helper));
 
     }
 }

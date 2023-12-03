@@ -27,6 +27,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue dragonAttackDamageLightning;
     public final ForgeConfigSpec.IntValue maxDragonFlight;
     public final ForgeConfigSpec.IntValue dragonGoldSearchLength;
+    public final ForgeConfigSpec.BooleanValue canDragonsHealFromBiting;
     public final ForgeConfigSpec.BooleanValue canDragonsDespawn;
     public final ForgeConfigSpec.BooleanValue doDragonsSleep;
     public final ForgeConfigSpec.BooleanValue dragonDigWhenStuck;
@@ -107,10 +108,10 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue dragonsteelBaseArmorToughness;
     public final ForgeConfigSpec.IntValue dragonsteelBaseDurability;
     public final ForgeConfigSpec.IntValue dragonsteelBaseDurabilityEquipment;
-    public final ForgeConfigSpec.BooleanValue dragonMovedWronglyFix;
-    public final ForgeConfigSpec.BooleanValue weezerTinkers;
+    public final ForgeConfigSpec.BooleanValue dragonMovedWronglyFix; // FIXME :: Unused
+    public final ForgeConfigSpec.BooleanValue weezerTinkers; // FIXME :: Unused
     public final ForgeConfigSpec.DoubleValue dragonBlockBreakingDropChance;
-    public final ForgeConfigSpec.BooleanValue completeDragonPathfinding;
+    public final ForgeConfigSpec.BooleanValue completeDragonPathfinding; // FIXME :: Unused
     public final ForgeConfigSpec.BooleanValue generateMausoleums;
     public final ForgeConfigSpec.BooleanValue spawnLiches;
     public final ForgeConfigSpec.IntValue lichSpawnRate;
@@ -118,7 +119,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue hydraMaxHealth;
     public final ForgeConfigSpec.IntValue generateHydraChance;
     public final ForgeConfigSpec.BooleanValue explosiveDragonBreath;
-    public final ForgeConfigSpec.DoubleValue weezerTinkersDisarmChance;
+    public final ForgeConfigSpec.DoubleValue weezerTinkersDisarmChance; // FIXME :: Unused
     public final ForgeConfigSpec.BooleanValue chunkLoadSummonCrystal;
     public ForgeConfigSpec.IntValue dangerousWorldGenDistanceLimit;
     public ForgeConfigSpec.IntValue dangerousWorldGenSeparationLimit;
@@ -192,6 +193,7 @@ public class ServerConfig {
         builder.push("Behaviour");
         this.maxDragonFlight = buildInt(builder, "Max Dragon Flight Height", "all", 128, 100, Integer.MAX_VALUE, "How high dragons can fly, in Y height.");
         this.dragonGoldSearchLength = buildInt(builder, "Dragon Gold Search Length", "all", 30, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
+        this.canDragonsHealFromBiting = buildBoolean(builder, "Dragon Bite Heal", "all", true, "Whether the bite attack from a dragon heals them or not.");
         this.canDragonsDespawn = buildBoolean(builder, "Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
         this.doDragonsSleep = buildBoolean(builder, "Tamed Dragons Sleep", "all", true, "True if tamed dragons go to sleep at night.");
         this.dragonDigWhenStuck = buildBoolean(builder, "Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
