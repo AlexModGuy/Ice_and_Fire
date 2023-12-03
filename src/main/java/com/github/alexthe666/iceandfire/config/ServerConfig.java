@@ -104,6 +104,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.DoubleValue seaSerpentAttackStrength;
     public final ForgeConfigSpec.DoubleValue dragonsteelBaseDamage;
     public final ForgeConfigSpec.IntValue dragonsteelBaseArmor;
+    public final ForgeConfigSpec.DoubleValue dragonsteelBaseArmorToughness;
     public final ForgeConfigSpec.IntValue dragonsteelBaseDurability;
     public final ForgeConfigSpec.IntValue dragonsteelBaseDurabilityEquipment;
     public final ForgeConfigSpec.BooleanValue dragonMovedWronglyFix;
@@ -318,6 +319,7 @@ public class ServerConfig {
         builder.push("Items");
         this.dragonsteelBaseDamage = buildDouble(builder, "Dragonsteel Sword Base Attack Strength", "all", 25, 5, Integer.MAX_VALUE, "Default attack strength of a dragonsteel sword.");
         this.dragonsteelBaseArmor = buildInt(builder, "Dragonsteel Base Armor", "all", 12, 7, Integer.MAX_VALUE, "Default armor value of dragonsteel chestplate.");
+        this.dragonsteelBaseArmorToughness = buildDouble(builder, "Dragonsteel Base Armor Toughness", "all", 6, 0, Double.MAX_VALUE, "Default armor toughness value of dragonsteel.");
         this.dragonsteelBaseDurability = buildInt(builder, "Dragonsteel Base Durability", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel tools.");
         this.dragonsteelBaseDurabilityEquipment = buildInt(builder, "Dragonsteel Base Durability Equipment", "all", 8000, 1, Integer.MAX_VALUE, "Default durability value of dragonsteel equipment.");
         this.weezerTinkers = buildBoolean(builder, "Weezer", "all", true, "Disable this to remove easter egg with tinkers installed.");

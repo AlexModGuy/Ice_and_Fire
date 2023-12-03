@@ -23,6 +23,19 @@ import java.util.concurrent.CompletableFuture;
 public class IafItemTags extends ItemTagsProvider {
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
 
+    public static TagKey<Item> BREED_AMPITHERE = createKey("breed_ampithere");
+    public static TagKey<Item> BREED_HIPPOCAMPUS = createKey("breed_hippocampus");
+    public static TagKey<Item> BREED_HIPPOGRYPH = createKey("breed_hippogryph");
+    public static TagKey<Item> HEAL_AMPITHERE = createKey("heal_ampithere");
+    public static TagKey<Item> HEAL_COCKATRICE = createKey("heal_cockatrice");
+    public static TagKey<Item> HEAL_HIPPOCAMPUS = createKey("heal_hippocampus");
+    public static TagKey<Item> HEAL_PIXIE = createKey("heal_pixie");
+    public static TagKey<Item> TAME_HIPPOGRYPH = createKey("tame_hippogryph");
+    public static TagKey<Item> TAME_PIXIE = createKey("tame_pixie");
+    public static TagKey<Item> TEMPT_DRAGON = createKey("tempt_dragon");
+    public static TagKey<Item> TEMPT_HIPPOCAMPUS = createKey("tempt_hippocampus");
+    public static TagKey<Item> TEMPT_HIPPOGRYPH = createKey("tempt_hippogryph");
+
     public IafItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags, ExistingFileHelper helper) {
         super(output, lookupProvider, blockTags, IceAndFire.MODID, helper);
     }
@@ -87,6 +100,45 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafBlockRegistry.DRAGON_SCALE_AMYTHEST.get().asItem())
                 .add(IafBlockRegistry.DRAGON_SCALE_COPPER.get().asItem())
                 .add(IafBlockRegistry.DRAGON_SCALE_BLACK.get().asItem());
+
+        tag(BREED_AMPITHERE)
+                .add(Items.COOKIE);
+
+        tag(BREED_HIPPOCAMPUS)
+                .add(Items.PRISMARINE_CRYSTALS);
+
+        tag(BREED_HIPPOGRYPH)
+                .add(Items.RABBIT_STEW);
+
+        tag(TAME_HIPPOGRYPH)
+                .add(Items.RABBIT_FOOT);
+
+        tag(HEAL_AMPITHERE)
+                .add(Items.COCOA_BEANS);
+
+        tag(HEAL_COCKATRICE)
+                .addTag(Tags.Items.SEEDS)
+                .add(Items.ROTTEN_FLESH);
+
+        tag(HEAL_HIPPOCAMPUS)
+                .add(Items.KELP);
+
+        tag(HEAL_PIXIE)
+                .add(Items.SUGAR);
+
+        tag(TAME_PIXIE)
+                .add(Items.CAKE);
+
+        tag(TEMPT_DRAGON)
+                .add(IafItemRegistry.FIRE_STEW.get());
+
+        tag(TEMPT_HIPPOCAMPUS)
+                .add(Items.KELP)
+                .add(Items.PRISMARINE_CRYSTALS);
+
+        tag(TEMPT_HIPPOGRYPH)
+                .add(Items.RABBIT)
+                .add(Items.COOKED_RABBIT);
 
         TagKey<Item> fireDragonScales = createKey("scales/dragon/fire");
         tag(fireDragonScales)

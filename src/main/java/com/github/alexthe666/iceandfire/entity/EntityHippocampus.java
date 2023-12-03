@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
@@ -124,8 +125,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new HippocampusAIRide(this));
-        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.KELP, false));
-        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, () -> Items.PRISMARINE_CRYSTALS, false));
+        this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, false, IafItemTags.TEMPT_HIPPOCAMPUS));
         this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
         this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(3, new HippocampusAIWander(this, 1));
@@ -602,7 +602,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.getItem() == Items.PRISMARINE_CRYSTALS;
+        return stack.is(IafItemTags.BREED_HIPPOCAMPUS);
     }
 
     @Override
@@ -625,7 +625,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         // Breed item
-        if (itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getAge() == 0 && !isInLove()) {
+        if (itemstack.is(IafItemTags.BREED_HIPPOCAMPUS) && this.getAge() == 0 && !isInLove()) {
             this.setOrderedToSit(false);
             this.setInLove(player);
             this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
@@ -635,7 +635,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
             return InteractionResult.SUCCESS;
         }
         // Food item
-        if (itemstack.getItem() == Items.KELP) {
+        if (itemstack.is(IafItemTags.HEAL_HIPPOCAMPUS)) {
             if (!level().isClientSide) {
                 this.heal(5);
                 this.playSound(SoundEvents.GENERIC_EAT, 1, 1);

@@ -4,7 +4,7 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
@@ -42,6 +42,8 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -439,22 +441,22 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
-        boolean flag = player.getItemInHand(hand).getItem() == Items.NAME_TAG || player.getItemInHand(hand).getItem() == Items.LEAD;
-        if (flag) {
+        ItemStack stackInHand = player.getItemInHand(hand);
+        Item itemInHand = stackInHand.getItem();
+
+        if (stackInHand.getItem() == Items.NAME_TAG || itemInHand == Items.LEAD || itemInHand == Items.POISONOUS_POTATO) {
             return super.mobInteract(player, hand);
         }
-        if (player.getItemInHand(hand).getItem() == Items.POISONOUS_POTATO) {
-            return super.mobInteract(player, hand);
-        }
+
         if (this.isTame() && this.isOwnedBy(player)) {
-            if (FoodUtils.isSeeds(player.getItemInHand(hand)) || player.getItemInHand(hand).getItem() == Items.ROTTEN_FLESH) {
+            if (stackInHand.is(IafItemTags.HEAL_COCKATRICE)) {
                 if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(8);
                     this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
-                    player.getItemInHand(hand).shrink(1);
+                    stackInHand.shrink(1);
                 }
                 return InteractionResult.SUCCESS;
-            } else if (player.getItemInHand(hand).isEmpty()) {
+            } else if (stackInHand.isEmpty()) {
                 if (player.isShiftKeyDown()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
@@ -516,13 +518,14 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
             double d0 = attackTarget.getX() - this.getX();
             double d1 = attackTarget.getZ() - this.getZ();
             float leap = Mth.sqrt((float) (d0 * d0 + d1 * d1));
-            if (dist <= 16.0D && this.onGround() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
-                Vec3 Vector3d = this.getDeltaMovement();
-                Vec3 Vector3d1 = new Vec3(attackTarget.getX() - this.getX(), 0.0D, attackTarget.getZ() - this.getZ());
-                if (Vector3d1.lengthSqr() > 1.0E-7D) {
-                    Vector3d1 = Vector3d1.normalize().scale(0.4D).add(Vector3d.scale(0.2D));
-                }
-            }
+            // FIXME :: Unused
+//            if (dist <= 16.0D && this.isOnGround() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
+//                Vec3 Vector3d = this.getDeltaMovement();
+//                Vec3 Vector3d1 = new Vec3(attackTarget.getX() - this.getX(), 0.0D, attackTarget.getZ() - this.getZ());
+//                if (Vector3d1.lengthSqr() > 1.0E-7D) {
+//                    Vector3d1 = Vector3d1.normalize().scale(0.4D).add(Vector3d.scale(0.2D));
+//                }
+//            }
             if (dist < 4 && this.getAnimationTick() > 10) {
                 attackTarget.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 if ((double) leap >= 1.0E-4D) {

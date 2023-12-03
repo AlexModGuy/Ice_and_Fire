@@ -201,7 +201,8 @@ public class DragonUtils {
         int distFromGround = (int) bird.getY() - ground.getY();
         int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, ground.getY() + bird.getRandom().nextInt(16));
         BlockPos newPos = radialPos.above(distFromGround > 16 ? flightHeight : (int) bird.getY() + bird.getRandom().nextInt(16) + 1);
-        BlockPos pos = bird.doesWantToLand() ? ground : newPos;
+        // FIXME :: Unused
+//        BlockPos pos = bird.doesWantToLand() ? ground : newPos;
         if (bird.getDistanceSquared(Vec3.atCenterOf(newPos)) > 6 && !bird.isTargetBlocked(Vec3.atCenterOf(newPos))) {
             return newPos;
         }

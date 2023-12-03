@@ -5,6 +5,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.HippogryphAIMate;
 import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITarget;
 import com.github.alexthe666.iceandfire.entity.ai.HippogryphAITargetItems;
@@ -177,7 +178,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(4, new HippogryphAIMate(this, 1.0D));
-        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(Items.RABBIT, Items.COOKED_RABBIT), false));
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0D, Ingredient.of(IafItemTags.TEMPT_HIPPOGRYPH), false));
         this.goalSelector.addGoal(6, new AIFlyRandom());
         this.goalSelector.addGoal(7, new HippogryphAIWander(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, LivingEntity.class, 6.0F));
@@ -302,7 +303,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
                 return InteractionResult.SUCCESS;
             }
-            if (itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getAge() == 0 && !isInLove()) {
+            if (itemstack != null && itemstack.is(IafItemTags.BREED_HIPPOGRYPH) && this.getAge() == 0 && !isInLove()) {
                 this.setInLove(player);
                 this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
                 if (!player.isCreative()) {
@@ -317,8 +318,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                         player.displayClientMessage(Component.translatable("hippogryph.command.remove_home"), true);
                         return InteractionResult.SUCCESS;
                     } else {
-                        BlockPos pos = this.blockPosition();
-                        this.homePos = pos;
+                        this.homePos = this.blockPosition();
                         this.hasHomePosition = true;
                         player.displayClientMessage(Component.translatable("hippogryph.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                         return InteractionResult.SUCCESS;

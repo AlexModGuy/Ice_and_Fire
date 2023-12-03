@@ -178,17 +178,18 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public void onUpdateParts() {
         addSegmentsToWorld();
-        if (isSandBelow()) {
-            int i = Mth.floor(this.getX());
-            int j = Mth.floor(this.getY() - 1);
-            int k = Mth.floor(this.getZ());
-            BlockPos blockpos = new BlockPos(i, j, k);
-            BlockState BlockState = this.level().getBlockState(blockpos);
-
-            if (level().isClientSide) {
-                // world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
-            }
-        }
+        // FIXME :: Unused
+//        if (isSandBelow()) {
+//            int i = Mth.floor(this.getX());
+//            int j = Mth.floor(this.getY() - 1);
+//            int k = Mth.floor(this.getZ());
+//            BlockPos blockpos = new BlockPos(i, j, k);
+//            BlockState BlockState = this.level.getBlockState(blockpos);
+//
+//            if (level.isClientSide) {
+//                world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
+//            }
+//        }
     }
 
     @Override

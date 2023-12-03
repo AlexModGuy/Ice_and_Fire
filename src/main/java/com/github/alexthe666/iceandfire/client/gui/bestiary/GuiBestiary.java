@@ -343,6 +343,7 @@ public class GuiBestiary extends Screen {
                     drawImage(ms, DRAWINGS_0, 90, 230, 425, 223, 61, 35, 512F);
                     ms.pose().popPose();
 
+                    // TODO :: Loop through tag (IafItemTags.TAME_HIPPOGRYPH)
                     drawItemStack(ms, new ItemStack(Items.RABBIT_FOOT), 70, 20, 3.75F);
                 }
 
@@ -358,6 +359,7 @@ public class GuiBestiary extends Screen {
                     drawItemStack(ms, new ItemStack(drawType == 0 ? Items.IRON_HORSE_ARMOR : drawType == 1 ? Items.GOLDEN_HORSE_ARMOR : Items.DIAMOND_HORSE_ARMOR), 180, 31, 1.35F);
                     drawItemStack(ms, new ItemStack(Items.FEATHER), 199, 31, 1.35F);
                     drawItemStack(ms, new ItemStack(drawType == 0 ? IafItemRegistry.IRON_HIPPOGRYPH_ARMOR.get() : drawType == 1 ? IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR.get() : IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR.get()), 151, 18, 2F);
+                    // TODO :: Loop through tag (IafItemTags.BREED_HIPPOGRYPH)
                     drawItemStack(ms, new ItemStack(Items.RABBIT_STEW), 70, 23, 3.75F);
                 }
                 break;
@@ -548,6 +550,7 @@ public class GuiBestiary extends Screen {
                     ms.pose().popPose();
                 }
                 if (bookPages == 1) {
+                    // TODO :: Loop through tag
                     drawItemStack(ms, new ItemStack(Items.KELP), 37, 33, 2.25F);
                     drawItemStack(ms, new ItemStack(Items.PRISMARINE_CRYSTALS), 37, 73, 2.25F);
                 }
