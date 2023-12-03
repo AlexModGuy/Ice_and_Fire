@@ -532,6 +532,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         breakBlock();
     }
 
+    @Override
+    public void checkDespawn() {
+        if (IafConfig.canDragonsDespawn) {
+            super.checkDespawn();
+        }
+    }
+
     public boolean canDestroyBlock(BlockPos pos, BlockState state) {
         return state.getBlock().canEntityDestroy(state, level, pos, this);
     }
@@ -1589,7 +1596,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             // TODO :: Why is damage to player hardcoded
-            prey.hurt(DamageSource.mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
+            float damage = prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4;
+            boolean didDamage = prey.hurt(DamageSource.mobAttack(this), damage);
+
+            if (didDamage && IafConfig.canDragonsHealFromBiting) {
+                heal(damage);
+            }
+
             prey.stopRiding();
         }
         yBodyRot = getYRot();
@@ -2311,7 +2324,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.setAnimation(EntityDragonBase.ANIMATION_BITE);
                 }
                 if (target != null && !DragonUtils.hasSameOwner(this, target)) {
-                    logic.attackTarget(target, rider, (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    int damage = (int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+                    boolean didDamage = logic.attackTarget(target, rider, damage);
+
+                    if (didDamage && IafConfig.canDragonsHealFromBiting) {
+                        heal(damage);
+                    }
                 }
             }
             // Shift key to dismount

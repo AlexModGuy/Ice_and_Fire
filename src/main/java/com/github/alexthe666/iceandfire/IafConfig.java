@@ -34,6 +34,7 @@ public class IafConfig {
     public static double dragonAttackDamageLightning = 3.5F;
     public static int maxDragonFlight = 256;
     public static int dragonGoldSearchLength = 30;
+    public static boolean canDragonsHealFromBiting;
     public static boolean canDragonsDespawn = true;
     public static boolean doDragonsSleep = true;
     public static boolean dragonDigWhenStuck = true;
@@ -114,9 +115,7 @@ public class IafConfig {
     public static float dragonsteelBaseArmorToughness = 6;
     public static int dragonsteelBaseDurability = 8000;
     public static int dragonsteelBaseDurabilityEquipment = 8000;
-    public static boolean spawnStructuresOnSuperflat = true;
     public static boolean dragonMovedWronglyFix = false;
-    public static int dreadlandsDimensionId = -12;
     public static boolean weezerTinkers = true;
     public static double dragonBlockBreakingDropChance = 0.1D;
     public static boolean dragonAuto3rdPerson = true;
@@ -182,6 +181,7 @@ public class IafConfig {
             dragonAttackDamageLightning = ConfigHolder.SERVER.dragonAttackDamageLightning.get();
             maxDragonFlight = ConfigHolder.SERVER.maxDragonFlight.get();
             dragonGoldSearchLength = ConfigHolder.SERVER.dragonGoldSearchLength.get();
+            canDragonsHealFromBiting = ConfigHolder.SERVER.canDragonsHealFromBiting.get();
             canDragonsDespawn = ConfigHolder.SERVER.canDragonsDespawn.get();
             doDragonsSleep = ConfigHolder.SERVER.doDragonsSleep.get();
             dragonDigWhenStuck = ConfigHolder.SERVER.dragonDigWhenStuck.get();

@@ -4,12 +4,14 @@ import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.datagen.IafPlacedFeatures;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.feature.*;
 import com.github.alexthe666.iceandfire.world.gen.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -131,96 +133,98 @@ public class IafWorldRegistry {
     public static void addFeatures(Holder<Biome> biome, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
 
         if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biome)) {
-            addFeatureToBiome("iceandfire:fire_lily", features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_FIRE_LILY, features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
         }
         if (safelyTestBiome(BiomeConfig.lightningLilyBiomes, biome)) {
-            addFeatureToBiome("iceandfire:lightning_lily", features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_LIGHTNING_LILY, features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
         }
         if (safelyTestBiome(BiomeConfig.frostLilyBiomes, biome)) {
-            addFeatureToBiome("iceandfire:frost_lily", features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_FROST_LILY, features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
         }
         if (safelyTestBiome(BiomeConfig.oreGenBiomes, biome)) {
-            addFeatureToBiome("iceandfire:silver_ore", features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SILVER_ORE, features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
         }
         if (safelyTestBiome(BiomeConfig.sapphireBiomes, biome)) {
-            addFeatureToBiome("iceandfire:sapphire_ore", features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SAPPHIRE_ORE, features, builder, GenerationStep.Decoration.UNDERGROUND_ORES);
         }
 
 
         if (safelyTestBiome(BiomeConfig.fireDragonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:fire_dragon_roost", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_FIRE_DRAGON_ROOST, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.lightningDragonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:lightning_dragon_roost", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_LIGHTNING_DRAGON_ROOST, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.iceDragonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:ice_dragon_roost", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_ICE_DRAGON_ROOST, features, builder);
         }
 
 
         if (safelyTestBiome(BiomeConfig.fireDragonCaveBiomes, biome)) {
-            addFeatureToBiome("iceandfire:fire_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_FIRE_DRAGON_CAVE, features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
         }
         if (safelyTestBiome(BiomeConfig.lightningDragonCaveBiomes, biome)) {
-            addFeatureToBiome("iceandfire:lightning_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_LIGHTNING_DRAGON_CAVE, features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
         }
         if (safelyTestBiome(BiomeConfig.iceDragonCaveBiomes, biome)) {
-            addFeatureToBiome("iceandfire:ice_dragon_cave", features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_ICE_DRAGON_CAVE, features, builder, GenerationStep.Decoration.UNDERGROUND_STRUCTURES);
         }
 
 
         if (safelyTestBiome(BiomeConfig.cyclopsCaveBiomes, biome)) {
-            addFeatureToBiome("iceandfire:cyclops_cave", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_CYCLOPS_CAVE, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.pixieBiomes, biome)) {
-            addFeatureToBiome("iceandfire:pixie_village", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_PIXIE_VILLAGE, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.hydraBiomes, biome)) {
-            addFeatureToBiome("iceandfire:hydra_cave", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_HYDRA_CAVE, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.desertMyrmexBiomes, biome)) {
-            addFeatureToBiome("iceandfire:myrmex_hive_desert", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_MYRMEX_HIVE_DESERT, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.jungleMyrmexBiomes, biome)) {
-            addFeatureToBiome("iceandfire:myrmex_hive_jungle", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_MYRMEX_HIVE_JUNGLE, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.sirenBiomes, biome)) {
-            addFeatureToBiome("iceandfire:siren_island", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SIREN_ISLAND, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.deathwormBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_death_worm", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_DEATH_WORM, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.wanderingCyclopsBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_wandering_cyclops", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_WANDERING_CYCLOPS, features, builder);
         }
 
         if (safelyTestBiome(BiomeConfig.lightningDragonSkeletonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_lightning", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_DRAGON_SKELETON_L, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.fireDragonSkeletonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_fire", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_DRAGON_SKELETON_F, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.iceDragonSkeletonBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_dragon_skeleton_ice", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_DRAGON_SKELETON_I, features, builder);
         }
 
         if (safelyTestBiome(BiomeConfig.hippocampusBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_hippocampus", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_HIPPOCAMPUS, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.seaSerpentBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_sea_serpent", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_SEA_SERPENT, features, builder);
         }
         if (safelyTestBiome(BiomeConfig.stymphalianBiomes, biome)) {
-            addFeatureToBiome("iceandfire:spawn_stymphalian_bird", features, builder);
+            addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_STYMPHALIAN_BIRD, features, builder);
         }
 
     }
 
-    private static void addFeatureToBiome(String identifier, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        addFeatureToBiome(identifier, features, builder, GenerationStep.Decoration.SURFACE_STRUCTURES);
+    private static void addFeatureToBiome(ResourceKey<PlacedFeature> feature, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+        addFeatureToBiome(feature, features, builder, GenerationStep.Decoration.SURFACE_STRUCTURES);
     }
 
-    private static void addFeatureToBiome(String identifier, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder, GenerationStep.Decoration step) {
+    private static void addFeatureToBiome(ResourceKey<PlacedFeature> featureResource, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder, GenerationStep.Decoration step) {
+        String identifier = featureResource.location().toString();
+
         Holder<PlacedFeature> feature = features.get(identifier);
         if (feature != null) {
             builder.getGenerationSettings().getFeatures(step)

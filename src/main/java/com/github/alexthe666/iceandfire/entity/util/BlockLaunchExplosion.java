@@ -89,7 +89,6 @@ public class BlockLaunchExplosion extends Explosion {
 
             for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);
-                Block block = blockstate.getBlock();
                 if (!blockstate.isAir()) {
                     BlockPos blockpos1 = blockpos.immutable();
                     this.world.getProfiler().push("explosion_blocks");
