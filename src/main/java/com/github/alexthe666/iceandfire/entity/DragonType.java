@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 public class DragonType {
 
@@ -43,6 +44,18 @@ public class DragonType {
         }else{
             return 0;
         }
+    }
+
+    public static @Nullable DragonType getType(final EntityType<?> type) {
+        if (type == IafEntityRegistry.LIGHTNING_DRAGON.get()) {
+            return DragonType.LIGHTNING;
+        } else if (type == IafEntityRegistry.ICE_DRAGON.get()) {
+            return DragonType.ICE;
+        } else if (type == IafEntityRegistry.FIRE_DRAGON.get()) {
+            return DragonType.FIRE;
+        }
+
+        return null;
     }
 
     public String getName() {

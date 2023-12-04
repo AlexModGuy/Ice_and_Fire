@@ -455,7 +455,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                         ClipContext.Fluid.NONE, this));
                     Vec3 vec3 = result.getLocation();
                     BlockPos pos = BlockPos.containing(vec3);
-                    IafDragonDestructionManager.destroyAreaLightning(level(), pos, this);
+                    IafDragonDestructionManager.destroyAreaBreath(level(), pos, this);
                     setHasLightningTarget(true);
                     setLightningTargetVec((float) result.getLocation().x, (float) result.getLocation().y, (float) result.getLocation().z);
                 }
@@ -468,7 +468,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             setHasLightningTarget(true);
             setLightningTargetVec((float) spawnX, (float) spawnY, (float) spawnZ);
             if (!level().isClientSide) {
-                IafDragonDestructionManager.destroyAreaLightning(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaBreath(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }

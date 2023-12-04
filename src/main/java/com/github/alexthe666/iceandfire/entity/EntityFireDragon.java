@@ -495,7 +495,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     HitResult result = this.level().clip(new ClipContext(new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()), new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
                     Vec3 vec3 = result.getLocation();
                     BlockPos pos = BlockPos.containing(vec3);
-                    IafDragonDestructionManager.destroyAreaFire(level(), pos, this);
+                    IafDragonDestructionManager.destroyAreaBreath(level(), pos, this);
                 }
             }
         }
@@ -504,7 +504,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnY = burnY + (random.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (random.nextFloat() * 3.0) - 1.5;
             if (!level().isClientSide) {
-                IafDragonDestructionManager.destroyAreaFire(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaBreath(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }

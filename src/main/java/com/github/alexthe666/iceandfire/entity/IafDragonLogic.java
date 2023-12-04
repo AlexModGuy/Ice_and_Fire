@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,14 +42,14 @@ public class IafDragonLogic {
         }
         if (IafConfig.doDragonsSleep && !dragon.isSleeping() && !dragon.isTimeToWake() && dragon.getPassengers().isEmpty() && this.dragon.getCommand() != 2) {
             if (dragon.hasHomePosition
-                && dragon.getRestrictCenter() != null
-                && DragonUtils.isInHomeDimension(dragon)
-                && dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth() * 10
-                && this.dragon.getCommand() != 2 && this.dragon.getCommand() != 1) {
+                    && dragon.getRestrictCenter() != null
+                    && DragonUtils.isInHomeDimension(dragon)
+                    && dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())) > dragon.getBbWidth() * 10
+                    && this.dragon.getCommand() != 2 && this.dragon.getCommand() != 1) {
                 dragon.lookingForRoostAIFlag = true;
             } else {
                 dragon.lookingForRoostAIFlag = false;
-                if ((/* Avoid immediately sleeping after killing the target */ dragon.level().getGameTime() - ticksAfterClearingTarget >= 20)  && !dragon.isInWater() && dragon.onGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
+                if ((/* Avoid immediately sleeping after killing the target */ dragon.level().getGameTime() - ticksAfterClearingTarget >= 20) && !dragon.isInWater() && dragon.onGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
                     dragon.setInSittingPose(true);
                 }
             }
@@ -78,7 +79,7 @@ public class IafDragonLogic {
         if (dragon.isInLove()) {
             dragon.level().broadcastEntityEvent(dragon, (byte) 18);
         }
-        if ((int) dragon.xo == (int) dragon.getX() && (int) dragon.zo == (int) dragon.getZ()) {
+        if (new Vec3i((int) dragon.xo, (int) dragon.yo, (int) dragon.zo).distSqr(dragon.blockPosition()) <= 0.5) {
             dragon.ticksStill++;
         } else {
             dragon.ticksStill = 0;
@@ -206,7 +207,7 @@ public class IafDragonLogic {
         }
         if (!dragon.isFlying() && !dragon.isHovering()) {
             if (dragon.isAllowedToTriggerFlight() || dragon.getY() < dragon.level().getMinBuildHeight()) {
-                if (dragon.getRandom().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getY() < dragon.level().getMinBuildHeight() || dragon.getTarget() != null && Math.abs(dragon.getTarget().getY() - dragon.getY()) > 5 || dragon.isInWater() && !dragon.isIceInWater()) {
+                if (dragon.getRandom().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getY() < dragon.level().getMinBuildHeight() || dragon.getTarget() != null && Math.abs(dragon.getTarget().getY() - dragon.getY()) > 5 || dragon.isInWater()) {
                     dragon.setHovering(true);
                     dragon.setInSittingPose(false);
                     dragon.setOrderedToSit(false);
@@ -240,7 +241,7 @@ public class IafDragonLogic {
             dragon.playSound(dragon.getBabyFireSound(), 1, 1);
         }
         if (dragon.isBreathingFire()) {
-            if(dragon.isSleeping() || dragon.isModelDead()){
+            if (dragon.isSleeping() || dragon.isModelDead()) {
                 dragon.setBreathingFire(false);
                 dragon.randomizeAttacks();
                 dragon.fireTicks = 0;
@@ -329,7 +330,7 @@ public class IafDragonLogic {
         }
 
         if (dragon.flightCycle == 2) {
-            if (!dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())){
+            if (!dragon.isDiving() && (dragon.isFlying() || dragon.isHovering())) {
                 float dragonSoundVolume = IafConfig.dragonFlapNoiseDistance;
                 float dragonSoundPitch = dragon.getVoicePitch();
                 dragon.playSound(IafSoundRegistry.DRAGON_FLIGHT, dragonSoundVolume, dragonSoundPitch);
@@ -475,19 +476,19 @@ public class IafDragonLogic {
         String owner = dragon.getOwner() == null ? "null" : dragon.getOwner().getName().getString();
         String attackTarget = dragon.getTarget() == null ? "null" : dragon.getTarget().getName().getString();
         IceAndFire.LOGGER.warn("DRAGON DEBUG[" + side + "]:"
-            + "\nStage: " + dragon.getDragonStage()
-            + "\nAge: " + dragon.getAgeInDays()
-            + "\nVariant: " + dragon.getVariantName(dragon.getVariant())
-            + "\nOwner: " + owner
-            + "\nAttack Target: " + attackTarget
-            + "\nFlying: " + dragon.isFlying()
-            + "\nHovering: " + dragon.isHovering()
-            + "\nHovering Time: " + dragon.hoverTicks
-            + "\nWidth: " + dragon.getBbWidth()
-            + "\nMoveHelper: " + dragon.getMoveControl()
-            + "\nGround Attack: " + dragon.groundAttack
-            + "\nAir Attack: " + dragon.airAttack
-            + "\nTackling: " + dragon.isTackling()
+                + "\nStage: " + dragon.getDragonStage()
+                + "\nAge: " + dragon.getAgeInDays()
+                + "\nVariant: " + dragon.getVariantName(dragon.getVariant())
+                + "\nOwner: " + owner
+                + "\nAttack Target: " + attackTarget
+                + "\nFlying: " + dragon.isFlying()
+                + "\nHovering: " + dragon.isHovering()
+                + "\nHovering Time: " + dragon.hoverTicks
+                + "\nWidth: " + dragon.getBbWidth()
+                + "\nMoveHelper: " + dragon.getMoveControl()
+                + "\nGround Attack: " + dragon.groundAttack
+                + "\nAir Attack: " + dragon.airAttack
+                + "\nTackling: " + dragon.isTackling()
 
         );
     }
