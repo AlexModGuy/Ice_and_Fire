@@ -41,7 +41,7 @@ public class EntityDragonLightningCharge extends EntityDragonCharge implements I
 
     @Override
     public void destroyArea(Level world, BlockPos center, EntityDragonBase destroyer) {
-        IafDragonDestructionManager.destroyAreaLightningCharge(world, center, destroyer);
+        IafDragonDestructionManager.destroyAreaCharge(world, center, destroyer);
     }
 
     @Override

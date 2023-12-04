@@ -70,8 +70,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -83,6 +83,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
@@ -224,6 +225,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public EntityDragonBase(EntityType t, Level world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(t, world);
+        setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         this.dragonType = type;
         this.minimumDamage = minimumDamage;
         this.maximumDamage = maximumDamage;
@@ -306,14 +308,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DragonAITargetNonTamed(this, LivingEntity.class, false, (Predicate<LivingEntity>) entity -> (!(entity instanceof Player) || !((Player) entity).isCreative()) && DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity)));
-        this.targetSelector.addGoal(5, new DragonAITarget(this, LivingEntity.class, true, new Predicate<LivingEntity>() {
-            @Override
-            public boolean apply(@Nullable LivingEntity entity) {
-                return DragonUtils.canHostilesTarget(entity) && entity.getType() != EntityDragonBase.this.getType() && EntityDragonBase.this.shouldTarget(entity) && DragonUtils.isAlive(entity);
+        this.targetSelector.addGoal(4, new DragonAITargetItems<>(this, 60, false, false, true));
+        this.targetSelector.addGoal(5, new DragonAITargetNonTamed<>(this, LivingEntity.class, false, (Predicate<LivingEntity>) entity -> {
+            boolean skip = entity instanceof Player player ? player.isCreative() : getRandom().nextInt(100) < getHunger();
+
+            if (!skip) {
+                return entity.getType() != getType() && DragonUtils.canHostilesTarget(entity) && DragonUtils.isAlive(entity) && shouldTarget(entity);
             }
+
+            return false;
         }));
-        this.targetSelector.addGoal(6, new DragonAITargetItems(this, false));
+        this.targetSelector.addGoal(6, new DragonAITarget<>(this, LivingEntity.class, true, (Predicate<LivingEntity>) entity -> DragonUtils.canHostilesTarget(entity) && entity.getType() != getType() && shouldTarget(entity) && DragonUtils.isAlive(entity)));
+        this.targetSelector.addGoal(7, new DragonAITargetItems<>(this, false));
     }
 
     protected abstract boolean shouldTarget(Entity entity);
@@ -529,7 +535,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        breakBlock();
+        breakBlocks(false);
     }
 
     @Override
@@ -1413,7 +1419,24 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     private boolean isStuck() {
-        return !this.isChained() && !this.isTame() && (!this.getNavigation().isDone() && (this.getNavigation().getPath() == null || this.getNavigation().getPath().getEndNode() != null && this.distanceToSqr(this.getNavigation().getPath().getEndNode().x, this.getNavigation().getPath().getEndNode().y, this.getNavigation().getPath().getEndNode().z) > 15)) && ticksStill > 80 && !this.isHovering() && canMove();
+        boolean skip = isChained() || isTame();
+
+        if (skip) {
+            return false;
+        }
+
+        boolean checkNavigation = ticksStill > 80 && canMove() && !isHovering();
+
+        if (checkNavigation) {
+            PathNavigation navigation = getNavigation();
+            Path path = navigation.getPath();
+
+            if (!navigation.isDone() && (path == null || path.getEndNode() != null || blockPosition().distSqr(path.getEndNode().asBlockPos()) > 15)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected boolean isOverAir() {
@@ -1446,13 +1469,38 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return 1;
     }
 
-    public void breakBlock() {
+    public void breakBlock(final BlockPos position) {
+        if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, position.getX(), position.getY(), position.getZ()))) {
+            return;
+        }
+
+        final BlockState state = level.getBlockState(position);
+        final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
+        if (isBreakable(position, state, hardness, this)) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
+            if (!level.isClientSide()) {
+                level.destroyBlock(position, random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
+            }
+        }
+    }
+
+    public void breakBlocks(boolean force) {
+        boolean doBreak = force;
+
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
-            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
+
+            if (blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) {
+                doBreak = true;
+            }
+        }
+
+        if (doBreak) {
+            if ((force || !this.isInWater()) && ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
                 if (DragonUtils.canGrief(this)) {
+                    // TODO :: make `force` ignore the dragon stage?
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
-                        final int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
+                        final int bounds = 1;
                         final int flightModifier = isFlying() && this.getTarget() != null ? -1 : 1;
                         final int yMinus = calculateDownY();
                         BlockPos.betweenClosedStream(
@@ -1462,22 +1510,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                                 (int) Math.floor(this.getBoundingBox().maxX) + bounds,
                                 (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier,
                                 (int) Math.floor(this.getBoundingBox().maxZ) + bounds
-                        ).forEach(pos -> {
-                            if (MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
-                                return;
-                            final BlockState state = level.getBlockState(pos);
-                            final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
-                            if (isBreakable(pos, state, hardness, this)) {
-                                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
-                                if (!level.isClientSide) {
-                                    if (random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state)) {
-                                        level.destroyBlock(pos, true);
-                                    } else {
-                                        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                                    }
-                                }
-                            }
-                        });
+                        ).forEach(this::breakBlock);
                     }
                 }
             }
@@ -1504,10 +1537,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean isBlockExplicitlyNotPassable(BlockState state, BlockPos pos, BlockPos entityPos) {
-        return false;
-    }
-
-    protected boolean isIceInWater() {
         return false;
     }
 
@@ -1595,12 +1624,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setAnimation(ANIMATION_SHAKEPREY);
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            // TODO :: Why is damage to player hardcoded
-            float damage = prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4;
+            float baseDamage = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+            float damage = baseDamage * 2;
             boolean didDamage = prey.hurt(DamageSource.mobAttack(this), damage);
 
             if (didDamage && IafConfig.canDragonsHealFromBiting) {
                 heal(damage);
+            }
+
+            if (!(prey instanceof Player)) {
+                setHunger(getHunger() + 1);
             }
 
             prey.stopRiding();
@@ -1752,10 +1785,19 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         level.getProfiler().pop();
         level.getProfiler().push("dragonFlight");
-        if (useFlyingPathFinder() && !level.isClientSide && isControlledByLocalInstance()) {
+        if (useFlyingPathFinder() && !level.isClientSide /*&& isControlledByLocalInstance()*/) {
             this.flightManager.update();
         }
         level.getProfiler().pop();
+
+        if (!level.isClientSide() && IafConfig.dragonDigWhenStuck && isStuck()) {
+            breakBlocks(true);
+            resetStuck();
+        }
+    }
+
+    private void resetStuck() {
+        ticksStill = 0;
     }
 
     @Override

@@ -117,19 +117,25 @@ public class ItemGorgonHead extends Item {
         }
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity livingEntity) {
-                pointedEntity.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
-                EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(livingEntity);
+                boolean wasSuccesful = true;
+
                 if (pointedEntity instanceof Player) {
-                    pointedEntity.hurt(IafDamageRegistry.causeGorgonDamage(pointedEntity), Integer.MAX_VALUE);
+                     wasSuccesful = pointedEntity.hurt(IafDamageRegistry.causeGorgonDamage(pointedEntity), Integer.MAX_VALUE);
                 } else {
                     if (!worldIn.isClientSide)
                         pointedEntity.remove(Entity.RemovalReason.KILLED);
                 }
-                statue.absMoveTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ(), pointedEntity.getYRot(), pointedEntity.getXRot());
-                statue.yBodyRot = pointedEntity.getYRot();
-                if (!worldIn.isClientSide) {
-                    worldIn.addFreshEntity(statue);
+
+                if (wasSuccesful) {
+                    pointedEntity.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
+                    EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(livingEntity);
+                    statue.absMoveTo(pointedEntity.getX(), pointedEntity.getY(), pointedEntity.getZ(), pointedEntity.getYRot(), pointedEntity.getXRot());
+                    statue.yBodyRot = pointedEntity.getYRot();
+                    if (!worldIn.isClientSide) {
+                        worldIn.addFreshEntity(statue);
+                    }
                 }
+
                 if (entity instanceof Player player && !player.isCreative()) {
                     stack.shrink(1);
                 }

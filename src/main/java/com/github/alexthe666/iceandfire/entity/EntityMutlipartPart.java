@@ -170,6 +170,7 @@ public abstract class EntityMutlipartPart extends Entity {
         return false;
     }
 
+    /** Source: {@link net.minecraft.world.entity.ai.control.MoveControl#rotlerp(float, float, float)} */
     protected float limitAngle(float sourceAngle, float targetAngle, float maximumChange) {
         float f = Mth.wrapDegrees(targetAngle - sourceAngle);
         if (f > maximumChange) {
