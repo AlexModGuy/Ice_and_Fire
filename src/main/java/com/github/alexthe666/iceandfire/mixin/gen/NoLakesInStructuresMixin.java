@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.world.gen.mixin;
+package com.github.alexthe666.iceandfire.mixin.gen;
 
 import com.github.alexthe666.iceandfire.datagen.IafStructures;
 import net.minecraft.core.Registry;

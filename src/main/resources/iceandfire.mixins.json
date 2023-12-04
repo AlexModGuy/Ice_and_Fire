@@ -1,11 +1,12 @@
 {
   "required": true,
-  "package": "com.github.alexthe666.iceandfire.world.gen.mixin",
+  "package": "com.github.alexthe666.iceandfire.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "iceandfire.refmap.json",
   "mixins": [
-    "NoLakesInStructuresMixin",
-    "WorldGenRegionMixin"
+    "SuppressVehicleMovedWronglyMixin",
+    "gen.NoLakesInStructuresMixin",
+    "gen.WorldGenRegionMixin"
   ],
   "client": [
   ],
