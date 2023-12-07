@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
@@ -35,6 +36,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new IafItemTags(generator, blockTagsProvider, helper));
         generator.addProvider(event.includeServer(), new IafEntityTags(generator, helper));
+        generator.addProvider(event.includeServer(), new IafRecipes(generator));
 
         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "h": {
+      "tag": "forge:rods/wooden"
+    },
+    "m": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "m",
+    "h",
+    "h"
+  ],
+  "result": {
+    "item": "iceandfire:copper_shovel"
+  }
+}

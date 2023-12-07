@@ -12,11 +12,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 public class IafItemTags extends ItemTagsProvider {
+    public static TagKey<Item> CHARRED_BLOCK = createKey("charred_block");
+    public static TagKey<Item> WITHER_BONES = createForgeKey("bones/wither");
+    public static TagKey<Item> COPPER_NUGGETS = createForgeKey("nuggets/copper");
+
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
 
     public static TagKey<Item> BREED_AMPITHERE = createKey("breed_ampithere");
@@ -38,6 +43,8 @@ public class IafItemTags extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
+        copy(IafBlockTags.CHARRED_BLOCK, CHARRED_BLOCK);
+
         tag(MAKE_ITEM_DROPS_FIREIMMUNE)
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_SWORD.get())
                 .add(IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING.get())
@@ -53,6 +60,9 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
+
+        tag(Tags.Items.INGOTS_COPPER)
+                .add(IafItemRegistry.COPPER_INGOT.get().asItem());
 
         tag(Tags.Items.NUGGETS)
                 .add(IafItemRegistry.COPPER_NUGGET.get())
@@ -208,7 +218,7 @@ public class IafItemTags extends ItemTagsProvider {
         });
 
         // Not sure if this should be in the forge namespace or not (or if the recipes should be using tags here)
-        tag(createForgeKey("bones/wither")).add(IafItemRegistry.WITHERBONE.get());
+        tag(WITHER_BONES).add(IafItemRegistry.WITHERBONE.get());
         tag(createForgeKey("ingots/dragonsteel_fire")).add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get());
         tag(createForgeKey("ingots/dragonsteel_ice")).add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get());
         tag(createForgeKey("ingots/dragonsteel_lightning")).add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
@@ -234,9 +244,8 @@ public class IafItemTags extends ItemTagsProvider {
         // These are also used / created by other mods
         tag(createForgeKey("ores/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
         tag(createForgeKey("ores/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
-        tag(createForgeKey("ingots/copper")).add(IafItemRegistry.COPPER_INGOT.get().asItem());
         tag(createForgeKey("ingots/silver")).add(IafItemRegistry.SILVER_INGOT.get().asItem());
-        tag(createForgeKey("nuggets/copper")).add(IafItemRegistry.COPPER_NUGGET.get());
+        tag(COPPER_NUGGETS).add(IafItemRegistry.COPPER_NUGGET.get());
         tag(createForgeKey("nuggets/silver")).add(IafItemRegistry.SILVER_NUGGET.get());
         tag(createForgeKey("storage_blocks/silver")).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
         tag(createForgeKey("storage_blocks/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());

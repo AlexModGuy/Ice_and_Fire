@@ -85,6 +85,7 @@ public class IafDragonDestructionManager {
         }
 
         DamageSource damageSource = getDamageSource(dragon);
+        float stageDamage = dragon.getDragonStage() * damageScale;
 
         level.getEntitiesOfClass(
                 LivingEntity.class,
@@ -98,7 +99,7 @@ public class IafDragonDestructionManager {
                 )
         ).forEach(target -> {
             if (!DragonUtils.onSameTeam(dragon, target) && !dragon.is(target) && dragon.hasLineOfSight(target)) {
-                target.hurt(damageSource, dragon.getDragonStage() * damageScale);
+                target.hurt(damageSource, stageDamage);
                 applyDragonEffect(target, dragon, statusDuration);
             }
         });

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:storage_blocks/diamond"
+    }
+  },
+  "pattern": [
+    "   ",
+    " ##",
+    "###"
+  ],
+  "result": {
+    "item": "iceandfire:dragonarmor_diamond_head"
+  }
+}

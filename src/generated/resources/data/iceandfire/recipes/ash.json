@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    },
+    {
+      "tag": "iceandfire:charred_block"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:ash"
+  }
+}

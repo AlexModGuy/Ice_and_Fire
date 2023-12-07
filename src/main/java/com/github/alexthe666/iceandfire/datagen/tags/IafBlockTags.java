@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.datagen.tags;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.sun.jna.platform.win32.WinDef;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 public class IafBlockTags extends BlockTagsProvider {
+    public static TagKey<Block> CHARRED_BLOCK = createKey("charred_block");
     public static TagKey<Block> DRAGON_ENVIRONMENT_BLOCKS = createKey("dragon_environment_blocks");
 
     public static TagKey<Block> DRAGON_CAVE_RARE_ORES = createKey("dragon_cave_rare_ores");
@@ -31,13 +33,16 @@ public class IafBlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        tag(DRAGON_ENVIRONMENT_BLOCKS)
+        tag(CHARRED_BLOCK)
                 .add(IafBlockRegistry.CHARRED_COBBLESTONE.get())
                 .add(IafBlockRegistry.CHARRED_DIRT.get())
                 .add(IafBlockRegistry.CHARRED_DIRT_PATH.get())
                 .add(IafBlockRegistry.CHARRED_GRASS.get())
                 .add(IafBlockRegistry.CHARRED_GRAVEL.get())
-                .add(IafBlockRegistry.CHARRED_STONE.get())
+                .add(IafBlockRegistry.CHARRED_STONE.get());
+
+        tag(DRAGON_ENVIRONMENT_BLOCKS)
+                .addTag(CHARRED_BLOCK)
                 .add(IafBlockRegistry.FROZEN_COBBLESTONE.get())
                 .add(IafBlockRegistry.FROZEN_DIRT.get())
                 .add(IafBlockRegistry.FROZEN_DIRT_PATH.get())
