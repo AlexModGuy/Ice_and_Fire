@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "h": {
+      "tag": "forge:bones/wither"
+    },
+    "m": {
+      "item": "iceandfire:dragonbone"
+    }
+  },
+  "pattern": [
+    "mm",
+    " h",
+    " h"
+  ],
+  "result": {
+    "item": "iceandfire:dragonbone_hoe"
+  }
+}

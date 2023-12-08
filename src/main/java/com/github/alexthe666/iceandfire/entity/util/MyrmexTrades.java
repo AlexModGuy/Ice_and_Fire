@@ -143,7 +143,7 @@ public class MyrmexTrades {
                 new ItemsForDesertResinTrade(Items.MAGMA_CREAM, 5, 1, 3, 1),
                 new ItemsForDesertResinTrade(Items.GOLD_INGOT, 3, 1, 5, 1),
                 new ItemsForDesertResinTrade(IafItemRegistry.SILVER_INGOT.get(), 3, 1, 5, 1),
-                new ItemsForDesertResinTrade(IafItemRegistry.COPPER_INGOT.get(), 2, 2, 3, 1),
+                new ItemsForDesertResinTrade(Items.COPPER_INGOT, 2, 2, 3, 1),
                 new ItemsForDesertResinTrade(Items.ENDER_PEARL, 8, 1, 5, 1),
                 new ItemsForDesertResinTrade(Items.RABBIT_FOOT, 3, 1, 5, 1),
             }));
@@ -160,7 +160,7 @@ public class MyrmexTrades {
                 new ItemsForJungleResinTrade(Items.MAGMA_CREAM, 5, 1, 3, 1),
                 new ItemsForJungleResinTrade(Items.GOLD_INGOT, 3, 1, 5, 1),
                 new ItemsForJungleResinTrade(IafItemRegistry.SILVER_INGOT.get(), 3, 1, 5, 1),
-                new ItemsForJungleResinTrade(IafItemRegistry.COPPER_INGOT.get(), 2, 2, 3, 1),
+                new ItemsForJungleResinTrade(Items.COPPER_INGOT, 2, 2, 3, 1),
                 new ItemsForJungleResinTrade(Items.ENDER_PEARL, 8, 1, 5, 1),
                 new ItemsForJungleResinTrade(Items.RABBIT_FOOT, 3, 1, 5, 1),
             }));

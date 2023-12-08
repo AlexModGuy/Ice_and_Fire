@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "h": {
+      "tag": "forge:bones/wither"
+    },
+    "m": {
+      "item": "iceandfire:dragonsteel_ice_ingot"
+    }
+  },
+  "pattern": [
+    "mm",
+    "mh",
+    " h"
+  ],
+  "result": {
+    "item": "iceandfire:dragonsteel_ice_axe"
+  }
+}

@@ -393,7 +393,7 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:copper_ingot",
+          "name": "minecraft:copper_ingot",
           "functions": [
             {
               "function": "set_count",

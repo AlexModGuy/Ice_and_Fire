@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.datagen.tags;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.ItemMobSkull;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -12,15 +13,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 public class IafItemTags extends ItemTagsProvider {
-    public static TagKey<Item> CHARRED_BLOCK = createKey("charred_block");
-    public static TagKey<Item> WITHER_BONES = createForgeKey("bones/wither");
+    private final static String STORAGE_BLOCK_PATH = Tags.Items.STORAGE_BLOCKS.location().getPath();
+
+    public static TagKey<Item> CHARRED_BLOCKS = createKey("charred_blocks");
+    public static TagKey<Item> FROZEN_BLOCKS = createKey("frozen_blocks");
+    public static TagKey<Item> CRACKLED_BLOCKS = createKey("crackled_blocks");
+    public static TagKey<Item> DRAGON_SKULLS = createKey("dragon_skulls");
+    public static TagKey<Item> MOB_SKULLS = createKey("mob_skulls");
+    public static TagKey<Item> FIRE_DRAGON_SCALES = createKey("scales/dragon/fire");
+    public static TagKey<Item> ICE_DRAGON_SCALES = createKey("scales/dragon/ice");
+    public static TagKey<Item> LIGHTNING_DRAGON_SCALES = createKey("scales/dragon/lightning");
+    public static TagKey<Item> FIRE_DRAGON_SCALE_STORAGE_BLOCKS = createForgeKey(STORAGE_BLOCK_PATH + "/scales/dragon/fire");
+    public static TagKey<Item> ICE_DRAGON_SCALE_STORAGE_BLOCKS = createForgeKey(STORAGE_BLOCK_PATH + "/scales/dragon/ice");
+    public static TagKey<Item> LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS = createForgeKey(STORAGE_BLOCK_PATH + "/scales/dragon/lightning");
+    public static TagKey<Item> DRAGON_FOOD_MEAT = createKey("dragon_food_meat");
+
     public static TagKey<Item> COPPER_NUGGETS = createForgeKey("nuggets/copper");
+    public static TagKey<Item> WITHER_BONES = createForgeKey("bones/wither");
 
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
 
@@ -43,7 +57,17 @@ public class IafItemTags extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
-        copy(IafBlockTags.CHARRED_BLOCK, CHARRED_BLOCK);
+        copy(IafBlockTags.CHARRED_BLOCKS, CHARRED_BLOCKS);
+        copy(IafBlockTags.FROZEN_BLOCKS, FROZEN_BLOCKS);
+        copy(IafBlockTags.CRACKLED_BLOCKS, CRACKLED_BLOCKS);
+
+        tag(DRAGON_SKULLS)
+                .add(IafItemRegistry.DRAGON_SKULL_FIRE.get())
+                .add(IafItemRegistry.DRAGON_SKULL_ICE.get())
+                .add(IafItemRegistry.DRAGON_SKULL_LIGHTNING.get());
+
+        tag(MOB_SKULLS)
+                .addTag(DRAGON_SKULLS);
 
         tag(MAKE_ITEM_DROPS_FIREIMMUNE)
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_SWORD.get())
@@ -54,15 +78,12 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_HOE.get());
 
         tag(Tags.Items.INGOTS)
-                .add(IafItemRegistry.COPPER_INGOT.get())
+//                .add(IafItemRegistry.COPPER_INGOT.get())
                 .add(IafItemRegistry.GHOST_INGOT.get())
                 .add(IafItemRegistry.SILVER_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
-
-        tag(Tags.Items.INGOTS_COPPER)
-                .add(IafItemRegistry.COPPER_INGOT.get().asItem());
 
         tag(Tags.Items.NUGGETS)
                 .add(IafItemRegistry.COPPER_NUGGET.get())
@@ -87,25 +108,52 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.MYRMEX_DESERT_EGG.get())
                 .add(IafItemRegistry.MYRMEX_JUNGLE_EGG.get());
 
+        tag(FIRE_DRAGON_SCALE_STORAGE_BLOCKS)
+                .add(IafBlockRegistry.DRAGON_SCALE_RED.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_GREEN.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_BRONZE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_GRAY.get().asItem());
+
+        tag(ICE_DRAGON_SCALE_STORAGE_BLOCKS)
+                .add(IafBlockRegistry.DRAGON_SCALE_BLUE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_WHITE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_SAPPHIRE.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_SILVER.get().asItem());
+
+        tag(LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS)
+                .add(IafBlockRegistry.DRAGON_SCALE_ELECTRIC.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_AMYTHEST.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_COPPER.get().asItem())
+                .add(IafBlockRegistry.DRAGON_SCALE_BLACK.get().asItem());
+
         tag(Tags.Items.STORAGE_BLOCKS)
+                .addTag(FIRE_DRAGON_SCALE_STORAGE_BLOCKS)
+                .addTag(ICE_DRAGON_SCALE_STORAGE_BLOCKS)
+                .addTag(LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS)
                 .add(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get().asItem())
                 .add(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get().asItem())
                 .add(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get().asItem())
                 .add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem())
                 .add(IafBlockRegistry.SILVER_BLOCK.get().asItem())
-                .add(IafBlockRegistry.DRAGON_BONE_BLOCK.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_RED.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_GREEN.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_BRONZE.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_GRAY.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_BLUE.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_WHITE.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_SAPPHIRE.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_SILVER.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_ELECTRIC.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_AMYTHEST.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_COPPER.get().asItem())
-                .add(IafBlockRegistry.DRAGON_SCALE_BLACK.get().asItem());
+                .add(IafBlockRegistry.DRAGON_BONE_BLOCK.get().asItem());
+
+        tag(DRAGON_FOOD_MEAT)
+                // Farmer's Delight
+//                .addOptionalTag(new ResourceLocation("forge", "raw_fishes"))
+                .addOptionalTag(new ResourceLocation("forge", "raw_mutton"))
+                .addOptionalTag(new ResourceLocation("forge", "raw_pork"))
+                .addOptionalTag(new ResourceLocation("forge", "raw_chicken"))
+                .addOptionalTag(new ResourceLocation("forge", "raw_beef"))
+//                .addOptionalTag(new ResourceLocation("forge", "cooked_fishes"))
+                .addOptionalTag(new ResourceLocation("forge", "cooked_mutton"))
+                .addOptionalTag(new ResourceLocation("forge", "cooked_pork"))
+                .addOptionalTag(new ResourceLocation("forge", "cooked_chicken"))
+                .addOptionalTag(new ResourceLocation("forge", "cooked_beef"))
+                //
+                .add(Items.BEEF, Items.COOKED_BEEF)
+                .add(Items.CHICKEN, Items.COOKED_CHICKEN)
+                .add(Items.MUTTON, Items.COOKED_MUTTON)
+                .add(Items.PORKCHOP, Items.COOKED_PORKCHOP);
 
         tag(BREED_AMPITHERE)
                 .add(Items.COOKIE);
@@ -146,31 +194,28 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(Items.RABBIT)
                 .add(Items.COOKED_RABBIT);
 
-        TagKey<Item> fireDragonScales = createKey("scales/dragon/fire");
-        tag(fireDragonScales)
+        tag(FIRE_DRAGON_SCALES)
                 .add(IafItemRegistry.DRAGONSCALES_RED.get())
                 .add(IafItemRegistry.DRAGONSCALES_GREEN.get())
                 .add(IafItemRegistry.DRAGONSCALES_BRONZE.get())
                 .add(IafItemRegistry.DRAGONSCALES_GRAY.get());
 
-        TagKey<Item> iceDragonScales = createKey("scales/dragon/ice");
-        tag(iceDragonScales)
+        tag(ICE_DRAGON_SCALES)
                 .add(IafItemRegistry.DRAGONSCALES_BLUE.get())
                 .add(IafItemRegistry.DRAGONSCALES_WHITE.get())
                 .add(IafItemRegistry.DRAGONSCALES_SAPPHIRE.get())
                 .add(IafItemRegistry.DRAGONSCALES_SILVER.get());
 
-        TagKey<Item> lightningDragonScales = createKey("scales/dragon/lightning");
-        tag(lightningDragonScales)
+        tag(LIGHTNING_DRAGON_SCALES)
                 .add(IafItemRegistry.DRAGONSCALES_ELECTRIC.get())
                 .add(IafItemRegistry.DRAGONSCALES_AMYTHEST.get())
                 .add(IafItemRegistry.DRAGONSCALES_COPPER.get())
                 .add(IafItemRegistry.DRAGONSCALES_BLACK.get());
 
         tag(createKey("scales/dragon"))
-                .addTag(fireDragonScales)
-                .addTag(iceDragonScales)
-                .addTag(lightningDragonScales);
+                .addTag(FIRE_DRAGON_SCALES)
+                .addTag(ICE_DRAGON_SCALES)
+                .addTag(LIGHTNING_DRAGON_SCALES);
 
         tag(createKey("hearts"))
                 .add(IafItemRegistry.FIRE_DRAGON_HEART.get())
@@ -210,6 +255,8 @@ public class IafItemTags extends ItemTagsProvider {
                     case LEGS -> tag(Tags.Items.ARMORS_LEGGINGS).add(item);
                     case FEET -> tag(Tags.Items.ARMORS_BOOTS).add(item);
                 }
+            } else if (item instanceof ItemMobSkull) {
+                tag(MOB_SKULLS).add(item);
             }
 
             if (item instanceof TieredItem || item instanceof BowItem || item instanceof TridentItem) {

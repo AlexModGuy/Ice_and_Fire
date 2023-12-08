@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.datagen;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
+import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.google.common.collect.Sets;
@@ -20,7 +22,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -61,13 +65,6 @@ public class IafRecipes extends RecipeProvider {
                 .define('O', Tags.Items.OBSIDIAN)
                 .define('F', IafItemRegistry.AMPHITHERE_FEATHER.get())
                 .save(consumer);
-
-        CustomShaped.shaped(Items.CHARCOAL)
-                .pattern("BBB")
-                .pattern("BBB")
-                .pattern("BBB")
-                .define('B', IafBlockRegistry.ASH.get())
-                .save(consumer, location("ash_to_charcoal"));
 
         CustomShaped.shaped(IafItemRegistry.BLINDFOLD.get())
                 .pattern("SLS")
@@ -139,8 +136,8 @@ public class IafRecipes extends RecipeProvider {
                 .define('H', IafItemRegistry.CHAIN.get())
                 .define('T', IafItemRegistry.DEATHWORM_TOUNGE.get())
                 .save(consumer);
-        
-        armorSet(consumer, IafItemRegistry.DEATH_WORM_CHITIN_RED.get(), 
+
+        armorSet(consumer, IafItemRegistry.DEATH_WORM_CHITIN_RED.get(),
                 IafItemRegistry.DEATHWORM_RED_HELMET.get(),
                 IafItemRegistry.DEATHWORM_RED_CHESTPLATE.get(),
                 IafItemRegistry.DEATHWORM_RED_LEGGINGS.get(),
@@ -187,7 +184,191 @@ public class IafRecipes extends RecipeProvider {
                 , locationString("dragon_bone_block"), null
                 , locationString("dragonbone"), null);
 
-        wall(consumer, );
+        CustomShaped.shaped(IafBlockRegistry.DRAGON_BONE_BLOCK_WALL.get())
+                .pattern("BBB")
+                .pattern("BBB")
+                .define('B', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafItemRegistry.DRAGON_FLUTE.get())
+                .pattern("B  ")
+                .pattern(" B ")
+                .pattern("  I")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('B', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafItemRegistry.DRAGON_HORN.get())
+                .pattern("  B")
+                .pattern(" BB")
+                .pattern("IB ")
+                .define('I', Tags.Items.RODS_WOODEN)
+                .define('B', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DRAGON_ICE_SPIKES.get(), 4)
+                .pattern("I I")
+                .pattern("I I")
+                .define('I', IafBlockRegistry.DRAGON_ICE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.NEST.get(), 8)
+                .pattern("HHH")
+                .pattern("HBH")
+                .pattern("HHH")
+                .define('H', Blocks.HAY_BLOCK)
+                .define('B', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafItemRegistry.DRAGON_STAFF.get())
+                .pattern("S")
+                .pattern("T")
+                .pattern("T")
+                .define('T', Tags.Items.RODS_WOODEN)
+                .define('S', IafItemTags.DRAGON_SKULLS)
+                .save(consumer);
+
+        toolSet(consumer, IafItemRegistry.DRAGON_BONE.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.DRAGONBONE_SWORD.get(),
+                IafItemRegistry.DRAGONBONE_PICKAXE.get(),
+                IafItemRegistry.DRAGONBONE_AXE.get(),
+                IafItemRegistry.DRAGONBONE_SHOVEL.get(),
+                IafItemRegistry.DRAGONBONE_HOE.get()
+        );
+
+        CustomShaped.shaped(IafItemRegistry.DRAGON_BOW.get())
+                .pattern(" DS")
+                .pattern("W S")
+                .pattern(" DS")
+                .define('S', Tags.Items.STRING)
+                .define('W', IafItemTags.WITHER_BONES)
+                .define('D', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
+
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.FIRE_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get());
+        forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get(), IafItemRegistry.FIRE_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get());
+        forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.get());
+
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.ICE_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get());
+        forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get(), IafItemRegistry.ICE_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get());
+        forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_ICE_INPUT.get());
+
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get());
+        forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), IafItemRegistry.LIGHTNING_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get());
+        forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.get());
+
+        CustomShaped.shaped(IafItemRegistry.DRAGON_MEAL.get())
+                .pattern("BMB")
+                .pattern("MBM")
+                .pattern("BMB")
+                .define('B', Tags.Items.BONES)
+                .define('M', IafItemTags.DRAGON_FOOD_MEAT)
+                .save(consumer);
+
+        compact(consumer, IafItemRegistry.DRAGONSCALES_RED.get(), IafBlockRegistry.DRAGON_SCALE_RED.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_GREEN.get(), IafBlockRegistry.DRAGON_SCALE_GREEN.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_BRONZE.get(), IafBlockRegistry.DRAGON_SCALE_BRONZE.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_GRAY.get(), IafBlockRegistry.DRAGON_SCALE_GRAY.get());
+
+        compact(consumer, IafItemRegistry.DRAGONSCALES_BLUE.get(), IafBlockRegistry.DRAGON_SCALE_BLUE.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_WHITE.get(), IafBlockRegistry.DRAGON_SCALE_WHITE.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_SAPPHIRE.get(), IafBlockRegistry.DRAGON_SCALE_SAPPHIRE.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_SILVER.get(), IafBlockRegistry.DRAGON_SCALE_SILVER.get());
+
+        compact(consumer, IafItemRegistry.DRAGONSCALES_ELECTRIC.get(), IafBlockRegistry.DRAGON_SCALE_ELECTRIC.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_AMYTHEST.get(), IafBlockRegistry.DRAGON_SCALE_AMYTHEST.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_COPPER.get(), IafBlockRegistry.DRAGON_SCALE_COPPER.get());
+        compact(consumer, IafItemRegistry.DRAGONSCALES_BLACK.get(), IafBlockRegistry.DRAGON_SCALE_BLACK.get());
+
+        for (EnumDragonArmor type : EnumDragonArmor.values()) {
+            armorSet(consumer, type.armorMaterial.getRepairIngredient(),
+                    type.helmet.get(),
+                    type.chestplate.get(),
+                    type.leggings.get(),
+                    type.boots.get()
+            );
+        }
+
+        for (EnumSeaSerpent type : EnumSeaSerpent.values()) {
+            armorSet(consumer, type.armorMaterial.getRepairIngredient(),
+                    type.helmet.get(),
+                    type.chestplate.get(),
+                    type.leggings.get(),
+                    type.boots.get()
+            );
+        }
+
+        compact(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get());
+
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.DRAGONSTEEL_FIRE_SWORD.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_PICKAXE.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_AXE.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_SHOVEL.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_HOE.get()
+        );
+
+        armorSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_HELMET.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_CHESTPLATE.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_LEGGINGS.get(),
+                IafItemRegistry.DRAGONSTEEL_FIRE_BOOTS.get()
+        );
+
+        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_0.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_1.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_2.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_3.get()
+        );
+
+        compact(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get());
+
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.DRAGONSTEEL_ICE_SWORD.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_PICKAXE.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_AXE.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_SHOVEL.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_HOE.get()
+        );
+
+        armorSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_HELMET.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_CHESTPLATE.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_LEGGINGS.get(),
+                IafItemRegistry.DRAGONSTEEL_ICE_BOOTS.get()
+        );
+
+        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_0.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_1.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_2.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_3.get()
+        );
+
+        compact(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get());
+
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_SWORD.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_PICKAXE.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_AXE.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_SHOVEL.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_HOE.get()
+        );
+
+        armorSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_HELMET.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_CHESTPLATE.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_LEGGINGS.get(),
+                IafItemRegistry.DRAGONSTEEL_LIGHTNING_BOOTS.get()
+        );
+
+        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_0.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_1.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2.get(),
+                IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_3.get()
+        );
     }
 
     private void createShapeless(@NotNull final Consumer<FinishedRecipe> consumer) {
@@ -196,8 +377,12 @@ public class IafRecipes extends RecipeProvider {
                 .requires(Items.BOWL)
                 .save(consumer);
 
+        CustomShapeless.shapeless(Items.CHARCOAL)
+                .requires(IafBlockRegistry.ASH.get(), 9)
+                .save(consumer, location("ash_to_charcoal"));
+
         CustomShapeless.shapeless(IafBlockRegistry.ASH.get())
-                .requires(IafItemTags.CHARRED_BLOCK, 9)
+                .requires(IafItemTags.CHARRED_BLOCKS, 9)
                 .save(consumer);
 
         CustomShapeless.shapeless(IafItemRegistry.BESTIARY.get())
@@ -209,20 +394,36 @@ public class IafRecipes extends RecipeProvider {
                 .requires(IafItemRegistry.CHAIN.get())
                 .save(consumer);
 
-        // FIXME :: Remove copper ingots / nuggets
-        /*
         CustomShapeless.shapeless(Items.COPPER_INGOT)
                 .requires(IafItemTags.COPPER_NUGGETS, 9)
                 .save(consumer);
 
         CustomShapeless.shapeless(IafItemRegistry.COPPER_NUGGET.get(), 9)
                 .requires(Tags.Items.INGOTS_COPPER)
-                .save(consumer, recipeId("copper_ingot_to_nuggets"));
-         */
+                .save(consumer, location("copper_ingot_to_nuggets"));
 
         CustomShapeless.shapeless(IafBlockRegistry.COPPER_PILE.get())
                 .requires(IafItemTags.COPPER_NUGGETS, 2)
                 .save(consumer);
+
+        CustomShapeless.shapeless(IafBlockRegistry.DRAGON_ICE.get())
+                .requires(IafItemTags.FROZEN_BLOCKS, 9)
+                .save(consumer);
+
+        CustomShapeless.shapeless(Items.BONE_MEAL, 5)
+                .requires(IafItemTags.MOB_SKULLS)
+                .save(consumer, location("skull_to_bone_meal"));
+
+        CustomShapeless.shapeless(IafItemRegistry.DRAGONBONE_ARROW.get(), 5)
+                .requires(IafItemRegistry.DRAGON_BONE.get())
+                .requires(IafItemRegistry.WITHER_SHARD.get())
+                .save(consumer);
+    }
+
+    private void compact(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike unpacked, final ItemLike packed) {
+        nineBlockStorageRecipes(consumer, unpacked, packed
+                , locationString(ForgeRegistries.ITEMS.getKey(packed.asItem()).getPath()), null
+                , locationString(ForgeRegistries.ITEMS.getKey(unpacked.asItem()).getPath()), null);
     }
 
     private void toolSet(@NotNull final Consumer<FinishedRecipe> consumer, final TagKey<Item> material, final TagKey<Item> handle, final ItemLike... items) {
@@ -369,6 +570,10 @@ public class IafRecipes extends RecipeProvider {
                 .save(consumer);
     }
 
+    private void dragonArmorSet(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike material, final ItemLike... results) {
+        dragonArmorSet(consumer, Ingredient.of(material), results);
+    }
+
     private void dragonArmorSet(@NotNull final Consumer<FinishedRecipe> consumer, final TagKey<Item> tag, final ItemLike... results) {
         dragonArmorSet(consumer, Ingredient.of(tag), results);
     }
@@ -423,6 +628,36 @@ public class IafRecipes extends RecipeProvider {
                 .pattern("  #")
                 .pattern("## ")
                 .define('#', ingredient)
+                .save(consumer);
+    }
+
+    private void forgeBrick(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike brick, final TagKey<Item> scales, final ItemLike result) {
+        CustomShaped.shaped(result, 4)
+                .pattern("SBS")
+                .pattern("BSB")
+                .pattern("SBS")
+                .define('S', Ingredient.of(scales))
+                .define('B', brick)
+                .save(consumer);
+    }
+
+    private void forgeCore(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike brick, final ItemLike heart, final ItemLike result) {
+        CustomShaped.shaped(result)
+                .pattern("BBB")
+                .pattern("BHB")
+                .pattern("BBB")
+                .define('H', heart)
+                .define('B', brick)
+                .save(consumer);
+    }
+
+    private void forgeInput(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike brick, final TagKey<Item> material, final ItemLike result) {
+        CustomShaped.shaped(result)
+                .pattern("BIB")
+                .pattern("I I")
+                .pattern("BIB")
+                .define('I', Ingredient.of(material))
+                .define('B', brick)
                 .save(consumer);
     }
 

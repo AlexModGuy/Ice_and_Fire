@@ -36,10 +36,6 @@ public class IafFeatureBiomeModifier implements BiomeModifier {
     }
 
     public static Codec<IafFeatureBiomeModifier> makeCodec() {
-        return RecordCodecBuilder.create((config) -> {
-            return config.group(PlacedFeature.LIST_CODEC.fieldOf("features").forGetter((otherConfig) -> {
-                return otherConfig.features;
-            })).apply(config, IafFeatureBiomeModifier::new);
-        });
+        return RecordCodecBuilder.create(config -> config.group(PlacedFeature.LIST_CODEC.fieldOf("features").forGetter((otherConfig) -> otherConfig.features)).apply(config, IafFeatureBiomeModifier::new));
     }
 }

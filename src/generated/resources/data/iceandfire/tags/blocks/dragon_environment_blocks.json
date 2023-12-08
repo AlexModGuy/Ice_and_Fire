@@ -1,17 +1,7 @@
 {
   "values": [
-    "#iceandfire:charred_block",
-    "iceandfire:frozen_cobblestone",
-    "iceandfire:frozen_dirt",
-    "iceandfire:frozen_dirt_path",
-    "iceandfire:frozen_grass",
-    "iceandfire:frozen_gravel",
-    "iceandfire:frozen_stone",
-    "iceandfire:crackled_cobblestone",
-    "iceandfire:crackled_dirt",
-    "iceandfire:crackled_dirt_path",
-    "iceandfire:crackled_grass",
-    "iceandfire:crackled_grass",
-    "iceandfire:crackled_stone"
+    "#iceandfire:charred_blocks",
+    "#iceandfire:frozen_blocks",
+    "#iceandfire:crackled_blocks"
   ]
 }
