@@ -1,18 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "   ",
-    "FDF",
-    "   "
-  ],
   "key": {
-    "F": {
-      "tag": "forge:feathers"
-    },
     "D": {
       "item": "minecraft:iron_horse_armor"
+    },
+    "F": {
+      "tag": "forge:feathers"
     }
   },
+  "pattern": [
+    "FDF"
+  ],
   "result": {
     "item": "iceandfire:iron_hippogryph_armor"
   }

@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    },
+    {
+      "item": "iceandfire:copper_nugget"
+    }
+  ],
+  "result": {
+    "item": "minecraft:copper_ingot"
+  }
+}

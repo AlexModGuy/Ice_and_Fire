@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "item": "iceandfire:dragonsteel_ice_ingot"
+      "item": "iceandfire:dragonsteel_ice_block"
     }
   },
   "pattern": [

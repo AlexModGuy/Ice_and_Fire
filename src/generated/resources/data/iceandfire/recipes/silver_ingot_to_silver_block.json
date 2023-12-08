@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "item": "iceandfire:dragonsteel_lightning_block"
+      "item": "iceandfire:silver_ingot"
     }
   },
   "pattern": [
     "###",
     "###",
-    "# #"
+    "###"
   ],
   "result": {
-    "item": "iceandfire:dragonarmor_dragonsteel_lightning_body"
+    "item": "iceandfire:silver_block"
   }
 }

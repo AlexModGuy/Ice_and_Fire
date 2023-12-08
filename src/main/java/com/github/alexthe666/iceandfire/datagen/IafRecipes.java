@@ -82,6 +82,7 @@ public class IafRecipes extends RecipeProvider {
                 .define('S', Items.CHAIN)
                 .save(consumer);
 
+        // FIXME :: Currently uses `minecraft` namespace
         armorSet(consumer, Items.CHAIN,
                 Items.CHAINMAIL_HELMET,
                 Items.CHAINMAIL_CHESTPLATE,
@@ -93,7 +94,7 @@ public class IafRecipes extends RecipeProvider {
                 .pattern("S")
                 .pattern("E")
                 .pattern("W")
-                .define('W', IafItemTags.WITHER_BONES)
+                .define('W', IafItemTags.BONES_WITHER)
                 .define('S', IafItemRegistry.WITHER_SHARD.get())
                 .define('E', IafItemRegistry.COCKATRICE_EYE.get())
                 .save(consumer);
@@ -168,12 +169,38 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONARMOR_COPPER_3.get()
         );
 
+        dragonArmorSet(consumer, Tags.Items.STORAGE_BLOCKS_IRON,
+                IafItemRegistry.DRAGONARMOR_IRON_0.get(),
+                IafItemRegistry.DRAGONARMOR_IRON_1.get(),
+                IafItemRegistry.DRAGONARMOR_IRON_2.get(),
+                IafItemRegistry.DRAGONARMOR_IRON_3.get()
+        );
+
+        dragonArmorSet(consumer, IafItemTags.STORAGE_BLOCKS_SILVER,
+                IafItemRegistry.DRAGONARMOR_SILVER_0.get(),
+                IafItemRegistry.DRAGONARMOR_SILVER_1.get(),
+                IafItemRegistry.DRAGONARMOR_SILVER_2.get(),
+                IafItemRegistry.DRAGONARMOR_SILVER_3.get()
+        );
+
         dragonArmorSet(consumer, Tags.Items.STORAGE_BLOCKS_DIAMOND,
                 IafItemRegistry.DRAGONARMOR_DIAMOND_0.get(),
                 IafItemRegistry.DRAGONARMOR_DIAMOND_1.get(),
                 IafItemRegistry.DRAGONARMOR_DIAMOND_2.get(),
                 IafItemRegistry.DRAGONARMOR_DIAMOND_3.get()
         );
+
+        CustomShaped.shaped(IafItemRegistry.IRON_HIPPOGRYPH_ARMOR.get())
+                .pattern("FDF")
+                .define('F', Tags.Items.FEATHERS)
+                .define('D', Items.IRON_HORSE_ARMOR)
+                .save(consumer);
+
+        CustomShaped.shaped(IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR.get())
+                .pattern("FDF")
+                .define('F', Tags.Items.FEATHERS)
+                .define('D', Items.GOLDEN_HORSE_ARMOR)
+                .save(consumer);
 
         CustomShaped.shaped(IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR.get())
                 .pattern("FDF")
@@ -229,7 +256,7 @@ public class IafRecipes extends RecipeProvider {
                 .define('S', IafItemTags.DRAGON_SKULLS)
                 .save(consumer);
 
-        toolSet(consumer, IafItemRegistry.DRAGON_BONE.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.DRAGON_BONE.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.DRAGONBONE_SWORD.get(),
                 IafItemRegistry.DRAGONBONE_PICKAXE.get(),
                 IafItemRegistry.DRAGONBONE_AXE.get(),
@@ -242,19 +269,19 @@ public class IafRecipes extends RecipeProvider {
                 .pattern("W S")
                 .pattern(" DS")
                 .define('S', Tags.Items.STRING)
-                .define('W', IafItemTags.WITHER_BONES)
+                .define('W', IafItemTags.BONES_WITHER)
                 .define('D', IafItemRegistry.DRAGON_BONE.get())
                 .save(consumer);
 
-        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.FIRE_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get());
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.STORAGE_BLOCKS_SCALES_DRAGON_FIRE, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get());
         forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get(), IafItemRegistry.FIRE_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_FIRE_CORE_DISABLED.get());
         forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_FIRE_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_FIRE_INPUT.get());
 
-        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.ICE_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get());
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.STORAGE_BLOCKS_SCALES_DRAGON_ICE, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get());
         forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get(), IafItemRegistry.ICE_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_ICE_CORE_DISABLED.get());
         forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_ICE_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_ICE_INPUT.get());
 
-        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get());
+        forgeBrick(consumer, Items.STONE_BRICKS, IafItemTags.STORAGE_BLOCKS_SCALES_DRAGON_LIGHTNING, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get());
         forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), IafItemRegistry.LIGHTNING_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get());
         forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.get());
 
@@ -303,7 +330,7 @@ public class IafRecipes extends RecipeProvider {
 
         compact(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get());
 
-        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.DRAGONSTEEL_FIRE_SWORD.get(),
                 IafItemRegistry.DRAGONSTEEL_FIRE_PICKAXE.get(),
                 IafItemRegistry.DRAGONSTEEL_FIRE_AXE.get(),
@@ -318,7 +345,7 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONSTEEL_FIRE_BOOTS.get()
         );
 
-        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(),
+        dragonArmorSet(consumer, IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_0.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_1.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_FIRE_2.get(),
@@ -327,7 +354,7 @@ public class IafRecipes extends RecipeProvider {
 
         compact(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get());
 
-        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.DRAGONSTEEL_ICE_SWORD.get(),
                 IafItemRegistry.DRAGONSTEEL_ICE_PICKAXE.get(),
                 IafItemRegistry.DRAGONSTEEL_ICE_AXE.get(),
@@ -342,7 +369,7 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONSTEEL_ICE_BOOTS.get()
         );
 
-        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get(),
+        dragonArmorSet(consumer, IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_0.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_1.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_ICE_2.get(),
@@ -351,7 +378,7 @@ public class IafRecipes extends RecipeProvider {
 
         compact(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get());
 
-        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.DRAGONSTEEL_LIGHTNING_SWORD.get(),
                 IafItemRegistry.DRAGONSTEEL_LIGHTNING_PICKAXE.get(),
                 IafItemRegistry.DRAGONSTEEL_LIGHTNING_AXE.get(),
@@ -366,7 +393,7 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONSTEEL_LIGHTNING_BOOTS.get()
         );
 
-        dragonArmorSet(consumer, IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get(),
+        dragonArmorSet(consumer, IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_0.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_1.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2.get(),
@@ -462,12 +489,6 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONARMOR_GOLD_3.get()
         );
 
-        CustomShaped.shaped(IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR.get())
-                .pattern("FDF")
-                .define('F', Tags.Items.FEATHERS)
-                .define('D', Items.GOLDEN_HORSE_ARMOR)
-                .save(consumer);
-
         CustomShaped.shaped(IafBlockRegistry.GRAVEYARD_SOIL.get())
                 .pattern(" E ")
                 .pattern("ECE")
@@ -495,7 +516,7 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.MYRMEX_DESERT_BOOTS.get()
         );
 
-        toolSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.MYRMEX_DESERT_SWORD.get(),
                 IafItemRegistry.MYRMEX_DESERT_PICKAXE.get(),
                 IafItemRegistry.MYRMEX_DESERT_AXE.get(),
@@ -510,7 +531,7 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.MYRMEX_JUNGLE_BOOTS.get()
         );
 
-        toolSet(consumer, IafItemRegistry.MYRMEX_JUNGLE_CHITIN.get(), IafItemTags.WITHER_BONES,
+        toolSet(consumer, IafItemRegistry.MYRMEX_JUNGLE_CHITIN.get(), IafItemTags.BONES_WITHER,
                 IafItemRegistry.MYRMEX_JUNGLE_SWORD.get(),
                 IafItemRegistry.MYRMEX_JUNGLE_PICKAXE.get(),
                 IafItemRegistry.MYRMEX_JUNGLE_AXE.get(),
@@ -518,16 +539,17 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.MYRMEX_JUNGLE_HOE.get()
         );
 
+        compact(consumer, IafItemRegistry.SILVER_INGOT.get(), IafBlockRegistry.SILVER_BLOCK.get());
         compact(consumer, IafItemRegistry.SILVER_NUGGET.get(), IafItemRegistry.SILVER_INGOT.get());
 
-        armorSet(consumer, IafItemTags.SILVER_INGOTS,
+        armorSet(consumer, IafItemTags.INGOTS_SILVER,
                 IafItemRegistry.SILVER_HELMET.get(),
                 IafItemRegistry.SILVER_CHESTPLATE.get(),
                 IafItemRegistry.SILVER_LEGGINGS.get(),
                 IafItemRegistry.SILVER_BOOTS.get()
         );
 
-        toolSet(consumer, IafItemTags.SILVER_INGOTS, Tags.Items.RODS_WOODEN,
+        toolSet(consumer, IafItemTags.INGOTS_SILVER, Tags.Items.RODS_WOODEN,
                 IafItemRegistry.SILVER_SWORD.get(),
                 IafItemRegistry.SILVER_PICKAXE.get(),
                 IafItemRegistry.SILVER_AXE.get(),
@@ -560,15 +582,15 @@ public class IafRecipes extends RecipeProvider {
                 .save(consumer);
 
         CustomShapeless.shapeless(Items.COPPER_INGOT)
-                .requires(IafItemTags.COPPER_NUGGETS, 9)
-                .save(consumer);
+                .requires(IafItemRegistry.COPPER_NUGGET.get(), 9)
+                .save(consumer, location("copper_nuggets_to_ingot"));
 
         CustomShapeless.shapeless(IafItemRegistry.COPPER_NUGGET.get(), 9)
                 .requires(Tags.Items.INGOTS_COPPER)
                 .save(consumer, location("copper_ingot_to_nuggets"));
 
         CustomShapeless.shapeless(IafBlockRegistry.COPPER_PILE.get())
-                .requires(IafItemTags.COPPER_NUGGETS, 2)
+                .requires(IafItemTags.NUGGETS_COPPER, 2)
                 .save(consumer);
 
         CustomShapeless.shapeless(IafBlockRegistry.DRAGON_ICE.get())
@@ -622,9 +644,12 @@ public class IafRecipes extends RecipeProvider {
     }
 
     private void compact(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike unpacked, final ItemLike packed) {
+        String packedPath = ForgeRegistries.ITEMS.getKey(packed.asItem()).getPath();
+        String unpackedPath = ForgeRegistries.ITEMS.getKey(unpacked.asItem()).getPath();
+
         nineBlockStorageRecipes(consumer, unpacked, packed
-                , locationString(ForgeRegistries.ITEMS.getKey(packed.asItem()).getPath()), null
-                , locationString(ForgeRegistries.ITEMS.getKey(unpacked.asItem()).getPath()), null);
+                , locationString(unpackedPath + "_to_" + packedPath), null
+                , locationString(packedPath + "_to_" + packedPath), null);
     }
 
     private void toolSet(@NotNull final Consumer<FinishedRecipe> consumer, final TagKey<Item> material, final TagKey<Item> handle, final ItemLike... items) {
