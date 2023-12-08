@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:ingots/silver"
+      "item": "iceandfire:silver_ingot"
     }
   ],
   "result": {
-    "item": "iceandfire:silver_nugget",
-    "count": 9
+    "count": 9,
+    "item": "iceandfire:silver_nugget"
   }
 }

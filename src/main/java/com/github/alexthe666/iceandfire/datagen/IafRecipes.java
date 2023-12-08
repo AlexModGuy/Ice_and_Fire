@@ -291,12 +291,14 @@ public class IafRecipes extends RecipeProvider {
         }
 
         for (EnumSeaSerpent type : EnumSeaSerpent.values()) {
-            armorSet(consumer, type.armorMaterial.getRepairIngredient(),
+            armorSet(consumer, type.scale.get(),
                     type.helmet.get(),
                     type.chestplate.get(),
                     type.leggings.get(),
                     type.boots.get()
             );
+
+            compact(consumer, type.scale.get(), type.scaleBlock.get());
         }
 
         compact(consumer, IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get(), IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get());
@@ -431,7 +433,7 @@ public class IafRecipes extends RecipeProvider {
                 .save(consumer);
 
         for (EnumTroll type : EnumTroll.values()) {
-            armorSet(consumer, type.material.getRepairIngredient(),
+            armorSet(consumer, type.leather.get(),
                     type.chestplate.get(),
                     type.leggings.get(),
                     type.boots.get()
@@ -440,7 +442,7 @@ public class IafRecipes extends RecipeProvider {
             CustomShaped.shaped(type.helmet.get())
                     .pattern("TTT")
                     .pattern("U U")
-                    .define('T', type.material.getRepairIngredient())
+                    .define('T', type.leather.get())
                     .define('U', IafItemRegistry.TROLL_TUSK.get())
                     .save(consumer);
         }
@@ -486,8 +488,6 @@ public class IafRecipes extends RecipeProvider {
                 .define('R', IafItemRegistry.MYRMEX_JUNGLE_RESIN.get())
                 .save(consumer);
 
-        //
-
         armorSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(),
                 IafItemRegistry.MYRMEX_DESERT_HELMET.get(),
                 IafItemRegistry.MYRMEX_DESERT_CHESTPLATE.get(),
@@ -516,6 +516,23 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.MYRMEX_JUNGLE_AXE.get(),
                 IafItemRegistry.MYRMEX_JUNGLE_SHOVEL.get(),
                 IafItemRegistry.MYRMEX_JUNGLE_HOE.get()
+        );
+
+        compact(consumer, IafItemRegistry.SILVER_NUGGET.get(), IafItemRegistry.SILVER_INGOT.get());
+
+        armorSet(consumer, IafItemTags.SILVER_INGOTS,
+                IafItemRegistry.SILVER_HELMET.get(),
+                IafItemRegistry.SILVER_CHESTPLATE.get(),
+                IafItemRegistry.SILVER_LEGGINGS.get(),
+                IafItemRegistry.SILVER_BOOTS.get()
+        );
+
+        toolSet(consumer, IafItemTags.SILVER_INGOTS, Tags.Items.RODS_WOODEN,
+                IafItemRegistry.SILVER_SWORD.get(),
+                IafItemRegistry.SILVER_PICKAXE.get(),
+                IafItemRegistry.SILVER_AXE.get(),
+                IafItemRegistry.SILVER_SHOVEL.get(),
+                IafItemRegistry.SILVER_HOE.get()
         );
     }
 

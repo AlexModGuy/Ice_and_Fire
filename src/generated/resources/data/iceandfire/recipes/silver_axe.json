@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "SS",
-    "ST",
-    " T"
-  ],
   "key": {
-    "S": {
-      "tag": "forge:ingots/silver"
-    },
-    "T": {
+    "H": {
       "tag": "forge:rods/wooden"
+    },
+    "M": {
+      "tag": "forge:ingots/silver"
     }
   },
+  "pattern": [
+    "MM",
+    "MH",
+    " H"
+  ],
   "result": {
     "item": "iceandfire:silver_axe"
   }

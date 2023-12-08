@@ -19,6 +19,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class IafItemTags extends ItemTagsProvider {
     private final static String STORAGE_BLOCK_PATH = Tags.Items.STORAGE_BLOCKS.location().getPath();
+    private final static String INGOTS_PATH = Tags.Items.INGOTS.location().getPath();
+    private final static String NUGGETS_PATH = Tags.Items.NUGGETS.location().getPath();
+    private final static String BONES_PATH = Tags.Items.BONES.location().getPath();
+    private final static String ORES_PATH = Tags.Items.ORES.location().getPath();
 
     public static TagKey<Item> CHARRED_BLOCKS = createKey("charred_blocks");
     public static TagKey<Item> FROZEN_BLOCKS = createKey("frozen_blocks");
@@ -33,8 +37,10 @@ public class IafItemTags extends ItemTagsProvider {
     public static TagKey<Item> LIGHTNING_DRAGON_SCALE_STORAGE_BLOCKS = createForgeKey(STORAGE_BLOCK_PATH + "/scales/dragon/lightning");
     public static TagKey<Item> DRAGON_FOOD_MEAT = createKey("dragon_food_meat");
 
-    public static TagKey<Item> COPPER_NUGGETS = createForgeKey("nuggets/copper");
-    public static TagKey<Item> WITHER_BONES = createForgeKey("bones/wither");
+    public static TagKey<Item> SILVER_INGOTS = createForgeKey(INGOTS_PATH + "/silver");
+    public static TagKey<Item> COPPER_NUGGETS = createForgeKey(NUGGETS_PATH + "/copper");
+    public static TagKey<Item> SILVER_NUGGETS = createForgeKey(NUGGETS_PATH + "/silver");
+    public static TagKey<Item> WITHER_BONES = createForgeKey(BONES_PATH + "/wither");
 
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
 
@@ -265,13 +271,6 @@ public class IafItemTags extends ItemTagsProvider {
         });
 
         // Not sure if this should be in the forge namespace or not (or if the recipes should be using tags here)
-        tag(WITHER_BONES).add(IafItemRegistry.WITHERBONE.get());
-        tag(createForgeKey("ingots/dragonsteel_fire")).add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get());
-        tag(createForgeKey("ingots/dragonsteel_ice")).add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get());
-        tag(createForgeKey("ingots/dragonsteel_lightning")).add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
-        tag(createForgeKey("storage_blocks/dragonsteel_fire")).add(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get().asItem());
-        tag(createForgeKey("storage_blocks/dragonsteel_ice")).add(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get().asItem());
-        tag(createForgeKey("storage_blocks/dragonsteel_lightning")).add(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get().asItem());
         tag(createForgeKey("storage_blocks/fire_dragon_scale"))
                 .add(IafBlockRegistry.DRAGON_SCALE_RED.get().asItem())
                 .add(IafBlockRegistry.DRAGON_SCALE_GREEN.get().asItem())
@@ -288,14 +287,15 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafBlockRegistry.DRAGON_SCALE_COPPER.get().asItem())
                 .add(IafBlockRegistry.DRAGON_SCALE_BLACK.get().asItem());
 
-        // These are also used / created by other mods
-        tag(createForgeKey("ores/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
-        tag(createForgeKey("ores/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
-        tag(createForgeKey("ingots/silver")).add(IafItemRegistry.SILVER_INGOT.get().asItem());
+        // Might be used by other mods
+        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
+        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+        tag(SILVER_INGOTS).add(IafItemRegistry.SILVER_INGOT.get().asItem());
         tag(COPPER_NUGGETS).add(IafItemRegistry.COPPER_NUGGET.get());
-        tag(createForgeKey("nuggets/silver")).add(IafItemRegistry.SILVER_NUGGET.get());
-        tag(createForgeKey("storage_blocks/silver")).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
-        tag(createForgeKey("storage_blocks/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
+        tag(SILVER_NUGGETS).add(IafItemRegistry.SILVER_NUGGET.get());
+        tag(createForgeKey(STORAGE_BLOCK_PATH + "/silver")).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
+        tag(createForgeKey(STORAGE_BLOCK_PATH + "/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
+        tag(WITHER_BONES).add(IafItemRegistry.WITHERBONE.get());
     }
 
     private static TagKey<Item> createKey(final String name) {
