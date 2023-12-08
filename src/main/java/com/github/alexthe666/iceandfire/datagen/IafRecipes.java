@@ -556,6 +556,18 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.SILVER_SHOVEL.get(),
                 IafItemRegistry.SILVER_HOE.get()
         );
+
+        compact(consumer, IafItemRegistry.SAPPHIRE_GEM.get(), IafBlockRegistry.SAPPHIRE_BLOCK.get());
+
+        CustomShaped.shaped(IafItemRegistry.TIDE_TRIDENT.get())
+                .pattern("TTT")
+                .pattern("SDS")
+                .pattern(" B ")
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('S', IafItemTags.SCALES_SEA_SERPENT)
+                .define('T', IafItemRegistry.SERPENT_FANG.get())
+                .define('B', IafItemRegistry.DRAGON_BONE.get())
+                .save(consumer);
     }
 
     private void createShapeless(@NotNull final Consumer<FinishedRecipe> consumer) {
@@ -649,7 +661,7 @@ public class IafRecipes extends RecipeProvider {
 
         nineBlockStorageRecipes(consumer, unpacked, packed
                 , locationString(unpackedPath + "_to_" + packedPath), null
-                , locationString(packedPath + "_to_" + packedPath), null);
+                , locationString(packedPath + "_to_" + unpackedPath), null);
     }
 
     private void toolSet(@NotNull final Consumer<FinishedRecipe> consumer, final TagKey<Item> material, final TagKey<Item> handle, final ItemLike... items) {
