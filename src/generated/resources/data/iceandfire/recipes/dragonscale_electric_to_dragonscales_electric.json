@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragonscale_electric"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "iceandfire:dragonscales_electric"
+  }
+}

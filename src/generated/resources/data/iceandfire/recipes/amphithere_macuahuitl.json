@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "iceandfire:amphithere_feather"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "OXO",
+    "FXF",
+    "OSO"
+  ],
+  "result": {
+    "item": "iceandfire:amphithere_macuahuitl"
+  },
+  "show_notification": true
+}

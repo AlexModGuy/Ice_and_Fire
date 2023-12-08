@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": {
+      "item": "minecraft:diamond_horse_armor"
+    },
+    "F": {
+      "tag": "forge:feathers"
+    }
+  },
+  "pattern": [
+    "FDF"
+  ],
+  "result": {
+    "item": "iceandfire:diamond_hippogryph_armor"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "iceandfire:mob_skulls"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "item": "minecraft:bone_meal"
+  }
+}

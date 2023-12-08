@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "iceandfire:dragonsteel_lightning_block"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "# #"
+  ],
+  "result": {
+    "item": "iceandfire:dragonarmor_dragonsteel_lightning_body"
+  },
+  "show_notification": true
+}

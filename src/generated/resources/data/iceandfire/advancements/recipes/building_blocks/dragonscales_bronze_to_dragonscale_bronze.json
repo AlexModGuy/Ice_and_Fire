@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dragonscales_bronze": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragonscales_bronze"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iceandfire:dragonscales_bronze_to_dragonscale_bronze"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_dragonscales_bronze",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iceandfire:dragonscales_bronze_to_dragonscale_bronze"
+    ]
+  },
+  "sends_telemetry_event": false
+}

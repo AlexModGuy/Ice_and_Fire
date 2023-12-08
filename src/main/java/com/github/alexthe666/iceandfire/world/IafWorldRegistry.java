@@ -28,7 +28,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class IafWorldRegistry {
@@ -98,7 +100,7 @@ public class IafWorldRegistry {
     public static HashMap<String, Boolean> LOADED_FEATURES;
 
     static {
-        LOADED_FEATURES = new HashMap<String, Boolean>();
+        LOADED_FEATURES = new HashMap<>();
         LOADED_FEATURES.put("iceandfire:fire_lily", false);
         LOADED_FEATURES.put("iceandfire:frost_lily", false);
         LOADED_FEATURES.put("iceandfire:lightning_lily", false);
@@ -126,7 +128,11 @@ public class IafWorldRegistry {
         LOADED_FEATURES.put("iceandfire:spawn_wandering_cyclops", false);
     }
 
+    // Only a global variable because it's too bothersome to add it to the method call (alternative: method returns identifier or null)
+    private static List<String> ADDED_FEATURES;
+
     public static void addFeatures(Holder<Biome> biome, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+        ADDED_FEATURES = new ArrayList<>();
 
         if (safelyTestBiome(BiomeConfig.fireLilyBiomes, biome)) {
             addFeatureToBiome(IafPlacedFeatures.PLACED_FIRE_LILY, features, builder, GenerationStep.Decoration.VEGETAL_DECORATION);
@@ -212,6 +218,17 @@ public class IafWorldRegistry {
             addFeatureToBiome(IafPlacedFeatures.PLACED_SPAWN_STYMPHALIAN_BIRD, features, builder);
         }
 
+        if (!ADDED_FEATURES.isEmpty()) {
+            StringBuilder featureList = new StringBuilder();
+
+            for (String feature : ADDED_FEATURES) {
+                featureList.append("\n").append("\t- ").append(feature);
+            }
+
+            IceAndFire.LOGGER.debug("Added the following features to the biome [{}]: {}", biome.unwrapKey().get().location(), featureList);
+        }
+
+        ADDED_FEATURES = null;
     }
 
     private static void addFeatureToBiome(ResourceKey<PlacedFeature> feature, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
@@ -220,14 +237,14 @@ public class IafWorldRegistry {
 
     private static void addFeatureToBiome(ResourceKey<PlacedFeature> featureResource, HashMap<String, Holder<PlacedFeature>> features, ModifiableBiomeInfo.BiomeInfo.Builder builder, GenerationStep.Decoration step) {
         String identifier = featureResource.location().toString();
-
         Holder<PlacedFeature> feature = features.get(identifier);
+
         if (feature != null) {
-            builder.getGenerationSettings().getFeatures(step)
-                    .add(feature);
+            builder.getGenerationSettings().getFeatures(step).add(feature);
             LOADED_FEATURES.put(identifier, true);
+            ADDED_FEATURES.add(identifier);
         } else {
-            IceAndFire.LOGGER.warn("Couldn't find feature with identifier: " + identifier);
+            IceAndFire.LOGGER.warn("Feature [{}] could not be found", identifier);
         }
     }
 

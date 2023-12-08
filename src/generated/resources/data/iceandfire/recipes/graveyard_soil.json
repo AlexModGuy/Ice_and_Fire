@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:coarse_dirt"
+    },
+    "E": {
+      "item": "iceandfire:ectoplasm"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ECE",
+    " E "
+  ],
+  "result": {
+    "item": "iceandfire:graveyard_soil"
+  },
+  "show_notification": true
+}

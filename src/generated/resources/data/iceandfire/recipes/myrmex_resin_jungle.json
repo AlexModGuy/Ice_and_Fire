@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "iceandfire:myrmex_jungle_resin"
+    }
+  },
+  "pattern": [
+    "RR",
+    "RR"
+  ],
+  "result": {
+    "item": "iceandfire:myrmex_resin_jungle"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dragonscales_silver": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "iceandfire:dragonscales_silver"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iceandfire:dragonscales_silver_to_dragonscale_silver"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_dragonscales_silver",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iceandfire:dragonscales_silver_to_dragonscale_silver"
+    ]
+  },
+  "sends_telemetry_event": false
+}

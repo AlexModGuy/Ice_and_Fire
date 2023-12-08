@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "iceandfire:dragonscale_black"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "iceandfire:dragonscales_black"
+  }
+}

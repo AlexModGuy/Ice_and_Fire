@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "forge:rods/wooden"
+    },
+    "M": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "M",
+    "M",
+    "H"
+  ],
+  "result": {
+    "item": "iceandfire:copper_sword"
+  },
+  "show_notification": true
+}

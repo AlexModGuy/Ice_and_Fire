@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "forge:bones/wither"
+    },
+    "M": {
+      "item": "iceandfire:dragonbone"
+    }
+  },
+  "pattern": [
+    "M",
+    "H",
+    "H"
+  ],
+  "result": {
+    "item": "iceandfire:dragonbone_shovel"
+  },
+  "show_notification": true
+}

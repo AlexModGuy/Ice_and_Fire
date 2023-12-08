@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    },
+    {
+      "tag": "iceandfire:crackled_blocks"
+    }
+  ],
+  "result": {
+    "item": "minecraft:gravel"
+  }
+}

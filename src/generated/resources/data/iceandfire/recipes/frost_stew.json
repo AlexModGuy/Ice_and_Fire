@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:prismarine_crystals"
+    },
+    {
+      "item": "iceandfire:frost_lily"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:frost_stew"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "tag": "forge:storage_blocks/iron"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "# #"
+  ],
+  "result": {
+    "item": "iceandfire:dragonarmor_iron_body"
+  },
+  "show_notification": true
+}

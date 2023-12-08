@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "item": "iceandfire:dread_stone_bricks"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "D D",
+    "DDD"
+  ],
+  "result": {
+    "count": 8,
+    "item": "iceandfire:dread_stone_tile"
+  },
+  "show_notification": true
+}

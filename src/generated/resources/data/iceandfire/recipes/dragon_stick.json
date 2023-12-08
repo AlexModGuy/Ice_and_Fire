@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "iceandfire:dragon_skulls"
+    },
+    "T": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "S",
+    "T",
+    "T"
+  ],
+  "result": {
+    "item": "iceandfire:dragon_stick"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonforge_ice_brick"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "BIB",
+    "I I",
+    "BIB"
+  ],
+  "result": {
+    "item": "iceandfire:dragonforge_ice_input"
+  },
+  "show_notification": true
+}

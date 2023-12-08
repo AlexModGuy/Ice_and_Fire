@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonbone"
+    },
+    "I": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  B",
+    " BB",
+    "IB "
+  ],
+  "result": {
+    "item": "iceandfire:dragon_horn"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "iceandfire:dragonforge_lightning_brick"
+    },
+    "H": {
+      "item": "iceandfire:lightning_dragon_heart"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "BHB",
+    "BBB"
+  ],
+  "result": {
+    "item": "iceandfire:dragonforge_lightning_core_disabled"
+  },
+  "show_notification": true
+}

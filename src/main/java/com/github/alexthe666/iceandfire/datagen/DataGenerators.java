@@ -47,6 +47,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), blocktags);
         generator.addProvider(event.includeServer(), new IafItemTags(output, provider, blocktags.contentsGetter(), helper));
         generator.addProvider(event.includeServer(), new IafEntityTags(output, provider, helper));
+        generator.addProvider(event.includeServer(), new IafRecipes(output));
 
     }
 }

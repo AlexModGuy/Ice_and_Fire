@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "forge:bones/wither"
+    },
+    "M": {
+      "item": "iceandfire:myrmex_desert_chitin"
+    }
+  },
+  "pattern": [
+    "MM",
+    " H",
+    " H"
+  ],
+  "result": {
+    "item": "iceandfire:myrmex_desert_hoe"
+  },
+  "show_notification": true
+}

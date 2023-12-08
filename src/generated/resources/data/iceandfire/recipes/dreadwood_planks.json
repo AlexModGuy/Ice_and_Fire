@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "iceandfire:dreadwood_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "iceandfire:dreadwood_planks"
+  }
+}

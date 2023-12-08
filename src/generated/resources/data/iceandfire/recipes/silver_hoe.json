@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "forge:rods/wooden"
+    },
+    "M": {
+      "tag": "forge:ingots/silver"
+    }
+  },
+  "pattern": [
+    "MM",
+    " H",
+    " H"
+  ],
+  "result": {
+    "item": "iceandfire:silver_hoe"
+  },
+  "show_notification": true
+}

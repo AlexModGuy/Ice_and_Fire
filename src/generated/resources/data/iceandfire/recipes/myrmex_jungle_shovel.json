@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "forge:bones/wither"
+    },
+    "M": {
+      "item": "iceandfire:myrmex_jungle_chitin"
+    }
+  },
+  "pattern": [
+    "M",
+    "H",
+    "H"
+  ],
+  "result": {
+    "item": "iceandfire:myrmex_jungle_shovel"
+  },
+  "show_notification": true
+}
