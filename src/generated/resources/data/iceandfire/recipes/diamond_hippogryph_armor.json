@@ -9,9 +9,7 @@
     }
   },
   "pattern": [
-    "   ",
-    "FDF",
-    "   "
+    "FDF"
   ],
   "result": {
     "item": "iceandfire:diamond_hippogryph_armor"

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:rods/wooden"
+    },
+    "E": {
+      "item": "iceandfire:ectoplasm"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ECE",
+    " E "
+  ],
+  "result": {
+    "item": "iceandfire:ghost_chest"
+  }
+}

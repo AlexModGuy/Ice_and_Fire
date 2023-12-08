@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:nuggets/gold"
+    },
+    {
+      "tag": "forge:nuggets/gold"
+    }
+  ],
+  "result": {
+    "item": "iceandfire:gold_pile"
+  }
+}

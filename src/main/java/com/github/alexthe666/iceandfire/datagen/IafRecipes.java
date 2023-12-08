@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.google.common.collect.Sets;
@@ -12,10 +13,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -44,6 +42,11 @@ public class IafRecipes extends RecipeProvider {
     protected void buildCraftingRecipes(@NotNull final Consumer<FinishedRecipe> consumer) {
         createShaped(consumer);
         createShapeless(consumer);
+
+        smithing(consumer, IafItemRegistry.DRAGONBONE_SWORD.get(), IafItemRegistry.FIRE_DRAGON_BLOOD.get(), IafItemRegistry.DRAGONBONE_SWORD_FIRE.get());
+        smithing(consumer, IafItemRegistry.DRAGONBONE_SWORD.get(), IafItemRegistry.ICE_DRAGON_BLOOD.get(), IafItemRegistry.DRAGONBONE_SWORD_ICE.get());
+        smithing(consumer, IafItemRegistry.DRAGONBONE_SWORD.get(), IafItemRegistry.LIGHTNING_DRAGON_BLOOD.get(), IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING.get());
+        smithing(consumer, IafItemRegistry.DRAGONBONE_SWORD.get(), IafItemRegistry.GHOST_INGOT.get(), IafItemRegistry.GHOST_SWORD.get());
     }
 
     private void createShaped(@NotNull final Consumer<FinishedRecipe> consumer) {
@@ -173,9 +176,7 @@ public class IafRecipes extends RecipeProvider {
         );
 
         CustomShaped.shaped(IafItemRegistry.DIAMOND_HIPPOGRYPH_ARMOR.get())
-                .pattern("   ")
                 .pattern("FDF")
-                .pattern("   ")
                 .define('F', Tags.Items.FEATHERS)
                 .define('D', Items.DIAMOND_HORSE_ARMOR)
                 .save(consumer);
@@ -369,6 +370,153 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_2.get(),
                 IafItemRegistry.DRAGONARMOR_DRAGONSTEEL_LIGHTNING_3.get()
         );
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE.get(), 8)
+                .pattern("DDD")
+                .pattern("DSD")
+                .pattern("DDD")
+                .define('S', Tags.Items.STONE)
+                .define('D', IafItemRegistry.DREAD_SHARD.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_BRICKS.get(), 4)
+                .pattern("DD")
+                .pattern("DD")
+                .define('D', IafBlockRegistry.DREAD_STONE.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_BRICKS_CHISELED.get())
+                .pattern("D")
+                .pattern("D")
+                .define('D', IafBlockRegistry.DREAD_STONE_BRICKS_SLAB.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_FACE.get(), 8)
+                .pattern("DDD")
+                .pattern("DSD")
+                .pattern("DDD")
+                .define('S', Items.SKELETON_SKULL)
+                .define('D', IafBlockRegistry.DREAD_STONE_BRICKS.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_BRICKS_SLAB.get(), 6)
+                .pattern("DDD")
+                .define('D', IafBlockRegistry.DREAD_STONE_BRICKS.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_BRICKS_STAIRS.get(), 4)
+                .pattern("D  ")
+                .pattern("DD ")
+                .pattern("DDD")
+                .define('D', IafBlockRegistry.DREAD_STONE_BRICKS.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_STONE_TILE.get(), 8)
+                .pattern("DDD")
+                .pattern("D D")
+                .pattern("DDD")
+                .define('D', IafBlockRegistry.DREAD_STONE_BRICKS.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.DREAD_TORCH.get(), 4)
+                .pattern("D")
+                .pattern("S")
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('D', IafItemRegistry.DREAD_SHARD.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafItemRegistry.EARPLUGS.get())
+                .pattern("B B")
+                .define('B', ItemTags.PLANKS)
+                .save(consumer);
+
+        for (EnumTroll type : EnumTroll.values()) {
+            armorSet(consumer, type.material.getRepairIngredient(),
+                    type.chestplate.get(),
+                    type.leggings.get(),
+                    type.boots.get()
+            );
+
+            CustomShaped.shaped(type.helmet.get())
+                    .pattern("TTT")
+                    .pattern("U U")
+                    .define('T', type.material.getRepairIngredient())
+                    .define('U', IafItemRegistry.TROLL_TUSK.get())
+                    .save(consumer);
+        }
+
+        CustomShaped.shaped(IafBlockRegistry.GHOST_CHEST.get())
+                .pattern(" E ")
+                .pattern("ECE")
+                .pattern(" E ")
+                .define('C', Tags.Items.RODS_WOODEN)
+                .define('E', IafItemRegistry.ECTOPLASM.get())
+                .save(consumer);
+
+        dragonArmorSet(consumer, Tags.Items.STORAGE_BLOCKS_GOLD,
+                IafItemRegistry.DRAGONARMOR_GOLD_0.get(),
+                IafItemRegistry.DRAGONARMOR_GOLD_1.get(),
+                IafItemRegistry.DRAGONARMOR_GOLD_2.get(),
+                IafItemRegistry.DRAGONARMOR_GOLD_3.get()
+        );
+
+        CustomShaped.shaped(IafItemRegistry.GOLD_HIPPOGRYPH_ARMOR.get())
+                .pattern("FDF")
+                .define('F', Tags.Items.FEATHERS)
+                .define('D', Items.GOLDEN_HORSE_ARMOR)
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.GRAVEYARD_SOIL.get())
+                .pattern(" E ")
+                .pattern("ECE")
+                .pattern(" E ")
+                .define('C', Items.COARSE_DIRT)
+                .define('E', IafItemRegistry.ECTOPLASM.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.MYRMEX_DESERT_RESIN.get())
+                .pattern("RR")
+                .pattern("RR")
+                .define('R', IafItemRegistry.MYRMEX_DESERT_RESIN.get())
+                .save(consumer);
+
+        CustomShaped.shaped(IafBlockRegistry.MYRMEX_JUNGLE_RESIN.get())
+                .pattern("RR")
+                .pattern("RR")
+                .define('R', IafItemRegistry.MYRMEX_JUNGLE_RESIN.get())
+                .save(consumer);
+
+        //
+
+        armorSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(),
+                IafItemRegistry.MYRMEX_DESERT_HELMET.get(),
+                IafItemRegistry.MYRMEX_DESERT_CHESTPLATE.get(),
+                IafItemRegistry.MYRMEX_DESERT_LEGGINGS.get(),
+                IafItemRegistry.MYRMEX_DESERT_BOOTS.get()
+        );
+
+        toolSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.MYRMEX_DESERT_SWORD.get(),
+                IafItemRegistry.MYRMEX_DESERT_PICKAXE.get(),
+                IafItemRegistry.MYRMEX_DESERT_AXE.get(),
+                IafItemRegistry.MYRMEX_DESERT_SHOVEL.get(),
+                IafItemRegistry.MYRMEX_DESERT_HOE.get()
+        );
+
+        armorSet(consumer, IafItemRegistry.MYRMEX_JUNGLE_CHITIN.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_HELMET.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_CHESTPLATE.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_LEGGINGS.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_BOOTS.get()
+        );
+
+        toolSet(consumer, IafItemRegistry.MYRMEX_JUNGLE_CHITIN.get(), IafItemTags.WITHER_BONES,
+                IafItemRegistry.MYRMEX_JUNGLE_SWORD.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_PICKAXE.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_AXE.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_SHOVEL.get(),
+                IafItemRegistry.MYRMEX_JUNGLE_HOE.get()
+        );
     }
 
     private void createShapeless(@NotNull final Consumer<FinishedRecipe> consumer) {
@@ -418,6 +566,42 @@ public class IafRecipes extends RecipeProvider {
                 .requires(IafItemRegistry.DRAGON_BONE.get())
                 .requires(IafItemRegistry.WITHER_SHARD.get())
                 .save(consumer);
+
+        CustomShapeless.shapeless(IafBlockRegistry.DREAD_STONE_BRICKS_MOSSY.get())
+                .requires(Items.VINE)
+                .requires(IafBlockRegistry.DREAD_STONE_BRICKS.get())
+                .save(consumer);
+
+        CustomShapeless.shapeless(IafBlockRegistry.DREADWOOD_PLANKS.get(), 4)
+                .requires(IafBlockRegistry.DREADWOOD_LOG.get())
+                .save(consumer);
+
+        CustomShapeless.shapeless(IafItemRegistry.FIRE_STEW.get())
+                .requires(Items.BOWL)
+                .requires(Items.BLAZE_ROD)
+                .requires(IafBlockRegistry.FIRE_LILY.get())
+                .save(consumer);
+
+        CustomShapeless.shapeless(IafItemRegistry.FROST_STEW.get())
+                .requires(Items.BOWL)
+                .requires(Items.PRISMARINE_CRYSTALS)
+                .requires(IafBlockRegistry.FROST_LILY.get())
+                .save(consumer);
+
+        CustomShapeless.shapeless(IafBlockRegistry.GOLD_PILE.get())
+                .requires(Tags.Items.NUGGETS_GOLD, 2)
+                .save(consumer);
+
+        CustomShapeless.shapeless(Items.GRAVEL)
+                .requires(IafItemTags.CRACKLED_BLOCKS, 9)
+                .save(consumer, location("crackled_to_gravel"));
+    }
+
+    private void smithing(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike base, final ItemLike material, final Item result) {
+        // The `unlocks` doesn't really matter here since this generator doesn't generate the advancement .json
+        UpgradeRecipeBuilder.smithing(Ingredient.of(base), Ingredient.of(material), result)
+                .unlocks("has_" + ForgeRegistries.ITEMS.getKey(material.asItem()).getPath(), has(material))
+                .save(consumer, location(ForgeRegistries.ITEMS.getKey(result).getPath()));
     }
 
     private void compact(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike unpacked, final ItemLike packed) {
@@ -522,51 +706,51 @@ public class IafRecipes extends RecipeProvider {
 
     private void sword(@NotNull final Consumer<FinishedRecipe> consumer, final Ingredient material, final Ingredient handle, final ItemLike result) {
         CustomShaped.shaped(result)
-                .pattern("m")
-                .pattern("m")
-                .pattern("h")
-                .define('m', material)
-                .define('h', handle)
+                .pattern("M")
+                .pattern("M")
+                .pattern("H")
+                .define('M', material)
+                .define('H', handle)
                 .save(consumer);
     }
 
     private void pickaxe(@NotNull final Consumer<FinishedRecipe> consumer, final Ingredient material, final Ingredient handle, final ItemLike result) {
         CustomShaped.shaped(result)
-                .pattern("mmm")
-                .pattern(" h ")
-                .pattern(" h ")
-                .define('m', material)
-                .define('h', handle)
+                .pattern("MMM")
+                .pattern(" H ")
+                .pattern(" H ")
+                .define('M', material)
+                .define('H', handle)
                 .save(consumer);
     }
 
     private void axe(@NotNull final Consumer<FinishedRecipe> consumer, final Ingredient material, final Ingredient handle, final ItemLike result) {
         CustomShaped.shaped(result)
-                .pattern("mm")
-                .pattern("mh")
-                .pattern(" h")
-                .define('m', material)
-                .define('h', handle)
+                .pattern("MM")
+                .pattern("MH")
+                .pattern(" H")
+                .define('M', material)
+                .define('H', handle)
                 .save(consumer);
     }
 
     private void shovel(@NotNull final Consumer<FinishedRecipe> consumer, final Ingredient material, final Ingredient handle, final ItemLike result) {
         CustomShaped.shaped(result)
-                .pattern("m")
-                .pattern("h")
-                .pattern("h")
-                .define('m', material)
-                .define('h', handle)
+                .pattern("M")
+                .pattern("H")
+                .pattern("H")
+                .define('M', material)
+                .define('H', handle)
                 .save(consumer);
     }
 
     private void hoe(@NotNull final Consumer<FinishedRecipe> consumer, final Ingredient material, final Ingredient handle, final ItemLike result) {
         CustomShaped.shaped(result)
-                .pattern("mm")
-                .pattern(" h")
-                .pattern(" h")
-                .define('m', material)
-                .define('h', handle)
+                .pattern("MM")
+                .pattern(" H")
+                .pattern(" H")
+                .define('M', material)
+                .define('H', handle)
                 .save(consumer);
     }
 

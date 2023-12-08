@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "tag": "forge:bones/wither"
+    },
+    "M": {
+      "item": "iceandfire:myrmex_jungle_chitin"
+    }
+  },
+  "pattern": [
+    "MM",
+    "MH",
+    " H"
+  ],
+  "result": {
+    "item": "iceandfire:myrmex_jungle_axe"
+  }
+}

@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "h": {
+    "H": {
       "tag": "forge:bones/wither"
     },
-    "m": {
+    "M": {
       "item": "iceandfire:dragonsteel_fire_ingot"
     }
   },
   "pattern": [
-    "m",
-    "h",
-    "h"
+    "M",
+    "H",
+    "H"
   ],
   "result": {
     "item": "iceandfire:dragonsteel_fire_shovel"
