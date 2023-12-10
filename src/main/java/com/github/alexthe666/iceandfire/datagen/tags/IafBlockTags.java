@@ -99,6 +99,7 @@ public class IafBlockTags extends BlockTagsProvider {
         tag(DRAGON_BLOCK_BREAK_NO_DROPS)
                 .addTag(BlockTags.DIRT)
                 .addTag(Tags.Blocks.STONE)
+                .addTag(Tags.Blocks.COBBLESTONE)
                 .addTag(DRAGON_ENVIRONMENT_BLOCKS)
                 .add(Blocks.GRASS_BLOCK);
 
