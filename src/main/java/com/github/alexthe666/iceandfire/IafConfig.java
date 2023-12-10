@@ -273,8 +273,6 @@ public class IafConfig {
             chunkLoadSummonCrystal = ConfigHolder.SERVER.chunkLoadSummonCrystal.get();
             dangerousWorldGenDistanceLimit = ConfigHolder.SERVER.dangerousWorldGenDistanceLimit.get();
             dangerousWorldGenSeparationLimit = ConfigHolder.SERVER.dangerousWorldGenSeparationLimit.get();
-//            blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
-//            noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
             hippogryphFlightSpeedMod = ConfigHolder.SERVER.hippogryphFlightSpeedMod.get();
             hippocampusSwimSpeedMod = ConfigHolder.SERVER.hippocampusSwimSpeedMod.get();
