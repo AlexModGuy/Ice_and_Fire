@@ -28,6 +28,9 @@ public class IafBlockTags extends BlockTagsProvider {
     public static TagKey<Block> ICE_DRAGON_CAVE_ORES = createKey("ice_dragon_cave_ores");
     public static TagKey<Block> LIGHTNING_DRAGON_CAVE_ORES = createKey("lightning_dragon_cave_ores");
 
+    public static TagKey<Block> DRAGON_BLOCK_BREAK_BLACKLIST = createKey("dragon_block_break_blacklist");
+    public static TagKey<Block> DRAGON_BLOCK_BREAK_NO_DROPS = createKey("dragon_block_break_no_drops");
+
     public IafBlockTags(final DataGenerator generator, @Nullable final ExistingFileHelper existingFileHelper) {
         super(generator, IceAndFire.MODID, existingFileHelper);
     }
@@ -87,6 +90,17 @@ public class IafBlockTags extends BlockTagsProvider {
 
         tag(LIGHTNING_DRAGON_CAVE_ORES)
                 .add(Blocks.BUDDING_AMETHYST);
+
+        tag(DRAGON_BLOCK_BREAK_BLACKLIST)
+                .addTag(Tags.Blocks.CHESTS)
+                .add(Blocks.END_STONE)
+                .add(Blocks.IRON_BARS);
+
+        tag(DRAGON_BLOCK_BREAK_NO_DROPS)
+                .addTag(BlockTags.DIRT)
+                .addTag(Tags.Blocks.STONE)
+                .addTag(DRAGON_ENVIRONMENT_BLOCKS)
+                .add(Blocks.GRASS_BLOCK);
 
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(IafBlockRegistry.SILVER_ORE.get())

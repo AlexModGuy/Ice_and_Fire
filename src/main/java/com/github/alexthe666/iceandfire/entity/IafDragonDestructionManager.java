@@ -123,9 +123,9 @@ public class IafDragonDestructionManager {
         if (canBreakBlocks) {
             if (dragon.getDragonStage() <= 3) {
                 BlockPos.betweenClosedStream(center.offset(-x, -y, -z), center.offset(x, y, z)).forEach(position -> {
-                    Block block = level.getBlockState(position).getBlock();
+                    BlockState state = level.getBlockState(position);
 
-                    if (dragon.getRandom().nextFloat() * 3 > center.distSqr(position) && (block instanceof IDragonProof) && DragonUtils.canDragonBreak(block, dragon)) {
+                    if (dragon.getRandom().nextFloat() * 3 > center.distSqr(position) && (state.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(state, dragon)) {
                         level.destroyBlock(position, false);
                     }
 
@@ -209,7 +209,7 @@ public class IafDragonDestructionManager {
     private static void attackBlock(final Level level, final EntityDragonBase dragon, final BlockPos position) {
         BlockState state = level.getBlockState(position);
 
-        if (state.getBlock() instanceof IDragonProof || !DragonUtils.canDragonBreak(state.getBlock(), dragon)) {
+        if (state.getBlock() instanceof IDragonProof || !DragonUtils.canDragonBreak(state, dragon)) {
             return;
         }
 
@@ -244,7 +244,7 @@ public class IafDragonDestructionManager {
 
         BlockState stateAbove = level.getBlockState(position.above());
 
-        if (doPlaceBlock && transformed.getMaterial().isSolid() && stateAbove.getFluidState().isEmpty() && !stateAbove.canOcclude() && state.canOcclude() && DragonUtils.canDragonBreak(stateAbove.getBlock(), dragon)) {
+        if (doPlaceBlock && transformed.getMaterial().isSolid() && stateAbove.getFluidState().isEmpty() && !stateAbove.canOcclude() && state.canOcclude() && DragonUtils.canDragonBreak(stateAbove, dragon)) {
             level.setBlockAndUpdate(position.above(), elementalBlock.defaultBlockState());
         }
     }
@@ -271,7 +271,7 @@ public class IafDragonDestructionManager {
     private static void destroyBlocks(Level world, BlockPos center, int x, int y, int z, double radius2, Entity destroyer) {
         BlockPos.betweenClosedStream(center.offset(-x, -y, -z), center.offset(x, y, z)).forEach(pos -> {
             if (center.distSqr(pos) <= radius2) {
-                if (world.random.nextFloat() * 3 > (float) center.distSqr(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos).getBlock(), destroyer)) {
+                if (world.random.nextFloat() * 3 > (float) center.distSqr(pos) / radius2 && !(world.getBlockState(pos).getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(world.getBlockState(pos), destroyer)) {
                     world.destroyBlock(pos, false);
                 }
             }
