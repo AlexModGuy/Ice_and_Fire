@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.block.IDragonProof;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
@@ -1479,7 +1480,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         if (isBreakable(position, state, hardness, this)) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0.6F, 1, 0.6F));
             if (!level().isClientSide()) {
-                level().destroyBlock(position, random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance && DragonUtils.canDropFromDragonBlockBreak(state));
+                level().destroyBlock(position, !state.is(IafBlockTags.DRAGON_BLOCK_BREAK_NO_DROPS) && random.nextFloat() <= IafConfig.dragonBlockBreakingDropChance );
             }
         }
     }
@@ -1522,7 +1523,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 state.getFluidState().isEmpty() && !state.getShape(level(), pos).isEmpty() &&
                 state.getDestroySpeed(level(), pos) >= 0F &&
                 state.getDestroySpeed(level(), pos) <= hardness &&
-                DragonUtils.canDragonBreak(state.getBlock(), entity) && this.canDestroyBlock(pos, state);
+                DragonUtils.canDragonBreak(state, entity) && this.canDestroyBlock(pos, state);
     }
 
     @Override
@@ -2786,7 +2787,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean shouldBlockExplode(@NotNull Explosion explosionIn, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, BlockState blockStateIn, float explosionPower) {
-        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn.getBlock(), this);
+        return !(blockStateIn.getBlock() instanceof IDragonProof) && DragonUtils.canDragonBreak(blockStateIn, this);
     }
 
     public void tryScorchTarget() {

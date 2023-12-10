@@ -123,8 +123,6 @@ public class ServerConfig {
     public final ForgeConfigSpec.BooleanValue chunkLoadSummonCrystal;
     public ForgeConfigSpec.IntValue dangerousWorldGenDistanceLimit;
     public ForgeConfigSpec.IntValue dangerousWorldGenSeparationLimit;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBreakBlocks;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> noDropBreakBlocks;
     public final ForgeConfigSpec.DoubleValue dragonFlightSpeedMod;
     public final ForgeConfigSpec.DoubleValue hippogryphFlightSpeedMod;
     public final ForgeConfigSpec.DoubleValue hippocampusSwimSpeedMod;
@@ -171,12 +169,6 @@ public class ServerConfig {
         this.dragonGriefing = buildInt(builder, "Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default. This value is also affected by minecrafts mob griefing rule.");
         this.tamedDragonGriefing = buildBoolean(builder, "Tamed Dragon Griefing", "all", true, "True if tamed dragons can follow the griefing rules.");
         this.dragonBlockBreakingDropChance = buildDouble(builder, "Dragon Block Breaking Drop Chance", "all", 0.1F, 0.0F, 1.0F, "The percentage chance for a block to drop as an item when a dragon breaks it.");
-        blacklistedBreakBlocks = builder
-                .comment("Blocks that a dragon cannot break. Use the format like \"minecraft:chest\" or \"rats:block_of_cheese\" ")
-                .defineList("blacklistedBreakBlocks", Lists.newArrayList(), o -> o instanceof String);
-        noDropBreakBlocks = builder
-                .comment("Blocks that a dragon can break, but won't spawn drops for. Use the format like \"minecraft:stone\" or \"rats:block_of_cheese\" ")
-                .defineList("noDropBreakBlocks", Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block"), o -> o instanceof String);
         builder.pop();
         builder.push("Attributes");
         this.dragonEggTime = buildInt(builder, "Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");

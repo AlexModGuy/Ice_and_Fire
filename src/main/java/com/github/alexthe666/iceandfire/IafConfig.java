@@ -16,9 +16,6 @@ public class IafConfig {
     public static int generateDragonDenChance = 260;
     public static int generateDragonRoostChance = 480;
     public static int dragonDenGoldAmount = 4;
-    public static List<? extends String> blacklistedBreakBlocks = Lists.newArrayList();
-    public static List<? extends String> noDropBreakBlocks = Lists.newArrayList("minecraft:stone", "minecraft:dirt", "minecraft:grass_block");
-    public static boolean blacklistBreakBlocksIsWhiteList = false;
     public static boolean spawnGlaciers = true;
     public static int glacierSpawnChance = 4;
     public static int oreToStoneRatioForDragonCaves = 45;
@@ -276,8 +273,8 @@ public class IafConfig {
             chunkLoadSummonCrystal = ConfigHolder.SERVER.chunkLoadSummonCrystal.get();
             dangerousWorldGenDistanceLimit = ConfigHolder.SERVER.dangerousWorldGenDistanceLimit.get();
             dangerousWorldGenSeparationLimit = ConfigHolder.SERVER.dangerousWorldGenSeparationLimit.get();
-            blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
-            noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
+//            blacklistedBreakBlocks = ConfigHolder.SERVER.blacklistedBreakBlocks.get();
+//            noDropBreakBlocks = ConfigHolder.SERVER.noDropBreakBlocks.get();
             dragonFlightSpeedMod = ConfigHolder.SERVER.dragonFlightSpeedMod.get();
             hippogryphFlightSpeedMod = ConfigHolder.SERVER.hippogryphFlightSpeedMod.get();
             hippocampusSwimSpeedMod = ConfigHolder.SERVER.hippocampusSwimSpeedMod.get();

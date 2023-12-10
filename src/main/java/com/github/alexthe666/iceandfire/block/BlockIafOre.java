@@ -32,6 +32,8 @@ public class BlockIafOre extends Block {
         super.tryDropExperience(level, pos, heldItem, amount);
     }
 
+
+    // FIXME :: Unused -> popExperience(...)
     protected int getExperience(RandomSource rand) {
         if (this == IafBlockRegistry.SAPPHIRE_ORE.get()) {
             return Mth.nextInt(rand, 3, 7);

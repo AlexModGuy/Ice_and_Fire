@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.util;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.google.common.base.Predicate;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -29,15 +29,9 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DragonUtils {
-
-
-    private static final Map<Block, Boolean> BLOCK_CACHE = new HashMap<>();
-
     public static BlockPos getBlockInViewEscort(EntityDragonBase dragon) {
         BlockPos escortPos = dragon.getEscortPosition();
         BlockPos ground = dragon.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, escortPos);
@@ -323,21 +317,14 @@ public class DragonUtils {
         return (dragonBase.getHomeDimensionName() == null || getDimensionName(dragonBase.level()).equals(dragonBase.getHomeDimensionName()));
     }
 
-    public static boolean canDragonBreak(Block block, Entity entity) {
-
-        if (!ForgeEventFactory.getMobGriefingEvent(entity.level(), entity))
+    public static boolean canDragonBreak(final BlockState state, final Entity entity) {
+        if (!ForgeEventFactory.getMobGriefingEvent(entity.level(), entity)) {
             return false;
+        }
 
-        if (BLOCK_CACHE.containsKey(block))
-            return BLOCK_CACHE.get(block);
+        Block block = state.getBlock();
 
-        boolean value = block.getExplosionResistance() < 1200 &&
-            block != Blocks.END_STONE &&
-            block != Blocks.IRON_BARS &&
-            !isBlacklistedBlock(block);
-
-        BLOCK_CACHE.put(block, value);
-        return value;
+        return block.getExplosionResistance() < 1200 && !state.is(IafBlockTags.DRAGON_BLOCK_BREAK_BLACKLIST);
     }
 
     public static boolean hasSameOwner(TamableAnimal cockatrice, Entity entity) {
@@ -363,25 +350,6 @@ public class DragonUtils {
 
         return IafConfig.dragonGriefing < 2;
 
-    }
-
-    public static boolean isBlacklistedBlock(Block block) {
-        if (IafConfig.blacklistBreakBlocksIsWhiteList) {
-            for (String name : IafConfig.blacklistedBreakBlocks) {
-                //TODO: This might not work
-                if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(block).getNamespace())) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            for (String name : IafConfig.blacklistedBreakBlocks) {
-                if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(block).getNamespace())) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
     public static boolean canHostilesTarget(Entity entity) {
@@ -421,15 +389,6 @@ public class DragonUtils {
             return owner1.is(owner2);
         }
         return def;
-    }
-
-    public static boolean canDropFromDragonBlockBreak(BlockState state) {
-        for (String name : IafConfig.noDropBreakBlocks) {
-            if (name.equalsIgnoreCase(ForgeRegistries.BLOCKS.getKey(state.getBlock()).getNamespace())) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static boolean isDreadBlock(BlockState state) {
