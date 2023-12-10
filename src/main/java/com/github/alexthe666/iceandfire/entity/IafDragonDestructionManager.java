@@ -130,7 +130,7 @@ public class IafDragonDestructionManager {
                     }
 
                     if (dragon.getRandom().nextBoolean()) {
-                        attackBlock(level, dragon, position);
+                        attackBlock(level, dragon, position, state);
                     }
                 });
             } else {
@@ -206,9 +206,7 @@ public class IafDragonDestructionManager {
         }
     }
 
-    private static void attackBlock(final Level level, final EntityDragonBase dragon, final BlockPos position) {
-        BlockState state = level.getBlockState(position);
-
+    private static void attackBlock(final Level level, final EntityDragonBase dragon, final BlockPos position, final BlockState state) {
         if (state.getBlock() instanceof IDragonProof || !DragonUtils.canDragonBreak(state, dragon)) {
             return;
         }
@@ -247,6 +245,10 @@ public class IafDragonDestructionManager {
         if (doPlaceBlock && transformed.getMaterial().isSolid() && stateAbove.getFluidState().isEmpty() && !stateAbove.canOcclude() && state.canOcclude() && DragonUtils.canDragonBreak(stateAbove, dragon)) {
             level.setBlockAndUpdate(position.above(), elementalBlock.defaultBlockState());
         }
+    }
+
+    private static void attackBlock(final Level level, final EntityDragonBase dragon, final BlockPos position) {
+        attackBlock(level, dragon, position, level.getBlockState(position));
     }
 
     private static void applyDragonEffect(final LivingEntity target, final EntityDragonBase dragon, int statusDuration) {
