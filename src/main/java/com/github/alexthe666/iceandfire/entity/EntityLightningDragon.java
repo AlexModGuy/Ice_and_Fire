@@ -319,12 +319,17 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     @Override
-    protected Item getBloodItem() {
+    public Item getBloodItem() {
         return IafItemRegistry.LIGHTNING_DRAGON_BLOOD.get();
     }
 
     @Override
-    protected ItemLike getHeartItem() {
+    public Item getFleshItem() {
+        return IafItemRegistry.LIGHTNING_DRAGON_FLESH.get();
+    }
+
+    @Override
+    public ItemLike getHeartItem() {
         return IafItemRegistry.LIGHTNING_DRAGON_HEART.get();
     }
 
@@ -530,7 +535,7 @@ public class EntityLightningDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemStack getSkull() {
+    public ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_LIGHTNING.get());
     }
 

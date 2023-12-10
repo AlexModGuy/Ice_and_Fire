@@ -253,11 +253,6 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemLike getHeartItem() {
-        return IafItemRegistry.FIRE_DRAGON_HEART.get();
-    }
-
-    @Override
     protected float getBlockSpeedFactor() {
         // Disable soul sand slow down
         if (this.onSoulSpeedBlock()) {
@@ -563,12 +558,22 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemStack getSkull() {
+    public ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
     }
 
     @Override
-    protected Item getBloodItem() {
+    public Item getBloodItem() {
         return IafItemRegistry.FIRE_DRAGON_BLOOD.get();
+    }
+
+    @Override
+    public Item getFleshItem() {
+        return IafItemRegistry.FIRE_DRAGON_FLESH.get();
+    }
+
+    @Override
+    public ItemLike getHeartItem() {
+        return IafItemRegistry.FIRE_DRAGON_HEART.get();
     }
 }

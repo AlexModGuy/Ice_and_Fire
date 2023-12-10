@@ -679,7 +679,7 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemStack getSkull() {
+    public ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE.get());
     }
 
@@ -694,12 +694,17 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected Item getBloodItem() {
+    public Item getBloodItem() {
         return IafItemRegistry.ICE_DRAGON_BLOOD.get();
     }
 
     @Override
-    protected ItemLike getHeartItem() {
+    public Item getFleshItem() {
+        return IafItemRegistry.ICE_DRAGON_FLESH.get();
+    }
+
+    @Override
+    public ItemLike getHeartItem() {
         return IafItemRegistry.ICE_DRAGON_HEART.get();
     }
 }
