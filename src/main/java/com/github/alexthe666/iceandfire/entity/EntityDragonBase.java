@@ -1325,11 +1325,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     }
 
-    protected abstract ItemLike getHeartItem();
+    public abstract ItemLike getHeartItem();
 
-    protected abstract Item getBloodItem();
+    public abstract Item getBloodItem();
 
-    protected ItemStack getSkull() {
+    public abstract Item getFleshItem();
+
+    public ItemStack getSkull() {
         return ItemStack.EMPTY;
     }
 

@@ -51,6 +51,9 @@ public class IafItemTags extends ItemTagsProvider {
     // Logic
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
 
+    public static TagKey<Item> DRAGON_BLOODS = createKey("dragon_bloods");
+    public static TagKey<Item> DRAGON_HEARTS = createKey("dragon_hearts");
+
     public static TagKey<Item> BREED_AMPITHERE = createKey("breed_ampithere");
     public static TagKey<Item> BREED_HIPPOCAMPUS = createKey("breed_hippocampus");
     public static TagKey<Item> BREED_HIPPOGRYPH = createKey("breed_hippogryph");
@@ -89,6 +92,11 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_AXE.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_SHOVEL.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_HOE.get());
+
+        tag(DRAGON_BLOODS)
+                .add(IafItemRegistry.FIRE_DRAGON_BLOOD.get())
+                .add(IafItemRegistry.ICE_DRAGON_BLOOD.get())
+                .add(IafItemRegistry.LIGHTNING_DRAGON_BLOOD.get());
 
         tag(Tags.Items.INGOTS)
 //                .add(IafItemRegistry.COPPER_INGOT.get())
@@ -232,11 +240,10 @@ public class IafItemTags extends ItemTagsProvider {
                 .addTag(SCALES_DRAGON_ICE)
                 .addTag(SCALES_DRAGON_LIGHTNING);
 
-        tag(createKey("hearts"))
+        tag(DRAGON_HEARTS)
                 .add(IafItemRegistry.FIRE_DRAGON_HEART.get())
                 .add(IafItemRegistry.ICE_DRAGON_HEART.get())
-                .add(IafItemRegistry.LIGHTNING_DRAGON_HEART.get())
-                .add(IafItemRegistry.HYDRA_HEART.get());
+                .add(IafItemRegistry.LIGHTNING_DRAGON_HEART.get());
 
         IafItemRegistry.ITEMS.getEntries().forEach(registryObject -> {
             Item item = registryObject.get();
