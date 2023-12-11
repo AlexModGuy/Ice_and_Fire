@@ -13,7 +13,7 @@
       "heightmap": "WORLD_SURFACE_WG"
     },
     {
-      "type": "iceandfire:biome_custom"
+      "type": "minecraft:biome"
     }
   ]
 }
