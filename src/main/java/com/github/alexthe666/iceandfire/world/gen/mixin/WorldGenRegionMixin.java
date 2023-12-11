@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-/** Avoid log spam for dragon caves (since their size exceeds the writable worldgen area */
+/** Avoid log spam for dragon caves (some blocks can exceed the writable worldgen area due to their size) */
 @Mixin(WorldGenRegion.class)
 public class WorldGenRegionMixin {
     @Inject(method = "ensureCanWrite", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;logAndPauseIfInIde(Ljava/lang/String;)V", shift = At.Shift.BEFORE), cancellable = true)
