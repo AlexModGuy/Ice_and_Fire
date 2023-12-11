@@ -2,7 +2,7 @@
   "feature": "iceandfire:myrmex_hive_desert",
   "placement": [
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }

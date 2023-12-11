@@ -13,7 +13,7 @@
       "heightmap": "MOTION_BLOCKING"
     },
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "feature": "iceandfire:cyclops_cave",
   "placement": [
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }

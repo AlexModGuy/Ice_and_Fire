@@ -119,6 +119,7 @@ dependencies {
     // Debug
     implementation fg.deobf("curse.maven:atlasviewer-633577:4420382")
     implementation fg.deobf("curse.maven:mob-entity-path-visualizer-590716:4063117")
+    implementation fg.deobf("curse.maven:terralith-513688:4823693")
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }

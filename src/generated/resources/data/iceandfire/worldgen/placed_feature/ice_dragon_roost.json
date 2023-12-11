@@ -2,7 +2,7 @@
   "feature": "iceandfire:ice_dragon_roost",
   "placement": [
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }

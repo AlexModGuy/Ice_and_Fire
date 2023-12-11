@@ -95,6 +95,7 @@ public class IceAndFire {
         IafBlockRegistry.BLOCKS.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
+        IafPlacementFilterRegistry.PLACEMENT_MODIFIER_TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
         IafRecipeRegistry.RECIPE_TYPE.register(modBus);
         IafBannerPatterns.BANNERS.register(modBus);

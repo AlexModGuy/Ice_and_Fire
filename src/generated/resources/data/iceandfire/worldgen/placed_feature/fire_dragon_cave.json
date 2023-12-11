@@ -2,7 +2,7 @@
   "feature": "iceandfire:fire_dragon_cave",
   "placement": [
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }

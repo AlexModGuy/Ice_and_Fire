@@ -2,7 +2,7 @@
   "feature": "iceandfire:spawn_sea_serpent",
   "placement": [
     {
-      "type": "minecraft:biome"
+      "type": "iceandfire:biome_custom"
     }
   ]
 }
