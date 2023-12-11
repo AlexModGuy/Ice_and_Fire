@@ -2,7 +2,11 @@
   "feature": "iceandfire:fire_dragon_roost",
   "placement": [
     {
-      "type": "iceandfire:biome_custom"
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }
