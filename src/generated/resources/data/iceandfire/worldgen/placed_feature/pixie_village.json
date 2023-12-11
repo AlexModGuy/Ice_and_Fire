@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:pixie_village",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}

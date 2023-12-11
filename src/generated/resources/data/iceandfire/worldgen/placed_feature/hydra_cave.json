@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:hydra_cave",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}

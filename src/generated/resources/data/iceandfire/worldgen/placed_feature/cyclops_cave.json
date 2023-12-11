@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:cyclops_cave",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}

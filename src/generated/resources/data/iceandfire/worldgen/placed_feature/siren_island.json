@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:siren_island",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}

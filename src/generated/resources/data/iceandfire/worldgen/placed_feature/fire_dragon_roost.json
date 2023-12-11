@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:fire_dragon_roost",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}

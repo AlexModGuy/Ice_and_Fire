@@ -150,7 +150,7 @@ public class WorldGenFireDragonRoosts extends Feature<NoneFeatureConfiguration> 
                 }
             });
         }
-        return false;
+        return false; // FIXME :: Why false
     }
 
     private void transformState(LevelAccessor world, BlockPos blockpos, BlockState state) {

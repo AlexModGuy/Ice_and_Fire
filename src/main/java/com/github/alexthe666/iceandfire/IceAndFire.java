@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.loot.IafLootRegistry;
 import com.github.alexthe666.iceandfire.message.*;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
 import com.github.alexthe666.iceandfire.recipe.IafRecipeSerializers;
+import com.github.alexthe666.iceandfire.world.IafPlacementFilterRegistry;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.core.Registry;
@@ -115,6 +116,7 @@ public class IceAndFire {
         IafBlockRegistry.BLOCKS.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
+        IafPlacementFilterRegistry.PLACEMENT_MODIFIER_TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
         IafWorldRegistry.STRUCTURES.register(modBus);
         IafContainerRegistry.CONTAINERS.register(modBus);

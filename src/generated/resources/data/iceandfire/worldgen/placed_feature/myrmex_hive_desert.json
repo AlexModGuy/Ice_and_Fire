@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:myrmex_hive_desert",
+  "placement": [
+    {
+      "type": "iceandfire:biome_custom"
+    }
+  ]
+}
