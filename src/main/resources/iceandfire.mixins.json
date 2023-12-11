@@ -5,7 +5,7 @@
   "refmap": "iceandfire.refmap.json",
   "mixins": [
     "NoLakesInStructuresMixin",
-    "MuteSetBlockFarChunk"
+    "WorldGenRegionMixin"
   ],
   "client": [
   ],
