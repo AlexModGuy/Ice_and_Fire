@@ -52,6 +52,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
@@ -92,6 +93,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, Level worldIn) {
         super(type, worldIn);
+        setPathfindingMalus(BlockPathTypes.OPEN, 2.0f); // FIXME :: Death worms are trying to go upwards -> figure out why (or if this really helps)
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
         if (worldIn.isClientSide) {
@@ -119,14 +121,19 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTame()) {
                     return input instanceof Monster;
-                } else {
-                    return (IafConfig.deathWormAttackMonsters ?
-                            input instanceof LivingEntity && DragonUtils.isAlive(input) && !input.isInWater() :
-                            (input instanceof Animal || input instanceof Player)) &&
-                            DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase &&
-                            ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwnedBy(input)
-                            && !input.isInWater();
+                } else if (input != null) {
+                    if (input.isInWater() || !DragonUtils.isAlive(input) || isOwnedBy(input)) {
+                        return false;
+                    }
+
+                    if (input instanceof Player || input instanceof Animal) {
+                        return true;
+                    }
+
+                    return IafConfig.deathWormAttackMonsters;
                 }
+
+                return false;
             }
         }));
     }
@@ -666,7 +673,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         refreshDimensions();
         onUpdateParts();
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
-            LivingEntity target = DragonUtils.riderLookingAtEntity(this, (Player) this.getControllingPassenger(), 3);
+            LivingEntity target = DragonUtils.riderLookingAtEntity(this, this.getControllingPassenger(), 3);
             if (this.getAnimation() != ANIMATION_BITE) {
                 this.setAnimation(ANIMATION_BITE);
                 this.playSound(this.getScale() > 3 ? IafSoundRegistry.DEATHWORM_GIANT_ATTACK : IafSoundRegistry.DEATHWORM_ATTACK, 1, 1);
