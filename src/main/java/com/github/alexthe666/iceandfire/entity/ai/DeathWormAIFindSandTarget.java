@@ -22,6 +22,10 @@ public class DeathWormAIFindSandTarget extends Goal {
 
     @Override
     public boolean canUse() {
+        if (this.mob.getTarget() != null) {
+            return false;
+        }
+
         if (!this.mob.isInSand() || this.mob.isPassenger() || this.mob.isVehicle()) {
             return false;
         }
@@ -34,7 +38,7 @@ public class DeathWormAIFindSandTarget extends Goal {
              */) {
                 this.mob.getNavigation().stop();
             }
-            if (this.mob.getNavigation().isDone() && !this.mob.getMoveControl().hasWanted()) {
+            if (this.mob.getNavigation().isDone() /* && !this.mob.getMoveControl().hasWanted()*/) {
                 BlockPos vec3 = this.findSandTarget();
                 if (vec3 != null) {
                     this.mob.getMoveControl().setWantedPosition(vec3.getX(), vec3.getY(), vec3.getZ(), 1.0);

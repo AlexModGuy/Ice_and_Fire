@@ -49,13 +49,15 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
     }
 
     @Override
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
-        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(posVec31, posVec32, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
-        if (raytraceresult != null && raytraceresult.getType() == HitResult.Type.BLOCK) {
+    protected boolean canMoveDirectly(@NotNull final Vec3 start, @NotNull final Vec3 end) {
+        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
+
+        if (raytraceresult.getType() == HitResult.Type.BLOCK) {
             Vec3 vec3i = raytraceresult.getLocation();
             return mob.level().getBlockState(BlockPos.containing(vec3i)).is(BlockTags.SAND);
         }
-        return false;
+
+        return raytraceresult.getType() == HitResult.Type.MISS;
     }
 
     @Override
