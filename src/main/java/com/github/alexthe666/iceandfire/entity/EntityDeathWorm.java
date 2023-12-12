@@ -50,6 +50,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -91,6 +92,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, Level worldIn) {
         super(type, worldIn);
+        setPathfindingMalus(BlockPathTypes.OPEN, 2.0f); // FIXME :: Death worms are trying to go upwards -> figure out why (or if this really helps)
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
@@ -115,14 +117,19 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             public boolean apply(@Nullable LivingEntity input) {
                 if (EntityDeathWorm.this.isTame()) {
                     return input instanceof Monster;
-                } else {
-                    return (IafConfig.deathWormAttackMonsters ?
-                        input instanceof LivingEntity && DragonUtils.isAlive(input) && !input.isInWater() :
-                        (input instanceof Animal || input instanceof Player)) &&
-                        DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase &&
-                        ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwnedBy(input)
-                        && !input.isInWater();
+                } else if (input != null) {
+                    if (input.isInWater() || !DragonUtils.isAlive(input) || isOwnedBy(input)) {
+                        return false;
+                    }
+
+                    if (input instanceof Player || input instanceof Animal) {
+                        return true;
+                    }
+
+                    return IafConfig.deathWormAttackMonsters;
                 }
+
+                return false;
             }
         }));
     }

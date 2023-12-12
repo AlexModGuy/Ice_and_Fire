@@ -923,6 +923,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     }
 
+    /** Only called Server side */
     class SwimmingMoveHelper extends MoveControl {
         private final EntityHippocampus hippo = EntityHippocampus.this;
 
@@ -933,13 +934,13 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         @Override
         public void tick() {
             if (this.hippo.isVehicle()) {
-                double flySpeed = hippo.getRideSpeedModifier() * this.hippo.getAttributeValue(Attributes.MOVEMENT_SPEED);
-                Vec3 dragonVec = hippo.position();
-                Vec3 moveVec = new Vec3(wantedX, wantedY, wantedZ);
-                Vec3 normalized = moveVec.subtract(dragonVec).normalize();
-                double dist = dragonVec.distanceTo(moveVec);
-                hippo.setDeltaMovement(normalized.x * flySpeed, normalized.y * flySpeed, normalized.z * flySpeed);
-                if (dist > 2.5E-7) {
+                double speed = hippo.getRideSpeedModifier() * this.hippo.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                Vec3 position = hippo.position();
+                Vec3 targetPosition = new Vec3(wantedX, wantedY, wantedZ);
+                Vec3 normalized = targetPosition.subtract(position).normalize();
+                double distance = position.distanceTo(targetPosition);
+                hippo.setDeltaMovement(normalized.x * speed, normalized.y * speed, normalized.z * speed);
+                if (distance > 2.5E-7) {
                     float yaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(normalized.x, normalized.y));
                     hippo.setYRot(rotlerp(hippo.getYRot(), yaw, 5));
                     hippo.setSpeed((float) (speedModifier));

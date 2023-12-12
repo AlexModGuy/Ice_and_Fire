@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.BlockGetter;
@@ -53,16 +54,16 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return new Vec3(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ());
     }
 
+    @Override
+    protected boolean canMoveDirectly(@NotNull final Vec3 start, @NotNull final Vec3 end) {
+        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
 
-    /**
-     * Checks if the specified entity can safely walk to the specified location.
-     */
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
-        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(posVec31, posVec32, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
-        if (raytraceresult != null && raytraceresult.getType() == HitResult.Type.BLOCK) {
-            return mob.level.getBlockState(new BlockPos(raytraceresult.getLocation())).getMaterial() == Material.SAND;
+        if (raytraceresult.getType() == HitResult.Type.BLOCK) {
+            Vec3 vec3i = raytraceresult.getLocation();
+            return mob.level.getBlockState(new BlockPos(vec3i)).is(BlockTags.SAND);
         }
-        return false;
+
+        return raytraceresult.getType() == HitResult.Type.MISS;
     }
 
     @Override
