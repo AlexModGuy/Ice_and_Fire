@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.mojang.serialization.Codec;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
+public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
     private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.get().defaultBlockState();
     private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.get().defaultBlockState();
@@ -68,14 +69,13 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         RandomSource rand = context.random();
         BlockPos pos = context.origin();
         if (!small) {
-            if (rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)) {
+            if (rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos, "myrmex_hive")) {
                 return false;
             }
             if (MyrmexWorldData.get(worldIn.getLevel()) != null && MyrmexWorldData.get(worldIn.getLevel()).getNearestHive(pos, 200) != null) {
                 return false;
             }
         }
-        pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);
         if (!small && !worldIn.getFluidState(pos.below()).isEmpty()) {
             return false;
         }
@@ -520,6 +520,10 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
             }
             return list.get(rand.nextInt(list.size()));
         }
+    }
 
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
     }
 }

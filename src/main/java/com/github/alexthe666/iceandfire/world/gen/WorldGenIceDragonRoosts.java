@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.event.WorldGenUtils;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -29,7 +30,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.Random;
 
-public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
+public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
     public static ResourceLocation DRAGON_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_roost");
@@ -69,30 +70,28 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+
+        if (rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "dragon_roost")) {
             return false;
         }
-        if (!worldIn.getFluidState(worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).below()).isEmpty()) {
+
+        if (!worldIn.getFluidState(position.below()).isEmpty()) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
+
         isMale = new Random().nextBoolean();
-        int boulders = 0;
         int radius = 12 + rand.nextInt(8);
-        BlockPos finalPosition = position;
-        {
-            EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.get().create(worldIn.getLevel());
-            dragon.setGender(isMale);
-            dragon.growDragon(40 + radius);
-            dragon.setAgingDisabled(true);
-            dragon.setHealth(dragon.getMaxHealth());
-            dragon.setVariant(new Random().nextInt(4));
-            dragon.absMoveTo(position.getX() + 0.5, worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
-            dragon.homePos = new HomePosition(position, worldIn.getLevel());
-            dragon.hasHomePosition = true;
-            dragon.setHunger(50);
-            worldIn.addFreshEntity(dragon);
-        }
+        EntityDragonBase dragon = IafEntityRegistry.ICE_DRAGON.get().create(worldIn.getLevel());
+        dragon.setGender(isMale);
+        dragon.growDragon(40 + radius);
+        dragon.setAgingDisabled(true);
+        dragon.setHealth(dragon.getMaxHealth());
+        dragon.setVariant(new Random().nextInt(4));
+        dragon.absMoveTo(position.getX() + 0.5, worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).getY() + 1.5, position.getZ() + 0.5, rand.nextFloat() * 360, 0);
+        dragon.homePos = new HomePosition(position, worldIn.getLevel());
+        dragon.hasHomePosition = true;
+        dragon.setHunger(50);
+        worldIn.addFreshEntity(dragon);
 
         {
             int j = radius;
@@ -101,8 +100,8 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             float f = (j + k + l) * 0.333F + 0.5F;
 
             BlockPos.betweenClosedStream(position.offset(-j, k, -l), position.offset(j, 0, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                int yAdd = blockPos.getY() - finalPosition.getY();
-                if (blockPos.distSqr(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isEmptyBlock(blockPos.below())) {
+                int yAdd = blockPos.getY() - position.getY();
+                if (blockPos.distSqr(position) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isEmptyBlock(blockPos.below())) {
                     if (worldIn.isEmptyBlock(blockPos.above()))
                         worldIn.setBlock(blockPos, IafBlockRegistry.FROZEN_GRASS.get().defaultBlockState(), 2);
                     else
@@ -116,9 +115,9 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, 1, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) < f * f) {
+                if (blockPos.distSqr(position) < f * f) {
                     worldIn.setBlock(blockPos, rand.nextBoolean() ? IafBlockRegistry.FROZEN_GRAVEL.get().defaultBlockState() : IafBlockRegistry.FROZEN_DIRT.get().defaultBlockState(), 2);
-                } else if (blockPos.distSqr(finalPosition) == f * f) {
+                } else if (blockPos.distSqr(position) == f * f) {
                     worldIn.setBlock(blockPos, IafBlockRegistry.FROZEN_COBBLESTONE.get().defaultBlockState(), 2);
                 }
             });
@@ -131,7 +130,7 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos up = position.above(k - 1);
             BlockPos.betweenClosedStream(up.offset(-j, -k + 2, -l), up.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) <= f * f) {
+                if (blockPos.distSqr(position) <= f * f) {
                     worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 2);
                 }
             });
@@ -143,9 +142,9 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) <= f * f) {
-                    double dist = blockPos.distSqr(finalPosition) / (f * f);
-                    if (!worldIn.isEmptyBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
+                if (blockPos.distSqr(position) <= f * f) {
+                    double dist = blockPos.distSqr(position) / (f * f);
+                    if (!worldIn.isEmptyBlock(position) && rand.nextDouble() > dist * 0.5D) {
                         transformState(worldIn, blockPos, worldIn.getBlockState(blockPos));
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {
@@ -178,5 +177,10 @@ public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> {
             });
         }
         return true;
+    }
+
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
     }
 }

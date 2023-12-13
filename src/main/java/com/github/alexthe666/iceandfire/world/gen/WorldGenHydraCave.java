@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -30,7 +31,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
+public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
     public static final ResourceLocation HYDRA_CHEST = new ResourceLocation("iceandfire", "chest/hydra_cave");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
@@ -45,10 +46,11 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
         RandomSource rand = context.random();
         BlockPos position = context.origin();
         ChunkGenerator generator = context.chunkGenerator();
-        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+
+        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "hydra_cave")) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
+
         int i1 = 8;
         int i2 = i1 - 2;
         int dist = 6;
@@ -162,5 +164,10 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> {
             }
         }
         return isTouchingAir;
+    }
+
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
     }
 }

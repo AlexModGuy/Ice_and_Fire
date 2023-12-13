@@ -61,9 +61,7 @@ public class IceAndFire {
         channel = channel.clientAcceptedVersions(version::equals);
         version = PROTOCOL_VERSION;
         version.getClass();
-        NETWORK_WRAPPER = channel.serverAcceptedVersions(version::equals).networkProtocolVersion(() -> {
-            return PROTOCOL_VERSION;
-        }).simpleChannel();
+        NETWORK_WRAPPER = channel.serverAcceptedVersions(version::equals).networkProtocolVersion(() -> PROTOCOL_VERSION).simpleChannel();
     }
 
     public IceAndFire() {
@@ -94,6 +92,7 @@ public class IceAndFire {
         IafTabRegistry.TAB_REGISTER.register(modBus);
         IafEntityRegistry.ENTITIES.register(modBus);
         IafTileEntityRegistry.TYPES.register(modBus);
+        IafPlacementFilterRegistry.PLACEMENT_MODIFIER_TYPES.register(modBus);
         IafWorldRegistry.FEATURES.register(modBus);
         IafRecipeRegistry.RECIPE_TYPE.register(modBus);
         IafBannerPatterns.BANNERS.register(modBus);
@@ -163,9 +162,7 @@ public class IceAndFire {
     }
 
     private void setupClient(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            PROXY.clientInit();
-        });
+        event.enqueueWork(() -> PROXY.clientInit());
     }
 
     private void setupComplete(final FMLLoadCompleteEvent event) {

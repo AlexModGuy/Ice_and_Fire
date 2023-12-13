@@ -4,7 +4,9 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.util.ShapeBuilder;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -13,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -36,7 +39,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> {
+public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     public ResourceLocation DRAGON_CHEST;
     public ResourceLocation DRAGON_MALE_CHEST;
     public WorldGenCaveStalactites CEILING_DECO;
@@ -56,7 +59,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "dragon_cave", IafWorldData.FeatureType.UNDERGROUND)) {
             return false;
         }
         isMale = rand.nextBoolean();
@@ -216,7 +219,21 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         }
     }
 
-    abstract EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge);
+    private EntityDragonBase createDragon(final WorldGenLevel worldGen, final RandomSource random, final BlockPos position, int dragonAge) {
+        EntityDragonBase dragon = getType().create(worldGen.getLevel());
+        dragon.setGender(isMale);
+        dragon.growDragon(dragonAge);
+        dragon.setAgingDisabled(true);
+        dragon.setHealth(dragon.getMaxHealth());
+        dragon.setVariant(random.nextInt(4));
+        dragon.absMoveTo(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, random.nextFloat() * 360, 0);
+        dragon.setInSittingPose(true);
+        dragon.homePos = new HomePosition(position, worldGen.getLevel());
+        dragon.setHunger(50);
+        return dragon;
+    }
+
+    public abstract EntityType<? extends EntityDragonBase> getType();
 
     private static class SphereInfo {
         int radius;
@@ -226,5 +243,10 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
             this.radius = radius;
             this.pos = pos;
         }
+    }
+
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.UNDERGROUND;
     }
 }

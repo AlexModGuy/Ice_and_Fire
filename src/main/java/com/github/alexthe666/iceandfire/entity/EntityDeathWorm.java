@@ -98,6 +98,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, Level worldIn) {
         super(type, worldIn);
         setPathfindingMalus(BlockPathTypes.OPEN, 2.0f); // FIXME :: Death worms are trying to go upwards -> figure out why (or if this really helps)
+        setPathfindingMalus(BlockPathTypes.WATER, 4.0f);
+        setPathfindingMalus(BlockPathTypes.WATER_BORDER, 4.0f);
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
         if (worldIn.isClientSide) {

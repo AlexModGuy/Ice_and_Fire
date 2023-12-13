@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.util;
 
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -8,11 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -222,5 +222,17 @@ public class WorldUtil {
     public static boolean isInWorldHeight(final int yBlock, final Level world) {
         final DimensionType dimensionType = world.dimensionType();
         return yBlock > getDimensionMinHeight(dimensionType) && yBlock < getDimensionMaxHeight(dimensionType);
+    }
+
+    public static boolean canGenerate(int configChance, final WorldGenLevel level, final RandomSource random, final BlockPos origin, final String id, boolean checkFluid) {
+        boolean canGenerate = random.nextInt(configChance) == 0 && IafWorldRegistry.isFarEnoughFromSpawn(level, origin) && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id);
+
+        if (canGenerate && checkFluid) {
+            if (!level.getFluidState(origin.below()).isEmpty()) {
+                return false;
+            }
+        }
+
+        return canGenerate;
     }
 }
