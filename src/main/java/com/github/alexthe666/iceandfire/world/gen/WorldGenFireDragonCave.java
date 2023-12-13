@@ -9,19 +9,20 @@ import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.Random;
 
-public class WorldGenFireDragonCave extends WorldGenDragonCave {
+public class WorldGenFireDragonCave extends WorldGenDragonCave{
 
     public static ResourceLocation FIRE_DRAGON_CHEST = new ResourceLocation(IceAndFire.MODID, "chest/fire_dragon_female_cave");
     public static ResourceLocation FIRE_DRAGON_CHEST_MALE = new ResourceLocation(IceAndFire.MODID, "chest/fire_dragon_male_cave");
 
-    public WorldGenFireDragonCave(Codec<NoneFeatureConfiguration> configFactoryIn) {
-        super(configFactoryIn);
+    public WorldGenFireDragonCave(final Codec<NoneFeatureConfiguration> configuration) {
+        super(configuration);
         DRAGON_CHEST = FIRE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = FIRE_DRAGON_CHEST_MALE;
         CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.CHARRED_STONE.get(), 3);

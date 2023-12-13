@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -20,10 +21,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.Random;
 
-public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
-
-    private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-
+public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     public WorldGenPixieVillage(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
@@ -33,10 +31,11 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.spawnPixies || rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
+
+        if (rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
+
         int maxRoads = IafConfig.pixieVillageSize + rand.nextInt(5);
         BlockPos buildPosition = position;
         int placedRoads = 0;
@@ -55,26 +54,15 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
                     Direction houseDir = rand.nextBoolean() ? buildingDirection.getClockWise() : buildingDirection.getCounterClockWise();
                     BlockState houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.get().defaultBlockState();
                     int houseColor = rand.nextInt(5);
-                    switch (houseColor) {
-                        case 0:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                        case 1:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                        case 2:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                        case 3:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_BIRCH.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                        case 4:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_SPRUCE.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                        case 5:
-                            houseState = IafBlockRegistry.PIXIE_HOUSE_DARK_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
-                            break;
-                    }
+                    houseState = switch (houseColor) {
+                        case 0 -> IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_RED.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        case 1 -> IafBlockRegistry.PIXIE_HOUSE_MUSHROOM_BROWN.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        case 2 -> IafBlockRegistry.PIXIE_HOUSE_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        case 3 -> IafBlockRegistry.PIXIE_HOUSE_BIRCH.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        case 4 -> IafBlockRegistry.PIXIE_HOUSE_SPRUCE.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        case 5 -> IafBlockRegistry.PIXIE_HOUSE_DARK_OAK.get().defaultBlockState().setValue(BlockPixieHouse.FACING, houseDir.getOpposite());
+                        default -> houseState;
+                    };
                     EntityPixie pixie = IafEntityRegistry.PIXIE.get().create(worldIn.getLevel());
                     pixie.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(buildPosition2.above()), MobSpawnType.SPAWNER, null, null);
                     pixie.setPos(buildPosition2.getX(), buildPosition2.getY() + 2, buildPosition2.getZ());
@@ -93,5 +81,10 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> {
         }
 
         return true;
+    }
+
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
     }
 }

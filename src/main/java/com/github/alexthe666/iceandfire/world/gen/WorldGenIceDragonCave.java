@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -17,13 +18,11 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import java.util.Random;
 
 public class WorldGenIceDragonCave extends WorldGenDragonCave {
-
     public static ResourceLocation ICE_DRAGON_CHEST = new ResourceLocation(IceAndFire.MODID, "chest/ice_dragon_female_cave");
     public static ResourceLocation ICE_DRAGON_CHEST_MALE = new ResourceLocation(IceAndFire.MODID, "chest/ice_dragon_male_cave");
 
-
-    public WorldGenIceDragonCave(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public WorldGenIceDragonCave(final Codec<NoneFeatureConfiguration> configuration) {
+        super(configuration);
         DRAGON_CHEST = ICE_DRAGON_CHEST;
         DRAGON_MALE_CHEST = ICE_DRAGON_CHEST_MALE;
         CEILING_DECO = new WorldGenCaveStalactites(IafBlockRegistry.FROZEN_STONE.get(), 3);

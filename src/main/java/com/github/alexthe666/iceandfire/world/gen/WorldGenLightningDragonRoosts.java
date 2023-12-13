@@ -41,18 +41,15 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
         WorldGenLevel worldIn = context.level();
         Random rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateDragonRoosts || rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonRoostChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "dragon_roost")) {
             return false;
         }
         if (!worldIn.getFluidState(worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position).below()).isEmpty()) {
             return false;
         }
         isMale = new Random().nextBoolean();
-        int boulders = 0;
         int radius = 12 + rand.nextInt(8);
-        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
         worldIn.setBlock(position, Blocks.AIR.defaultBlockState(), 2);
-        BlockPos finalPosition = position;
         if (!worldIn.isClientSide()) {
             EntityDragonBase dragon = IafEntityRegistry.LIGHTNING_DRAGON.get().create(worldIn.getLevel());
             dragon.setGender(isMale);
@@ -74,8 +71,8 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.betweenClosedStream(position.offset(-j, k, -l), position.offset(j, 0, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                int yAdd = blockPos.getY() - finalPosition.getY();
-                if (blockPos.distSqr(finalPosition) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isEmptyBlock(blockPos.below())) {
+                int yAdd = blockPos.getY() - position.getY();
+                if (blockPos.distSqr(position) <= f * f && yAdd < 2 + rand.nextInt(k) && !worldIn.isEmptyBlock(blockPos.below())) {
                     if (worldIn.isEmptyBlock(blockPos.above()))
                         worldIn.setBlock(blockPos, IafBlockRegistry.CRACKLED_DIRT.get().defaultBlockState(), 2);
                     else
@@ -89,9 +86,9 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, 1, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) < f * f) {
+                if (blockPos.distSqr(position) < f * f) {
                     worldIn.setBlock(blockPos, rand.nextBoolean() ? IafBlockRegistry.CRACKLED_GRAVEL.get().defaultBlockState() : IafBlockRegistry.CRACKLED_DIRT.get().defaultBlockState(), 2);
-                } else if (blockPos.distSqr(finalPosition) == f * f) {
+                } else if (blockPos.distSqr(position) == f * f) {
                     worldIn.setBlock(blockPos, IafBlockRegistry.CRACKLED_COBBLESTONE.get().defaultBlockState(), 2);
                 }
             });
@@ -104,7 +101,7 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos up = position.above(k - 1);
             BlockPos.betweenClosedStream(up.offset(-j, -k + 2, -l), up.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) <= f * f) {
+                if (blockPos.distSqr(position) <= f * f) {
                     worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 2);
                 }
             });
@@ -116,9 +113,9 @@ public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfigurat
             int l = radius;
             float f = (j + k + l) * 0.333F + 0.5F;
             BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, k, l)).map(BlockPos::immutable).forEach(blockPos -> {
-                if (blockPos.distSqr(finalPosition) <= f * f) {
-                    double dist = blockPos.distSqr(finalPosition) / (f * f);
-                    if (!worldIn.isEmptyBlock(finalPosition) && rand.nextDouble() > dist * 0.5D) {
+                if (blockPos.distSqr(position) <= f * f) {
+                    double dist = blockPos.distSqr(position) / (f * f);
+                    if (!worldIn.isEmptyBlock(position) && rand.nextDouble() > dist * 0.5D) {
                         transformState(worldIn, blockPos, worldIn.getBlockState(blockPos));
                     }
                     if (dist > 0.5D && rand.nextInt(1000) == 0) {

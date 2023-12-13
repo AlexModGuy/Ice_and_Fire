@@ -178,15 +178,13 @@ public class IafWorldRegistry {
                 () -> new SpawnWanderingCyclops(NoneFeatureConfiguration.CODEC));
     }
 
-    private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(String name,
-                                                                                                     Supplier<? extends F> supplier) {
+    private static <C extends FeatureConfiguration, F extends Feature<C>> RegistryObject<F> register(final String name, final Supplier<? extends F> supplier) {
         return FEATURES.register(name, supplier);
     }
 
     private static HeightRangePlacement maxHeight(int max) {
         return HeightRangePlacement.uniform(VerticalAnchor.bottom(), absolute(max));
     }
-
     private static HeightRangePlacement minMaxHeight(int min, int max) {
         return HeightRangePlacement.uniform(absolute(min), absolute(max));
     }
@@ -202,6 +200,10 @@ public class IafWorldRegistry {
 
     private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
         return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE), BiomeFilter.biome());
+    };
+
+    private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimpleCave = (name, feat) -> {
+        return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE), CustomBiomeFilter.biome());
     };
 
     public static void registerConfiguredFeatures() {
@@ -250,9 +252,9 @@ public class IafWorldRegistry {
         FIRE_DRAGON_ROOST_CF = registerSimple.apply("fire_dragon_roost", FIRE_DRAGON_ROOST.get());
         ICE_DRAGON_ROOST_CF = registerSimple.apply("ice_dragon_roost", ICE_DRAGON_ROOST.get());
         LIGHTNING_DRAGON_ROOST_CF = registerSimple.apply("lightning_dragon_roost", LIGHTNING_DRAGON_ROOST.get());
-        FIRE_DRAGON_CAVE_CF = registerSimple.apply("fire_dragon_cave", FIRE_DRAGON_CAVE.get());
-        ICE_DRAGON_CAVE_CF = registerSimple.apply("ice_dragon_cave", ICE_DRAGON_CAVE.get());
-        LIGHTNING_DRAGON_CAVE_CF = registerSimple.apply("lightning_dragon_cave", LIGHTNING_DRAGON_CAVE.get());
+        FIRE_DRAGON_CAVE_CF = registerSimpleCave.apply("fire_dragon_cave", FIRE_DRAGON_CAVE.get());
+        ICE_DRAGON_CAVE_CF = registerSimpleCave.apply("ice_dragon_cave", ICE_DRAGON_CAVE.get());
+        LIGHTNING_DRAGON_CAVE_CF = registerSimpleCave.apply("lightning_dragon_cave", LIGHTNING_DRAGON_CAVE.get());
 
         CYCLOPS_CAVE_CF = registerSimple.apply("cyclops_cave", CYCLOPS_CAVE.get());
         PIXIE_VILLAGE_CF = registerSimple.apply("pixie_village", PIXIE_VILLAGE.get());
@@ -306,26 +308,20 @@ public class IafWorldRegistry {
         BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
     }
 
-    public static boolean isFarEnoughFromSpawn(LevelAccessor world, BlockPos pos) {
-        LevelData spawnPoint = world.getLevelData();
-        BlockPos spawnRelative = new BlockPos(spawnPoint.getXSpawn(), pos.getY(), spawnPoint.getYSpawn());
 
-        boolean spawnCheck = !spawnRelative.closerThan(pos, IafConfig.dangerousWorldGenDistanceLimit);
-        return spawnCheck;
+    public static boolean isFarEnoughFromSpawn(final LevelAccessor level, final BlockPos position) {
+        LevelData spawnPoint = level.getLevelData();
+        BlockPos spawnRelative = new BlockPos(spawnPoint.getXSpawn(), position.getY(), spawnPoint.getYSpawn());
+        return !spawnRelative.closerThan(position, IafConfig.dangerousWorldGenDistanceLimit);
     }
 
-    public static boolean isFarEnoughFromDangerousGen(ServerLevelAccessor world, BlockPos pos) {
-        boolean canGen = true;
-        IafWorldData data = IafWorldData.get(world.getLevel());
-        if (data != null) {
-            BlockPos last = data.lastGeneratedDangerousStructure;
-            canGen = last.distSqr(pos) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
-            if (canGen) {
-                data.setLastGeneratedDangerousStructure(pos);
-            }
+    public static boolean isFarEnoughFromDangerousGen(final ServerLevelAccessor level, final BlockPos position, final String id) {
+        return isFarEnoughFromDangerousGen(level, position, id, IafWorldData.FeatureType.SURFACE);
+    }
 
-        }
-        return canGen;
+    public static boolean isFarEnoughFromDangerousGen(final ServerLevelAccessor level, final BlockPos position, final String id, final IafWorldData.FeatureType type) {
+        IafWorldData data = IafWorldData.get(level.getLevel());
+        return data.check(type, position, id);
     }
 
     public static HashMap<String, Boolean> LOADED_FEATURES;
