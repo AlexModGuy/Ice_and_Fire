@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.util.WorldUtil;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -13,12 +14,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
+public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
 
     public WorldGenSirenIsland(Codec<NoneFeatureConfiguration> configFactoryIn) {
@@ -30,10 +30,10 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+
+        if (rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "siren_island", IafWorldData.FeatureType.OCEAN)) {
             return false;
         }
-        position = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
 
         int up = rand.nextInt(4) + 1;
         BlockPos center = position.above(up);
@@ -94,4 +94,8 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
         worldIn.addFreshEntity(siren);
     }
 
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
+    }
 }

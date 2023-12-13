@@ -13,8 +13,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0);
 
     public static final SpawnBiomeData FIREDRAGON_ROOST = new SpawnBiomeData()
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HOT.location().toString(), 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_HOT_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_JUNGLE.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_BADLANDS.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_SAVANNA.location().toString(), 0)
@@ -35,10 +34,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 8)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:lush_stacks", 9);
     public static final SpawnBiomeData FIREDRAGON_CAVE = FIREDRAGON_ROOST
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 10);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/thermal_caves", 10)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/mantle_caves", 11);
     public static final SpawnBiomeData ICEDRAGON_ROOST = new SpawnBiomeData()
-            //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
-            //.addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_ICY.location().toString()"icy", 0) This category doesn't seem to exist anymore
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_SNOWY.location().toString(), 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_OVERWORLD.location().toString(), 1)

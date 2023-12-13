@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.datagen;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.world.CustomBiomeFilter;
 import com.google.gson.JsonElement;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -82,9 +83,9 @@ public final class IafPlacedFeatures {
         entries.put(PLACED_FROST_LILY.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.LIGHTNING_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
 
         // Underground
-        entries.put(PLACED_FIRE_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.FIRE_DRAGON_CAVE), List.of(BiomeFilter.biome())));
-        entries.put(PLACED_ICE_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.ICE_DRAGON_CAVE), List.of(BiomeFilter.biome())));
-        entries.put(PLACED_LIGHTNING_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_CAVE), List.of(BiomeFilter.biome())));
+        entries.put(PLACED_FIRE_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.FIRE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
+        entries.put(PLACED_ICE_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.ICE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
+        entries.put(PLACED_LIGHTNING_DRAGON_CAVE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
         entries.put(PLACED_SILVER_ORE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.SILVER_ORE), commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)))));
         entries.put(PLACED_SAPPHIRE_ORE.location(), new PlacedFeature(registryOps.registry(Registry.CONFIGURED_FEATURE_REGISTRY).get().getOrCreateHolderOrThrow(IafConfiguredFeatures.SAPPHIRE_ORE), commonOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)))));
 

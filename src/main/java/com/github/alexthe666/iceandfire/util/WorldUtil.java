@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.util;
 
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.Registry;
@@ -10,11 +11,9 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -234,5 +233,17 @@ public class WorldUtil {
     /** > 1.19.2 Mojang method */
     public static BlockPos containing(Position position) {
         return containing(position.x(), position.y(), position.z());
+    }
+
+    public static boolean canGenerate(int configChance, final WorldGenLevel level, final RandomSource random, final BlockPos origin, final String id, boolean checkFluid) {
+        boolean canGenerate = random.nextInt(configChance) == 0 && IafWorldRegistry.isFarEnoughFromSpawn(level, origin) && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id);
+
+        if (canGenerate && checkFluid) {
+            if (!level.getFluidState(origin.below()).isEmpty()) {
+                return false;
+            }
+        }
+
+        return canGenerate;
     }
 }
