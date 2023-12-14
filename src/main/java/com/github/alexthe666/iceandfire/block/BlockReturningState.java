@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -17,49 +16,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class BlockReturningState extends Block {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
-    public Item itemBlock;
     private final BlockState returnState;
 
-/*    public BlockReturningState(float hardness, float resistance, SoundType sound, BlockState returnToState) {
-        super(
-            BlockBehaviour.Properties
-                .of()
-                .sound(sound)
-                .strength(hardness, resistance)
-                .randomTicks()
-        );
-
-        this.returnState = returnToState;
-        this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
-    }*/
-
     public static BlockReturningState builder(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
-        if (instrument != null) {
-            props.instrument(instrument);
-        }
-        if (reaction != null) {
-            props.pushReaction(reaction);
-        }
-        if (ignited) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).instrument(instrument).pushReaction(reaction).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
+        if (ignited)
             props.ignitedByLava();
-        }
         return new BlockReturningState(props, returnToState);
     }
     public static BlockReturningState builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).randomTicks();
-        if (instrument != null) {
-            props.instrument(instrument);
-        }
-        if (reaction != null) {
-            props.pushReaction(reaction);
-        }
-        if (ignited) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).instrument(instrument).pushReaction(reaction).sound(sound).strength(hardness, resistance).randomTicks();
+        if (ignited)
             props.ignitedByLava();
-        }
         return new BlockReturningState(props, returnToState);
     }
-
 
     public BlockReturningState(BlockBehaviour.Properties props, BlockState returnToState) {
         super(props);
@@ -67,6 +37,7 @@ public class BlockReturningState extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
     }
 
+    // FIXME :: Unused because isRandomlyTicking is not used -> The chunk check might be a performance problem anyway (and potentially not needed)
     @Override
     public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {

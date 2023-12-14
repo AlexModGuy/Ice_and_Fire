@@ -26,7 +26,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    public EntityType<? extends EntityDragonBase> getType() {
+    public EntityType<? extends EntityDragonBase> getDragonType() {
         return IafEntityRegistry.LIGHTNING_DRAGON.get();
     }
 }

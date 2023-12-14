@@ -59,7 +59,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         WorldGenLevel worldIn = context.level();
         RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "dragon_cave", IafWorldData.FeatureType.UNDERGROUND)) {
+        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, getId(), getFeatureType())) {
             return false;
         }
         isMale = rand.nextBoolean();
@@ -220,7 +220,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
     }
 
     private EntityDragonBase createDragon(final WorldGenLevel worldGen, final RandomSource random, final BlockPos position, int dragonAge) {
-        EntityDragonBase dragon = getType().create(worldGen.getLevel());
+        EntityDragonBase dragon = getDragonType().create(worldGen.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);
         dragon.setAgingDisabled(true);
@@ -233,7 +233,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         return dragon;
     }
 
-    public abstract EntityType<? extends EntityDragonBase> getType();
+    public abstract EntityType<? extends EntityDragonBase> getDragonType();
 
     private static class SphereInfo {
         int radius;
@@ -248,5 +248,10 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
     @Override
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.UNDERGROUND;
+    }
+
+    @Override
+    public String getId() {
+        return "dragon_cave";
     }
 }

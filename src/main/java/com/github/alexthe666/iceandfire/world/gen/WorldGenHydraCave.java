@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -47,7 +46,7 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
         BlockPos position = context.origin();
         ChunkGenerator generator = context.chunkGenerator();
 
-        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "hydra_cave")) {
+        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, getId())) {
             return false;
         }
 
@@ -169,5 +168,10 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
     @Override
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.SURFACE;
+    }
+
+    @Override
+    public String getId() {
+        return "hydra_cave";
     }
 }
