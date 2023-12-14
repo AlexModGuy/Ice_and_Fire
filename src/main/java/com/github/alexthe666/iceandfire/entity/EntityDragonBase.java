@@ -72,7 +72,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -311,9 +310,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(4, new DragonAITargetItems<>(this, 60, false, false, true));
         this.targetSelector.addGoal(5, new DragonAITargetNonTamed<>(this, LivingEntity.class, false, (Predicate<LivingEntity>) entity -> {
-            boolean skip = entity instanceof Player player ? player.isCreative() : getRandom().nextInt(100) < getHunger();
+            if (entity instanceof Player player) {
+                return !player.isCreative();
+            }
 
-            if (!skip) {
+            if (getRandom().nextInt(100) > getHunger()) {
                 return entity.getType() != getType() && DragonUtils.canHostilesTarget(entity) && DragonUtils.isAlive(entity) && shouldTarget(entity);
             }
 
@@ -1499,7 +1500,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
 
         if (doBreak) {
-            if ((force || !this.isInWater()) && ForgeEventFactory.getMobGriefingEvent(this.level(), this)) {
+            if (ForgeEventFactory.getMobGriefingEvent(this.level(), this)) {
                 if (DragonUtils.canGrief(this)) {
                     // TODO :: make `force` ignore the dragon stage?
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
@@ -1622,17 +1623,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return bob * this.getRenderSize() / 3;
     }
 
-    protected void updatePreyInMouth(Entity prey) {
+    protected void updatePreyInMouth(final Entity prey) {
         if (this.getAnimation() != ANIMATION_SHAKEPREY) {
             this.setAnimation(ANIMATION_SHAKEPREY);
         }
+
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
             float baseDamage = (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
             float damage = baseDamage * 2;
             boolean didDamage = prey.hurt(this.level().damageSources().mobAttack(this), damage);
 
             if (didDamage && IafConfig.canDragonsHealFromBiting) {
-                heal(damage);
+                heal(damage * 0.5f);
             }
 
             if (!(prey instanceof Player)) {
@@ -1640,17 +1642,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
 
             prey.stopRiding();
+        } else {
+            yBodyRot = getYRot();
+            final float modTick_0 = this.getAnimationTick() - 25;
+            final float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * Mth.clamp(Mth.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
+            final float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
+            final float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
+            final float angle = (0.01745329251F * this.yBodyRot) + 3.15F + (modTick_1 * 2F) * 0.015F;
+            final double extraX = radius * Mth.sin((float) (Math.PI + angle));
+            final double extraZ = radius * Mth.cos(angle);
+            final double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
+            prey.setPos(this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ);
         }
-        yBodyRot = getYRot();
-        final float modTick_0 = this.getAnimationTick() - 25;
-        final float modTick_1 = this.getAnimationTick() > 25 && this.getAnimationTick() < 55 ? 8 * Mth.clamp(Mth.sin((float) (Math.PI + modTick_0 * 0.25)), -0.8F, 0.8F) : 0;
-        final float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
-        final float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
-        final float angle = (0.01745329251F * this.yBodyRot) + 3.15F + (modTick_1 * 2F) * 0.015F;
-        final double extraX = radius * Mth.sin((float) (Math.PI + angle));
-        final double extraZ = radius * Mth.cos(angle);
-        final double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
-        prey.setPos(this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ);
     }
 
     public int getDragonStage() {
@@ -2374,7 +2377,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     boolean didDamage = logic.attackTarget(target, rider, damage);
 
                     if (didDamage && IafConfig.canDragonsHealFromBiting) {
-                        heal(damage);
+                        heal(damage * 0.1f);
                     }
                 }
             }
@@ -2704,8 +2707,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public @NotNull Vec3 getDismountLocationForPassenger(LivingEntity pPassenger) {
-        return this.getRiderPosition().add(0, pPassenger.getBbHeight(), 0);
+    public @NotNull Vec3 getDismountLocationForPassenger(final LivingEntity passenger) {
+        if (passenger.isInWall()) {
+            return this.position().add(0, 1, 0);
+        }
+
+        return this.getRiderPosition().add(0, passenger.getBbHeight(), 0);
     }
 
     @Override

@@ -83,6 +83,24 @@ public abstract class WorldGenDragonRoosts extends Feature<NoneFeatureConfigurat
         }
     }
 
+    protected double getCircularArea(int radius, int height) {
+        double area = (radius + height + radius) * 0.333F + 0.5F;
+        return Mth.floor(area * area);
+    }
+
+    protected double getCircularArea(int radius) {
+        double area = (radius + radius) * 0.333F + 0.5F;
+        return Mth.floor(area * area);
+    }
+
+    protected BlockPos getSurfacePosition(final WorldGenLevel level, final BlockPos position) {
+        return level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
+    }
+
+    protected BlockState transform(final Block block) {
+        return transform(block.defaultBlockState());
+    }
+
     private void generateDecoration(@NotNull final FeaturePlaceContext<NoneFeatureConfiguration> context, int radius, boolean isMale) {
         int height = (radius / 5);
         double circularArea = getCircularArea(radius, height);
@@ -223,24 +241,6 @@ public abstract class WorldGenDragonRoosts extends Feature<NoneFeatureConfigurat
         dragon.hasHomePosition = true;
         dragon.setHunger(50);
         context.level().addFreshEntity(dragon);
-    }
-
-    protected double getCircularArea(int radius, int height) {
-        double area = (radius + height + radius) * 0.333F + 0.5F;
-        return Mth.floor(area * area);
-    }
-
-    protected double getCircularArea(int radius) {
-        double area = (radius + radius) * 0.333F + 0.5F;
-        return Mth.floor(area * area);
-    }
-
-    protected BlockPos getSurfacePosition(final WorldGenLevel level, final BlockPos position) {
-        return level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, position);
-    }
-
-    protected BlockState transform(final Block block) {
-        return transform(block.defaultBlockState());
     }
 
     protected abstract EntityType<? extends EntityDragonBase> getDragonType();
