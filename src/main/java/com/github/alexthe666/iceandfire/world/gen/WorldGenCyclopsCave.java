@@ -38,7 +38,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> imple
 
     @Override
     public boolean place(final FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        if (!WorldUtil.canGenerate(IafConfig.spawnCyclopsCaveChance, context.level(), context.random(), context.origin(), "cyclopes_cave", true)) {
+        if (!WorldUtil.canGenerate(IafConfig.spawnCyclopsCaveChance, context.level(), context.random(), context.origin(), getId(), true)) {
             return false;
         }
 
@@ -260,5 +260,10 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> imple
     @Override
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.SURFACE;
+    }
+
+    @Override
+    public String getId() {
+        return "cyclops_cave";
     }
 }

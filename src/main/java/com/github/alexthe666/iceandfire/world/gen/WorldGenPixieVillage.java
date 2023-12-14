@@ -86,4 +86,9 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> impl
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.SURFACE;
     }
+
+    @Override
+    public String getId() {
+        return "pixie_village";
+    }
 }

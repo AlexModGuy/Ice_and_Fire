@@ -69,7 +69,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> implem
         RandomSource rand = context.random();
         BlockPos pos = context.origin();
         if (!small) {
-            if (rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos, "myrmex_hive")) {
+            if (rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos, getId())) {
                 return false;
             }
             if (MyrmexWorldData.get(worldIn.getLevel()) != null && MyrmexWorldData.get(worldIn.getLevel()).getNearestHive(pos, 200) != null) {
@@ -525,5 +525,10 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> implem
     @Override
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.SURFACE;
+    }
+
+    @Override
+    public String getId() {
+        return "myrmex_hive";
     }
 }

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,21 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BlockReturningState extends Block {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
-    public Item itemBlock;
     private final BlockState returnState;
-
-/*    public BlockReturningState(float hardness, float resistance, SoundType sound, BlockState returnToState) {
-        super(
-            BlockBehaviour.Properties
-                .of()
-                .sound(sound)
-                .strength(hardness, resistance)
-                .randomTicks()
-        );
-
-        this.returnState = returnToState;
-        this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
-    }*/
 
     public static BlockReturningState builder(float hardness, float resistance, SoundType sound, boolean slippery, Material material, BlockState returnToState) {
         BlockBehaviour.Properties props = BlockBehaviour.Properties.of(material).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
@@ -47,6 +32,7 @@ public class BlockReturningState extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
     }
 
+    // FIXME :: Unused because isRandomlyTicking is not used -> The chunk check might be a performance problem anyway (and potentially not needed)
     @Override
     public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {

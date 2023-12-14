@@ -44,7 +44,7 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
         BlockPos position = context.origin();
         ChunkGenerator generator = context.chunkGenerator();
 
-        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "hydra_cave")) {
+        if (rand.nextInt(IafConfig.generateHydraChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, getId())) {
             return false;
         }
 
@@ -164,5 +164,10 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
     @Override
     public IafWorldData.FeatureType getFeatureType() {
         return IafWorldData.FeatureType.SURFACE;
+    }
+
+    @Override
+    public String getId() {
+        return "hydra_cave";
     }
 }

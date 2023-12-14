@@ -5,13 +5,12 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.github.alexthe666.iceandfire.world.IafWorldData;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -19,52 +18,53 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> implements TypedFeature {
-
-
-    public WorldGenSirenIsland(Codec<NoneFeatureConfiguration> configFactoryIn) {
-        super(configFactoryIn);
+    public WorldGenSirenIsland(final Codec<NoneFeatureConfiguration> configuration) {
+        super(configuration);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel worldIn = context.level();
-        RandomSource rand = context.random();
-        BlockPos position = context.origin();
-
-        if (rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "siren_island", IafWorldData.FeatureType.OCEAN)) {
+    public boolean place(final FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        if (!WorldUtil.canGenerate(IafConfig.generateSirenChance, context.level(), context.random(), context.origin(), getId(), false)) {
             return false;
         }
 
-        int up = rand.nextInt(4) + 1;
-        BlockPos center = position.above(up);
+        int up = context.random().nextInt(4) + 1;
+        BlockPos center = context.origin().above(up);
         int layer = 0;
-        int sirens = 0;
-        int sirensMax = 1 + rand.nextInt(3);
-        while (!worldIn.getBlockState(center).canOcclude() && center.getY() >= 0) {
+        int sirens = 1 + context.random().nextInt(3);
+
+        while (!context.level().getBlockState(center).canOcclude() && center.getY() >= 0) {
             layer++;
-            for (float i = 0; i < getRadius(layer, up); i += 0.5) {
-                for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                    BlockPos stonePos = WorldUtil.containing(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
-                    worldIn.setBlock(stonePos, getStone(rand), 3);
+
+            for (float i = 0; i < getRadius(layer, up); i += 0.5f) {
+                for (float j = 0; j < 2 * Math.PI * i + context.random().nextInt(2); j += 0.5f) {
+                    BlockPos stonePos = WorldUtil.containing(Math.floor(center.getX() + Mth.sin(j) * i + context.random().nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + context.random().nextInt(2)));
+                    context.level().setBlock(stonePos, getStone(context.random()), Block.UPDATE_ALL);
                     BlockPos upPos = stonePos.above();
-                    if (worldIn.isEmptyBlock(upPos) && worldIn.isEmptyBlock(upPos.east()) && worldIn.isEmptyBlock(upPos.north()) && worldIn.isEmptyBlock(upPos.north().east()) && rand.nextInt(3) == 0 && sirens < sirensMax) {
-                        sirens++;
-                        spawnSiren(worldIn, rand, upPos.north().east());
+
+                    if (context.level().isEmptyBlock(upPos) && context.level().isEmptyBlock(upPos.east()) && context.level().isEmptyBlock(upPos.north()) && context.level().isEmptyBlock(upPos.north().east()) && context.random().nextInt(3) == 0 && sirens > 0) {
+                        spawnSiren(context.level(), context.random(), upPos.north().east());
+                        sirens--;
                     }
                 }
             }
+
             center = center.below();
         }
+
         layer++;
-        for (float i = 0; i < getRadius(layer, up); i += 0.5) {
-            for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                BlockPos stonePos = WorldUtil.containing(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
-                while (!worldIn.getBlockState(stonePos).canOcclude() && stonePos.getY() >= 0) {
-                    worldIn.setBlock(stonePos, getStone(rand), 3);
+
+        for (float i = 0; i < getRadius(layer, up); i += 0.5f) {
+            for (float j = 0; j < 2 * Math.PI * i + context.random().nextInt(2); j += 0.5f) {
+                BlockPos stonePos = WorldUtil.containing(Math.floor(center.getX() + Mth.sin(j) * i + context.random().nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + context.random().nextInt(2)));
+
+                while (!context.level().getBlockState(stonePos).canOcclude() && stonePos.getY() >= 0) {
+                    context.level().setBlock(stonePos, getStone(context.random()), Block.UPDATE_ALL);
                     stonePos = stonePos.below();
                 }
             }
         }
+
         return true;
     }
 
@@ -96,6 +96,11 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
 
     @Override
     public IafWorldData.FeatureType getFeatureType() {
-        return IafWorldData.FeatureType.SURFACE;
+        return IafWorldData.FeatureType.OCEAN;
+    }
+
+    @Override
+    public String getId() {
+        return "siren_island";
     }
 }

@@ -26,7 +26,7 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    public EntityType<? extends EntityDragonBase> getType() {
+    public EntityType<? extends EntityDragonBase> getDragonType() {
         return IafEntityRegistry.ICE_DRAGON.get();
     }
 }
