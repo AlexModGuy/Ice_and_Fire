@@ -895,9 +895,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return this.dragonInventory != pInventory;
     }
 
-    @Override
-    @Nullable
-    public LivingEntity getControllingPassenger() {
+    @Override // TODO :: This only returns player - is that correct?
+    public @Nullable LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player player && this.getTarget() != passenger) {
                 if (this.isTame() && this.getOwnerUUID() != null && this.getOwnerUUID().equals(player.getUUID())) {
@@ -905,19 +904,21 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
             }
         }
+
         return null;
     }
 
+    // FIXME :: Unused
     public boolean isRidingPlayer(Player player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
     @Override
-    @Nullable
-    public Player getRidingPlayer() {
-        if (this.getControllingPassenger() instanceof Player) {
-            return (Player) this.getControllingPassenger();
+    public @Nullable Player getRidingPlayer() {
+        if (this.getControllingPassenger() instanceof Player player) {
+            return player;
         }
+
         return null;
     }
 
@@ -1365,7 +1366,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void eatFoodBonus(ItemStack stack) {
-
+        // FIXME :: ?
     }
 
 
@@ -1574,10 +1575,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             blockPos = blockPos.below();
         }
         return blockPos;
-    }
-
-    public void fall(float distance, float damageMultiplier) {
-
     }
 
     public boolean isActuallyBreathingFire() {
@@ -1980,7 +1977,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return false;
     }
 
-    public EntityDragonEgg createEgg(EntityDragonBase ageable) {
+    public EntityDragonEgg createEgg(EntityDragonBase ageable) { // FIXME :: Unused parameter
         EntityDragonEgg dragon = new EntityDragonEgg(IafEntityRegistry.DRAGON_EGG.get(), this.level);
         dragon.setEggType(EnumDragonEgg.byMetadata(new Random().nextInt(4) + getStartMetaForType()));
         dragon.setPos(Mth.floor(this.getX()) + 0.5, Mth.floor(this.getY()) + 1, Mth.floor(this.getZ()) + 0.5);
@@ -2003,6 +2000,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return false;
     }
 
+    // FIXME :: Unused
     private double getFlySpeed() {
         return (2 + (this.getAgeInDays() / 125) * 2) * (this.isTackling() ? 2 : 1);
     }
@@ -2030,7 +2028,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void setCrystalBound(boolean crystalBound) {
         this.entityData.set(CRYSTAL_BOUND, crystalBound);
     }
-
 
     public float getDistanceSquared(Vec3 Vector3d) {
         final float f = (float) (this.getX() - Vector3d.x);
@@ -2459,11 +2456,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void setDeltaMovement(@NotNull Vec3 pMotion) {
-        super.setDeltaMovement(pMotion);
-    }
-
-    @Override
     public void move(@NotNull MoverType pType, @NotNull Vec3 pPos) {
         if (this.isOrderedToSit() && !this.isVehicle()) {
             pPos = new Vec3(0, pPos.y(), 0);
@@ -2480,23 +2472,17 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
                 super.move(pType, pPos);
             } else {
-                // Use noPhysics tag to disable server side collision check
-                // It is unsafe to do this
-//                this.noPhysics = true;
                 super.move(pType, pPos);
             }
+
             // Set no gravity flag to prevent getting kicked by flight disabled servers
             this.setNoGravity(this.isHovering() || this.isFlying());
-
         } else {
-            this.noPhysics = false;
             // The flight mgr is not ready for noGravity
             this.setNoGravity(false);
             super.move(pType, pPos);
         }
-
     }
-
 
     public void updateCheckPlayer() {
         final double checkLength = this.getBoundingBox().getSize() * 3;
@@ -2510,8 +2496,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
+    @Override // TODO :: Maybe only for ice dragons?
+    public boolean rideableUnderWater() {
+        return true;
     }
 
     public boolean isDirectPathBetweenPoints(Vec3 vec1, Vec3 vec2) {
@@ -2869,11 +2856,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public boolean isSkeletal() {
         return this.getDeathStage() >= (this.getAgeInDays() / 5) / 2;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
     }
 
     @Override

@@ -92,7 +92,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
         for (EntityDragonBase dragon : level.getEntitiesOfClass(EntityDragonBase.class, searchArea)) {
             if (!dragonSelected &&
                 // Dragon Checks
-                getDragonType() == DragonType.getIntFromType(dragon.dragonType) &&
+                getDragonType() == dragon.dragonType.getIntFromType() &&
                 (dragon.isChained() || dragon.isTame()) &&
                 canSeeInput(dragon, targetPosition)
             ) {

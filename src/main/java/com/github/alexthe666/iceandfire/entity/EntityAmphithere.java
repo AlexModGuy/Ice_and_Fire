@@ -41,7 +41,6 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -355,7 +354,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             if (this.isOrderedToSit()) {
                 this.getNavigation().stop();
                 //TODO
-                //this.getMoveHelper().action = MovementController.Action.WAIT;
+//                this.getMoveHelper().action = MovementController.Action.WAIT;
             }
             if (flying) {
                 ticksFlying++;
@@ -747,19 +746,19 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return false;
     }
 
+    // FIXME :: Unused
     public boolean isRidingPlayer(Player player) {
         return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
     @Override
-    @Nullable
-    public Player getRidingPlayer() {
-        if (this.getControllingPassenger() instanceof Player) {
-            return (Player) this.getControllingPassenger();
+    public @Nullable Player getRidingPlayer() {
+        if (this.getControllingPassenger() instanceof Player player) {
+            return player;
         }
+
         return null;
     }
-
 
     @Override
     public boolean isFlying() {
@@ -777,7 +776,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public int getVariant() {
-        return this.entityData.get(VARIANT).intValue();
+        return this.entityData.get(VARIANT);
     }
 
     public void setVariant(int variant) {
@@ -786,20 +785,20 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean isGoingUp() {
-        return (entityData.get(CONTROL_STATE).byteValue() & 1) == 1;
+        return (entityData.get(CONTROL_STATE) & 1) == 1;
     }
 
     @Override
     public boolean isGoingDown() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 1 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 1 & 1) == 1;
     }
 
     public boolean attack() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 2 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 2 & 1) == 1;
     }
 
     public boolean dismountIAF() {
-        return (entityData.get(CONTROL_STATE).byteValue() >> 3 & 1) == 1;
+        return (entityData.get(CONTROL_STATE) >> 3 & 1) == 1;
     }
 
     @Override
@@ -828,7 +827,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = entityData.get(CONTROL_STATE).byteValue();
+        byte prevState = entityData.get(CONTROL_STATE);
         if (newState) {
             entityData.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -838,7 +837,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public byte getControlState() {
-        return entityData.get(CONTROL_STATE).byteValue();
+        return entityData.get(CONTROL_STATE);
     }
 
     @Override
@@ -930,10 +929,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return spawnDataIn;
     }
 
-
-    public void fall(float distance, float damageMultiplier) {
-    }
-
     @Override
     public boolean canPhaseThroughBlock(LevelAccessor world, BlockPos pos) {
         return world.getBlockState(pos).getBlock() instanceof LeavesBlock;
@@ -953,7 +948,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     @Override
-
     public void handleEntityEvent(byte id) {
         if (id == 45) {
             this.playEffect();
@@ -981,11 +975,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     @Override
     public boolean isPersistenceRequired() {
         return true;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
     }
 
     @Override
