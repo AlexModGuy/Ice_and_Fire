@@ -63,8 +63,7 @@ public class BlockEggInIce extends BaseEntityBlock {
     @Override
     public void playerWillDestroy(Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (worldIn.getBlockEntity(pos) != null) {
-            if (worldIn.getBlockEntity(pos) instanceof TileEntityEggInIce) {
-                TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getBlockEntity(pos);
+            if (worldIn.getBlockEntity(pos) instanceof TileEntityEggInIce tile) {
                 tile.spawnEgg();
             }
         }

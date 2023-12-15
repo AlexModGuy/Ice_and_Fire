@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,7 +91,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
         for (EntityDragonBase dragon : level.getEntitiesOfClass(EntityDragonBase.class, searchArea)) {
             if (!dragonSelected &&
                 // Dragon Checks
-                getDragonType() == DragonType.getIntFromType(dragon.dragonType) &&
+                getDragonType() == dragon.dragonType.getIntFromType() &&
                 (dragon.isChained() || dragon.isTame()) &&
                 canSeeInput(dragon, targetPosition)
             ) {
