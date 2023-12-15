@@ -36,7 +36,7 @@ public class AquaticAIFindWaterTarget extends Goal {
             }
             if (this.mob.getNavigation().isDone()) {
                 BlockPos vec3 = this.findWaterTarget();
-                if (vec3 != null) {
+                if (vec3 != null) { // TODO :: Performance impact
                     this.mob.getNavigation().moveTo(vec3.getX(), vec3.getY(), vec3.getZ(), 1.0);
                     return true;
                 }

@@ -1318,6 +1318,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         return true;
     }
 
+    // TODO :: Expensive performance-wise
     protected boolean isPassable(final BlockPos pos, final boolean head, final MNode parent) {
         final BlockState state = world.getBlockState(pos);
         final VoxelShape shape = state.getBlockSupportShape(world, pos);
