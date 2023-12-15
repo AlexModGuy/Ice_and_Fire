@@ -281,11 +281,11 @@ public class IafDragonFlightManager {
                 float yawTurnHead = dragon.getYRot() + 90.0F;
                 speedModifier *= dragon.getFlightSpeedModifier();
                 speedModifier *= Math.min(1, dist / 50 + 0.3);//Make the dragon fly slower when close to target
-                double lvt_16_1_ = speedModifier * Mth.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
-                double lvt_18_1_ = speedModifier * Mth.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
-                double lvt_20_1_ = speedModifier * Mth.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
+                double x = speedModifier * Mth.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
+                double y = speedModifier * Mth.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
+                double z = speedModifier * Mth.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
                 double motionCap = 0.2D;
-                dragon.setDeltaMovement(dragon.getDeltaMovement().add(Math.min(lvt_16_1_ * 0.2D, motionCap), Math.min(lvt_20_1_ * 0.2D, motionCap), Math.min(lvt_18_1_ * 0.2D, motionCap)));
+                dragon.setDeltaMovement(dragon.getDeltaMovement().add(Math.min(x * 0.2D, motionCap), Math.min(y * 0.2D, motionCap), Math.min(z * 0.2D, motionCap)));
             }
         }
 

@@ -2964,7 +2964,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    @Override
+    @Override // TODO :: Block collision performance impact (due to the multi-part entity)?
     public @NotNull Vec3 handleRelativeFrictionAndCalculateMovement(@NotNull Vec3 pDeltaMovement, float pFriction) {
         if (this.moveControl instanceof IafDragonFlightManager.PlayerFlightMoveHelper)
             return pDeltaMovement;
