@@ -2,13 +2,13 @@ package com.github.alexthe666.iceandfire.entity.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class DragonPositionGenerator {
 
@@ -20,7 +20,7 @@ public class DragonPositionGenerator {
     @Nullable
     public static Vec3 generateRandomPos(Mob mob, int xz, int y, @Nullable Vec3 vec, boolean skipWater) {
         PathNavigation pathnavigate = mob.getNavigation();
-        Random random = mob.getRandom();
+        RandomSource random = mob.getRandom();
         boolean flag;
 
         if (mob.hasRestriction()) {
@@ -59,7 +59,7 @@ public class DragonPositionGenerator {
                     }
                 }
 
-                BlockPos blockpos1 = new BlockPos((double) l + mob.getX(), (double) i1 + mob.getY(), (double) j1 + mob.getZ());
+                BlockPos blockpos1 = new BlockPos(l + mob.getBlockX(), i1 + mob.getBlockY(), j1 + mob.getBlockZ());
 
                 if ((!flag || mob.isWithinRestriction(blockpos1)) && pathnavigate.isStableDestination(blockpos1)) {
                     if (skipWater) {
@@ -103,6 +103,6 @@ public class DragonPositionGenerator {
     }
 
     private static boolean isWaterDestination(BlockPos pos, Mob mob) {
-        return mob.level.getBlockState(pos).getMaterial() == Material.WATER;
+        return mob.level.getBlockState(pos).is(Blocks.WATER);
     }
 }

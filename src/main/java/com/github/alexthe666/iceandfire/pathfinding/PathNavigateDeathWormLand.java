@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -50,17 +51,17 @@ public class PathNavigateDeathWormLand extends PathNavigation {
      */
     @Override
     public Path createPath(@NotNull BlockPos pos, int i) {
-        if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
+        if (this.level.getBlockState(pos).isAir()) {
             BlockPos blockpos;
 
-            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.below()) {
+            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).isAir(); blockpos = blockpos.below()) {
             }
 
             if (blockpos.getY() > 0) {
                 return super.createPath(blockpos.above(), i);
             }
 
-            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).getMaterial() == Material.AIR) {
+            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).isAir()) {
                 blockpos = blockpos.above();
             }
 
@@ -93,12 +94,12 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     private int getPathablePosY() {
         if (this.worm.isInSand()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            BlockState blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
+            BlockState blockstate = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ()));
             int j = 0;
 
-            while (blockstate.getMaterial() == Material.SAND) {
+            while (blockstate.is(BlockTags.SAND)) {
                 ++i;
-                blockstate = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ())));
+                blockstate = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ()));
                 ++j;
 
                 if (j > 16) {
@@ -115,7 +116,7 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     protected void removeSunnyPath() {
 
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(WorldUtil.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY + 0.5D, this.mob.getBlockZ()))) {
                 return;
             }
 
@@ -133,12 +134,17 @@ public class PathNavigateDeathWormLand extends PathNavigation {
     /**
      * Checks if the specified entity can safely walk to the specified location.
      */
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+    @Override
+    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32) {
         int i = Mth.floor(posVec31.x);
         int j = Mth.floor(posVec31.z);
         double d0 = posVec32.x - posVec31.x;
         double d1 = posVec32.z - posVec31.z;
         double d2 = d0 * d0 + d1 * d1;
+        int sizeX = (int) worm.getBoundingBox().getXsize();
+        int sizeY = (int) worm.getBoundingBox().getYsize();
+        int sizeZ = (int) worm.getBoundingBox().getZsize();
+
 
         if (d2 < 1.0E-8D) {
             return false;
@@ -247,7 +253,7 @@ public class PathNavigateDeathWormLand extends PathNavigation {
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.level.getBlockState(blockpos).getBlock();
 
-                if (this.level.getBlockState(blockpos).getMaterial().blocksMotion() || this.level.getBlockState(blockpos).getMaterial() == Material.SAND) {
+                if (this.level.getBlockState(blockpos).getMaterial().blocksMotion() || this.level.getBlockState(blockpos).is(BlockTags.SAND)) {
                     return false;
                 }
             }

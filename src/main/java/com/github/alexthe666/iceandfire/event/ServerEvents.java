@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.event;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
@@ -23,7 +24,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.AbstractPat
 import com.github.alexthe666.iceandfire.world.gen.WorldGenFireDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenIceDragonCave;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenLightningDragonCave;
-import com.google.common.base.Predicate;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,13 +44,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.AbstractChestBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -59,31 +61,31 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
-    private static final Predicate VILLAGER_FEAR = new Predicate<LivingEntity>() {
-        @Override
-        public boolean apply(@Nullable LivingEntity entity) {
-            return entity != null && entity instanceof IVillagerFear;
-        }
-    };
+    // FIXME :: No check for shouldFear()?
+    private static final Predicate<LivingEntity> VILLAGER_FEAR = entity -> entity instanceof IVillagerFear;
     private final Random rand = new Random();
 
     private static void signalChickenAlarm(LivingEntity chicken, LivingEntity attacker) {
@@ -94,8 +96,7 @@ public class ServerEvents {
         for (final EntityCockatrice cockatrice : list) {
             if (!(attacker instanceof EntityCockatrice)) {
                 if (!DragonUtils.hasSameOwner(cockatrice, attacker)) {
-                    if (attacker instanceof Player) {
-                        Player player = (Player) attacker;
+                    if (attacker instanceof Player player) {
                         if (!player.isCreative() && !cockatrice.isOwnedBy(player)) {
                             cockatrice.setTarget(player);
                         }
@@ -113,11 +114,9 @@ public class ServerEvents {
         if (list.isEmpty()) return;
 
         for (final Entity entity : list) {
-            if (entity instanceof EntityAmphithere && !(attacker instanceof EntityAmphithere)) {
-                TamableAnimal amphithere = (TamableAnimal) entity;
+            if (entity instanceof EntityAmphithere amphithere && !(attacker instanceof EntityAmphithere)) {
                 if (!DragonUtils.hasSameOwner(amphithere, attacker)) {
-                    if (attacker instanceof Player) {
-                        Player player = (Player) attacker;
+                    if (attacker instanceof Player player) {
                         if (!player.isCreative() && !amphithere.isOwnedBy(player)) {
                             amphithere.setTarget(player);
                         }
@@ -130,7 +129,7 @@ public class ServerEvents {
     }
 
     private static boolean isInEntityTag(ResourceLocation loc, EntityType<?> type) {
-        return type.is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(loc));
+        return type.is(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.tags()).createTagKey(loc));
     }
 
     public static boolean isLivestock(Entity entity) {
@@ -172,18 +171,35 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onArrowCollide(ProjectileImpactEvent event) {
-        if (event.getEntity() instanceof AbstractArrow && ((AbstractArrow) event.getEntity()).getOwner() != null) {
-            if (event.getRayTraceResult() instanceof EntityHitResult && ((EntityHitResult) event.getRayTraceResult()).getEntity() != null) {
-                Entity shootingEntity = ((AbstractArrow) event.getEntity()).getOwner();
-                Entity shotEntity = ((EntityHitResult) event.getRayTraceResult()).getEntity();
+    public void onArrowCollide(final ProjectileImpactEvent event) {
+        if (event.getRayTraceResult() instanceof EntityHitResult result) {
+            Entity shotEntity = result.getEntity();
+
+            if (shotEntity instanceof EntityGhost) {
+                event.setCanceled(true);
+            } else if (event.getEntity() instanceof AbstractArrow arrow && arrow.getOwner() != null) {
+                Entity shootingEntity = arrow.getOwner();
+
                 if (shootingEntity instanceof LivingEntity && isRidingOrBeingRiddenBy(shootingEntity, shotEntity)) {
-                    if (shotEntity instanceof TamableAnimal && ((TamableAnimal) shotEntity).isTame() && shotEntity.isAlliedTo(shootingEntity)) {
+                    if (shotEntity instanceof TamableAnimal tamable && tamable.isTame() && shotEntity.isAlliedTo(shootingEntity)) {
                         event.setCanceled(true);
                     }
                 }
             }
         }
+    }
+
+    private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
+    @SubscribeEvent
+    public static void addNewVillageBuilding(final ServerAboutToStartEvent event) {
+        if (IafConfig.villagerHouseWeight > 0) {
+            Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
+            Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
+            for (String type : VILLAGE_TYPES) {
+                IafVillagerRegistry.addBuildingToPool(templatePoolRegistry, processorListRegistry, new ResourceLocation("village/" + type + "/houses"), "iceandfire:village/" + type + "_scriber_1", IafConfig.villagerHouseWeight);
+            }
+        }
+
     }
 
     @SubscribeEvent
@@ -211,10 +227,10 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityFall(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof Player) {
-            if (MiscProperties.hasDismounted(event.getEntityLiving())) {
+        if (event.getEntity() instanceof Player) {
+            if (MiscProperties.hasDismounted(event.getEntity())) {
                 event.setDamageMultiplier(0);
-                MiscProperties.setDismountedDragon(event.getEntityLiving(), false);
+                MiscProperties.setDismountedDragon(event.getEntity(), false);
             }
         }
     }
@@ -224,17 +240,17 @@ public class ServerEvents {
     public void onEntityDamage(LivingHurtEvent event) {
         if (event.getSource().isProjectile()) {
             float multi = 1;
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
-                multi -= 0.1;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
+                multi -= 0.1f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
-                multi -= 0.3;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
+                multi -= 0.3f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
-                multi -= 0.2;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
+                multi -= 0.2f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
-                multi -= 0.1;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
+                multi -= 0.1f;
             }
             event.setAmount(event.getAmount() * multi);
         }
@@ -242,21 +258,21 @@ public class ServerEvents {
         if (IafDamageRegistry.DRAGON_FIRE_TYPE.equals(damageType) || IafDamageRegistry.DRAGON_ICE_TYPE.equals(damageType) ||
             IafDamageRegistry.DRAGON_LIGHTNING_TYPE.equals(damageType)) {
             float multi = 1;
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor ||
-                event.getEntityLiving().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemDragonsteelArmor) {
-                multi -= 0.1;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor ||
+                event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemDragonsteelArmor) {
+                multi -= 0.1f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor ||
-                event.getEntityLiving().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemDragonsteelArmor) {
-                multi -= 0.3;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemScaleArmor ||
+                event.getEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ItemDragonsteelArmor) {
+                multi -= 0.3f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor ||
-                event.getEntityLiving().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemDragonsteelArmor) {
-                multi -= 0.2;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemScaleArmor ||
+                event.getEntity().getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ItemDragonsteelArmor) {
+                multi -= 0.2f;
             }
-            if (event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemScaleArmor ||
-                event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemDragonsteelArmor) {
-                multi -= 0.1;
+            if (event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemScaleArmor ||
+                event.getEntity().getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ItemDragonsteelArmor) {
+                multi -= 0.1f;
             }
             event.setAmount(event.getAmount() * multi);
         }
@@ -264,9 +280,32 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDrop(LivingDropsEvent event) {
-        if (event.getEntityLiving() instanceof WitherSkeleton) {
+        if (event.getEntity() instanceof WitherSkeleton) {
             event.getDrops().add(new ItemEntity(event.getEntity().level, event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
-                new ItemStack(IafItemRegistry.WITHERBONE.get(), event.getEntityLiving().getRandom().nextInt(2))));
+                new ItemStack(IafItemRegistry.WITHERBONE.get(), event.getEntity().getRandom().nextInt(2))));
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void makeItemDropsFireImmune(final LivingDropsEvent event) {
+        boolean makeFireImmune = false;
+
+        if (event.getSource().getDirectEntity() instanceof LightningBolt bolt && bolt.getTags().contains(BOLT_DONT_DESTROY_LOOT)) {
+            makeFireImmune = true;
+        } else if (event.getSource().getEntity() instanceof Player player && player.getItemInHand(player.getUsedItemHand()).is(IafItemTags.MAKE_ITEM_DROPS_FIREIMMUNE)) {
+            makeFireImmune = true;
+        }
+
+        if (makeFireImmune) {
+            Set<ItemEntity> fireImmuneDrops = event.getDrops().stream().map(itemEntity -> new ItemEntity(itemEntity.level, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), itemEntity.getItem()) {
+                @Override
+                public boolean fireImmune() {
+                    return true;
+                }
+            }).collect(Collectors.toSet());
+
+            event.getDrops().clear();
+            event.getDrops().addAll(fireImmuneDrops);
         }
     }
 
@@ -278,10 +317,10 @@ public class ServerEvents {
                 if (MiscProperties.getLoveTicks((LivingEntity) attacker) > 0)
                     event.setCanceled(true);
 
-                if (isChicken(event.getEntityLiving())) {
-                    signalChickenAlarm(event.getEntityLiving(), (LivingEntity) attacker);
-                } else if (DragonUtils.isVillager(event.getEntityLiving())) {
-                    signalAmphithereAlarm(event.getEntityLiving(), (LivingEntity) attacker);
+                if (isChicken(event.getEntity())) {
+                    signalChickenAlarm(event.getEntity(), (LivingEntity) attacker);
+                } else if (DragonUtils.isVillager(event.getEntity())) {
+                    signalAmphithereAlarm(event.getEntity(), (LivingEntity) attacker);
                 }
             }
         }
@@ -289,10 +328,10 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
-        final LivingEntity target = event.getTarget();
+    public void onLivingSetTarget(LivingChangeTargetEvent event) {
+        final LivingEntity target = event.getOriginalTarget();
         if (target != null) {
-            final LivingEntity attacker = event.getEntityLiving();
+            final LivingEntity attacker = event.getEntity();
             if (isChicken(target)) {
                 signalChickenAlarm(target, attacker);
             } else if (DragonUtils.isVillager(target)) {
@@ -302,54 +341,57 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onPlayerAttack(AttackEntityEvent event) {
+    public void onPlayerAttack(final AttackEntityEvent event) {
         if (event.getTarget() != null && isSheep(event.getTarget())) {
             float dist = IafConfig.cyclopesSheepSearchLength;
-            final List<Entity> list = event.getTarget().level.getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().expandTowards(dist, dist, dist));
+            final List<Entity> list = event.getTarget().level.getEntities(event.getEntity(), event.getEntity().getBoundingBox().expandTowards(dist, dist, dist));
+
             if (!list.isEmpty()) {
                 for (final Entity entity : list) {
-                    if (entity instanceof EntityCyclops) {
-                        EntityCyclops cyclops = (EntityCyclops) entity;
-                        if (!cyclops.isBlinded() && !event.getPlayer().isCreative()) {
-                            cyclops.setTarget(event.getPlayer());
+                    if (entity instanceof EntityCyclops cyclops) {
+                        if (!cyclops.isBlinded() && !event.getEntity().isCreative()) {
+                            cyclops.setTarget(event.getEntity());
                         }
                     }
                 }
             }
         }
-        if (event.getTarget() instanceof EntityStoneStatue) {
-            ((LivingEntity) event.getTarget()).setHealth(((LivingEntity) event.getTarget()).getMaxHealth());
-            if (event.getPlayer() != null) {
-                ItemStack stack = event.getPlayer().getMainHandItem();
+
+        if (event.getTarget() instanceof EntityStoneStatue statue) {
+            statue.setHealth(statue.getMaxHealth());
+
+            if (event.getEntity() != null) {
+                ItemStack stack = event.getEntity().getMainHandItem();
                 event.getTarget().playSound(SoundEvents.STONE_BREAK, 2, 0.5F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
-                if (stack.getItem() != null && (stack.getItem().isCorrectToolForDrops(Blocks.STONE.defaultBlockState()) || stack.getItem().getDescriptionId().contains("pickaxe"))) {
-                    boolean ready = false;
+
+                if (stack.getItem().isCorrectToolForDrops(Blocks.STONE.defaultBlockState()) || stack.getItem().getDescriptionId().contains("pickaxe")) {
                     event.setCanceled(true);
-                    EntityStoneStatue statue = (EntityStoneStatue) event.getTarget();
                     statue.setCrackAmount(statue.getCrackAmount() + 1);
-                    ready = statue.getCrackAmount() > 9;
-                    if (ready) {
+
+                    if (statue.getCrackAmount() > 9) {
                         CompoundTag writtenTag = new CompoundTag();
                         event.getTarget().saveWithoutId(writtenTag);
                         event.getTarget().playSound(SoundEvents.STONE_BREAK, 2, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 0.5F);
                         event.getTarget().remove(Entity.RemovalReason.KILLED);
-                        boolean silkTouch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
-                        if (silkTouch) {
+
+                        if (stack.getEnchantmentLevel(Enchantments.SILK_TOUCH) > 0) {
                             ItemStack statuette = new ItemStack(IafItemRegistry.STONE_STATUE.get());
-                            statuette.setTag(new CompoundTag());
-                            statuette.getTag().putBoolean("IAFStoneStatuePlayerEntity", statue.getTrappedEntityTypeString().equalsIgnoreCase("minecraft:player"));
-                            statuette.getTag().putString("IAFStoneStatueEntityID", statue.getTrappedEntityTypeString());
-                            statuette.getTag().put("IAFStoneStatueNBT", writtenTag);
-                            ((LivingEntity) event.getTarget()).addAdditionalSaveData(statuette.getTag());
-                            if (!event.getTarget().level.isClientSide) {
-                                event.getTarget().spawnAtLocation(statuette, 1);
+                            CompoundTag tag = statuette.getOrCreateTag();
+                            tag.putBoolean("IAFStoneStatuePlayerEntity", statue.getTrappedEntityTypeString().equalsIgnoreCase("minecraft:player"));
+                            tag.putString("IAFStoneStatueEntityID", statue.getTrappedEntityTypeString());
+                            tag.put("IAFStoneStatueNBT", writtenTag);
+                            statue.addAdditionalSaveData(tag);
+
+                            if (!statue.level.isClientSide()) {
+                                statue.spawnAtLocation(statuette, 1);
                             }
                         } else {
-                            if (!event.getTarget().level.isClientSide) {
-                                event.getTarget().spawnAtLocation(Blocks.COBBLESTONE.asItem(), 2 + event.getEntityLiving().getRandom().nextInt(4));
+                            if (!statue.level.isClientSide()) {
+                                statue.spawnAtLocation(Blocks.COBBLESTONE.asItem(), 2 + event.getEntity().getRandom().nextInt(4));
                             }
                         }
-                        event.getTarget().remove(Entity.RemovalReason.KILLED);
+
+                        statue.remove(Entity.RemovalReason.KILLED);
                     }
                 }
             }
@@ -358,34 +400,34 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
-        if (!event.getEntity().level.isClientSide && ChainProperties.hasChainData(event.getEntityLiving())) {
+        if (!event.getEntity().level.isClientSide && ChainProperties.hasChainData(event.getEntity())) {
             ItemEntity entityitem = new ItemEntity(event.getEntity().level,
                 event.getEntity().getX(),
                 event.getEntity().getY() + 1,
                 event.getEntity().getZ(),
-                new ItemStack(IafItemRegistry.CHAIN.get(), ChainProperties.getChainedTo(event.getEntityLiving()).size()));
+                new ItemStack(IafItemRegistry.CHAIN.get(), ChainProperties.getChainedTo(event.getEntity()).size()));
             entityitem.setDefaultPickUpDelay();
             event.getEntity().level.addFreshEntity(entityitem);
-            ChainProperties.clearChainData(event.getEntityLiving());
+            ChainProperties.clearChainData(event.getEntity());
         }
-        if (event.getEntityLiving().getUUID().equals(ServerEvents.ALEX_UUID)) {
-            event.getEntityLiving().spawnAtLocation(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), 1);
+        if (event.getEntity().getUUID().equals(ServerEvents.ALEX_UUID)) {
+            event.getEntity().spawnAtLocation(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), 1);
         }
-        if (event.getEntityLiving() instanceof Player && IafConfig.ghostsFromPlayerDeaths) {
-            Entity attacker = event.getEntityLiving().getLastHurtByMob();
-            if (attacker instanceof Player && event.getEntityLiving().getRandom().nextInt(3) == 0) {
-                CombatTracker combat = event.getEntityLiving().getCombatTracker();
+        if (event.getEntity() instanceof Player && IafConfig.ghostsFromPlayerDeaths) {
+            Entity attacker = event.getEntity().getLastHurtByMob();
+            if (attacker instanceof Player && event.getEntity().getRandom().nextInt(3) == 0) {
+                CombatTracker combat = event.getEntity().getCombatTracker();
                 CombatEntry entry = combat.getMostSignificantFall();
                 boolean flag = entry != null && (entry.getSource() == DamageSource.FALL || entry.getSource() == DamageSource.DROWN || entry.getSource() == DamageSource.LAVA);
-                if (event.getEntityLiving().hasEffect(MobEffects.POISON)) {
+                if (event.getEntity().hasEffect(MobEffects.POISON)) {
                     flag = true;
                 }
                 if (flag) {
-                    Level world = event.getEntityLiving().level;
+                    Level world = event.getEntity().level;
                     EntityGhost ghost = IafEntityRegistry.GHOST.get().create(world);
-                    ghost.copyPosition(event.getEntityLiving());
+                    ghost.copyPosition(event.getEntity());
                     if (!world.isClientSide) {
-                        ghost.finalizeSpawn((ServerLevelAccessor) world, world.getCurrentDifficultyAt(event.getEntityLiving().blockPosition()), MobSpawnType.SPAWNER, null, null);
+                        ghost.finalizeSpawn((ServerLevelAccessor) world, world.getCurrentDifficultyAt(event.getEntity().blockPosition()), MobSpawnType.SPAWNER, null, null);
                         world.addFreshEntity(ghost);
                     }
                     ghost.setDaytimeMode(true);
@@ -403,93 +445,85 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntityLiving() instanceof Player && event.getEntityLiving().getXRot() > 87 && event.getEntityLiving().getVehicle() != null && event.getEntityLiving().getVehicle() instanceof EntityDragonBase) {
-            ((EntityDragonBase) event.getEntityLiving().getVehicle()).mobInteract((Player) event.getEntityLiving(), event.getHand());
+        if (event.getEntity() != null && event.getEntity().getXRot() > 87 && event.getEntity().getVehicle() != null && event.getEntity().getVehicle() instanceof EntityDragonBase) {
+            ((EntityDragonBase) event.getEntity().getVehicle()).mobInteract(event.getEntity(), event.getHand());
         }
-        if (event.getEntityLiving() instanceof EntityDragonBase && !event.getEntityLiving().isAlive()) {
+/*        if (event.getEntity() instanceof EntityDragonBase && !event.getEntity().isAlive()) {
             event.setResult(Event.Result.DENY);
             ((EntityDragonBase) event.getEntityLiving()).mobInteract(event.getPlayer(), event.getHand());
-        }
+        }*/
     }
 
     @SubscribeEvent
-    public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+    public void onEntityUpdate(LivingEvent.LivingTickEvent event) {
 
-        if (ChainProperties.hasChainData(event.getEntityLiving())) {
-            ChainProperties.tickChain(event.getEntityLiving());
+        if (ChainProperties.hasChainData(event.getEntity())) {
+            ChainProperties.tickChain(event.getEntity());
         }
 
-        if (IafConfig.chickensLayRottenEggs && !event.getEntityLiving().level.isClientSide && isChicken(event.getEntityLiving()) && !event.getEntityLiving().isBaby() && event.getEntityLiving() instanceof Animal) {
-            ChickenProperties.tickChicken(event.getEntityLiving());
+        if (IafConfig.chickensLayRottenEggs && !event.getEntity().level.isClientSide && isChicken(event.getEntity()) && !event.getEntity().isBaby() && event.getEntity() instanceof Animal) {
+            ChickenProperties.tickChicken(event.getEntity());
         }
 
-        if (FrozenProperties.isFrozen(event.getEntityLiving())) {
-            FrozenProperties.tickFrozenEntity(event.getEntityLiving());
+        if (FrozenProperties.isFrozen(event.getEntity())) {
+            FrozenProperties.tickFrozenEntity(event.getEntity());
 
-            if (!(event.getEntityLiving() instanceof Player && ((Player) event.getEntityLiving()).isCreative())) {
+            if (!(event.getEntity() instanceof Player && ((Player) event.getEntity()).isCreative())) {
                 event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().multiply(0.25F, 1, 0.25F));
-                if (!(event.getEntityLiving() instanceof EnderDragon) && !event.getEntityLiving().isOnGround()) {
+                if (!(event.getEntity() instanceof EnderDragon) && !event.getEntity().isOnGround()) {
                     event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().add(0, -0.2, 0));
                 }
 
             }
         }
 
-        if (event.getEntityLiving() instanceof Player || event.getEntityLiving() instanceof AbstractVillager || event.getEntityLiving() instanceof IHearsSiren) {
-            SirenProperties.tickCharmedEntity(event.getEntityLiving());
+        if (event.getEntity() instanceof Player || event.getEntity() instanceof AbstractVillager || event.getEntity() instanceof IHearsSiren) {
+            SirenProperties.tickCharmedEntity(event.getEntity());
         }
 
-        if (MiscProperties.getLoveTicks(event.getEntityLiving()) > 0) {
-            MiscProperties.tickLove(event.getEntityLiving());
+        if (MiscProperties.getLoveTicks(event.getEntity()) > 0) {
+            MiscProperties.tickLove(event.getEntity());
         }
-        if (AiDebug.isEnabled() && event.getEntityLiving() instanceof Mob && AiDebug.contains((Mob) event.getEntityLiving())) {
+        if (AiDebug.isEnabled() && event.getEntity() instanceof Mob && AiDebug.contains((Mob) event.getEntity())) {
             AiDebug.logData();
         }
     }
 
     @SubscribeEvent
-    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+    public void onEntityInteract(final PlayerInteractEvent.EntityInteract event) {
         // Handle chain removal
-        if (event.getTarget() instanceof LivingEntity) {
-            LivingEntity target = (LivingEntity) event.getTarget();
-            if (ChainProperties.isChainedTo(target, event.getPlayer())) {
-                ChainProperties.removeChain(target, event.getPlayer());
-                if (!event.getWorld().isClientSide) {
+        if (event.getTarget() instanceof LivingEntity target) {
+            if (ChainProperties.isChainedTo(target, event.getEntity())) {
+                ChainProperties.removeChain(target, event.getEntity());
+
+                if (!event.getLevel().isClientSide) {
                     event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN.get(), 1);
                 }
+
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.SUCCESS);
             }
         }
+
         // Handle debug path render
-        if (!event.getWorld().isClientSide() && event.getTarget() instanceof Mob && event.getItemStack().getItem() == Items.STICK) {
+        if (!event.getLevel().isClientSide() && event.getTarget() instanceof Mob && event.getItemStack().getItem() == Items.STICK) {
             if (AiDebug.isEnabled())
                 AiDebug.addEntity((Mob) event.getTarget());
             if (Pathfinding.isDebug()) {
-                if (AbstractPathJob.trackingMap.getOrDefault(event.getPlayer(), UUID.randomUUID()).equals(event.getTarget().getUUID())) {
-                    AbstractPathJob.trackingMap.remove(event.getPlayer());
-                    IceAndFire.sendMSGToPlayer(new MessageSyncPath(new HashSet<>(), new HashSet<>(), new HashSet<>()), (ServerPlayer) event.getPlayer());
+                if (AbstractPathJob.trackingMap.getOrDefault(event.getEntity(), UUID.randomUUID()).equals(event.getTarget().getUUID())) {
+                    AbstractPathJob.trackingMap.remove(event.getEntity());
+                    IceAndFire.sendMSGToPlayer(new MessageSyncPath(new HashSet<>(), new HashSet<>(), new HashSet<>()), (ServerPlayer) event.getEntity());
                 } else {
-                    AbstractPathJob.trackingMap.put(event.getPlayer(), event.getTarget().getUUID());
+                    AbstractPathJob.trackingMap.put(event.getEntity(), event.getTarget().getUUID());
                 }
             }
         }
     }
 
-    @SubscribeEvent
-    public void onProjectileImpact(ProjectileImpactEvent event) {
-        if (event.getRayTraceResult() != null && event.getRayTraceResult() instanceof EntityHitResult) {
-            EntityHitResult entityResult = (EntityHitResult) event.getRayTraceResult();
-            if (entityResult.getEntity() != null && entityResult.getEntity() instanceof EntityGhost) {
-                event.setCanceled(true);
-            }
-        }
-    }
-
-    @SubscribeEvent
+    @SubscribeEvent // TODO :: Can this be moved into the item itself?
     public static void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
-        onLeftClick(event.getPlayer(), event.getItemStack());
-        if (event.getWorld().isClientSide) {
+        onLeftClick(event.getEntity(), event.getItemStack());
+        if (event.getLevel().isClientSide) {
             IceAndFire.sendMSGToServer(new MessageSwingArm());
         }
     }
@@ -502,24 +536,23 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof AbstractChestBlock) && !event.getPlayer().isCreative()) {
+        if (event.getEntity() != null && (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof AbstractChestBlock) && !event.getEntity().isCreative()) {
             float dist = IafConfig.dragonGoldSearchLength;
-            final List<Entity> list = event.getWorld().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
+            final List<Entity> list = event.getLevel().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(dist, dist, dist));
             if (!list.isEmpty()) {
                 for (final Entity entity : list) {
-                    if (entity instanceof EntityDragonBase) {
-                        EntityDragonBase dragon = (EntityDragonBase) entity;
-                        if (!dragon.isTame() && !dragon.isModelDead() && !dragon.isOwnedBy(event.getPlayer())) {
+                    if (entity instanceof EntityDragonBase dragon) {
+                        if (!dragon.isTame() && !dragon.isModelDead() && !dragon.isOwnedBy(event.getEntity())) {
                             dragon.setInSittingPose(false);
                             dragon.setOrderedToSit(false);
-                            dragon.setTarget(event.getPlayer());
+                            dragon.setTarget(event.getEntity());
                         }
                     }
                 }
             }
         }
-        if (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof WallBlock) {
-            ItemChain.attachToFence(event.getPlayer(), event.getWorld(), event.getPos());
+        if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof WallBlock) {
+            ItemChain.attachToFence(event.getEntity(), event.getLevel(), event.getPos());
         }
     }
 
@@ -527,12 +560,11 @@ public class ServerEvents {
     public void onBreakBlock(BlockEvent.BreakEvent event) {
         if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE.get() || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE.get() || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE.get())) {
             final float dist = IafConfig.dragonGoldSearchLength;
-            List<Entity> list = event.getWorld().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
+            List<Entity> list = event.getLevel().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
             if (list.isEmpty()) return;
 
             for (Entity entity : list) {
-                if (entity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) entity;
+                if (entity instanceof EntityDragonBase dragon) {
                     if (!dragon.isTame() && !dragon.isModelDead() && !dragon.isOwnedBy(event.getPlayer()) && !event.getPlayer().isCreative()) {
                         dragon.setInSittingPose(false);
                         dragon.setOrderedToSit(false);
@@ -543,7 +575,7 @@ public class ServerEvents {
         }
     }
 
-    //@SubscribeEvent
+    //@SubscribeEvent // FIXME :: Unused
     public static void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(BuiltInLootTables.SIMPLE_DUNGEON)
@@ -564,15 +596,11 @@ public class ServerEvents {
             || eventName.equals(BuiltInLootTables.VILLAGE_TOOLSMITH)
             || eventName.equals(BuiltInLootTables.VILLAGE_ARMORER)) {
 
-            if (IafConfig.generateSilverOre) {
-                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.SILVER_INGOT.get()).setQuality(15).setWeight(12);
-                LootPool.Builder builder = new LootPool.Builder().name("iaf_silver_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.5f)).setRolls(UniformGenerator.between(1, 3)).setBonusRolls(UniformGenerator.between(0, 3));
-                event.getTable().addPool(builder.build());
-            } else if (IafConfig.generateCopperOre) {
-                LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.COPPER_INGOT.get()).setQuality(10).setWeight(14);
-                LootPool.Builder builder = new LootPool.Builder().name("iaf_copper_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.6f)).setRolls(UniformGenerator.between(1, 2)).setBonusRolls(UniformGenerator.between(0, 3));
-                event.getTable().addPool(builder.build());
-            }
+
+            LootPoolEntryContainer.Builder item = LootItem.lootTableItem(IafItemRegistry.SILVER_INGOT.get()).setQuality(15).setWeight(12);
+            LootPool.Builder builder = new LootPool.Builder().name("iaf_silver_ingot").add(item).when(LootItemRandomChanceCondition.randomChance(0.5f)).setRolls(UniformGenerator.between(1, 3)).setBonusRolls(UniformGenerator.between(0, 3));
+            event.getTable().addPool(builder.build());
+
         } else if ((event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST)
             || event.getName().equals(WorldGenFireDragonCave.FIRE_DRAGON_CHEST_MALE)
             || event.getName().equals(WorldGenIceDragonCave.ICE_DRAGON_CHEST)
@@ -587,8 +615,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerLeaveEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.getPlayer() != null && !event.getPlayer().getPassengers().isEmpty()) {
-            for (Entity entity : event.getPlayer().getPassengers()) {
+        if (event.getEntity() != null && !event.getEntity().getPassengers().isEmpty()) {
+            for (Entity entity : event.getEntity().getPassengers()) {
                 entity.stopRiding();
             }
         }
@@ -596,10 +624,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onPlayerStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof LivingEntity) {
+        if (event.getTarget() instanceof LivingEntity target) {
             // Make sure that when a player starts tracking an entity that has additional data
             // it gets relayed from the server to the client
-            LivingEntity target = (LivingEntity) event.getTarget();
             if (ChainProperties.hasChainData(target))
                 ChainProperties.updateData(target);
             if (FrozenProperties.isFrozen(target))
@@ -612,27 +639,22 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
-        try {
-            if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal) {
-                Animal animal = (Animal) event.getEntity();
-                animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+    public void onEntityJoinWorld(final EntityJoinLevelEvent event) {
+        // Note: Avoid world (chunk) interaction with not-fully-loaded chunks
+        if (event.getEntity() instanceof Mob mob) {
+            try {
+                if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal animal) {
+                    animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
+                }
+                if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() != null && IafConfig.villagersFearDragons) {
+                    mob.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) mob, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
+                }
+                if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() != null && IafConfig.animalsFearDragons) {
+                    mob.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) mob, LivingEntity.class, 30, 1.0D, 0.5D, entity -> entity instanceof IAnimalFear iAnimalFear && iAnimalFear.shouldAnimalsFear(mob)));
+                }
+            } catch (Exception e) {
+                IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
             }
-            if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() instanceof Mob && IafConfig.villagersFearDragons) {
-                Mob villager = (Mob) event.getEntity();
-                villager.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) villager, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
-            }
-            if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() instanceof Mob && IafConfig.animalsFearDragons) {
-                Mob animal = (Mob) event.getEntity();
-                animal.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) animal, LivingEntity.class, 30, 1.0D, 0.5D, new java.util.function.Predicate<LivingEntity>() {
-                    @Override
-                    public boolean test(LivingEntity entity) {
-                        return entity != null && entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal);
-                    }
-                }));
-            }
-        } catch (Exception e) {
-            IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");
         }
     }
 
@@ -640,6 +662,17 @@ public class ServerEvents {
     public void onVillagerTrades(VillagerTradesEvent event) {
         if (event.getType() == IafVillagerRegistry.SCRIBE.get()) {
             IafVillagerRegistry.addScribeTrades(event.getTrades());
+        }
+    }
+
+    public static String BOLT_DONT_DESTROY_LOOT = "iceandfire.bolt_skip_loot";
+
+    @SubscribeEvent
+    public void onLightningHit(final EntityStruckByLightningEvent event) {
+        if ((event.getEntity() instanceof ItemEntity || event.getEntity() instanceof ExperienceOrb) && event.getLightning().getTags().contains(BOLT_DONT_DESTROY_LOOT)) {
+            event.setCanceled(true);
+        } else if (event.getLightning().getTags().contains(event.getEntity().getStringUUID())) {
+            event.setCanceled(true);
         }
     }
 }

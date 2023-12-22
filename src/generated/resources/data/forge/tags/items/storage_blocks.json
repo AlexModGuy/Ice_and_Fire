@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#forge:storage_blocks/scales/dragon/fire",
+    "#forge:storage_blocks/scales/dragon/ice",
+    "#forge:storage_blocks/scales/dragon/lightning",
+    "iceandfire:dragonsteel_fire_block",
+    "iceandfire:dragonsteel_ice_block",
+    "iceandfire:dragonsteel_lightning_block",
+    "iceandfire:sapphire_block",
+    "iceandfire:silver_block",
+    "iceandfire:dragon_bone_block"
+  ]
+}

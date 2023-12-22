@@ -8,7 +8,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.material.Material;
 
 public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<T> {
 
@@ -53,15 +52,14 @@ public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<
         this.resetToDefaultPose();
         this.Egg1.setPos(0.0F, 19.6F, 0.0F);
         this.Egg4.setPos(0.0F, -0.9F, 0.0F);
-        if (entity instanceof EntityDragonEgg) {
-            EntityDragonEgg dragon = (EntityDragonEgg) entity;
-            boolean flag = false;
-            if (dragon.getEggType().dragonType == DragonType.FIRE) {
-                flag = dragon.level.getBlockState(dragon.blockPosition()).getMaterial() == Material.FIRE;
-            } else if (dragon.getEggType().dragonType == DragonType.LIGHTNING) {
-                flag = dragon.level.isRainingAt(dragon.blockPosition());
+        if (entity instanceof EntityDragonEgg egg) {
+            boolean isLocationValid = false;
+            if (egg.getEggType().dragonType == DragonType.FIRE) {
+                isLocationValid = egg.level.getBlockState(egg.blockPosition()).isBurning(entity.level, egg.blockPosition());
+            } else if (egg.getEggType().dragonType == DragonType.LIGHTNING) {
+                isLocationValid = egg.level.isRainingAt(egg.blockPosition());
             }
-            if (flag) {
+            if (isLocationValid) {
                 this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, f2, 1);
                 this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, f2, 1);
             }

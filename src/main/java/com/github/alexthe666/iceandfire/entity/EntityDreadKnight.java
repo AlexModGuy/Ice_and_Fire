@@ -10,9 +10,10 @@ import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IDreadMob;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry;
+import com.github.alexthe666.iceandfire.recipe.IafBannerPatterns;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +23,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -39,6 +41,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +62,8 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     private static ItemStack generateShield() {
         ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
         CompoundTag compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
-        ListTag listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafItemRegistry.PATTERN_DREAD.get().getBannerPattern(), DyeColor.WHITE).toListTag();
+
+        ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPatterns.BASE, DyeColor.CYAN).addPattern(Holder.direct(IafBannerPatterns.PATTERN_DREAD.get()), DyeColor.WHITE).toListTag();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
         shield.setTag(itemstack.getTag());
@@ -68,16 +72,16 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, 40.0D)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.25D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, 2.0D)
-            //FOLLOW RANGE
-            .add(Attributes.FOLLOW_RANGE, 128.0D)
-            //ARMOR
-            .add(Attributes.ARMOR, 20.0D);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, 40.0D)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, 2.0D)
+                //FOLLOW RANGE
+                .add(Attributes.FOLLOW_RANGE, 128.0D)
+                //ARMOR
+                .add(Attributes.ARMOR, 20.0D);
     }
 
     @Override
@@ -124,9 +128,10 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+
     @Override
-    protected void populateDefaultEquipmentSlots(@NotNull DifficultyInstance difficulty) {
-        super.populateDefaultEquipmentSlots(difficulty);
+    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
+        super.populateDefaultEquipmentSlots(pRandom, pDifficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD.get()));
         if (random.nextBoolean()) {
             this.setItemSlot(EquipmentSlot.OFFHAND, SHIELD.copy());
@@ -139,7 +144,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setAnimation(ANIMATION_SPAWN);
-        this.populateDefaultEquipmentSlots(difficultyIn);
+        this.populateDefaultEquipmentSlots(worldIn.getRandom(), difficultyIn);
         return data;
     }
 

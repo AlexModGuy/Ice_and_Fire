@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixie;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -40,8 +39,8 @@ public class LayerPixieItem extends RenderLayer<EntityPixie, ModelPixie> {
                 matrixStackIn.translate(-0.075F, 0, -0.05F);
             }
             matrixStackIn.translate(0.05F, 0.55F, -0.4F);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 200, true));
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 180, true));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(200.0F));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
             Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
             matrixStackIn.popPose();
         }

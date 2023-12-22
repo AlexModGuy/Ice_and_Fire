@@ -1,0 +1,12 @@
+{
+  "feature": "iceandfire:lightning_dragon_roost",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

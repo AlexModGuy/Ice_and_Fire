@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.PathResult;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -218,7 +219,7 @@ public class MyrmexAIForage extends Goal {
         }
         Vec3 vec = DefaultRandomPos.getPos(this.myrmex, wanderRadius, 7);
         if (vec != null) {
-            this.targetBlock = new BlockPos(vec);
+            this.targetBlock = WorldUtil.containing(vec);
         }
         if (this.targetBlock != null) {
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(targetBlock.getX(),

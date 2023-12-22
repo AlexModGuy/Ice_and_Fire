@@ -44,45 +44,32 @@ public enum EnumDragonArmor {
             String sub = EnumDragonArmor.values()[i].name();
 
             int finalI = i;
-            EnumDragonArmor.values()[finalI].helmet = IafItemRegistry.ITEMS.register(sub + "_helmet", () ->
+            EnumDragonArmor.values()[finalI].helmet = IafItemRegistry.registerItem(sub + "_helmet", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.HEAD));
-            EnumDragonArmor.values()[finalI].chestplate = IafItemRegistry.ITEMS.register(sub + "_chestplate", () ->
+            EnumDragonArmor.values()[finalI].chestplate = IafItemRegistry.registerItem(sub + "_chestplate", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.CHEST));
-            EnumDragonArmor.values()[finalI].leggings = IafItemRegistry.ITEMS.register(sub + "_leggings", () ->
+            EnumDragonArmor.values()[finalI].leggings = IafItemRegistry.registerItem(sub + "_leggings", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.LEGS));
-            EnumDragonArmor.values()[finalI].boots = IafItemRegistry.ITEMS.register(sub + "_boots", () ->
+            EnumDragonArmor.values()[finalI].boots = IafItemRegistry.registerItem(sub + "_boots", () ->
                 new ItemScaleArmor(EnumDragonArmor.values()[finalI].eggType, EnumDragonArmor.values()[finalI], EnumDragonArmor.values()[finalI].armorMaterial, EquipmentSlot.FEET));
         }
     }
 
     public static Item getScaleItem(EnumDragonArmor armor) {
-        switch (armor) {
-            case armor_red:
-                return IafItemRegistry.DRAGONSCALES_RED.get();
-            case armor_bronze:
-                return IafItemRegistry.DRAGONSCALES_BRONZE.get();
-            case armor_green:
-                return IafItemRegistry.DRAGONSCALES_GREEN.get();
-            case armor_gray:
-                return IafItemRegistry.DRAGONSCALES_GRAY.get();
-            case armor_blue:
-                return IafItemRegistry.DRAGONSCALES_BLUE.get();
-            case armor_white:
-                return IafItemRegistry.DRAGONSCALES_WHITE.get();
-            case armor_sapphire:
-                return IafItemRegistry.DRAGONSCALES_SAPPHIRE.get();
-            case armor_silver:
-                return IafItemRegistry.DRAGONSCALES_SILVER.get();
-            case armor_electric:
-                return IafItemRegistry.DRAGONSCALES_ELECTRIC.get();
-            case armor_amythest:
-                return IafItemRegistry.DRAGONSCALES_AMYTHEST.get();
-            case armor_copper:
-                return IafItemRegistry.DRAGONSCALES_COPPER.get();
-            case armor_black:
-                return IafItemRegistry.DRAGONSCALES_BLACK.get();
-            default:
-                return IafItemRegistry.DRAGONSCALES_RED.get();
-        }
+        return switch (armor) {
+            case armor_red -> IafItemRegistry.DRAGONSCALES_RED.get();
+            case armor_bronze -> IafItemRegistry.DRAGONSCALES_BRONZE.get();
+            case armor_green -> IafItemRegistry.DRAGONSCALES_GREEN.get();
+            case armor_gray -> IafItemRegistry.DRAGONSCALES_GRAY.get();
+            case armor_blue -> IafItemRegistry.DRAGONSCALES_BLUE.get();
+            case armor_white -> IafItemRegistry.DRAGONSCALES_WHITE.get();
+            case armor_sapphire -> IafItemRegistry.DRAGONSCALES_SAPPHIRE.get();
+            case armor_silver -> IafItemRegistry.DRAGONSCALES_SILVER.get();
+            case armor_electric -> IafItemRegistry.DRAGONSCALES_ELECTRIC.get();
+            case armor_amythest -> IafItemRegistry.DRAGONSCALES_AMYTHEST.get();
+            case armor_copper -> IafItemRegistry.DRAGONSCALES_COPPER.get();
+            case armor_black -> IafItemRegistry.DRAGONSCALES_BLACK.get();
+            default -> IafItemRegistry.DRAGONSCALES_RED.get();
+        };
     }
 }

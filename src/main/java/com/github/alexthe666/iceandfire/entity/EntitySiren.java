@@ -46,7 +46,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -86,9 +86,16 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public EntitySiren(EntityType<EntitySiren> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.switchNavigator(true);
-        this.maxUpStep = 2;
+        if (worldIn.isClientSide) {
+            tail_buffer = new ChainBuffer();
+        }
+        this.maxUpStep = 1F;
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(0, new SirenAIFindWaterTarget(this));
         this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
@@ -109,9 +116,6 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
                 return EntitySiren.this.isAgressive();
             }
         }));
-        if (worldIn.isClientSide) {
-            tail_buffer = new ChainBuffer();
-        }
     }
 
     public static boolean isWearingEarplugs(LivingEntity entity) {
@@ -120,13 +124,13 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return 8;
     }
 
     @Override
     public float getWalkTargetValue(@NotNull BlockPos pos) {
-        return level.getBlockState(pos).getMaterial() == Material.WATER ? 10F : super.getWalkTargetValue(pos);
+        return level.getBlockState(pos).is(Blocks.WATER) ? 10F : super.getWalkTargetValue(pos);
     }
 
     @Override
@@ -256,7 +260,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         if (target != null && !this.isAgressive()) {
             this.setAggressive(true);
         }
-        boolean singing = isActuallySinging() && !this.isAgressive() && !this.isInWater() && onGround;
+        boolean singing = isActuallySinging() && !this.isAgressive() && !this.isInWater() && isOnGround();
         if (singing && singProgress < 20.0F) {
             singProgress += 1F;
         } else if (!singing && singProgress > 0.0F) {
@@ -351,7 +355,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         this.setSinging(tag.getBoolean("Singing"));
         this.setSwimming(tag.getBoolean("Swimming"));
         this.setCharmed(tag.getBoolean("Passive"));
-
+        this.setConfigurableAttributes();
     }
 
     public boolean isSinging() {
@@ -432,17 +436,17 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Mob.createMobAttributes()
-            //HEALTH
-            .add(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
-            //SPEED
-            .add(Attributes.MOVEMENT_SPEED, 0.25D)
-            //ATTACK
-            .add(Attributes.ATTACK_DAMAGE, 6.0D);
+                //HEALTH
+                .add(Attributes.MAX_HEALTH, IafConfig.sirenMaxHealth)
+                //SPEED
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                //ATTACK
+                .add(Attributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.sirenMaxHealth);
     }
 
     @Override
@@ -569,7 +573,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
                 siren.setDeltaMovement(siren.getDeltaMovement().add(f1, siren.getSpeed() * distanceY * 0.1D, f2));
             } else if (this.operation == MoveControl.Operation.JUMPING) {
                 siren.setSpeed((float) (this.speedModifier * siren.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
-                if (siren.onGround) {
+                if (siren.isOnGround()) {
                     this.operation = MoveControl.Operation.WAIT;
                 }
             } else {

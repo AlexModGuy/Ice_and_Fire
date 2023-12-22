@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.model.util;
 
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -64,7 +65,7 @@ public class LegSolver {
 
 
         private float settle(EntityDragonBase entity, double x, double y, double z, float height) {
-            BlockPos pos = new BlockPos(x, y + 1e-3, z);
+            BlockPos pos = WorldUtil.containing(x, y + 1e-3, z);
             float dist = this.getDistance(entity.level, pos);
             if (1 - dist < 1e-3) {
                 dist = this.getDistance(entity.level, pos.below()) + (float) y % 1;

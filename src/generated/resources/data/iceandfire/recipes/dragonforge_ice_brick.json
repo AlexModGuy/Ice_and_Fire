@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:stone_bricks"
+    },
+    "S": {
+      "tag": "forge:storage_blocks/scales/dragon/ice"
+    }
+  },
+  "pattern": [
+    "SBS",
+    "BSB",
+    "SBS"
+  ],
+  "result": {
+    "count": 4,
+    "item": "iceandfire:dragonforge_ice_brick"
+  }
+}

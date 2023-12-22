@@ -25,7 +25,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(@NotNull ItemStack stack, ItemTransforms.@NotNull TransformType type, PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(@NotNull ItemStack stack, @NotNull ItemTransforms.TransformType type, PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         stackIn.translate(0.5F, 0.5f, 0.5f);
         if (type == ItemTransforms.TransformType.GUI || type == ItemTransforms.TransformType.FIXED || type == ItemTransforms.TransformType.NONE || type == ItemTransforms.TransformType.GROUND) {
             ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY.get());
@@ -42,7 +42,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
             } else {
                 stackIn.translate(0, 0.6F, 0.0F);
             }
-            stackIn.mulPose(Vector3f.XP.rotationDegrees(160));
+            stackIn.mulPose(Vector3f.XP.rotationDegrees(160.0F));
             VertexConsumer glintVertexBuilder = ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityCutoutNoCull(RenderTideTrident.TRIDENT), false, stack.hasFoil());
             MODEL.renderToBuffer(stackIn,
                 glintVertexBuilder, combinedLightIn,

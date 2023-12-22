@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelMyrmexPupa;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -50,7 +49,7 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
         }
         matrixStackIn.scale(scale, scale, scale);
         if (myrmex.isPassenger() && myrmex.getGrowthStage() < 2) {
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90, true));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
         }
     }
 

@@ -1,92 +1,68 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url 'https://maven.minecraftforge.net' }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        maven { url = 'https://maven.parchmentmc.org' } // Add this line
     }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xmaxerrs" << "1000"
-        }
-    }
-}
-plugins {
-    id 'eclipse'
-    id 'maven-publish'
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-repositories {
-    maven {
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "CurseMaven"
-        url = "https://www.cursemaven.com"
+    dependencies {
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7+'
     }
 }
+
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+apply plugin: 'org.spongepowered.mixin'
 
 def build_snapshot = System.getenv("BUILD_SNAPSHOT") == "true"
 def build_id = System.getenv("BUILD_ID")
 
-version = '2.1.12-1.18.2'
+version = mc_version + "-" + mod_version
 
 if (build_snapshot) {
     version += '-SNAPSHOT'
 }
+
 if (build_id != null) {
     version += "+build.${build_id}"
 }
 
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'iceandfire'
+//archivesBaseName = 'iceandfire'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: 'parchment', version: "${parchment_version}-${mc_version}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    copyIdeResources = true
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            property 'fml.earlyprogresswindow', 'false'
+            property 'mixin.env.disableRefMap', 'true'
+
+            mods {
+                "iceandfire" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
             arg "-mixin.config=citadel.mixins.json"
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
-            // Recommended logging data for a userdev environment
-            // The markers can be changed as needed.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRYDUMP'
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
 
-            mods {
-                iceandfire {
-                    source sourceSets.main
-                }
-            }
         }
 
         server {
@@ -96,13 +72,7 @@ minecraft {
             arg "-mixin.config=citadel.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-            property 'forge.logging.console.level', 'debug'
 
-            mods {
-                iceandfire {
-                    source sourceSets.main
-                }
-            }
         }
 
         data {
@@ -111,19 +81,9 @@ minecraft {
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
 
-            //property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.markers', 'REGISTRYDUMP'
-
-            property 'forge.logging.console.level', 'debug'
-
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'iceandfire', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-            mods {
-                iceandfire {
-                    source sourceSets.main
-                }
-            }
         }
     }
 }
@@ -132,28 +92,46 @@ mixin {
     add sourceSets.main, "iceandfire.refmap.json"
     config 'iceandfire.mixins.json'
 }
+
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-processResources {}
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+repositories {
+    flatDir { dirs 'dev' }
+    maven { url = "https://www.cursemaven.com" } // CurseForge
+    maven { url = "https://maven.blamejared.com/" } // JEI
+}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    // at runtime, use the full JEI jar
+    implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    //compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.25")
+    //compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.25")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
+    implementation fg.deobf("curse.maven:citadel-331936:4556677")
+
+    // Debug
+    implementation fg.deobf("curse.maven:atlasviewer-633577:4420382")
+    implementation fg.deobf("curse.maven:mob-entity-path-visualizer-590716:4063117")
+    implementation fg.deobf("curse.maven:terralith-513688:4823693")
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2-common-api:10.2.1.283")
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2-forge-api:10.2.1.283")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2-forge:10.2.1.283")
-    implementation "curse.maven:citadel-331936:3783098"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
     manifest {
         attributes([
                 "Specification-Title": "iceandfire",
                 "Specification-Vendor": "alexthe667",
-                "Specification-Version": "2.1.11", // We are version 1 of ourselves
+                "Specification-Version": mod_version, // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"alexthe667",
@@ -169,15 +147,15 @@ jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            artifact jar
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "file:///${project.projectDir}/mcmodsrepo"
+//        }
+//    }
+//}

@@ -28,7 +28,7 @@ public class RenderGorgonHead extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack stack, @NotNull ItemTransforms.TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         boolean active = false;
         if (stack.getItem() == IafItemRegistry.GORGON_HEAD.get()) {
             if (stack.getTag() != null) {

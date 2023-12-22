@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
@@ -302,9 +301,9 @@ public abstract class AbstractPathJob implements Callable<Path> {
      * @return ChunkCoordinates for starting location.
      */
     public static BlockPos prepareStart(final LivingEntity entity) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(Mth.floor(entity.getX()),
-            Mth.floor(entity.getY()),
-            Mth.floor(entity.getZ()));
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(entity.getBlockX(),
+            entity.getBlockY(),
+            entity.getBlockZ());
         final Level world = entity.level;
 
         BlockState bs = world.getBlockState(pos);
@@ -598,9 +597,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             }
         }
 
-        final Path path = finalizePath(bestNode);
-
-        return path;
+        return finalizePath(bestNode);
     }
 
     private void handleDebugOptions(final MNode currentNode) {
@@ -1072,7 +1069,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             if (isWalkableSurface(below, pos) == SurfaceType.WALKABLE && i <= 4 || below.getMaterial().isLiquid()) {
                 //  Level path
                 return pos.getY() - i + 1;
-            } else if (below.getMaterial() != Material.AIR) {
+            } else if (below.isAir()) {
                 return -1;
             }
         }
@@ -1276,7 +1273,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             }
         }
 
-        if (block.getMaterial() != Material.AIR) {
+        if (!block.isAir()) {
             final VoxelShape shape = block.getBlockSupportShape(world, pos);
             if (block.getMaterial().blocksMotion() && !(shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.1)) {
                 if (block.getBlock() instanceof TrapDoorBlock) {
@@ -1311,7 +1308,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
                 // TODO: I'd be cool if dragons could squash multiple snow layers when walking over them
                 if (shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.125 && !isLiquid((block)) && (block.getBlock() != Blocks.SNOW || block.getValue(SnowLayerBlock.LAYERS) == 1)) {
-                    final BlockPathTypes pathType = block.getBlockPathType(world, pos);
+                    final BlockPathTypes pathType = block.getBlockPathType(world, pos, null);
                     return pathType == null || pathType.getDanger() == null;
                 }
                 return false;
@@ -1321,6 +1318,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
         return true;
     }
 
+    // TODO :: Expensive performance-wise
     protected boolean isPassable(final BlockPos pos, final boolean head, final MNode parent) {
         final BlockState state = world.getBlockState(pos);
         final VoxelShape shape = state.getBlockSupportShape(world, pos);
@@ -1414,7 +1412,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooBlock
+            || block instanceof BambooSaplingBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;
         }
@@ -1435,7 +1433,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooBlock
+            || block instanceof BambooSaplingBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;
         }

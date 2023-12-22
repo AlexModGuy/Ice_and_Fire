@@ -1,34 +1,37 @@
 package com.github.alexthe666.iceandfire.misc;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class IafDamageRegistry {
+import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
+
+@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class IafDamageRegistry { // TODO 1.19.2
     public static final String GORGON_DMG_TYPE = "gorgon";
     public static final String DRAGON_FIRE_TYPE = "dragon_fire";
     public static final String DRAGON_ICE_TYPE = "dragon_ice";
     public static final String DRAGON_LIGHTNING_TYPE = "dragon_lightning";
 
     static class CustomEntityDamageSource extends EntityDamageSource {
-        public CustomEntityDamageSource(String damageTypeIn, @Nullable Entity damageSourceEntityIn) {
+        public CustomEntityDamageSource(String damageTypeIn, @NotNull Entity damageSourceEntityIn) {
             super(damageTypeIn, damageSourceEntityIn);
         }
 
         @Override
         public @NotNull Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
-            String s = "death.attack." + this.msgId;
+            String s = "death.attack." + this.getMsgId();
             int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
-            return livingentity != null ? new TranslatableComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName());
+            return livingentity != null ? Component.translatable(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : Component.translatable(s1, entityLivingBaseIn.getDisplayName());
         }
     }
 
@@ -41,11 +44,11 @@ public class IafDamageRegistry {
         @Override
         public @NotNull Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
-            String s = "death.attack." + this.msgId;
+            String s = "death.attack." + this.getMsgId();
             int index = entityLivingBaseIn.getRandom().nextInt(2);
             String s1 = s + "." + index;
             String s2 = s + ".attacker_" + index;
-            return livingentity != null ? new TranslatableComponent(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName());
+            return livingentity != null ? Component.translatable(s2, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : Component.translatable(s1, entityLivingBaseIn.getDisplayName());
         }
     }
 

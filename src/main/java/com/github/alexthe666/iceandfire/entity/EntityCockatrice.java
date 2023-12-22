@@ -4,18 +4,17 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -43,10 +42,11 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -90,7 +90,6 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         this.lookControl = new IAFLookHelper(this);
         aiStare = new CockatriceAIStareAttack(this, 1.0D, 0, 15.0F);
         aiMelee = new EntityAIAttackMeleeNoCooldown(this, 1.5D, false);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -108,12 +107,13 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
-        return 10;
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.cockatriceMaxHealth);
     }
 
-    public boolean getCanSpawnHere() {
-        return this.getRandom().nextInt(IafConfig.cockatriceSpawnCheckChance + 1) == 0;
+    @Override
+    public int getExperienceReward() {
+        return 10;
     }
 
     @Override
@@ -250,11 +250,6 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
     }
 
-    @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
-    }
-
     public boolean canMove() {
         return !this.isOrderedToSit() && !(this.getAnimation() == ANIMATION_JUMPAT && this.getAnimationTick() < 7);
     }
@@ -368,6 +363,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         if (hasHomePosition && tag.getInt("HomeAreaX") != 0 && tag.getInt("HomeAreaY") != 0 && tag.getInt("HomeAreaZ") != 0) {
             homePos = new HomePosition(tag, this.level);
         }
+        this.setConfigurableAttributes();
     }
 
     @Override
@@ -445,32 +441,32 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
-        boolean flag = player.getItemInHand(hand).getItem() == Items.NAME_TAG || player.getItemInHand(hand).getItem() == Items.LEAD;
-        if (flag) {
+        ItemStack stackInHand = player.getItemInHand(hand);
+        Item itemInHand = stackInHand.getItem();
+
+        if (stackInHand.getItem() == Items.NAME_TAG || itemInHand == Items.LEAD || itemInHand == Items.POISONOUS_POTATO) {
             return super.mobInteract(player, hand);
         }
-        if (player.getItemInHand(hand).getItem() == Items.POISONOUS_POTATO) {
-            return super.mobInteract(player, hand);
-        }
+
         if (this.isTame() && this.isOwnedBy(player)) {
-            if (FoodUtils.isSeeds(player.getItemInHand(hand)) || player.getItemInHand(hand).getItem() == Items.ROTTEN_FLESH) {
+            if (stackInHand.is(IafItemTags.HEAL_COCKATRICE)) {
                 if (this.getHealth() < this.getMaxHealth()) {
                     this.heal(8);
                     this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
-                    player.getItemInHand(hand).shrink(1);
+                    stackInHand.shrink(1);
                 }
                 return InteractionResult.SUCCESS;
-            } else if (player.getItemInHand(hand).isEmpty()) {
+            } else if (stackInHand.isEmpty()) {
                 if (player.isShiftKeyDown()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
-                        player.displayClientMessage(new TranslatableComponent("cockatrice.command.remove_home"), true);
+                        player.displayClientMessage(Component.translatable("cockatrice.command.remove_home"), true);
                         return InteractionResult.SUCCESS;
                     } else {
                         BlockPos pos = this.blockPosition();
                         this.homePos = new HomePosition(pos, this.level);
                         this.hasHomePosition = true;
-                        player.displayClientMessage(new TranslatableComponent("cockatrice.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
+                        player.displayClientMessage(Component.translatable("cockatrice.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                         return InteractionResult.SUCCESS;
                     }
                 } else {
@@ -478,7 +474,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
                     if (this.getCommand() > 3) {
                         this.setCommand(0);
                     }
-                    player.displayClientMessage(new TranslatableComponent("cockatrice.command." + this.getCommand()), true);
+                    player.displayClientMessage(Component.translatable("cockatrice.command." + this.getCommand()), true);
                     this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                     return InteractionResult.SUCCESS;
                 }
@@ -522,13 +518,14 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
             double d0 = attackTarget.getX() - this.getX();
             double d1 = attackTarget.getZ() - this.getZ();
             float leap = Mth.sqrt((float) (d0 * d0 + d1 * d1));
-            if (dist <= 16.0D && this.isOnGround() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
-                Vec3 Vector3d = this.getDeltaMovement();
-                Vec3 Vector3d1 = new Vec3(attackTarget.getX() - this.getX(), 0.0D, attackTarget.getZ() - this.getZ());
-                if (Vector3d1.lengthSqr() > 1.0E-7D) {
-                    Vector3d1 = Vector3d1.normalize().scale(0.4D).add(Vector3d.scale(0.2D));
-                }
-            }
+            // FIXME :: Unused
+//            if (dist <= 16.0D && this.isOnGround() && this.getAnimationTick() > 7 && this.getAnimationTick() < 12) {
+//                Vec3 Vector3d = this.getDeltaMovement();
+//                Vec3 Vector3d1 = new Vec3(attackTarget.getX() - this.getX(), 0.0D, attackTarget.getZ() - this.getZ());
+//                if (Vector3d1.lengthSqr() > 1.0E-7D) {
+//                    Vector3d1 = Vector3d1.normalize().scale(0.4D).add(Vector3d.scale(0.2D));
+//                }
+//            }
             if (dist < 4 && this.getAnimationTick() > 10) {
                 attackTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 if ((double) leap >= 1.0E-4D) {

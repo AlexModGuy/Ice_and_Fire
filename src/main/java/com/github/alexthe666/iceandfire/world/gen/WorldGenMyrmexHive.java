@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.mojang.serialization.Codec;
@@ -14,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -27,10 +29,9 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
-public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
+public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
     private static final BlockState DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN.get().defaultBlockState();
     private static final BlockState STICKY_DESERT_RESIN = IafBlockRegistry.MYRMEX_DESERT_RESIN_STICKY.get().defaultBlockState();
@@ -51,7 +52,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         this.jungle = jungle;
     }
 
-    public boolean placeSmallGen(WorldGenLevel worldIn, Random rand, BlockPos pos) {
+    public boolean placeSmallGen(WorldGenLevel worldIn, RandomSource rand, BlockPos pos) {
         hasFoodRoom = false;
         hasNursery = false;
         totalRooms = 0;
@@ -65,17 +66,16 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos pos = context.origin();
         if (!small) {
-            if (!IafConfig.generateMyrmexColonies || rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos)) {
+            if (rand.nextInt(IafConfig.myrmexColonyGenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, pos) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, pos, getId())) {
                 return false;
             }
             if (MyrmexWorldData.get(worldIn.getLevel()) != null && MyrmexWorldData.get(worldIn.getLevel()).getNearestHive(pos, 200) != null) {
                 return false;
             }
         }
-        pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);
         if (!small && !worldIn.getFluidState(pos.below()).isEmpty()) {
             return false;
         }
@@ -91,7 +91,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         return true;
     }
 
-    private void generateMainRoom(ServerLevelAccessor world, Random rand, BlockPos position) {
+    private void generateMainRoom(ServerLevelAccessor world, RandomSource rand, BlockPos position) {
         hive = new MyrmexHive(world.getLevel(), position, 100);
         MyrmexWorldData.addHive(world.getLevel(), hive);
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
@@ -142,7 +142,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void generatePath(LevelAccessor world, Random rand, BlockPos offset, int length, Direction direction, int roomChance) {
+    private void generatePath(LevelAccessor world, RandomSource rand, BlockPos offset, int length, Direction direction, int roomChance) {
         if (roomChance == 0) {
             return;
         }
@@ -182,7 +182,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void generateRoom(LevelAccessor world, Random rand, BlockPos position, int size, int height, int roomChance, Direction direction) {
+    private void generateRoom(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, int roomChance, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         RoomType type = RoomType.random(rand);
@@ -213,7 +213,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void generateEntrance(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
+    private void generateEntrance(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, Direction direction) {
         BlockPos up = position.above();
         hive.getEntranceBottoms().put(up, direction);
         while (up.getY() < world.getHeightmapPos(small ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : Heightmap.Types.WORLD_SURFACE_WG, up).getY()
@@ -231,7 +231,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         entrances++;
     }
 
-    private void generateCircle(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
+    private void generateCircle(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
@@ -267,7 +267,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         decorateCircle(world, rand, position, size, height, direction);
     }
 
-    private void generateCircleRespectSky(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
+    private void generateCircleRespectSky(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, Direction direction) {
         BlockState resin = jungle ? JUNGLE_RESIN : DESERT_RESIN;
         BlockState sticky_resin = jungle ? STICKY_JUNGLE_RESIN : STICKY_DESERT_RESIN;
         int radius = size + 2;
@@ -308,7 +308,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
     }
 
 
-    private void generateCircleAir(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
+    private void generateCircleAir(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, Direction direction) {
         int radius = size;
         {
             for (float i = 0; i < radius; i += 0.5) {
@@ -327,7 +327,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         decorateCircle(world, rand, position, size, height, direction);
     }
 
-    public void generateSphere(LevelAccessor world, Random rand, BlockPos position, int size, int height, BlockState fill) {
+    public void generateSphere(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, BlockState fill) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -341,7 +341,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    public void generateSphere(LevelAccessor world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
+    public void generateSphere(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -355,7 +355,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    public void generateSphereRespectResin(LevelAccessor world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
+    public void generateSphereRespectResin(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -370,7 +370,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    public void generateSphereRespectAir(LevelAccessor world, Random rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
+    public void generateSphereRespectAir(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, BlockState fill, BlockState fill2) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -393,7 +393,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         return world.getBlockState(copy).getBlock() instanceof BlockMyrmexResin || world.getBlockState(copy).getBlock() instanceof BlockMyrmexConnectedResin;
     }
 
-    private void decorateCircle(LevelAccessor world, Random rand, BlockPos position, int size, int height, Direction direction) {
+    private void decorateCircle(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, Direction direction) {
         int radius = size + 2;
         {
             for (float i = 0; i < radius; i += 0.5) {
@@ -420,7 +420,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void decorateSphere(LevelAccessor world, Random rand, BlockPos position, int size, int height, RoomType roomType) {
+    private void decorateSphere(LevelAccessor world, RandomSource rand, BlockPos position, int size, int height, RoomType roomType) {
         int i2 = size;
         int ySize = rand.nextInt(2);
         int j = i2 + rand.nextInt(2);
@@ -439,7 +439,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void decorate(LevelAccessor world, BlockPos blockpos, BlockPos center, int size, Random random, RoomType roomType) {
+    private void decorate(LevelAccessor world, BlockPos blockpos, BlockPos center, int size, RandomSource random, RoomType roomType) {
         switch (roomType) {
             case FOOD:
                 if (random.nextInt(45) == 0 && world.getBlockState(blockpos.below()).getBlock() instanceof BlockMyrmexResin) {
@@ -482,7 +482,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
 
     }
 
-    private void decorateTubers(LevelAccessor world, BlockPos blockpos, Random random, RoomType roomType) {
+    private void decorateTubers(LevelAccessor world, BlockPos blockpos, RandomSource random, RoomType roomType) {
         if (world.getBlockState(blockpos.above()).canOcclude() && random.nextInt(roomType == RoomType.ENTERANCE || roomType == RoomType.TUNNEL ? 20 : 6) == 0) {
             int tuberLength = roomType == RoomType.ENTERANCE || roomType == RoomType.TUNNEL ? 1 : roomType == RoomType.QUEEN ? 1 + random.nextInt(5) : 1 + random.nextInt(3);
             for (int i = 0; i < tuberLength; i++) {
@@ -511,7 +511,7 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
             this.random = random;
         }
 
-        public static RoomType random(Random rand) {
+        public static RoomType random(RandomSource rand) {
             List<RoomType> list = new ArrayList<RoomType>();
             for (RoomType type : RoomType.values()) {
                 if (type.random) {
@@ -520,6 +520,15 @@ public class WorldGenMyrmexHive extends Feature<NoneFeatureConfiguration> {
             }
             return list.get(rand.nextInt(list.size()));
         }
+    }
 
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.SURFACE;
+    }
+
+    @Override
+    public String getId() {
+        return "myrmex_hive";
     }
 }

@@ -108,7 +108,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
 
     public void autoTarget() {
-        if (!level.isClientSide) {
+        if (this.level.isClientSide) {
             Entity shootingEntity = this.getOwner();
             if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getTarget() != null) {
                 Entity target = ((EntitySeaSerpent) shootingEntity).getTarget();
@@ -146,7 +146,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
     @Override
     protected void onHit(@NotNull HitResult movingObject) {
-        boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING); // TODO :: Unused?
         if (!this.level.isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {
                 Entity entity = ((EntityHitResult) movingObject).getEntity();

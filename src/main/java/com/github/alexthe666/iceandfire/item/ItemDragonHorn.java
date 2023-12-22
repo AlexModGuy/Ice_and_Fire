@@ -6,12 +6,9 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -72,7 +70,7 @@ public class ItemDragonHorn extends Item {
             target.save(entityTag);
             newTag.put("EntityTag", entityTag);
 
-            newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
+            newTag.putString("DragonHornEntityID", ForgeRegistries.ENTITY_TYPES.getKey(target.getType()).toString());
             trueStack.setTag(newTag);
 
             playerIn.swing(hand);
@@ -125,17 +123,17 @@ public class ItemDragonHorn extends Item {
                 String id = stack.getTag().getString("DragonHornEntityID");
                 if (EntityType.byString(id).isPresent()) {
                     EntityType type = EntityType.byString(id).get();
-                    tooltip.add((new TranslatableComponent(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));
-                    String name = (new TranslatableComponent("dragon.unnamed")).getString();
+                    tooltip.add((Component.translatable(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));
+                    String name = (Component.translatable("dragon.unnamed")).getString();
                     if (!entityTag.getString("CustomName").isEmpty()) {
                         MutableComponent component = Component.Serializer.fromJson(entityTag.getString("CustomName"));
                         if (component != null)
                             name = component.getString();
                     }
 
-                    tooltip.add((new TextComponent(name)).withStyle(ChatFormatting.GRAY));
-                    String gender = (new TranslatableComponent("dragon.gender")).getString() + " " + (new TranslatableComponent(entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
-                    tooltip.add((new TextComponent(gender)).withStyle(ChatFormatting.GRAY));
+                    tooltip.add((Component.literal(name)).withStyle(ChatFormatting.GRAY));
+                    String gender = (Component.translatable("dragon.gender")).getString() + " " + (Component.translatable(entityTag.getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female")).getString();
+                    tooltip.add((Component.literal(gender)).withStyle(ChatFormatting.GRAY));
                     int stagenumber = entityTag.getInt("AgeTicks") / 24000;
                     int stage1 = 0;
                     if (stagenumber >= 100) {
@@ -149,8 +147,8 @@ public class ItemDragonHorn extends Item {
                     } else {
                         stage1 = 1;
                     }
-                    String stage = (new TranslatableComponent("dragon.stage")).getString() + " " + stage1 + " " + (new TranslatableComponent("dragon.days.front")).getString() + stagenumber + " " + (new TranslatableComponent("dragon.days.back")).getString();
-                    tooltip.add((new TextComponent(stage)).withStyle(ChatFormatting.GRAY));
+                    String stage = (Component.translatable("dragon.stage")).getString() + " " + stage1 + " " + (Component.translatable("dragon.days.front")).getString() + stagenumber + " " + (Component.translatable("dragon.days.back")).getString();
+                    tooltip.add((Component.literal(stage)).withStyle(ChatFormatting.GRAY));
                 }
             }
 

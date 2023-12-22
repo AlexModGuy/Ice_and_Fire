@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
@@ -64,7 +64,7 @@ public class SirenAIFindWaterTarget extends Goal {
                                 singTargets.add(new Vec3(x, y + 1, z));
                             }
                         }
-                        if (this.mob.level.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y, z))) {
+                        if (this.mob.level.getBlockState(new BlockPos(x, y, z)).is(Blocks.WATER) && this.mob.isDirectPathBetweenPoints(this.mob.position(), new Vec3(x, y, z))) {
                             water.add(new Vec3(x, y, z));
                         }
 

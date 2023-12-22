@@ -137,15 +137,6 @@ public class EntityGhostSword extends AbstractArrow {
         }
     }
 
-    public int getBrightnessForRender() {
-        return 15728880;
-    }
-
-    @Override
-    public float getBrightness() {
-        return 1.0F;
-    }
-
     @Override
     public boolean isNoGravity() {
         return true;
@@ -201,8 +192,7 @@ public class EntityGhostSword extends AbstractArrow {
 
         if (entity1 != null) {
             if (entity1 instanceof LivingEntity) {
-                damagesource = DamageSource.arrow(this, entity1);
-                damagesource.setMagic();
+                damagesource = DamageSource.indirectMagic(this, entity1);
                 ((LivingEntity) entity1).setLastHurtMob(entity);
             }
         }

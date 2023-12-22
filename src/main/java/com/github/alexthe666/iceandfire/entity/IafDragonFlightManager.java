@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IFlyingMount;
 import com.github.alexthe666.iceandfire.util.IAFMath;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -80,7 +81,10 @@ public class IafDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level.isEmptyBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
+        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4
+                || !dragon.level.isEmptyBlock(WorldUtil.containing(target.x, target.y, target.z))
+                        && (dragon.isHovering() || dragon.isFlying())
+                || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;
 
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
@@ -93,9 +97,10 @@ public class IafDragonFlightManager {
                     viewBlock = DragonUtils.getBlockInViewEscort(dragon);
                 }
             } else if (dragon.lookingForRoostAIFlag) {
-                double xDist = Math.abs(dragon.getX() - dragon.getRestrictCenter().getX() - 0.5F);
-                double zDist = Math.abs(dragon.getZ() - dragon.getRestrictCenter().getZ() - 0.5F);
-                double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
+                // FIXME :: Unused
+//                double xDist = Math.abs(dragon.getX() - dragon.getRestrictCenter().getX() - 0.5F);
+//                double zDist = Math.abs(dragon.getZ() - dragon.getRestrictCenter().getZ() - 0.5F);
+//                double xzDist = Math.sqrt(xDist * xDist + zDist * zDist);
                 BlockPos upPos = dragon.getRestrictCenter();
                 if (dragon.getDistanceSquared(Vec3.atCenterOf(dragon.getRestrictCenter())) > 200) {
                     upPos = upPos.above(30);
@@ -277,11 +282,11 @@ public class IafDragonFlightManager {
                 float yawTurnHead = dragon.getYRot() + 90.0F;
                 speedModifier *= dragon.getFlightSpeedModifier();
                 speedModifier *= Math.min(1, dist / 50 + 0.3);//Make the dragon fly slower when close to target
-                double lvt_16_1_ = speedModifier * Mth.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
-                double lvt_18_1_ = speedModifier * Mth.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
-                double lvt_20_1_ = speedModifier * Mth.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
+                double x = speedModifier * Mth.cos(yawTurnHead * 0.017453292F) * Math.abs((double) distX / dist);
+                double y = speedModifier * Mth.sin(finPitch * 0.017453292F) * Math.abs((double) distY / dist);
+                double z = speedModifier * Mth.sin(yawTurnHead * 0.017453292F) * Math.abs((double) distZ / dist);
                 double motionCap = 0.2D;
-                dragon.setDeltaMovement(dragon.getDeltaMovement().add(Math.min(lvt_16_1_ * 0.2D, motionCap), Math.min(lvt_20_1_ * 0.2D, motionCap), Math.min(lvt_18_1_ * 0.2D, motionCap)));
+                dragon.setDeltaMovement(dragon.getDeltaMovement().add(Math.min(x * 0.2D, motionCap), Math.min(y * 0.2D, motionCap), Math.min(z * 0.2D, motionCap)));
             }
         }
 

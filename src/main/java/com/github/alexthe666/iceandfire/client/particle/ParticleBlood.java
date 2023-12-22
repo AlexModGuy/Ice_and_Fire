@@ -47,8 +47,9 @@ public class ParticleBlood extends TextureSheetParticle {
             quaternion.mul(Vector3f.ZP.rotation(f3));
         }
 
-        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
-        vector3f1.transform(quaternion);
+        // TODO :: 1.19.2 - This doesn't get utilized (the passed-in quaterion does not change)?
+//        Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);
+//        vector3f1.transform(quaternion);
         Vector3f[] avector3f = new Vector3f[]{new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)};
         float f4 = this.getQuadSize(partialTicks);
 

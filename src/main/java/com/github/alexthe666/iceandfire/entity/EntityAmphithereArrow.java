@@ -46,14 +46,14 @@ public class EntityAmphithereArrow extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-        if ((tickCount == 1 || this.tickCount % 70 == 0) && !this.inGround && !this.onGround) {
+        if ((tickCount == 1 || this.tickCount % 70 == 0) && !this.inGround && !this.isOnGround()) {
             this.playSound(IafSoundRegistry.AMPHITHERE_GUST, 1, 1);
         }
         if (level.isClientSide && !this.inGround) {
             double d0 = this.random.nextGaussian() * 0.02D;
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
-            double d3 = 10.0D;
+//            double d3 = 10.0D;
             double xRatio = this.getDeltaMovement().x * this.getBbWidth();
             double zRatio = this.getDeltaMovement().z * this.getBbWidth();
             this.level.addParticle(ParticleTypes.CLOUD, this.getX() + xRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d0 * 10.0D, this.getY() + this.random.nextFloat() * this.getBbHeight() - d1 * 10.0D, this.getZ() + zRatio + this.random.nextFloat() * this.getBbWidth() * 1.0F - this.getBbWidth() - d2 * 10.0D, d0, d1, d2);

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
@@ -33,15 +32,6 @@ public class CommonProxy {
             // We only need to initialize the biome config on the server
             BiomeConfig.init();
             IafConfig.bakeServer(config);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onModConfigChanged(final ModConfigEvent.Reloading event) {
-        final ModConfig config = event.getConfig();
-        // In case we reload the config clear the attribute cache to allow for values to be modified
-        if (config.getSpec() == ConfigHolder.SERVER_SPEC) {
-            IHasCustomizableAttributes.ATTRIBUTE_MODIFIER_MAP.clear();
         }
     }
 

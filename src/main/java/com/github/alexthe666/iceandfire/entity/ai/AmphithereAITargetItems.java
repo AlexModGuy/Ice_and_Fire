@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.sounds.SoundEvents;
@@ -7,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
@@ -37,12 +37,7 @@ public class AmphithereAITargetItems<T extends ItemEntity> extends TargetGoal {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetChance = chance;
-        this.targetEntitySelector = new Predicate<ItemEntity>() {
-            @Override
-            public boolean test(ItemEntity item) {
-                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Items.COCOA_BEANS;
-            }
-        };
+        this.targetEntitySelector = (Predicate<ItemEntity>) item -> item != null && !item.getItem().isEmpty() && item.getItem().is(IafItemTags.HEAL_AMPITHERE);
         this.setFlags(EnumSet.of(Flag.TARGET));
     }
 

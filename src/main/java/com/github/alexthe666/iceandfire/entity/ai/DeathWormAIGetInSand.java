@@ -1,15 +1,16 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 
 public class DeathWormAIGetInSand extends Goal {
     private final EntityDeathWorm creature;
@@ -62,13 +63,13 @@ public class DeathWormAIGetInSand extends Goal {
 
     @Nullable
     private Vec3 findPossibleShelter() {
-        Random random = this.creature.getRandom();
-        BlockPos blockpos = new BlockPos(this.creature.getX(), this.creature.getBoundingBox().minY, this.creature.getZ());
+        RandomSource random = this.creature.getRandom();
+        BlockPos blockpos = WorldUtil.containing(this.creature.getBlockX(), this.creature.getBoundingBox().minY, this.creature.getBlockZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
-            if (this.world.getBlockState(blockpos1).getMaterial() == Material.SAND) {
+            if (this.world.getBlockState(blockpos1).is(BlockTags.SAND)) {
                 return new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }

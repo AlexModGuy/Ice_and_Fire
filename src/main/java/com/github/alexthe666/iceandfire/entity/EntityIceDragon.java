@@ -11,13 +11,13 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -33,7 +33,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -138,26 +137,26 @@ public class EntityIceDragon extends EntityDragonBase {
 
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Swimming", this.isSwimming());
         compound.putInt("SwimmingTicks", this.ticksSwiming);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSwimming(compound.getBoolean("Swimming"));
         this.ticksSwiming = compound.getInt("SwimmingTicks");
     }
 
-    @Override
+/*    @Override
     public boolean canBeControlledByRider() {
         return true;
-    }
+    }*/
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         this.getLookControl().setLookAt(entityIn, 30.0F, 30.0F);
         if (!this.isPlayingAttackAnimation()) {
             switch (groundAttack) {
@@ -203,7 +202,7 @@ public class EntityIceDragon extends EntityDragonBase {
             if (this.getBoundingBox().inflate(0 + this.getRenderSize() * 0.33F, 0 + this.getRenderSize() * 0.33F, 0 + this.getRenderSize() * 0.33F).intersects(attackTarget.getBoundingBox())) {
                 doHurtTarget(attackTarget);
             }
-            if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
+            if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || isOnGround())) {
                 shootIceAtMob(attackTarget);
             }
             if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.distanceToSqr(attackTarget) < 100) {
@@ -221,34 +220,34 @@ public class EntityIceDragon extends EntityDragonBase {
                 }
             }
         }
-        boolean swimming = isInMaterialWater();
+        boolean swimming = isInWater();
         this.prevSwimProgress = swimProgress;
         if (swimming && swimProgress < 20.0F) {
             swimProgress += 0.5F;
         } else if (!swimming && swimProgress > 0.0F) {
             swimProgress -= 0.5F;
         }
-        if (this.isInMaterialWater() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
+        if (this.isInWater() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
             this.setSwimming(true);
             this.setHovering(false);
             this.setFlying(false);
             this.flyTicks = 0;
             this.ticksSwiming = 0;
         }
-        if ((!this.isInMaterialWater() || this.isHovering() || this.isFlying()) && this.isSwimming()) {
+        if ((!this.isInWater() || this.isHovering() || this.isFlying()) && this.isSwimming()) {
             this.setSwimming(false);
             this.ticksSwiming = 0;
         }
         if (this.isSwimming() && !this.isModelDead()) {
             ticksSwiming++;
-            if ((this.isInMaterialWater() || this.isOverWater()) && (ticksSwiming > 4000 || this.getTarget() != null && this.isInWater() != this.getTarget().isInWater()) && !this.isBaby() && !this.isHovering() && !this.isFlying()) {
+            if (this.isInWater() && (ticksSwiming > 4000 || this.getTarget() != null && this.isInWater() != this.getTarget().isInWater()) && !this.isBaby() && !this.isHovering() && !this.isFlying()) {
                 this.setHovering(true);
                 this.jumpFromGround();
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.8D, 0.0D));
                 this.setSwimming(false);
             }
         }
-        if (!level.isClientSide && this.getControllingPassenger() == null && (this.isHovering() && !this.isFlying() && (this.isInMaterialWater() || this.isOverWater()))) {
+        if (!level.isClientSide && this.getControllingPassenger() == null && (this.isHovering() && !this.isFlying() && this.isInWater())) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.2D, 0.0D));
         }
         if (swimCycle < 48) {
@@ -259,19 +258,6 @@ public class EntityIceDragon extends EntityDragonBase {
         if (this.isModelDead() && swimCycle != 0) {
             swimCycle = 0;
         }
-    }
-
-    @Override
-    protected boolean isIceInWater() {
-        return isInMaterialWater();
-    }
-
-    private boolean isOverWater() {
-        return isInMaterialWater();
-    }
-
-    public boolean isInsideWaterBlock() {
-        return this.isInMaterialWater();
     }
 
     @Override
@@ -339,8 +325,9 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    public void travel(Vec3 pTravelVector) {
-        if (this.isInWater()) {
+    public void travel(@NotNull Vec3 pTravelVector) {
+        float flyingSpeed;
+        if (/* Always false on the server */ this.isInWater()) {
             // In water special
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
                 // Ice dragons swim faster
@@ -350,7 +337,7 @@ public class EntityIceDragon extends EntityDragonBase {
                 if (this.getTarget() == null) {
 //                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
                 }
-            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
+            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && !isHovering() && !isFlying()) {
                 LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -397,7 +384,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
         }
         // Over water special
-        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && !isHovering() && !isFlying()
                 && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.WATER)) {
             // Movement when walking on the water, mainly used for not slowing down when jumping out of water
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
@@ -420,7 +407,7 @@ public class EntityIceDragon extends EntityDragonBase {
             strafing *= 0.05f;
 
             if (this.isControlledByLocalInstance()) {
-                this.flyingSpeed = speed * 0.1F;
+                flyingSpeed = speed * 0.1F;
                 this.setSpeed(speed);
 
                 // Vanilla walking behavior includes going up steps
@@ -449,10 +436,6 @@ public class EntityIceDragon extends EntityDragonBase {
         } else {
             return isMale() ? MALE_LOOT : FEMALE_LOOT;
         }
-    }
-
-    public boolean isInMaterialWater() {
-        return this.isInWater();
     }
 
     private void shootIceAtMob(LivingEntity entity) {
@@ -523,7 +506,7 @@ public class EntityIceDragon extends EntityDragonBase {
             //sync with server, fire bomb
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonSyncFire(this.getId(), burnX, burnY, burnZ, 5));
         }
-        if (syncType > 2 && syncType < 6) {
+        if (/* Only trigger for bomb */ syncType > 2 && syncType < 6) {
             if (this.getAnimation() != ANIMATION_FIRECHARGE) {
                 this.setAnimation(ANIMATION_FIRECHARGE);
             } else if (this.getAnimationTick() == 20) {
@@ -539,7 +522,8 @@ public class EntityIceDragon extends EntityDragonBase {
                 this.playSound(IafSoundRegistry.FIREDRAGON_BREATH, 4, 1);
                 EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(
                     IafEntityRegistry.ICE_DRAGON_CHARGE.get(), level, this, d2, d3, d4);
-                float size = this.isBaby() ? 0.4F : this.shouldDropLoot() ? 1.3F : 0.8F;
+                // FIXME :: Unused
+//                float size = this.isBaby() ? 0.4F : this.shouldDropLoot() ? 1.3F : 0.8F;
                 entitylargefireball.setPos(headVec.x, headVec.y, headVec.z);
                 if (!level.isClientSide) {
                     level.addFreshEntity(entitylargefireball);
@@ -555,7 +539,6 @@ public class EntityIceDragon extends EntityDragonBase {
         double d2 = burnX - headPos.x;
         double d3 = burnY - headPos.y;
         double d4 = burnZ - headPos.z;
-        float particleScale = Mth.clamp(this.getRenderSize() * 0.08F, 0.55F, 3F);
         double distance = Math.max(2.5F * this.distanceToSqr(burnX, burnY, burnZ), 0);
         double conqueredDistance = burnProgress / 40D * distance;
         int increment = (int) Math.ceil(conqueredDistance / 100);
@@ -571,10 +554,9 @@ public class EntityIceDragon extends EntityDragonBase {
             } else {
                 if (!level.isClientSide) {
                     HitResult result = this.level.clip(new ClipContext(new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()), new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-                    BlockPos pos = new BlockPos(result.getLocation());
-                    if (!this.isInMaterialWater()) {
-                        IafDragonDestructionManager.destroyAreaIce(level, pos, this);
-                    }
+                    Vec3 vec3 = result.getLocation();
+                    BlockPos pos = WorldUtil.containing(vec3);
+                    IafDragonDestructionManager.destroyAreaBreath(level, pos, this);
                 }
             }
         }
@@ -583,9 +565,7 @@ public class EntityIceDragon extends EntityDragonBase {
             double spawnY = burnY + (random.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (random.nextFloat() * 3.0) - 1.5;
             if (!level.isClientSide) {
-                if (!this.isInMaterialWater()) {
-                    IafDragonDestructionManager.destroyAreaIce(level, new BlockPos(spawnX, spawnY, spawnZ), this);
-                }
+                IafDragonDestructionManager.destroyAreaBreath(level, WorldUtil.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }
@@ -655,7 +635,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
     @Override
     public double getFlightSpeedModifier() {
-        return super.getFlightSpeedModifier() * (this.isInMaterialWater() ? 0.3F : 1F);
+        return super.getFlightSpeedModifier() * (this.isInWater() ? 0.3F : 1F);
     }
 
     @Override
@@ -700,13 +680,13 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemStack getSkull() {
+    public ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_ICE.get());
     }
 
     @Override
     public boolean useFlyingPathFinder() {
-        return (this.isFlying() || this.isInMaterialWater()) && this.getControllingPassenger() == null;
+        return (this.isFlying() || this.isInWater()) && this.getControllingPassenger() == null;
     }
 
     @Override
@@ -715,12 +695,17 @@ public class EntityIceDragon extends EntityDragonBase {
     }
 
     @Override
-    protected Item getBloodItem() {
+    public Item getBloodItem() {
         return IafItemRegistry.ICE_DRAGON_BLOOD.get();
     }
 
     @Override
-    protected ItemLike getHeartItem() {
+    public Item getFleshItem() {
+        return IafItemRegistry.ICE_DRAGON_FLESH.get();
+    }
+
+    @Override
+    public ItemLike getHeartItem() {
         return IafItemRegistry.ICE_DRAGON_HEART.get();
     }
 }

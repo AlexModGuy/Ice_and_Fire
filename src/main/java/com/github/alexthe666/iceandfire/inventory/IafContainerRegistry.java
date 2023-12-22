@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class IafContainerRegistry {
 
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister
-        .create(ForgeRegistries.CONTAINERS, IceAndFire.MODID);
+        .create(ForgeRegistries.MENU_TYPES, IceAndFire.MODID);
 
     public static final RegistryObject<MenuType<ContainerLectern>> IAF_LECTERN_CONTAINER = register(
         () -> new MenuType<>(ContainerLectern::new), "iaf_lectern");

@@ -1,17 +1,18 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 
 public class AquaticAIGetInWater extends Goal {
 
@@ -76,15 +77,14 @@ public class AquaticAIGetInWater extends Goal {
 
     @Nullable
     protected Vec3 findPossibleShelter(int xz, int y) {
-        Random random = this.creature.getRandom();
-        BlockPos blockpos = new BlockPos(this.creature.getX(), this.creature.getBoundingBox().minY,
-            this.creature.getZ());
+        RandomSource random = this.creature.getRandom();
+        BlockPos blockpos = WorldUtil.containing(this.creature.getBlockX(), this.creature.getBoundingBox().minY, this.creature.getBlockZ());
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.offset(random.nextInt(xz * 2) - xz, random.nextInt(y * 2) - y,
                 random.nextInt(xz * 2) - xz);
 
-            if (this.world.getBlockState(blockpos1).getMaterial() == Material.WATER) {
+            if (this.world.getBlockState(blockpos1).is(Blocks.WATER)) {
                 return new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }

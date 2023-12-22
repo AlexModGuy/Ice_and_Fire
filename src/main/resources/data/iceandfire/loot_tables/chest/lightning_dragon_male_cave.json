@@ -35,7 +35,7 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:amythest_gem",
+          "name": "minecraft:amethyst_shard",
           "functions": [
             {
               "function": "set_count",
@@ -105,7 +105,7 @@
         },
         {
           "type": "item",
-          "name": "iceandfire:copper_ingot",
+          "name": "minecraft:copper_ingot",
           "functions": [
             {
               "function": "set_count",

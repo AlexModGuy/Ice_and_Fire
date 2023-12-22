@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Random;
 
 public class SirenProperties {
@@ -22,14 +23,23 @@ public class SirenProperties {
     private static final String SIREN_TIME = "CharmeTime";
     private static final Random rand = new Random();
 
+    // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
+    private static HashMap<CompoundTag, Boolean> containsCharmedData = new HashMap<>();
+
     private static CompoundTag getOrCreateCharmData(LivingEntity entity) {
         return getOrCreateCharmData(CitadelEntityData.getCitadelTag(entity));
     }
 
     private static CompoundTag getOrCreateCharmData(CompoundTag entityData) {
-        if (entityData.contains(SIREN_DATA, 10)) {
+        if (containsCharmedData.containsKey(entityData) && containsCharmedData.get(entityData) && entityData.contains(SIREN_DATA, 10)) {
             return (CompoundTag) entityData.get(SIREN_DATA);
-        } else return createDefaultData();
+        } else if (entityData.contains(SIREN_DATA, 10)) {
+            containsCharmedData.put(entityData, true);
+            return (CompoundTag) entityData.get(SIREN_DATA);
+        } else {
+            containsCharmedData.put(entityData, false);
+            return createDefaultData();
+        }
     }
 
     private static void clearCharmedStatus(LivingEntity entity) {

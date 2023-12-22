@@ -1,14 +1,15 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -20,11 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
-    private final EntityDeathWorm worm;
 
     public PathNavigateDeathWormSand(EntityDeathWorm deathworm, Level worldIn) {
         super(deathworm, worldIn);
-        worm = deathworm;
     }
 
     @Override
@@ -40,9 +39,6 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return new PathFinder(this.nodeEvaluator, i);
     }
 
-    /**
-     * If on ground or swimming and can swim
-     */
     @Override
     protected boolean canUpdatePath() {
         return true;
@@ -53,16 +49,16 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
         return new Vec3(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ());
     }
 
+    @Override
+    protected boolean canMoveDirectly(@NotNull final Vec3 start, @NotNull final Vec3 end) {
+        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
 
-    /**
-     * Checks if the specified entity can safely walk to the specified location.
-     */
-    protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
-        HitResult raytraceresult = this.level.clip(new CustomRayTraceContext(posVec31, posVec32, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mob));
-        if (raytraceresult != null && raytraceresult.getType() == HitResult.Type.BLOCK) {
-            return mob.level.getBlockState(new BlockPos(raytraceresult.getLocation())).getMaterial() == Material.SAND;
+        if (raytraceresult.getType() == HitResult.Type.BLOCK) {
+            Vec3 vec3i = raytraceresult.getLocation();
+            return mob.level.getBlockState(WorldUtil.containing(vec3i)).is(BlockTags.SAND);
         }
-        return false;
+
+        return raytraceresult.getType() == HitResult.Type.MISS;
     }
 
     @Override
@@ -83,7 +79,7 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
 
         @Override
         public @NotNull VoxelShape getBlockShape(BlockState blockState, @NotNull BlockGetter world, @NotNull BlockPos pos) {
-            if (blockState.getMaterial() == Material.SAND)
+            if (blockState.is(BlockTags.SAND))
                 return Shapes.empty();
             return this.blockMode.get(blockState, world, pos, this.context);
         }

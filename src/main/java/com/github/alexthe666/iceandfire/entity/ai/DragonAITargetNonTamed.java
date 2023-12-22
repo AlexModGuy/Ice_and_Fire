@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,10 +23,26 @@ public class DragonAITargetNonTamed<T extends LivingEntity> extends NearestAttac
 
     @Override
     public boolean canUse() {
-        if (!dragon.isTame() && dragon.lookingForRoostAIFlag) {
+        if (dragon.isTame()) {
             return false;
         }
-        return !dragon.isTame() && !dragon.isSleeping() && super.canUse();
+
+        if (dragon.lookingForRoostAIFlag) {
+            return false;
+        }
+
+        boolean canUse = super.canUse();
+        boolean isSleeping = dragon.isSleeping();
+
+        if (canUse) {
+            if (isSleeping && target instanceof Player) {
+                return dragon.distanceToSqr(target) <= 16;
+            }
+
+            return !isSleeping;
+        }
+
+        return false;
     }
 
     @Override

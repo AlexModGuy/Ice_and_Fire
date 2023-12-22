@@ -1,11 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -35,7 +36,7 @@ public class AquaticAIFindWaterTarget extends Goal {
             }
             if (this.mob.getNavigation().isDone()) {
                 BlockPos vec3 = this.findWaterTarget();
-                if (vec3 != null) {
+                if (vec3 != null) { // TODO :: Performance impact
                     this.mob.getNavigation().moveTo(vec3.getX(), vec3.getY(), vec3.getZ(), 1.0);
                     return true;
                 }
@@ -50,11 +51,11 @@ public class AquaticAIFindWaterTarget extends Goal {
     }
 
     public BlockPos findWaterTarget() {
-        BlockPos blockpos = new BlockPos(this.mob.getX(), this.mob.getBoundingBox().minY, mob.getZ());
+        BlockPos blockpos = WorldUtil.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY, mob.getBlockZ());
         if (this.mob.getTarget() == null || !this.mob.getTarget().isAlive()) {
             for (int i = 0; i < 10; ++i) {
                 BlockPos blockpos1 = blockpos.offset(mob.getRandom().nextInt(20) - 10, mob.getRandom().nextInt(6) - 3, mob.getRandom().nextInt(20) - 10);
-                if (mob.level.getBlockState(blockpos1).getMaterial() == Material.WATER) {
+                if (mob.level.getBlockState(blockpos1).is(Blocks.WATER)) {
                     return blockpos1;
                 }
             }

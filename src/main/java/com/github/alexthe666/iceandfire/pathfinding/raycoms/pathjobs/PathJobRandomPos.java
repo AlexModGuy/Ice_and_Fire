@@ -7,13 +7,13 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 /**
@@ -35,7 +35,7 @@ public class PathJobRandomPos extends AbstractPathJob
     /**
      * Random pathing rand.
      */
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.createThreadSafe();
 
 
     /**
@@ -124,7 +124,7 @@ public class PathJobRandomPos extends AbstractPathJob
      * @param random a random object.
      * @return a tuple of two directions.
      */
-    public static Tuple<Direction, Direction> getRandomDirectionTuple(final Random random)
+    public static Tuple<Direction, Direction> getRandomDirectionTuple(final RandomSource random)
     {
         return new Tuple<>(Direction.getRandom(random), Direction.getRandom(random));
     }

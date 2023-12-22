@@ -36,7 +36,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -114,7 +113,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return 10;
     }
 
@@ -268,7 +267,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
                 if (dist < 1.5F) {
                     this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 }
-                if (onGround) {
+                if (isOnGround()) {
                     this.setFlying(false);
                 }
             }
@@ -332,7 +331,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
             this.setFlying(false);
             this.airTarget = null;
         }
-        if (!level.isClientSide && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && this.onGround) {
+        if (!level.isClientSide && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && this.isOnGround()) {
             this.setFlying(true);
             this.launchTicks = 0;
             this.flyTicks = 0;
@@ -351,7 +350,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
                 this.flyTicks = 0;
             }
         }
-        if (!this.onGround) {
+        if (!this.isOnGround()) {
             airBorneCounter++;
         } else {
             airBorneCounter = 0;
@@ -476,7 +475,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
     }
 
     protected boolean isTargetInAir() {
-        return airTarget != null && ((level.getBlockState(airTarget).getMaterial() == Material.AIR) || level.getBlockState(airTarget).getMaterial() == Material.AIR);
+        return airTarget != null && ((level.getBlockState(airTarget).isAir()) || level.getBlockState(airTarget).isAir());
     }
 
     public boolean doesWantToLand() {

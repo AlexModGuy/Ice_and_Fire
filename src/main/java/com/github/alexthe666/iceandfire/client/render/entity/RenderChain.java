@@ -49,8 +49,8 @@ public class RenderChain {
         vector3d2 = vector3d2.normalize();
         float f5 = (float) Math.acos(vector3d2.y);
         float f6 = (float) Math.atan2(vector3d2.z, vector3d2.x);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(Vector3f.YP.rotation((float) Math.PI / 2.0F - f6));
+        matrixStackIn.mulPose(Vector3f.XP.rotation(f5));
         float f7 = -1.0F;
         int j = 255;
         int k = 255;

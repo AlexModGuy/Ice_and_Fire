@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "iceandfire:deathworm_chitin_red"
+    },
+    "H": {
+      "item": "iceandfire:chain"
+    },
+    "T": {
+      "item": "iceandfire:deathworm_tounge"
+    }
+  },
+  "pattern": [
+    " T ",
+    "CHC",
+    "CCC"
+  ],
+  "result": {
+    "item": "iceandfire:deathworm_gauntlet_red"
+  }
+}

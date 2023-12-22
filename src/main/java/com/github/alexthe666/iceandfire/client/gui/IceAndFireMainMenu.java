@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -184,17 +183,15 @@ public class IceAndFireMainMenu extends TitleScreen {
             float heightScale = height / 427F;
             float imageScale = Math.min(widthScale, heightScale) * 192;
             for (Picture picture : drawnPictures) {
-                float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
                 RenderSystem.setShaderColor(1, 1, 1, 1);
-                GUIColoredBlit.blit(ms, (int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale, alpha);
+                blit(ms, (int) ((picture.x * widthScale) + middleX), (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
                 RenderSystem.disableBlend();
             }
         }
-        GlStateManager._enableTexture();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager._enableBlend();
+        RenderSystem.enableBlend();
         this.getMinecraft().font.draw(ms, "Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF);
         RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

@@ -27,9 +27,9 @@
 
 
 
-<item><iceandfire:copper_ingot 100 130 40 1>
-<item><iceandfire:copper_ore 100 110 40 1>
-<item><iceandfire:amythest_gem 100 170 40 1>
+<item><minecraft:copper_ingot 100 130 40 1>
+<item><minecraft:copper_ore 100 110 40 1>
+<item><minecraft:amethyst_shard 100 170 40 1>
 <item><iceandfire:amythest_ore 100 150 40 1>
 
 

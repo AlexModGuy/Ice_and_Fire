@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import java.util.EnumSet;
@@ -69,7 +68,7 @@ public class MyrmexAIFollowSummoner extends Goal {
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.canOcclude();
+        return BlockState.isAir() || !BlockState.canOcclude();
     }
 
     @Override

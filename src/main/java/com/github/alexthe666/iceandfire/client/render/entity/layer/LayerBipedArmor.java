@@ -50,9 +50,8 @@ public class LayerBipedArmor<T extends LivingEntity & IAnimatedEntity,
 
     private void renderEquipment(PoseStack matrixStackIn, MultiBufferSource bufferIn, T entityIn, EquipmentSlot slotType, int packedLightIn, A modelIn) {
         ItemStack itemstack = entityIn.getItemBySlot(slotType);
-        if (itemstack.getItem() instanceof ArmorItem) {
-            ArmorItem armoritem = (ArmorItem) itemstack.getItem();
-            if (armoritem.getSlot() == slotType) {
+        if (itemstack.getItem() instanceof ArmorItem armoritem) {
+            if (armoritem.getEquipmentSlot(itemstack) == slotType) {
                 this.getParentModel().setModelAttributes(modelIn);
                 this.setModelSlotVisible(modelIn, slotType);
                 boolean flag1 = itemstack.hasFoil();

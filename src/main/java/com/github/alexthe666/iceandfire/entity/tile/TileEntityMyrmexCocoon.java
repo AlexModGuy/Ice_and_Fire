@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -65,7 +64,7 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return new TranslatableComponent("container.myrmex_cocoon");
+        return Component.translatable("container.myrmex_cocoon");
     }
 
     @Override
@@ -125,7 +124,7 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
 
     public boolean isFull(ItemStack heldStack) {
         for (ItemStack itemstack : chestContents) {
-            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.sameItem(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
+            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && ItemStack.isSame(itemstack, heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
                 return false;
             }
         }

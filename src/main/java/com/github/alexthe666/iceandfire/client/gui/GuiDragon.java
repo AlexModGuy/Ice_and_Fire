@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -18,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
     private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
-    private float mousePosx;
-    private float mousePosY;
 
     public GuiDragon(ContainerDragon dragonInv, Inventory playerInv, Component name) {
         super(dragonInv, playerInv, name);
@@ -34,8 +33,6 @@ public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
     @Override
     public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.mousePosx = mouseX;
-        this.mousePosY = mouseY;
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
@@ -47,12 +44,12 @@ public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
         RenderSystem.setShaderTexture(0, texture);
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
+        blit(matrixStack, k, l, 0, 0, this.imageWidth, this.imageHeight);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;
             float dragonScale = 1F / Math.max(0.0001F, dragon.getScale());
-            InventoryScreen.renderEntityInInventory(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, (int) (dragonScale * 23F), k + 51 - this.mousePosx, l + 75 - 50 - this.mousePosY, dragon);
+            InventoryScreen.renderEntityInInventory(k + 88, l + (int) (0.5F * (dragon.flyProgress)) + 55, (int) (dragonScale * 23F), k + 51 - mouseX, l + 75 - 50 - mouseY, dragon);
         }
         if (entity instanceof EntityDragonBase) {
             EntityDragonBase dragon = (EntityDragonBase) entity;

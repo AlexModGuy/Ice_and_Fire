@@ -1,7 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.google.common.base.Predicate;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -23,8 +25,9 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
 
     @Override
     public boolean canUse() {
-        if (super.canUse() && target != null
-            && !target.getClass().isAssignableFrom(this.deathworm.getClass())) {
+        boolean canUse = super.canUse();
+
+        if (canUse && target != null && target.getType() != (IafEntityRegistry.DEATH_WORM.get())) {
             if (target instanceof Player && !deathworm.isOwnedBy(target)) {
                 return !deathworm.isTame();
             } else if (deathworm.isOwnedBy(target)) {
@@ -35,14 +38,17 @@ public class DeathWormAITarget<T extends LivingEntity> extends NearestAttackable
                 if (target instanceof PathfinderMob) {
                     return deathworm.getWormAge() > 3;
                 }
+
                 return true;
             }
         }
+
         return false;
     }
 
     @Override
     protected @NotNull AABB getTargetSearchArea(double targetDistance) {
-        return this.deathworm.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
+        // Increasing the y-range too much makes it target entities in caves etc., which will be unreachable (thus no target will be set)
+        return this.deathworm.getBoundingBox().inflate(targetDistance, 6, targetDistance);
     }
 }

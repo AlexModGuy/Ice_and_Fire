@@ -1,20 +1,26 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
-import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.util.HomePosition;
 import com.github.alexthe666.iceandfire.util.ShapeBuilder;
+import com.github.alexthe666.iceandfire.world.IafWorldData;
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,28 +30,25 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> {
-
+public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     public ResourceLocation DRAGON_CHEST;
     public ResourceLocation DRAGON_MALE_CHEST;
     public WorldGenCaveStalactites CEILING_DECO;
     public BlockState PALETTE_BLOCK1;
     public BlockState PALETTE_BLOCK2;
-    public BlockState PALETTE_ORE1;
-    public BlockState PALETTE_ORE2;
+    public TagKey<Block> dragonTypeOreTag;
     public BlockState TREASURE_PILE;
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     public boolean isMale;
-    public boolean generateGemOre = false;
 
     protected WorldGenDragonCave(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -54,9 +57,9 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
-        if (!IafConfig.generateDragonDens || rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position)) {
+        if (rand.nextInt(IafConfig.generateDragonDenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, getId(), getFeatureType())) {
             return false;
         }
         isMale = rand.nextBoolean();
@@ -89,7 +92,7 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         return true;
     }
 
-    public void generateCave(LevelAccessor worldIn, int radius, int amount, BlockPos center, Random rand) {
+    public void generateCave(LevelAccessor worldIn, int radius, int amount, BlockPos center, RandomSource rand) {
         List<SphereInfo> sphereList = new ArrayList<>();
         sphereList.add(new SphereInfo(radius, center.immutable()));
         Stream<BlockPos> sphereBlocks = ShapeBuilder.start().getAllInCutOffSphereMutable(radius, radius / 2, center).toStream(false);
@@ -117,65 +120,85 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
         sphereList.clear();
     }
 
-    public void createShell(LevelAccessor worldIn, Random rand, Set<BlockPos> positions) {
+    public void createShell(LevelAccessor worldIn, RandomSource rand, Set<BlockPos> positions) {
+        ITagManager<Block> tagManager = ForgeRegistries.BLOCKS.tags();
+
+        List<Block> rareOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_RARE_ORES);
+        List<Block> uncommonOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_UNCOMMON_ORES);
+        List<Block> commonOres = getBlockList(tagManager, IafBlockTags.DRAGON_CAVE_COMMON_ORES);
+        List<Block> dragonTypeOres = getBlockList(tagManager, dragonTypeOreTag);
+
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BaseEntityBlock) && worldIn.getBlockState(blockPos).getDestroySpeed(worldIn, blockPos) >= 0) {
                 boolean doOres = rand.nextInt(IafConfig.oreToStoneRatioForDragonCaves + 1) == 0;
+
                 if (doOres) {
-                    int chance = rand.nextInt(199) + 1;
-                    if (chance < 30) {
-                        worldIn.setBlock(blockPos, Blocks.IRON_ORE.defaultBlockState(), 2);
-                    } else if (chance > 30 && chance < 40) {
-                        worldIn.setBlock(blockPos, Blocks.GOLD_ORE.defaultBlockState(), 2);
-                    } else if (chance > 40 && chance < 45) {
-                        worldIn.setBlock(blockPos, IafConfig.generateCopperOre ? IafBlockRegistry.COPPER_ORE.get().defaultBlockState() : PALETTE_BLOCK1, 2);
-                    } else if (chance > 45 && chance < 50) {
-                        worldIn.setBlock(blockPos, IafConfig.generateSilverOre ? IafBlockRegistry.SILVER_ORE.get().defaultBlockState() : PALETTE_BLOCK1, 2);
-                    } else if (chance > 50 && chance < 60) {
-                        worldIn.setBlock(blockPos, Blocks.COAL_ORE.defaultBlockState(), 2);
-                    } else if (chance > 60 && chance < 70) {
-                        worldIn.setBlock(blockPos, Blocks.REDSTONE_ORE.defaultBlockState(), 2);
-                    } else if (chance > 70 && chance < 80) {
-                        worldIn.setBlock(blockPos, Blocks.LAPIS_ORE.defaultBlockState(), 2);
-                    } else if (chance > 80 && chance < 90) {
-                        worldIn.setBlock(blockPos, Blocks.DIAMOND_ORE.defaultBlockState(), 2);
-                    } else if (chance > 90) {
-                        worldIn.setBlock(blockPos, generateGemOre ? PALETTE_ORE1 : PALETTE_ORE2, 2);
+                    Block toPlace = null;
+
+                    if (rand.nextBoolean()) {
+                        toPlace = !dragonTypeOres.isEmpty() ? dragonTypeOres.get(rand.nextInt(dragonTypeOres.size())) : null;
+                    } else {
+                        double chance = rand.nextDouble();
+
+                        if (!rareOres.isEmpty() && chance <= 0.15) {
+                            toPlace = rareOres.get(rand.nextInt(rareOres.size()));
+                        } else if (!uncommonOres.isEmpty() && chance <= 0.45) {
+                            toPlace = uncommonOres.get(rand.nextInt(uncommonOres.size()));
+                        } else if (!commonOres.isEmpty()) {
+                            toPlace = commonOres.get(rand.nextInt(commonOres.size()));
+                        }
+                    }
+
+                    if (toPlace != null) {
+                        worldIn.setBlock(blockPos, toPlace.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    } else {
+                        worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, Block.UPDATE_CLIENTS);
                     }
                 } else {
-                    worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, 2);
+                    worldIn.setBlock(blockPos, rand.nextBoolean() ? PALETTE_BLOCK1 : PALETTE_BLOCK2, Block.UPDATE_CLIENTS);
                 }
             }
         });
     }
 
+    private List<Block> getBlockList(final ITagManager<Block> tagManager, final TagKey<Block> tagKey) {
+        if (tagManager == null) {
+            return List.of();
+        }
+
+        return tagManager.getTag(tagKey).stream().toList();
+    }
+
     public void hollowOut(LevelAccessor worldIn, Set<BlockPos> positions) {
         positions.forEach(blockPos -> {
             if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BaseEntityBlock)) {
-                worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
+                worldIn.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             }
         });
     }
 
-    public void decorateCave(LevelAccessor worldIn, Random rand, Set<BlockPos> positions, List<SphereInfo> spheres, BlockPos center) {
+    public void decorateCave(LevelAccessor worldIn, RandomSource rand, Set<BlockPos> positions, List<SphereInfo> spheres, BlockPos center) {
         for (SphereInfo sphere : spheres) {
             BlockPos pos = sphere.pos;
             int radius = sphere.radius;
+
             for (int i = 0; i < 15 + rand.nextInt(10); i++) {
                 CEILING_DECO.generate(worldIn, rand, pos.above(radius / 2 - 1).offset(rand.nextInt(radius) - radius / 2, 0, rand.nextInt(radius) - radius / 2));
             }
-
         }
-        int y = center.getY();
+
         positions.forEach(blockPos -> {
-            if (blockPos.getY() < y) {
-                if (worldIn.getBlockState(blockPos.below()).getMaterial() == Material.STONE && worldIn.getBlockState(blockPos).getMaterial() == Material.AIR)
+            if (blockPos.getY() < center.getY()) {
+                BlockState stateBelow = worldIn.getBlockState(blockPos.below());
+
+                if ((stateBelow.is(BlockTags.BASE_STONE_OVERWORLD) || stateBelow.is(IafBlockTags.DRAGON_ENVIRONMENT_BLOCKS)) && worldIn.getBlockState(blockPos).isAir()) {
                     setGoldPile(worldIn, blockPos, rand);
+                }
             }
         });
     }
 
-    public void setGoldPile(LevelAccessor world, BlockPos pos, Random rand) {
+    public void setGoldPile(LevelAccessor world, BlockPos pos, RandomSource rand) {
         if (!(world.getBlockState(pos).getBlock() instanceof BaseEntityBlock)) {
             int chance = rand.nextInt(99) + 1;
             if (chance < 60) {
@@ -183,18 +206,34 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
                 boolean generateGold = rand.nextInt(goldRand) == 0;
                 world.setBlock(pos, generateGold ? TREASURE_PILE.setValue(BlockGoldPile.LAYERS, 1 + rand.nextInt(7)) : Blocks.AIR.defaultBlockState(), 3);
             } else if (chance == 61) {
-                world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[rand.nextInt(3)]), 2);
+                world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[rand.nextInt(3)]), Block.UPDATE_CLIENTS);
+
                 if (world.getBlockState(pos).getBlock() instanceof ChestBlock) {
-                    BlockEntity tileentity1 = world.getBlockEntity(pos);
-                    if (tileentity1 instanceof ChestBlockEntity) {
-                        ((ChestBlockEntity) tileentity1).setLootTable(isMale ? DRAGON_MALE_CHEST : DRAGON_CHEST, rand.nextLong());
+                    BlockEntity blockEntity = world.getBlockEntity(pos);
+
+                    if (blockEntity instanceof ChestBlockEntity chestBlockEntity) {
+                        chestBlockEntity.setLootTable(isMale ? DRAGON_MALE_CHEST : DRAGON_CHEST, rand.nextLong());
                     }
                 }
             }
         }
     }
 
-    abstract EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge);
+    private EntityDragonBase createDragon(final WorldGenLevel worldGen, final RandomSource random, final BlockPos position, int dragonAge) {
+        EntityDragonBase dragon = getDragonType().create(worldGen.getLevel());
+        dragon.setGender(isMale);
+        dragon.growDragon(dragonAge);
+        dragon.setAgingDisabled(true);
+        dragon.setHealth(dragon.getMaxHealth());
+        dragon.setVariant(random.nextInt(4));
+        dragon.absMoveTo(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, random.nextFloat() * 360, 0);
+        dragon.setInSittingPose(true);
+        dragon.homePos = new HomePosition(position, worldGen.getLevel());
+        dragon.setHunger(50);
+        return dragon;
+    }
+
+    public abstract EntityType<? extends EntityDragonBase> getDragonType();
 
     private static class SphereInfo {
         int radius;
@@ -204,5 +243,15 @@ public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguratio
             this.radius = radius;
             this.pos = pos;
         }
+    }
+
+    @Override
+    public IafWorldData.FeatureType getFeatureType() {
+        return IafWorldData.FeatureType.UNDERGROUND;
+    }
+
+    @Override
+    public String getId() {
+        return "dragon_cave";
     }
 }

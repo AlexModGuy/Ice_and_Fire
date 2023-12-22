@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Objets de Ice And Fire",
+  "itemGroup.iceandfire.items": "Objets de Ice And Fire",
   "itemGroup.iceandfire.blocks": "Blocs de Ice And Fire",
   "iceandfire.empty": "Vide",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "Tas d'Argent",
   "block.iceandfire.copper_pile": "Tas de Cuivre",
   "block.iceandfire.silver_ore": "Minerai d'Argent",
-  "block.iceandfire.copper_ore": "Minerai de Cuivre",
   "block.iceandfire.sapphire_ore": "Minerai de Saphir",
-  "block.iceandfire.amythest_ore": "Minerai d'Améthyste",
   "block.iceandfire.silver_block": "Bloc d'Argent",
-  "block.iceandfire.copper_block": "Bloc de Cuivre",
   "block.iceandfire.sapphire_block": "Bloc de Saphir",
-  "block.iceandfire.amythest_block": "Bloc de d'Améthyste",
   "block.iceandfire.chared_dirt": "Terre Carbonisée",
   "block.iceandfire.chared_grass": "Bloc d'Herbe Carbonisé",
   "block.iceandfire.chared_stone": "Roche Carbonisée",
@@ -137,7 +133,6 @@
   "item.iceandfire.amythest_gem": "Améthyste",
   "item.iceandfire.silver_ingot": "Lingot d'Argent",
   "item.iceandfire.silver_nugget": "Pépite d'Argent",
-  "item.iceandfire.copper_ingot": "Lingot de Cuivre",
   "item.iceandfire.copper_nugget": "Pépite de Cuivre",
   "item.iceandfire.armor_silver_metal_helmet": "Casque en Argent",
   "item.iceandfire.armor_silver_metal_chestplate": "Plastron en Argent",

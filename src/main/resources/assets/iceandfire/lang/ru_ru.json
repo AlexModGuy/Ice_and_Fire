@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Предметы Ice And Fire",
+  "itemGroup.iceandfire.items": "Предметы Ice And Fire",
   "itemGroup.iceandfire.blocks": "Блоки Ice And Fire",
   "iceandfire.empty": "Пусто",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "Груда серебра",
   "block.iceandfire.copper_pile": "Груда меди",
   "block.iceandfire.silver_ore": "Серебряная руда",
-  "block.iceandfire.copper_ore": "Медная руда",
   "block.iceandfire.sapphire_ore": "Сапфировая руда",
-  "block.iceandfire.amythest_ore": "Аметистовая руда",
   "block.iceandfire.silver_block": "Серебряный блок",
-  "block.iceandfire.copper_block": "Медный блок",
   "block.iceandfire.sapphire_block": "Сапфировый блок",
-  "block.iceandfire.amythest_block": "Аметистовый блок",
   "block.iceandfire.chared_dirt": "Обугленная земля",
   "block.iceandfire.chared_grass": "Обугленный дёрн",
   "block.iceandfire.chared_stone": "Обугленный камень",
@@ -137,7 +133,6 @@
   "item.iceandfire.amythest_gem": "Аметист",
   "item.iceandfire.silver_ingot": "Серебряный слиток",
   "item.iceandfire.silver_nugget": "Серебряный самородок",
-  "item.iceandfire.copper_ingot": "Медный слиток",
   "item.iceandfire.copper_nugget": "Медный самородок",
   "item.iceandfire.armor_silver_metal_helmet": "Серебряный шлем",
   "item.iceandfire.armor_silver_metal_chestplate": "Серебряный нагрудник",

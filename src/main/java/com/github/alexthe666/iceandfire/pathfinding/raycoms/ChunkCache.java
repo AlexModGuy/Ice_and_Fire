@@ -3,18 +3,18 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,16 +29,18 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
-import static com.github.alexthe666.iceandfire.util.WorldUtil.isChunkLoaded;
 
 public class ChunkCache implements LevelReader {
+    /**
+     * Dimensiontype.
+     */
     private final DimensionType dimType;
     protected int chunkX;
     protected int chunkZ;
@@ -52,6 +54,9 @@ public class ChunkCache implements LevelReader {
      */
     protected Level world;
 
+    private final int minBuildHeight;
+    private final int maxBuildHeight;
+
     public ChunkCache(Level worldIn, BlockPos posFromIn, BlockPos posToIn, int subIn, final DimensionType type) {
         this.world = worldIn;
         this.chunkX = posFromIn.getX() - subIn >> 4;
@@ -63,19 +68,18 @@ public class ChunkCache implements LevelReader {
 
         for (int k = this.chunkX; k <= i; ++k) {
             for (int l = this.chunkZ; l <= j; ++l) {
-                if (isEntityChunkLoaded(world, new ChunkPos(k, l))) {
-                    this.chunkArray[k - this.chunkX][l - this.chunkZ] = (LevelChunk) worldIn.getChunk(k, l, ChunkStatus.FULL, false);
+                if (WorldUtil.isEntityChunkLoaded(world, new ChunkPos(k, l)) && worldIn.getChunkSource() instanceof ServerChunkCache serverChunkCache) {
+                    final ChunkHolder holder = serverChunkCache.chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(k, l));
+                    if (holder != null) {
+                        this.chunkArray[k - this.chunkX][l - this.chunkZ] = holder.getFullChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left().orElse(null);
+                    }
                 }
             }
         }
         this.dimType = type;
-    }
 
-    public static boolean isEntityChunkLoaded(final LevelAccessor world, final ChunkPos pos) {
-        if (world instanceof ServerLevel) {
-            return ((ServerLevel) world).isPositionEntityTicking(pos.getWorldPosition());
-        }
-        return isChunkLoaded(world, pos);
+        minBuildHeight = worldIn.getMinBuildHeight();
+        maxBuildHeight = worldIn.getMaxBuildHeight();
     }
 
     /**
@@ -83,6 +87,7 @@ public class ChunkCache implements LevelReader {
      *
      * @return if so.
      */
+    @OnlyIn(Dist.CLIENT)
     public boolean isEmpty() {
         return this.empty;
     }
@@ -103,6 +108,15 @@ public class ChunkCache implements LevelReader {
         return this.chunkArray[i][j].getBlockEntity(pos, createType);
     }
 
+    @Override
+    public int getMinBuildHeight() {
+        return minBuildHeight;
+    }
+
+    @Override
+    public int getMaxBuildHeight() {
+        return maxBuildHeight;
+    }
 
     @NotNull
     @Override
@@ -142,15 +156,7 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public @NotNull Holder<Biome> getBiome(@NotNull BlockPos pos) {
-        var plains = ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS);
-        if (world.isClientSide() && plains.isPresent())
-            return plains.get();
-        return this.getBiomeManager().getBiome(pos);
-    }
-
-    @Override
-    public @NotNull Holder<Biome> getUncachedNoiseBiome(final int x, final int y, final int z) {
+    public Holder<Biome> getUncachedNoiseBiome(final int x, final int y, final int z) {
         return null;
     }
 
@@ -166,7 +172,7 @@ public class ChunkCache implements LevelReader {
 
     @Nullable
     @Override
-    public ChunkAccess getChunk(final int x, final int z, final @NotNull ChunkStatus requiredStatus, final boolean nonnull) {
+    public ChunkAccess getChunk(final int x, final int z, final ChunkStatus requiredStatus, final boolean nonnull) {
         int i = x - this.chunkX;
         int j = z - this.chunkZ;
 
@@ -182,12 +188,12 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public @NotNull BlockPos getHeightmapPos(final Heightmap.@NotNull Types heightmapType, final @NotNull BlockPos pos) {
+    public BlockPos getHeightmapPos(final Heightmap.Types heightmapType, final BlockPos pos) {
         return null;
     }
 
     @Override
-    public int getHeight(final Heightmap.@NotNull Types heightmapType, final int x, final int z) {
+    public int getHeight(final Heightmap.Types heightmapType, final int x, final int z) {
         return 0;
     }
 
@@ -197,27 +203,27 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public @NotNull BiomeManager getBiomeManager() {
+    public BiomeManager getBiomeManager() {
         return null;
     }
 
     @Override
-    public @NotNull WorldBorder getWorldBorder() {
+    public WorldBorder getWorldBorder() {
         return null;
     }
 
     @Override
-    public boolean isUnobstructed(@Nullable final Entity entityIn, final @NotNull VoxelShape shape) {
+    public boolean isUnobstructed(@Nullable final Entity entityIn, final VoxelShape shape) {
         return false;
     }
 
     @Override
-    public @NotNull List<VoxelShape> getEntityCollisions(@Nullable Entity p_230318_1_, @NotNull AABB p_230318_2_) {
-        return Collections.emptyList();
+    public List<VoxelShape> getEntityCollisions(@org.jetbrains.annotations.Nullable final Entity p_186427_, final AABB p_186428_) {
+        return null;
     }
 
     @Override
-    public int getDirectSignal(@NotNull BlockPos pos, @NotNull Direction direction) {
+    public int getDirectSignal(BlockPos pos, Direction direction) {
         return this.getBlockState(pos).getDirectSignal(this, pos, direction);
     }
 
@@ -241,12 +247,12 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
-    public float getShade(final @NotNull Direction direction, final boolean b) {
+    public float getShade(final Direction direction, final boolean b) {
         return 0;
     }
 
     @Override
-    public @NotNull LevelLightEngine getLightEngine() {
+    public LevelLightEngine getLightEngine() {
         return null;
     }
 }

@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    },
+    {
+      "item": "iceandfire:ash"
+    }
+  ],
+  "result": {
+    "item": "minecraft:charcoal"
+  }
+}

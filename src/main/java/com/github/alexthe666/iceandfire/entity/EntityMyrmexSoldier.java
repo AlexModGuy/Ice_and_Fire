@@ -62,7 +62,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 5;
     }
 
@@ -135,10 +135,9 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2D);
     }
-
     @Override
     public ResourceLocation getAdultTexture() {
         return isJungle() ? TEXTURE_JUNGLE : TEXTURE_DESERT;
@@ -219,6 +218,6 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     @Override
     public boolean isClientSide() {
-        return this.getLevel().isClientSide;
+        return this.level.isClientSide;
     }
 }

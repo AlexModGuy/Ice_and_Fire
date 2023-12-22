@@ -4,6 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PlayMessages;
 
@@ -25,8 +26,8 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
     @Override
     public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
-        if (parent instanceof EntityCyclops && source.isProjectile()) {
-            ((EntityCyclops) parent).onHitEye(source, damage);
+        if (parent instanceof EntityCyclops entityCyclops && (source.getDirectEntity() instanceof Arrow || source.getMsgId().contains("arrow"))) {
+            entityCyclops.onHitEye(source, damage);
             return true;
         } else {
             return parent != null && parent.hurt(source, damage);

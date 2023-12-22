@@ -4,10 +4,7 @@ import com.github.alexthe666.citadel.client.model.TabulaModel;
 import com.github.alexthe666.iceandfire.IceAndFire;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * A library containing all animations for all dragons. Contains methods for registering and retrieving models

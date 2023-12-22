@@ -6,13 +6,12 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.api.event.GenericGriefEvent;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
-import com.github.alexthe666.iceandfire.entity.util.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IHumanoid;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -51,7 +51,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import java.util.ArrayList;
 
 public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
@@ -71,10 +71,9 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
 
     public EntityTroll(EntityType<EntityTroll> t, Level worldIn) {
         super(t, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(t, this);
     }
 
-    public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
+    public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, randomIn)
             && checkMobSpawnRules(IafEntityRegistry.TROLL.get(), worldIn, reason, pos, randomIn);
     }
@@ -94,8 +93,9 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.trollMaxHealth);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.trollAttackStrength);
     }
 
     private void setAvoidSun(boolean day) {
@@ -119,9 +119,6 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         BlockPos pos = this.blockPosition();
         BlockPos heightAt = worldIn.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
         boolean rngCheck = true;
-        if (IafConfig.trollSpawnCheckChance > 0) {
-            rngCheck = this.getRandom().nextInt(IafConfig.trollSpawnCheckChance) == 0;
-        }
         return rngCheck && pos.getY() < heightAt.getY() - 10 && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
@@ -203,6 +200,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         this.setVariant(compound.getInt("Variant"));
         this.setWeapon(compound.getInt("Weapon"));
         this.stoneProgress = compound.getFloat("StoneProgress");
+        this.setConfigurableAttributes();
     }
 
     @Override
@@ -237,7 +235,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return 15;
     }
 
@@ -324,8 +322,8 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         }
         setAvoidSun(this.level.isDay());
         if (this.level.isDay() && !this.level.isClientSide) {
-            float f = this.getBrightness();
-            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), Math.round(this.getY()), this.getZ());
+            float f = this.level.getBrightness(LightLayer.SKY, this.blockPosition());
+            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getBlockX(), this.getBlockY(), this.getBlockZ())).above() : new BlockPos(this.getBlockX(), this.getBlockY(), this.getBlockZ());
             if (f > 0.5F && this.level.canSeeSky(blockpos)) {
                 this.setDeltaMovement(0, 0, 0);
                 this.setAnimation(NO_ANIMATION);
@@ -349,7 +347,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponY = (float) (getY() + (0.2F));
-            BlockState state = level.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
+            BlockState state = level.getBlockState(WorldUtil.containing(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
                 double motionX = getRandom().nextGaussian() * 0.07D;
                 double motionY = getRandom().nextGaussian() * 0.07D;
@@ -391,7 +389,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
                 float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponY = (float) (getY() + (this.getEyeHeight() / 2));
-                BlockBreakExplosion explosion = new BlockBreakExplosion(level, this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat());
+                Explosion explosion = new Explosion(level, this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat(), new ArrayList<>());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))) {
                     explosion.explode();
                     explosion.finalizeExplosion(true);

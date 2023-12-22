@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.entity.EntityGhostSword;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -36,13 +35,10 @@ public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
         matrixStackIn.translate(0, 0.5F, 0);
         matrixStackIn.scale(2F, 2F, 2F);
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 0F, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.ZN, (entityIn.tickCount + partialTicks) * 30F, true));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(0.0F));
+        matrixStackIn.mulPose(Vector3f.ZN.rotationDegrees((entityIn.tickCount + partialTicks) * 30.0F));
         matrixStackIn.translate(0, -0.15F, 0);
         Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(IafItemRegistry.GHOST_SWORD.get()), ItemTransforms.TransformType.GROUND, 240, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
         matrixStackIn.popPose();
-
-
     }
-
 }

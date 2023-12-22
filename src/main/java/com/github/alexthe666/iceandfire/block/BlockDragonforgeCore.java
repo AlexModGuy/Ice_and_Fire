@@ -40,9 +40,7 @@ public class BlockDragonforgeCore extends BaseEntityBlock implements IDragonProo
                 .dynamicShape()
                 .strength(40, 500)
                 .sound(SoundType.METAL)
-                .lightLevel((state) -> {
-                    return activated ? 15 : 0;
-                })
+                .lightLevel((state) -> activated ? 15 : 0)
         );
 
         this.isFire = isFire;

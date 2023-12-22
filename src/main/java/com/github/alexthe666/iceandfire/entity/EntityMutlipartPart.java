@@ -102,7 +102,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     private float getScaleX() {
-        return this.entityData.get(SCALE_WIDTH).floatValue();
+        return this.entityData.get(SCALE_WIDTH);
     }
 
     private void setScaleX(float scale) {
@@ -110,7 +110,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     private float getScaleY() {
-        return this.entityData.get(SCALE_HEIGHT).floatValue();
+        return this.entityData.get(SCALE_HEIGHT);
     }
 
     private void setScaleY(float scale) {
@@ -118,7 +118,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     public float getPartYaw() {
-        return this.entityData.get(PART_YAW).floatValue();
+        return this.entityData.get(PART_YAW);
     }
 
     private void setPartYaw(float yaw) {
@@ -170,6 +170,7 @@ public abstract class EntityMutlipartPart extends Entity {
         return false;
     }
 
+    /** Source: {@link net.minecraft.world.entity.ai.control.MoveControl#rotlerp(float, float, float)} */
     protected float limitAngle(float sourceAngle, float targetAngle, float maximumChange) {
         float f = Mth.wrapDegrees(targetAngle - sourceAngle);
         if (f > maximumChange) {
@@ -199,7 +200,7 @@ public abstract class EntityMutlipartPart extends Entity {
     public Entity getParent() {
         UUID id = getParentId();
         if (id != null && !level.isClientSide) {
-            return ((ServerLevel) level).getEntity(id);
+            return ((ServerLevel)level).getEntity(id);
         }
         return null;
     }

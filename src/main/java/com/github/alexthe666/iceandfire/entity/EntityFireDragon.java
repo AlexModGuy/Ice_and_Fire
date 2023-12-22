@@ -11,6 +11,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.message.MessageDragonSyncFire;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -27,8 +28,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -133,13 +132,13 @@ public class EntityFireDragon extends EntityDragonBase {
         return IafItemRegistry.SUMMONING_CRYSTAL_FIRE.get();
     }
 
-    @Override
+/*    @Override
     public boolean canBeControlledByRider() {
         return true;
-    }
+    }*/
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         this.getLookControl().setLookAt(entityIn, 30.0F, 30.0F);
         if (!this.isPlayingAttackAnimation()) {
             switch (groundAttack) {
@@ -178,7 +177,7 @@ public class EntityFireDragon extends EntityDragonBase {
             if (this.getBoundingBox().inflate(2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F, 2.5F + this.getRenderSize() * 0.33F).intersects(attackTarget.getBoundingBox())) {
                 doHurtTarget(attackTarget);
             }
-            if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || this.onGround)) {
+            if (this.groundAttack == IafDragonAttacks.Ground.FIRE && (usingGroundAttack || isOnGround())) {
                 shootFireAtMob(attackTarget);
             }
             if (this.airAttack == IafDragonAttacks.Air.TACKLE && !usingGroundAttack && this.distanceToSqr(attackTarget) < 100) {
@@ -256,11 +255,6 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemLike getHeartItem() {
-        return IafItemRegistry.FIRE_DRAGON_HEART.get();
-    }
-
-    @Override
     protected float getBlockSpeedFactor() {
         // Disable soul sand slow down
         if (this.onSoulSpeedBlock()) {
@@ -271,6 +265,7 @@ public class EntityFireDragon extends EntityDragonBase {
 
     @Override
     public void travel(@NotNull Vec3 pTravelVector) {
+        float flyingSpeed;
         if (this.isInLava()) {
             // In lava special
             if (this.isEffectiveAi() && this.getControllingPassenger() == null) {
@@ -281,7 +276,7 @@ public class EntityFireDragon extends EntityDragonBase {
                 if (this.getTarget() == null) {
 //                    this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
                 }
-            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()) {
+            } else if (allowLocalMotionControl && this.getControllingPassenger() != null && !isHovering() && !isFlying()) {
                 LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -327,7 +322,7 @@ public class EntityFireDragon extends EntityDragonBase {
             }
         }
         // Over lava special
-        else if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider() && !isHovering() && !isFlying()
+        else if (allowLocalMotionControl && this.getControllingPassenger() != null && !isHovering() && !isFlying()
                 && this.level.getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getFluidState().is(FluidTags.LAVA)) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
 
@@ -349,7 +344,7 @@ public class EntityFireDragon extends EntityDragonBase {
             strafing *= 0.05f;
 
             if (this.isControlledByLocalInstance()) {
-                this.flyingSpeed = speed * 0.1F;
+                flyingSpeed = speed * 0.1F;
                 this.setSpeed(speed);
 
                 // Vanilla walking behavior includes going up steps
@@ -495,8 +490,9 @@ public class EntityFireDragon extends EntityDragonBase {
             } else {
                 if (!level.isClientSide) {
                     HitResult result = this.level.clip(new ClipContext(new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()), new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-                    BlockPos pos = new BlockPos(result.getLocation());
-                    IafDragonDestructionManager.destroyAreaFire(level, pos, this);
+                    Vec3 vec3 = result.getLocation();
+                    BlockPos pos = WorldUtil.containing(vec3);
+                    IafDragonDestructionManager.destroyAreaBreath(level, pos, this);
                 }
             }
         }
@@ -505,7 +501,7 @@ public class EntityFireDragon extends EntityDragonBase {
             double spawnY = burnY + (random.nextFloat() * 3.0) - 1.5;
             double spawnZ = burnZ + (random.nextFloat() * 3.0) - 1.5;
             if (!level.isClientSide) {
-                IafDragonDestructionManager.destroyAreaFire(level, new BlockPos(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaBreath(level, WorldUtil.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }
@@ -564,12 +560,22 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     @Override
-    protected ItemStack getSkull() {
+    public ItemStack getSkull() {
         return new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get());
     }
 
     @Override
-    protected Item getBloodItem() {
+    public Item getBloodItem() {
         return IafItemRegistry.FIRE_DRAGON_BLOOD.get();
+    }
+
+    @Override
+    public Item getFleshItem() {
+        return IafItemRegistry.FIRE_DRAGON_FLESH.get();
+    }
+
+    @Override
+    public ItemLike getHeartItem() {
+        return IafItemRegistry.FIRE_DRAGON_HEART.get();
     }
 }

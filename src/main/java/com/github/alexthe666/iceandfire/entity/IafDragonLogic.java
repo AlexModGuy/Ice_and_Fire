@@ -2,10 +2,10 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.message.MessageSpawnParticleAt;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
     dragon logic separation for client, server and shared sides.
  */
 public class IafDragonLogic {
+    long ticksAfterClearingTarget;
 
     private final EntityDragonBase dragon;
 
@@ -49,7 +50,7 @@ public class IafDragonLogic {
                 dragon.lookingForRoostAIFlag = true;
             } else {
                 dragon.lookingForRoostAIFlag = false;
-                if (!dragon.isInWater() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
+                if ((/* Avoid immediately sleeping after killing the target */ dragon.level.getGameTime() - ticksAfterClearingTarget >= 20) && !dragon.isInWater() && dragon.isOnGround() && !dragon.isFlying() && !dragon.isHovering() && dragon.getTarget() == null) {
                     dragon.setInSittingPose(true);
                 }
             }
@@ -79,7 +80,7 @@ public class IafDragonLogic {
         if (dragon.isInLove()) {
             dragon.level.broadcastEntityEvent(dragon, (byte) 18);
         }
-        if ((int) dragon.xo == (int) dragon.getX() && (int) dragon.zo == (int) dragon.getZ()) {
+        if (new Vec3i(dragon.xo, dragon.yo, dragon.zo).distSqr(dragon.blockPosition()) <= 0.5) {
             dragon.ticksStill++;
         } else {
             dragon.ticksStill = 0;
@@ -126,6 +127,7 @@ public class IafDragonLogic {
         if (!dragon.canMove()) {
             if (dragon.getTarget() != null) {
                 dragon.setTarget(null);
+                ticksAfterClearingTarget = dragon.level.getGameTime();
             }
             dragon.getNavigation().stop();
         }
@@ -206,7 +208,7 @@ public class IafDragonLogic {
         }
         if (!dragon.isFlying() && !dragon.isHovering()) {
             if (dragon.isAllowedToTriggerFlight() || dragon.getY() < dragon.level.getMinBuildHeight()) {
-                if (dragon.getRandom().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getY() < dragon.level.getMinBuildHeight() || dragon.getTarget() != null && Math.abs(dragon.getTarget().getY() - dragon.getY()) > 5 || dragon.isInWater() && !dragon.isIceInWater()) {
+                if (dragon.getRandom().nextInt(dragon.getFlightChancePerTick()) == 0 || dragon.getY() < dragon.level.getMinBuildHeight() || dragon.getTarget() != null && Math.abs(dragon.getTarget().getY() - dragon.getY()) > 5 || dragon.isInWater()) {
                     dragon.setHovering(true);
                     dragon.setInSittingPose(false);
                     dragon.setOrderedToSit(false);
@@ -219,6 +221,7 @@ public class IafDragonLogic {
         if (dragon.getTarget() != null) {
             if (!DragonUtils.isAlive(dragon.getTarget())) {
                 dragon.setTarget(null);
+                ticksAfterClearingTarget = dragon.level.getGameTime();
             }
         }
         if (!dragon.isAgingDisabled()) {
@@ -274,14 +277,14 @@ public class IafDragonLogic {
                 dragon.randomizeAttacks();
             }
         }
-
     }
 
-    public void attackTarget(Entity target, Player ridingPlayer, float damage) {
-        if (ridingPlayer == null)
-            target.hurt(DamageSource.mobAttack(dragon), damage);
-        else
-            target.hurt(DamageSource.indirectMobAttack(dragon, ridingPlayer), damage);
+    public boolean attackTarget(Entity target, Player ridingPlayer, float damage) {
+        if (ridingPlayer == null) {
+            return target.hurt(DamageSource.mobAttack(dragon), damage);
+        } else {
+            return target.hurt(DamageSource.indirectMobAttack(dragon, ridingPlayer), damage);
+        }
     }
 
     /*

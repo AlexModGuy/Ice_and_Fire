@@ -8,6 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -52,31 +54,39 @@ public class MessageUpdateLectern {
         public Handler() {
         }
 
-        public static void handle(MessageUpdateLectern message, Supplier<NetworkEvent.Context> context) {
+        public static void handle(MessageUpdateLectern message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() ->
+                    DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> MessageUpdateLectern.Handler.handlePacket(message, ctx))
+            );
+            ctx.get().enqueueWork(() ->
+                    DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MessageUpdateLectern.Handler.handlePacket(message, ctx))
+            );
+            ctx.get().setPacketHandled(true);
+        }
+
+        public static void handlePacket(MessageUpdateLectern message, Supplier<NetworkEvent.Context> context) {
             context.get().setPacketHandled(true);
             Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
+            if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
             if (player != null) {
                 if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof TileEntityLectern) {
-                            TileEntityLectern lectern = (TileEntityLectern) player.level.getBlockEntity(pos);
-                            if (message.updateStack) {
-                                ItemStack bookStack = lectern.getItem(0);
-                                if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {
-                                    EnumBestiaryPages.addPage(EnumBestiaryPages.fromInt(message.pageOrdinal), bookStack);
-                                }
-                                lectern.randomizePages(bookStack, lectern.getItem(1));
-                            } else {
-                                lectern.selectedPages[0] = EnumBestiaryPages.fromInt(message.selectedPages1);
-                                lectern.selectedPages[1] = EnumBestiaryPages.fromInt(message.selectedPages2);
-                                lectern.selectedPages[2] = EnumBestiaryPages.fromInt(message.selectedPages3);
+                    if (player.level.hasChunkAt(pos) && player.level.getBlockEntity(pos) instanceof TileEntityLectern lectern) {
+                        if (message.updateStack) {
+                            ItemStack bookStack = lectern.getItem(0);
+                            if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {
+                                EnumBestiaryPages.addPage(EnumBestiaryPages.fromInt(message.pageOrdinal), bookStack);
                             }
-
+                            lectern.randomizePages(bookStack, lectern.getItem(1));
+                        } else {
+                            lectern.selectedPages[0] = EnumBestiaryPages.fromInt(message.selectedPages1);
+                            lectern.selectedPages[1] = EnumBestiaryPages.fromInt(message.selectedPages2);
+                            lectern.selectedPages[2] = EnumBestiaryPages.fromInt(message.selectedPages3);
                         }
+
+
                     }
                 }
             }

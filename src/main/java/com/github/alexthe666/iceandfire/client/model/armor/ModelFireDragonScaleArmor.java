@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.model.armor;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;

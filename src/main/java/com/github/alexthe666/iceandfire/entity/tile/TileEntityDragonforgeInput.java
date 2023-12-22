@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -91,7 +92,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
         for (EntityDragonBase dragon : level.getEntitiesOfClass(EntityDragonBase.class, searchArea)) {
             if (!dragonSelected &&
                 // Dragon Checks
-                getDragonType() == DragonType.getIntFromType(dragon.dragonType) &&
+                getDragonType() == dragon.dragonType.getIntFromType() &&
                 (dragon.isChained() || dragon.isTame()) &&
                 canSeeInput(dragon, targetPosition)
             ) {
@@ -169,7 +170,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
     @Override
     @javax.annotation.Nonnull
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (core != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (core != null && capability == ForgeCapabilities.ITEM_HANDLER) {
             return core.getCapability(capability, facing);
         }
         return super.getCapability(capability, facing);

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "forge:storage_blocks/gold"
+    }
+  },
+  "pattern": [
+    "   ",
+    " ##",
+    "###"
+  ],
+  "result": {
+    "item": "iceandfire:dragonarmor_gold_head"
+  }
+}

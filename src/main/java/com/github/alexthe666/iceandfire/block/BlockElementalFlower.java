@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -40,17 +41,17 @@ public class BlockElementalFlower extends BushBlock {
     @Override
     protected boolean mayPlaceOn(BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         Block block = state.getBlock();
-        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND || state.getMaterial() == Material.SAND;
+        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND || state.is(BlockTags.SAND);
     }
 
     public boolean canStay(Level worldIn, BlockPos pos) {
         BlockState soil = worldIn.getBlockState(pos.below());
         if (this == IafBlockRegistry.FIRE_LILY.get()) {
-            return soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK;
+            return soil.is(BlockTags.SAND) || soil.is(Blocks.NETHERRACK);
         } else if (this == IafBlockRegistry.LIGHTNING_LILY.get()) {
-            return soil.getMaterial() == Material.DIRT || soil.getBlock() == Blocks.GRASS;
+            return soil.is(BlockTags.DIRT) || soil.is(Blocks.GRASS);
         } else {
-            return soil.getMaterial() == Material.ICE_SOLID || soil.getMaterial() == Material.ICE;
+            return soil.is(BlockTags.ICE) || soil.is(BlockTags.SNOW) || soil.is(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON);
         }
     }
 

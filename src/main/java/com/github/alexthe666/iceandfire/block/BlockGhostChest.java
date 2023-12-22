@@ -25,9 +25,7 @@ public class BlockGhostChest extends ChestBlock {
                 .of(Material.WOOD)
                 .strength(2.5F)
                 .sound(SoundType.WOOD),
-            () -> {
-                return IafTileEntityRegistry.GHOST_CHEST.get();
-            }
+                IafTileEntityRegistry.GHOST_CHEST::get
         );
     }
 

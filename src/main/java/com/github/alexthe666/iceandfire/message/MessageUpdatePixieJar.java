@@ -47,8 +47,7 @@ public class MessageUpdatePixieJar {
                 if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
                     if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof TileEntityJar) {
-                            TileEntityJar jar = (TileEntityJar) player.level.getBlockEntity(pos);
+                        if (player.level.getBlockEntity(pos) instanceof TileEntityJar jar) {
                             jar.hasProduced = message.isProducing;
                         }
                     }

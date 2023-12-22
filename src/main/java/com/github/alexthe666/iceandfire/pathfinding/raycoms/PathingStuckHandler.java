@@ -5,6 +5,7 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
@@ -233,7 +234,7 @@ public class PathingStuckHandler implements IStuckHandler
             }
         }
         if (takeDamageOnCompleteStuck) {
-            entity.hurt(new EntityDamageSource("Stuck-damage", entity), entity.getMaxHealth() * damagePct);
+            entity.hurt(new EntityDamageSource(DamageSource.IN_WALL.msgId, entity), entity.getMaxHealth() * damagePct);
         }
 
         if (completeStuckBlockBreakRange > 0)
@@ -381,7 +382,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param pos   the pos the block is at.
      */
     private void setAirIfPossible(final Level world, final BlockPos pos) {
-        final Block blockAtPos = world.getBlockState(pos).getBlock();
+        final Block blockAtPos = world.getBlockState(pos).getBlock(); // TODO 1.19.2 :: Why get the block state?
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 

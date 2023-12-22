@@ -53,7 +53,6 @@ public class ParticleGhostAppearance extends Particle {
             } else {
                 matrixstack.mulPose(Vector3f.YP.rotationDegrees(150.0F * f - 60.0F));
                 matrixstack.mulPose(Vector3f.ZP.rotationDegrees(150.0F * f - 60.0F));
-
             }
             matrixstack.scale(-1.0F, -1.0F, 1.0F);
             matrixstack.translate(0.0D, 0.3F, 1.25D);

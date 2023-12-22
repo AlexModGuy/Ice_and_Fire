@@ -1,0 +1,12 @@
+{
+  "feature": "iceandfire:spawn_stymphalian_bird",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -6,22 +6,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public enum EnumSeaSerpentAnimations {
-    T_POSE(""),
-    SWIM1("Swim1"),
-    SWIM2("Swim2"),
-    SWIM3("Swim3"),
-    SWIM4("Swim4"),
-    SWIM5("Swim5"),
-    SWIM6("Swim6"),
-    BITE1("Bite1"),
-    BITE2("Bite2"),
-    BITE3("Bite3"),
-    ROAR1("Roar1"),
-    ROAR2("Roar2"),
-    ROAR3("Roar3"),
-    DEAD("Dead"),
-    JUMPING1("Jumping1"),
-    JUMPING2("Jumping2");
+    T_POSE("base"),
+    SWIM1("swim1"),
+    SWIM2("swim2"),
+    SWIM3("swim3"),
+    SWIM4("swim4"),
+    SWIM5("swim5"),
+    SWIM6("swim6"),
+    BITE1("bite1"),
+    BITE2("bite2"),
+    BITE3("bite3"),
+    ROAR1("roar1"),
+    ROAR2("roar2"),
+    ROAR3("roar3"),
+    DEAD("dead"),
+    JUMPING1("jumping1"),
+    JUMPING2("jumping2");
 
 
     private final String fileSuffix;
@@ -36,7 +36,7 @@ public enum EnumSeaSerpentAnimations {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             for (EnumSeaSerpentAnimations animation : values()) {
                 try {
-                    animation.seaserpent_model = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent" + animation.fileSuffix));
+                    animation.seaserpent_model = new TabulaModel(TabulaModelHandlerHelper.loadTabulaModel("/assets/iceandfire/models/tabula/seaserpent/seaserpent_" + animation.fileSuffix));
                 } catch (Exception e) {
                     IceAndFire.LOGGER.warn("sea serpent model at: seaserpent" + animation.fileSuffix + ".tbl doesn't exist!");
                     e.printStackTrace();

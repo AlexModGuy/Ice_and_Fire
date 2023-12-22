@@ -22,6 +22,11 @@ public class DragonsteelArmorMaterial extends IafArmorMaterial {
     }
 
     @Override
+    public float getToughness() {
+        return IafConfig.dragonsteelBaseArmorToughness;
+    }
+
+    @Override
     public int getDurabilityForSlot(EquipmentSlot slotIn) {
         return (int) (MAX_DAMAGE_ARRAY[slotIn.getIndex()] * 0.02D * IafConfig.dragonsteelBaseDurabilityEquipment);
     }

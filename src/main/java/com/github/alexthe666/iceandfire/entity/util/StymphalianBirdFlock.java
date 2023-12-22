@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
@@ -12,14 +13,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class StymphalianBirdFlock {
     private EntityStymphalianBird leader;
     private ArrayList<EntityStymphalianBird> members = new ArrayList<>();
     private BlockPos leaderTarget;
     private BlockPos prevLeaderTarget;
-    private Random random;
+    private RandomSource random;
     private final int distance = 15;
 
     private StymphalianBirdFlock() {

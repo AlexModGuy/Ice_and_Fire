@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class FrozenProperties {
@@ -19,14 +20,24 @@ public class FrozenProperties {
     private static final String FROZEN_TIME = "TicksUntilUnfrozen";
     private static final Random rand = new Random();
 
+    // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
+    private static HashMap<CompoundTag, Boolean> containsFrozenData = new HashMap<>();
+
     private static CompoundTag getOrCreateFrozenData(LivingEntity entity) {
         return getOrCreateFrozenData(CitadelEntityData.getCitadelTag(entity));
     }
 
     private static CompoundTag getOrCreateFrozenData(CompoundTag entityData) {
-        if (entityData.contains(FROZEN_DATA, 10)) {
+
+        if (containsFrozenData.containsKey(entityData) && containsFrozenData.get(entityData) && entityData.contains(FROZEN_DATA, 10)) {
             return (CompoundTag) entityData.get(FROZEN_DATA);
-        } else return createDefaultData();
+        } else if (entityData.contains(FROZEN_DATA, 10)) {
+            containsFrozenData.put(entityData, true);
+            return (CompoundTag) entityData.get(FROZEN_DATA);
+        } else {
+            containsFrozenData.put(entityData, false);
+            return createDefaultData();
+        }
     }
 
     private static CompoundTag createDefaultData() {
@@ -38,12 +49,12 @@ public class FrozenProperties {
         if (breakIce) {
             for (int i = 0; i < 15; i++) {
                 entity.level.addParticle(
-                    new BlockParticleOption(ParticleTypes.BLOCK,
-                        IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
-                    entity.getX() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
-                    entity.getY() + ((rand.nextDouble()) * entity.getBbHeight()),
-                    entity.getZ() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
-                    0, 0, 0);
+                        new BlockParticleOption(ParticleTypes.BLOCK,
+                                IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
+                        entity.getX() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
+                        entity.getY() + ((rand.nextDouble()) * entity.getBbHeight()),
+                        entity.getZ() + ((rand.nextDouble() - 0.5D) * entity.getBbWidth()),
+                        0, 0, 0);
             }
             entity.playSound(SoundEvents.GLASS_BREAK, 3, 1);
         }

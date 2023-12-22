@@ -3,13 +3,12 @@ package com.github.alexthe666.iceandfire.world.gen;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.Random;
 
 public class WorldGenRoostSpire {
 
-    public boolean generate(LevelAccessor worldIn, Random rand, BlockPos position) {
+    public boolean generate(LevelAccessor worldIn, RandomSource rand, BlockPos position) {
         int height = 5 + rand.nextInt(5);
         Direction bumpDirection = Direction.NORTH;
         for (int i = 0; i < height; i++) {

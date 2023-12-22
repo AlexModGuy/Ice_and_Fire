@@ -21,7 +21,7 @@ public class RenderTrollWeapon extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack stack, @NotNull ItemTransforms.TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
         if (stack.getItem() instanceof ItemTrollWeapon)
             weapon = ((ItemTrollWeapon) stack.getItem()).weapon;

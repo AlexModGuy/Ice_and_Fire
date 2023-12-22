@@ -35,7 +35,6 @@ public class TileEntityPixieHouse extends BlockEntity {
     public boolean tamedPixie;
     public UUID pixieOwnerUUID;
     public int pixieType;
-    public int ticksExisted;
     public NonNullList<ItemStack> pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public TileEntityPixieHouse(BlockPos pos, BlockState state) {
@@ -53,18 +52,20 @@ public class TileEntityPixieHouse extends BlockEntity {
         else return 0;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, TileEntityPixieHouse entityPixieHouse) {
-        entityPixieHouse.ticksExisted++;
-        if (!level.isClientSide && entityPixieHouse.hasPixie && ThreadLocalRandom.current().nextInt(100) == 0) {
-            entityPixieHouse.releasePixie();
-        }
-        if (level.isClientSide && entityPixieHouse.hasPixie) {
+    public static void tickClient(Level level, BlockPos pos, BlockState state, TileEntityPixieHouse entityPixieHouse) {
+        if (entityPixieHouse.hasPixie) {
             IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
                 pos.getX() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
                 pos.getY() + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_HEIGHT),
                 pos.getZ() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
                 EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][0], EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][1],
                 EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][2]);
+        }
+    }
+
+    public static void tickServer(Level level, BlockPos pos, BlockState state, TileEntityPixieHouse entityPixieHouse) {
+        if (entityPixieHouse.hasPixie && ThreadLocalRandom.current().nextInt(100) == 0) {
+            entityPixieHouse.releasePixie();
         }
     }
 

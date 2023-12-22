@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadPortal;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.DREAD_PORTAL;
 
@@ -30,9 +30,7 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
                 .of(Material.PORTAL)
                 .dynamicShape()
                 .strength(-1, 100000)
-                .lightLevel((state) -> {
-                    return 1;
-                })
+                .lightLevel((state) -> 1)
                 .randomTicks()
 		);
     }
@@ -70,7 +68,7 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
     }
 
 
-    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand) {
         if (!this.canSurviveAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
         }
@@ -86,12 +84,12 @@ public class BlockDreadPortal extends BaseEntityBlock implements IDreadBlock {
         return DragonUtils.isDreadBlock(world.getBlockState(pos.above())) && DragonUtils.isDreadBlock(world.getBlockState(pos.below()));
     }
 
-    public int quantityDropped(Random random) {
+    public int quantityDropped(RandomSource random) {
         return 0;
     }
 
     @Override
-    public void animateTick(@NotNull BlockState stateIn, Level worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, Level worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
         if (tileentity instanceof TileEntityDreadPortal) {

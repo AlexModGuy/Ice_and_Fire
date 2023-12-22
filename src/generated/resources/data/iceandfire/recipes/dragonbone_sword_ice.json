@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "iceandfire:ice_dragon_blood"
+  },
+  "base": {
+    "item": "iceandfire:dragonbone_sword"
+  },
+  "result": {
+    "item": "iceandfire:dragonbone_sword_ice"
+  }
+}

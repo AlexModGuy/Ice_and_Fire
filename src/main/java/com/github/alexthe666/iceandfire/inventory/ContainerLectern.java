@@ -145,38 +145,47 @@ public class ContainerLectern extends AbstractContainerMenu {
         possiblePagesInt[0] = getPageField(0);
         possiblePagesInt[1] = getPageField(1);
         possiblePagesInt[2] = getPageField(2);
-        ItemStack itemstack = this.tileFurnace.getItem(0);
-        ItemStack itemstack1 = this.tileFurnace.getItem(1);
+        ItemStack bookStack = this.tileFurnace.getItem(0);
+        ItemStack manuscriptStack = this.tileFurnace.getItem(1);
         int i = 3;
 
         if (!playerIn.level.isClientSide && !playerIn.isCreative()) {
-            itemstack1.shrink(i);
-            if (itemstack1.isEmpty()) {
+            manuscriptStack.shrink(i);
+            if (manuscriptStack.isEmpty()) {
                 this.tileFurnace.setItem(1, ItemStack.EMPTY);
             }
             return false;
         }
 
-        if ((itemstack1.isEmpty() ||
-            itemstack1.getCount() < i ||
-            itemstack1.getItem() != IafItemRegistry.MANUSCRIPT.get())
+        if ((manuscriptStack.isEmpty() ||
+            manuscriptStack.getCount() < i ||
+            manuscriptStack.getItem() != IafItemRegistry.MANUSCRIPT.get())
             && !playerIn.isCreative()) {
             return false;
-        } else if (this.possiblePagesInt[id] > 0 && !itemstack.isEmpty()) {
+        } else if (this.possiblePagesInt[id] > 0 && !bookStack.isEmpty()) {
             EnumBestiaryPages page = getPossiblePages()[Mth.clamp(id, 0, 2)];
             if (page != null) {
-                if (itemstack.getItem() == IafItemRegistry.BESTIARY.get()) {
-                    this.tileFurnace.setItem(0, itemstack);
+                if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {
+                    this.tileFurnace.setItem(0, bookStack);
                     if (IceAndFire.PROXY.getRefrencedTE() instanceof TileEntityLectern) {
-                        if (playerIn.level.isClientSide) {
+                        if (!playerIn.level.isClientSide) {
+
+                            if (bookStack.getItem() == IafItemRegistry.BESTIARY.get()) {
+                                EnumBestiaryPages.addPage(EnumBestiaryPages.fromInt(page.ordinal()), bookStack);
+                            }
+                            if (this.tileFurnace instanceof TileEntityLectern entityLectern) {
+                                entityLectern.randomizePages(bookStack, manuscriptStack);
+                            }
+
+                        }
+                        else {
                             IceAndFire.sendMSGToServer(new MessageUpdateLectern(IceAndFire.PROXY.getRefrencedTE().getBlockPos().asLong(), 0, 0, 0, true, page.ordinal()));
                         }
-                        ((TileEntityLectern) IceAndFire.PROXY.getRefrencedTE()).randomizePages(itemstack, itemstack1);
+
                     }
                 }
 
                 this.tileFurnace.setChanged();
-                //this.xpSeed = playerIn.getXPSeed();
                 this.slotsChanged(this.tileFurnace);
                 playerIn.level.playSound(null, playerIn.blockPosition(), IafSoundRegistry.BESTIARY_PAGE, SoundSource.BLOCKS, 1.0F, playerIn.level.random.nextFloat() * 0.1F + 0.9F);
             }

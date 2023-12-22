@@ -12,7 +12,6 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -111,8 +110,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         }
         preRenderCallback(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0, 1.5F, 0);
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw));
         if (model instanceof ICustomStatueModel && fakeEntity != null) {
             ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, fakeEntity);
             if (model instanceof ModelHydraBody && fakeEntity instanceof EntityHydra) {
@@ -132,8 +131,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             matrixStackIn.pushPose();
             preRenderCallback(entityIn, matrixStackIn, partialTicks);
             matrixStackIn.translate(0, 1.5F, 0);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw));
             if (model instanceof ICustomStatueModel) {
                 ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder2, packedLightIn, fakeEntity);
             } else {

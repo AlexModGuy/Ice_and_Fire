@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +25,7 @@ import java.util.List;
 public class ItemStoneStatue extends Item {
 
     public ItemStoneStatue() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ItemStoneStatue extends Item {
             String id = stack.getTag().getString("IAFStoneStatueEntityID");
             if (EntityType.byString(id).orElse(null) != null) {
                 EntityType type = EntityType.byString(id).orElse(null);
-                TranslatableComponent untranslated = isPlayer ? new TranslatableComponent("entity.player.name") : new TranslatableComponent(type.getDescriptionId());
+                MutableComponent untranslated = isPlayer ? Component.translatable("entity.minecraft.player") : Component.translatable(type.getDescriptionId());
                 tooltip.add(untranslated.withStyle(ChatFormatting.GRAY));
             }
         }

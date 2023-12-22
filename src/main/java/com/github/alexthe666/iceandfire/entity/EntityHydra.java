@@ -74,7 +74,6 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     public EntityHydra(EntityType<EntityHydra> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         resetParts();
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
     }
@@ -92,8 +91,8 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.hydraMaxHealth);
     }
 
     @Override
@@ -257,7 +256,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             resetParts();
         }
         onUpdateParts();
-        float partY = 1.0F - animationSpeed * 0.5F;
+        float partY = 1.0F - this.animationSpeed * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
             headBoxes[i].setParent(this);
@@ -340,6 +339,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         for (int i = 0; i < HEADS; i++) {
             headDamageTracker[i] = compound.getFloat("HeadDamage" + i);
         }
+        this.setConfigurableAttributes();
     }
 
     @Override

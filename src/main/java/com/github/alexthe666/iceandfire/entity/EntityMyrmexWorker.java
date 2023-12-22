@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
-import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
@@ -65,6 +64,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength);
+    }
+
+    @Override
     @Nullable
     protected ResourceLocation getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
@@ -80,7 +84,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 3;
     }
 
@@ -178,11 +182,6 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     @Override
     protected VillagerTrades.ItemListing[] getLevel2Trades() {
         return isJungle() ? MyrmexTrades.JUNGLE_WORKER.get(2) : MyrmexTrades.DESERT_WORKER.get(2);
-    }
-
-    @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
     }
 
     @Override
@@ -297,20 +296,11 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     public void onPickupItem(ItemEntity itemEntity) {
         Item item = itemEntity.getItem().getItem();
         if (item == IafItemRegistry.MYRMEX_JUNGLE_RESIN.get() && this.isJungle() || item == IafItemRegistry.MYRMEX_DESERT_RESIN.get() && !this.isJungle()) {
-
-            Player owner = null;
-            try {
-                if (itemEntity.getThrower() != null) {
-                    owner = this.level.getPlayerByUUID(itemEntity.getThrower());
-                }
-            } catch (Exception e) {
-                IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");
-            }
-            if (owner != null && this.getHive() != null) {
-                this.getHive().modifyPlayerReputation(owner.getUUID(), 5);
+            if (itemEntity.getThrowingEntity() instanceof Player player) {
+                this.getHive().modifyPlayerReputation(player.getUUID(), 5);
                 this.playSound(SoundEvents.SLIME_SQUISH, 1, 1);
                 if (!level.isClientSide) {
-                    level.addFreshEntity(new ExperienceOrb(level, owner.getX(), owner.getY(), owner.getZ(), 1 + random.nextInt(3)));
+                    level.addFreshEntity(new ExperienceOrb(level, player.getX(), player.getY(), player.getZ(), 1 + random.nextInt(3)));
                 }
             }
         }
@@ -328,6 +318,6 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean isClientSide() {
-        return this.getLevel().isClientSide;
+        return this.level.isClientSide;
     }
 }

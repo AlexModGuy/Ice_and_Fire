@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.misc.IafTagRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateCyclops;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -46,7 +47,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -69,15 +69,13 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     public EntityCyclops(EntityType<EntityCyclops> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
-        this.maxUpStep = 2.5F;
+        this.maxUpStep = 2.5f;
         this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, 0.0F);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
         ANIMATION_ROAR = Animation.create(30);
-
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -95,8 +93,9 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.cyclopsMaxHealth);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35D);
     }
 
     @Override
@@ -105,7 +104,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return 40;
     }
 
@@ -170,7 +169,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             if (!entityIn.hasPassenger(this)
                 && entityIn.getBbWidth() < 1.95F
                 && !(entityIn instanceof EntityDragonBase)
-                && !entityIn.getType().is((ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES)))) {
+                && !entityIn.getType().is((ForgeRegistries.ENTITY_TYPES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES)))) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.stopRiding();
                 entityIn.startRiding(this, true);
@@ -203,6 +202,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         super.readAdditionalSaveData(compound);
         this.setBlinded(compound.getBoolean("Blind"));
         this.setVariant(compound.getInt("Variant"));
+        this.setConfigurableAttributes();
     }
 
     public int getVariant() {
@@ -254,11 +254,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    public boolean isControlledByLocalInstance() {
-        return false;
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -267,7 +262,6 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     public boolean shouldRiderSit() {
         return false;
     }
-
 
     @Override
     public void aiStep() {
@@ -313,8 +307,8 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level.getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
-                if (BlockState.getMaterial() != Material.AIR) {
+                BlockState BlockState = this.level.getBlockState(WorldUtil.containing(this.getX() + extraX, this.getY() + extraY - 1, this.getZ() + extraZ));
+                if (BlockState.isAir()) {
                     if (level.isClientSide) {
                         level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }

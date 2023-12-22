@@ -111,19 +111,19 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
             EntityMyrmexBase myrmex;
             switch (this.getMyrmexCaste()) {
                 default:
-                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(), level);
+                    myrmex = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(),level);
                     break;
                 case 1:
-                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(), level);
+                    myrmex = new EntityMyrmexSoldier(IafEntityRegistry.MYRMEX_SOLDIER.get(),level);
                     break;
                 case 2:
-                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(), level);
+                    myrmex = new EntityMyrmexRoyal(IafEntityRegistry.MYRMEX_ROYAL.get(),level);
                     break;
                 case 3:
-                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(), level);
+                    myrmex = new EntityMyrmexSentinel(IafEntityRegistry.MYRMEX_SENTINEL.get(),level);
                     break;
                 case 4:
-                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(), level);
+                    myrmex = new EntityMyrmexQueen(IafEntityRegistry.MYRMEX_QUEEN.get(),level);
                     break;
             }
             myrmex.setJungleVariant(this.isJungle());

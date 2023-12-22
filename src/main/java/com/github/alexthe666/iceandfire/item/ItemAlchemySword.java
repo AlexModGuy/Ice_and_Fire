@@ -5,9 +5,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
+import com.github.alexthe666.iceandfire.event.ServerEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -55,6 +55,8 @@ public class ItemAlchemySword extends SwordItem {
             }
             if (!attacker.level.isClientSide && flag) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
+                lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_LOOT);
+                lightningboltentity.getTags().add(attacker.getStringUUID());
                 lightningboltentity.moveTo(target.position());
                 if (!target.level.isClientSide) {
                     target.level.addFreshEntity(lightningboltentity);
@@ -70,21 +72,21 @@ public class ItemAlchemySword extends SwordItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE.get()) {
-            tooltip.add(new TranslatableComponent("dragon_sword_fire.hurt1").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("dragon_sword_fire.hurt1").withStyle(ChatFormatting.GREEN));
             if (IafConfig.dragonWeaponFireAbility)
-                tooltip.add(new TranslatableComponent("dragon_sword_fire.hurt2").withStyle(ChatFormatting.DARK_RED));
+                tooltip.add(Component.translatable("dragon_sword_fire.hurt2").withStyle(ChatFormatting.DARK_RED));
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE.get()) {
-            tooltip.add(new TranslatableComponent("dragon_sword_ice.hurt1").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("dragon_sword_ice.hurt1").withStyle(ChatFormatting.GREEN));
             if (IafConfig.dragonWeaponIceAbility)
-                tooltip.add(new TranslatableComponent("dragon_sword_ice.hurt2").withStyle(ChatFormatting.AQUA));
+                tooltip.add(Component.translatable("dragon_sword_ice.hurt2").withStyle(ChatFormatting.AQUA));
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_LIGHTNING.get()) {
-            tooltip.add(new TranslatableComponent("dragon_sword_lightning.hurt1").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("dragon_sword_lightning.hurt1").withStyle(ChatFormatting.GREEN));
             if (IafConfig.dragonWeaponLightningAbility)
-                tooltip.add(new TranslatableComponent("dragon_sword_lightning.hurt2").withStyle(ChatFormatting.DARK_PURPLE));
+                tooltip.add(Component.translatable("dragon_sword_lightning.hurt2").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
 

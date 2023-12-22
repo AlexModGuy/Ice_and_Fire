@@ -169,14 +169,14 @@ public class RenderPath {
         final MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 
         matrixStack.translate(0.0F, -5F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
 
         matrixStack.translate(0.0F, -8F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0.0f, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880, false);
         buffer.endBatch();
 
         matrixStack.popPose();

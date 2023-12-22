@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.NewRegistryEvent;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -95,10 +96,10 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return IafRecipeRegistry.DRAGON_FORGE_TYPE;
+        return IafRecipeRegistry.DRAGON_FORGE_TYPE.get();
     }
 
-    public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<DragonForgeRecipe> {
+    public static class Serializer extends NewRegistryEvent implements RecipeSerializer<DragonForgeRecipe> {
         @Override
         public @NotNull DragonForgeRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
             String dragonType = JsonUtils.getString(json, "dragon_type");

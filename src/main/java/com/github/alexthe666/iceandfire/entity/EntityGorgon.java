@@ -14,6 +14,7 @@ import com.github.alexthe666.iceandfire.misc.IafDamageRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,7 +48,6 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
 
     public EntityGorgon(EntityType<EntityGorgon> type, Level worldIn) {
         super(type, worldIn);
-        IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         ANIMATION_SCARE = Animation.create(30);
         ANIMATION_HIT = Animation.create(10);
     }
@@ -83,8 +83,8 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.gorgonMaxHealth);
     }
 
     public boolean isTargetBlocked(Vec3 target) {
@@ -171,7 +171,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    public int getExperienceReward() {
         return 30;
     }
 
@@ -189,7 +189,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
         if (this.deathTime >= 200) {
             if (!this.level.isClientSide && (this.isAlwaysExperienceDropper() || this.lastHurtByPlayerTime > 0 && this.shouldDropExperience() && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))) {
-                int i = this.getExperienceReward(this.lastHurtByPlayer);
+                int i = this.getExperienceReward();
                 i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
                 while (i > 0) {
                     int j = ExperienceOrb.getExperienceValue(i);
@@ -288,6 +288,11 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
         }
     }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setConfigurableAttributes();
+    }
 
     @Override
     public int getAnimationTick() {

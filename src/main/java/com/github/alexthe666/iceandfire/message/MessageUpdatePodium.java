@@ -49,8 +49,7 @@ public class MessageUpdatePodium {
                 if (player.level != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
                     if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof TileEntityPodium) {
-                            TileEntityPodium podium = (TileEntityPodium) player.level.getBlockEntity(pos);
+                        if (player.level.getBlockEntity(pos) instanceof TileEntityPodium podium) {
                             podium.setItem(0, message.heldStack);
                         }
                     }

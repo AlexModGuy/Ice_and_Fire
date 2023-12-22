@@ -18,7 +18,7 @@ public class ItemMobSkull extends Item {
     private final EnumSkullType skull;
 
     public ItemMobSkull(EnumSkullType skull) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
         this.skull = skull;
     }
 

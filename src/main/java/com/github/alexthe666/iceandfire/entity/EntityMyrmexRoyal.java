@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -44,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 
 public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
@@ -80,8 +81,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return isJungle() ? MyrmexTrades.JUNGLE_ROYAL.get(2) : MyrmexTrades.DESERT_ROYAL.get(2);
     }
 
-    public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, Random rand) {
-        BlockPos pos = new BlockPos(x, entity.getY(), z);
+    public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, RandomSource rand) {
+        BlockPos pos = WorldUtil.containing(x, entity.getBlockY(), z);
         for (int yDown = 0; yDown < 10; yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
                 return pos.above(yDown);
@@ -97,7 +98,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 10;
     }
 
@@ -152,7 +153,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     @Override
     public void aiStep() {
         super.aiStep();
-        boolean flying = this.isFlying() && !this.onGround;
+        boolean flying = this.isFlying() && !this.isOnGround();
         LivingEntity attackTarget = this.getTarget();
         if (flying && flyProgress < 20.0F) {
             flyProgress += 1F;
@@ -203,7 +204,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
                 this.setFlying(false);
                 this.mate.setFlying(false);
                 isMating = true;
-                if (this.isOnGround() && this.mate.onGround) {
+                if (this.isOnGround() && this.mate.isOnGround()) {
                     breedingTicks++;
                     if (breedingTicks > 100) {
                         if (this.isAlive()) {
@@ -304,8 +305,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 2D);
     }
 
     @Override
@@ -537,6 +538,6 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     @Override
     public boolean isClientSide() {
-        return this.getLevel().isClientSide;
+        return this.level.isClientSide;
     }
 }

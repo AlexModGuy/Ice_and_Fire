@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "얼음과 불 모드 아이템",
+  "itemGroup.iceandfire.items": "얼음과 불 모드 아이템",
   "itemGroup.iceandfire.blocks": "얼음과 불 모드 블럭",
   "iceandfire.empty": "Ram",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "은화 더미",
   "block.iceandfire.copper_pile": "동화 더미",
   "block.iceandfire.silver_ore": "은 광석",
-  "block.iceandfire.copper_ore": "구리 광석",
   "block.iceandfire.sapphire_ore": "사파이어 광석",
-  "block.iceandfire.amythest_ore": "자수정 광석",
   "block.iceandfire.silver_block": "은 블럭",
-  "block.iceandfire.copper_block": "구리 블럭",
   "block.iceandfire.sapphire_block": "사파이어 블럭",
-  "block.iceandfire.amythest_block": "자수정 블럭",
   "block.iceandfire.chared_dirt": "그을린 흙",
   "block.iceandfire.chared_grass": "그을린 잔디",
   "block.iceandfire.chared_stone": "그을린 돌",
@@ -137,7 +133,6 @@
   "item.iceandfire.amythest_gem": "자수정",
   "item.iceandfire.silver_ingot": "은괴",
   "item.iceandfire.silver_nugget": "은 조각",
-  "item.iceandfire.copper_ingot": "동괴",
   "item.iceandfire.copper_nugget": "구리 조각",
   "item.iceandfire.armor_silver_metal_helmet": "은 투구",
   "item.iceandfire.armor_silver_metal_chestplate": "은 흉갑",

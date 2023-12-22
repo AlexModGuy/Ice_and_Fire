@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexWorker;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -59,8 +58,8 @@ public class LayerMyrmexItem extends RenderLayer<EntityMyrmexBase, AdvancedEntit
                     } else {
                         matrixStackIn.translate(0F, 0.2F, 0.3F);
                     }
-                    matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 160, true));
-                    matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 180, true));
+                    matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(160.0F));
+                    matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
                     Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
                     matrixStackIn.popPose();
                 }

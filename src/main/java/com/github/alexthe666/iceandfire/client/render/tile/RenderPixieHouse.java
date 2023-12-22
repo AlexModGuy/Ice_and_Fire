@@ -64,7 +64,7 @@ public class RenderPixieHouse<T extends TileEntityPixieHouse> implements BlockEn
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 1.501F, 0.5F);
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(rotation));
         if (entity != null && entity.getLevel() != null && entity.hasPixie) {
             matrixStackIn.pushPose();

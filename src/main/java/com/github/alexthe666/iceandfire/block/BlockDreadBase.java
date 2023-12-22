@@ -15,14 +15,25 @@ import org.jetbrains.annotations.NotNull;
 public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDreadBlock {
     public static final BooleanProperty PLAYER_PLACED = BooleanProperty.create("player_placed");
 
-    public BlockDreadBase(Material materialIn, float hardness, float resistance, SoundType sound) {
-        super(materialIn, hardness, resistance, sound);
+/*    public BlockDreadBase(float hardness, float resistance, SoundType sound) {
+        super(hardness, resistance, sound);
         this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.FALSE));
     }
 
-    public BlockDreadBase(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
-        super(materialIn, hardness, resistance, sound, slippery);
+    public BlockDreadBase(float hardness, float resistance, SoundType sound, boolean slippery) {
+        super(hardness, resistance, sound, slippery);
         this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.FALSE));
+    }*/
+
+    public static BlockDreadBase builder(float hardness, float resistance, SoundType sound, Material material) {
+        Properties props = Properties.of(material)
+                .sound(sound)
+                .strength(hardness, resistance);
+        return new BlockDreadBase(props);
+    }
+
+    public BlockDreadBase(Properties props) {
+        super(props);
     }
 
     @SuppressWarnings("deprecation")

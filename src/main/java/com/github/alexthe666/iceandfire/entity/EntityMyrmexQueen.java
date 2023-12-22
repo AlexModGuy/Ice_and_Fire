@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexTrades;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.github.alexthe666.iceandfire.world.gen.WorldGenMyrmexHive;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +72,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 20;
     }
 
@@ -132,7 +132,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             spawnGroundEffects(3);
         }
         if (this.getHive() != null) {
-            this.getHive().tick(0, level);
+            this.getHive().tick(0,level);
         }
 
         if (hasMadeHome() && this.getGrowthStage() >= 2 && !this.canSeeSky()) {
@@ -141,7 +141,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             this.setAnimation(ANIMATION_DIGNEST);
             if (this.getAnimationTick() == 42) {
                 int down = Math.max(15, this.blockPosition().getY() - 20 + this.getRandom().nextInt(10));
-                BlockPos genPos = new BlockPos(this.getX(), down, this.getZ());
+                BlockPos genPos = new BlockPos(this.getBlockX(), down, this.getBlockZ());
                 if (!MinecraftForge.EVENT_BUS.post(new GenericGriefEvent(this, genPos.getX(), genPos.getY(), genPos.getZ()))) {
                     WorldGenMyrmexHive hiveGen = new WorldGenMyrmexHive(true, this.isJungle(), NoneFeatureConfiguration.CODEC);
                     if (!level.isClientSide && level instanceof ServerLevel) {
@@ -153,7 +153,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                     this.setHive(hiveGen.hive);
                     for (int i = 0; i < 3; i++) {
                         EntityMyrmexWorker worker = new EntityMyrmexWorker(IafEntityRegistry.MYRMEX_WORKER.get(),
-                            level);
+                           level);
                         worker.copyPosition(this);
                         worker.setHive(this.getHive());
                         worker.setJungleVariant(this.isJungle());
@@ -170,7 +170,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
             float angle = (0.01745329251F * this.yBodyRot);
             double extraX = radius * Mth.sin((float) (Math.PI + angle));
             double extraZ = radius * Mth.cos(angle);
-            BlockPos eggPos = new BlockPos(this.getX() + extraX, this.getY() + 0.75F, this.getZ() + extraZ);
+            BlockPos eggPos = WorldUtil.containing(this.getX() + extraX, this.getY() + 0.75F, this.getZ() + extraZ);
             if (level.isEmptyBlock(eggPos)) {
                 this.setAnimation(ANIMATION_EGG);
                 if (this.getAnimationTick() == 10) {
@@ -255,7 +255,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     public boolean isInHive() {
         if (getHive() != null) {
             for (BlockPos pos : getHive().getAllRooms()) {
-                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(getLevel(), pos), 300))
+                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(level, pos), 300))
                     return true;
             }
         }
@@ -282,8 +282,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
     }
 
     @Override
-    public AttributeSupplier.Builder getConfigurableAttributes() {
-        return bakeAttributes();
+    public void setConfigurableAttributes() {
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.myrmexBaseAttackStrength * 3.5D);
     }
 
     @Override
@@ -349,8 +349,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level.getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
-                if (BlockState.getMaterial() != Material.AIR) {
+                BlockState BlockState = this.level.getBlockState(WorldUtil.containing(this.getBlockX() + extraX, this.getBlockY() + extraY - 1, this.getBlockZ() + extraZ));
+                if (BlockState.isAir()) {
                     if (level.isClientSide) {
                         level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), true, this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }

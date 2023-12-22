@@ -26,7 +26,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.IAF_LECTERN;
 
@@ -77,26 +76,6 @@ public class BlockLectern extends BaseEntityBlock {
             worldIn.updateNeighbourForOutputSignal(pos, this);
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
-    }
-
-    public boolean canPlaceBlockAt(Level worldIn, BlockPos pos) {
-        BlockState BlockState = worldIn.getBlockState(pos.below());
-        Block block = BlockState.getBlock();
-        return BlockState.isFaceSturdy(worldIn, pos, Direction.UP);
-    }
-
-
-    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
-        this.checkFall(worldIn, pos);
-    }
-
-    private boolean checkFall(Level worldIn, BlockPos pos) {
-        if (!this.canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, true);
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @Nullable

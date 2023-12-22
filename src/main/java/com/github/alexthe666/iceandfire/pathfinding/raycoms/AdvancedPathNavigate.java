@@ -283,7 +283,8 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             isSneaking = false;
             mob.setShiftKeyDown(false);
         }
-        //this.ourEntity.setMoveVertical(0);
+
+        this.ourEntity.setYya(0);
         if (handleLadders(oldIndex)) {
             followThePath();
             stuckHandler.checkStuck(this);
@@ -311,7 +312,7 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
             DebugPackets.sendPathFindingPacket(this.level, this.mob, this.path, this.maxDistanceToWaypoint);
             if (!this.isDone()) {
                 Vec3 vector3d2 = this.path.getNextEntityPos(this.mob);
-                BlockPos blockpos = new BlockPos(vector3d2);
+                BlockPos blockpos = WorldUtil.containing(vector3d2);
                 if (isEntityBlockLoaded(this.level, blockpos)) {
                     this.mob.getMoveControl()
                         .setWantedPosition(vector3d2.x,
@@ -770,18 +771,18 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final Vec3 curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
         final Vec3 next = this.path.getEntityPosAtNode(this.mob, curNode);
 
-        final Vec3i currI = new Vec3i(curr.x, curr.y, curr.z);
-        final Vec3i nextI = new Vec3i(next.x, next.y, next.z);
+        final Vec3i currI = new Vec3i((int) Math.round(curr.x), (int) Math.round(curr.y), (int) Math.round(curr.z));
+        final Vec3i nextI = new Vec3i((int) Math.round(next.x), (int) Math.round(next.y), (int) Math.round(next.z));
 
         if (mob.blockPosition().closerThan(currI, 2.0) && mob.blockPosition().closerThan(nextI, 2.0)) {
             int currentIndex = curNode - 1;
             while (currentIndex > 0) {
                 final Vec3 tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
-                final Vec3i tempoPosI = new Vec3i(tempoPos.x, tempoPos.y, tempoPos.z);
+                final Vec3i tempoPosI = new Vec3i((int) Math.round(tempoPos.x), (int) Math.round(tempoPos.y), (int) Math.round(tempoPos.z));
                 if (mob.blockPosition().closerThan(tempoPosI, 1.0)) {
                     this.path.setNextNodeIndex(currentIndex);
                 } else if (isTracking) {
-                    reached.add(new BlockPos(tempoPos.x, tempoPos.y, tempoPos.z));
+                    reached.add(new BlockPos(tempoPosI));
                 }
                 currentIndex--;
             }

@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IafConfig;
+import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -128,8 +129,8 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
                 }
             }
             if (movingObject.getType() != HitResult.Type.MISS) {
-                if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                    destroyArea(level, new BlockPos(this.getX(), this.getY(), this.getZ()), ((EntityDragonBase) shootingEntity));
+                if (shootingEntity instanceof EntityDragonBase && DragonUtils.canGrief((EntityDragonBase) shootingEntity)) {
+                    destroyArea(level, WorldUtil.containing(this.getX(), this.getY(), this.getZ()), ((EntityDragonBase) shootingEntity));
                 }
                 this.remove(RemovalReason.DISCARDED);
             }

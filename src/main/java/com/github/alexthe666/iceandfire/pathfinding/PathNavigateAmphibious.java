@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.util.WorldUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -43,17 +43,17 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     @Override
     public Path createPath(@NotNull BlockPos pos, int i) {
-        if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
+        if (this.level.getBlockState(pos).isAir()) {
             BlockPos blockpos;
 
-            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.below()) {
+            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).isAir(); blockpos = blockpos.below()) {
             }
 
             if (blockpos.getY() > 0) {
                 return super.createPath(blockpos.above(), i);
             }
 
-            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).getMaterial() == Material.AIR) {
+            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).isAir()) {
                 blockpos = blockpos.above();
             }
 
@@ -80,12 +80,12 @@ public class PathNavigateAmphibious extends PathNavigation {
     private int getPathablePosY() {
         if (this.mob.isInWater() && this.canFloat()) {
             int i = (int) this.mob.getBoundingBox().minY;
-            Block block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+            Block block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
             int j = 0;
 
             while (block == Blocks.WATER) {
                 ++i;
-                block = this.level.getBlockState(new BlockPos(Mth.floor(this.mob.getX()), i, Mth.floor(this.mob.getZ()))).getBlock();
+                block = this.level.getBlockState(new BlockPos(this.mob.getBlockX(), i, this.mob.getBlockZ())).getBlock();
                 ++j;
 
                 if (j > 16) {
@@ -101,7 +101,7 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     protected void removeSunnyPath() {
         if (this.shouldAvoidSun) {
-            if (this.level.canSeeSky(new BlockPos(Mth.floor(this.mob.getX()), (int) (this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getZ())))) {
+            if (this.level.canSeeSky(WorldUtil.containing(this.mob.getBlockX(), this.mob.getBoundingBox().minY + 0.5D, this.mob.getBlockZ()))) {
                 return;
             }
 

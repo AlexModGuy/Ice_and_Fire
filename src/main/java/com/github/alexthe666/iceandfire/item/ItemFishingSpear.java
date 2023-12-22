@@ -6,6 +6,6 @@ import net.minecraft.world.item.Item;
 public class ItemFishingSpear extends Item {
 
     public ItemFishingSpear() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(64));
+        super(new Item.Properties().durability(64).tab(IceAndFire.TAB_ITEMS));
     }
 }

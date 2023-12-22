@@ -15,8 +15,7 @@ public class ArmorModelBase extends HumanoidModel<LivingEntity> {
 
     @Override
     public void setupAnim(@NotNull LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityIn instanceof ArmorStand) {
-            ArmorStand armorStand = (ArmorStand) entityIn;
+        if (entityIn instanceof ArmorStand armorStand) {
             this.head.xRot = ((float) Math.PI / 180F) * armorStand.getHeadPose().getX();
             this.head.yRot = ((float) Math.PI / 180F) * armorStand.getHeadPose().getY();
             this.head.zRot = ((float) Math.PI / 180F) * armorStand.getHeadPose().getZ();

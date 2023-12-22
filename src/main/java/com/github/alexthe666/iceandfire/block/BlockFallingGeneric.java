@@ -10,24 +10,35 @@ import net.minecraft.world.level.material.Material;
 public class BlockFallingGeneric extends FallingBlock {
     public Item itemBlock;
 
-    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound) {
+/*    public BlockFallingGeneric(float hardness, float resistance, SoundType sound) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
         );
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingGeneric(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery) {
+    public BlockFallingGeneric(float hardness, float resistance, SoundType sound, boolean slippery) {
         super(
             BlockBehaviour.Properties
-                .of(materialIn)
+                .of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .friction(0.98F)
         );
+    }*/
+
+    public static BlockFallingGeneric builder(float hardness, float resistance, SoundType sound, Material material) {
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of(material)
+                .sound(sound)
+                .strength(hardness, resistance);
+        return new BlockFallingGeneric(props);
+    }
+
+    public BlockFallingGeneric(BlockBehaviour.Properties props) {
+        super(props);
     }
 
 

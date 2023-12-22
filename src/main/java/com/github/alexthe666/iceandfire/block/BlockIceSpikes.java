@@ -27,7 +27,7 @@ public class BlockIceSpikes extends Block {
     public BlockIceSpikes() {
         super(
             Properties
-                .of(Material.ICE_SOLID)
+                .of(Material.ICE)
                 .noOcclusion()
                 .dynamicShape()
                 .randomTicks()

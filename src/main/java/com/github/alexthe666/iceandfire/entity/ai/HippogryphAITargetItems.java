@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.sounds.SoundEvents;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
@@ -37,12 +37,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
         super(creature, checkSight, onlyNearby);
         this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
         this.targetChance = chance;
-        this.targetEntitySelector = new Predicate<ItemEntity>() {
-            @Override
-            public boolean test(ItemEntity item) {
-                return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Items.RABBIT_FOOT;
-            }
-        };
+        this.targetEntitySelector = (Predicate<ItemEntity>) item -> item != null && !item.getItem().isEmpty() && item.getItem().is(IafItemTags.TAME_HIPPOGRYPH);
     }
 
     @Override
@@ -55,6 +50,10 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             return false;
         }
 
+        return updateList();
+    }
+
+    private boolean updateList() {
         if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
             list = this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
@@ -89,16 +88,15 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
             hippo.feedings++;
             hippo.heal(4);
-            if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRandom().nextInt(3) == 0) && !hippo.isTame() && this.targetEntity.getThrower() != null && this.mob.level.getPlayerByUUID(this.targetEntity.getThrower()) != null) {
-                Player owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
-                if (owner != null) {
-                    hippo.tame(owner);
+            if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRandom().nextInt(3) == 0) && !hippo.isTame() && this.targetEntity.getThrowingEntity() instanceof Player player) {
+                    hippo.tame(player);
                     hippo.setTarget(null);
                     hippo.setCommand(1);
                     hippo.setOrderedToSit(true);
-                }
             }
             stop();
+        } else {
+            updateList();
         }
     }
 

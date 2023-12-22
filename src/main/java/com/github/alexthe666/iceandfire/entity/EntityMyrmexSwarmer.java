@@ -54,7 +54,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 0;
     }
 
@@ -178,7 +178,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public void aiStep() {
         super.aiStep();
         setFlying(true);
-        boolean flying = this.isFlying() && !this.onGround;
+        boolean flying = this.isFlying() && !this.isOnGround();
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.08D, 0));
@@ -186,7 +186,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
             }
         }
-        if (this.onGround) {
+        if (isOnGround()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.2D, 0));
         }
         if (this.getTarget() != null) {

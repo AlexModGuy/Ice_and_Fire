@@ -1,0 +1,12 @@
+{
+  "feature": "iceandfire:hydra_cave",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

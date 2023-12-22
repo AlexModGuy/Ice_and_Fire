@@ -37,7 +37,7 @@ public class IceAndFireTEISR extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack stack, @NotNull ItemTransforms.TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (stack.getItem() == IafBlockRegistry.GHOST_CHEST.get().asItem()) {
             blockEntityRenderDispatcher.renderItem(chest, stackIn, bufferIn, combinedLightIn, combinedOverlayIn);
         }

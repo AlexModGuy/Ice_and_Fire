@@ -1,0 +1,8 @@
+{
+  "feature": "iceandfire:ice_dragon_cave",
+  "placement": [
+    {
+      "type": "iceandfire:biome_extended"
+    }
+  ]
+}

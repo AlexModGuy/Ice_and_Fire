@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,8 @@ public class ChainProperties {
     private static final String CHAIN_TO_ENTITY_ID_TAG = "ChainOwnerIDIaf";
     private static final String CHAIN_DATA = "ChainDataIaf";
 
+    // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
+    private static HashMap<CompoundTag, Boolean> containsChainData = new HashMap<>();
     public static void attachChain(LivingEntity chained, Entity chainedTo) {
         if (isChainedTo(chained, chainedTo)) {
             return;
@@ -66,10 +69,16 @@ public class ChainProperties {
 
     private static ListTag getOrCreateChainData(CompoundTag entityData) {
         //TODO: Look at type
-        if (entityData.contains(CHAIN_DATA, 9)) {
+        if (containsChainData.containsKey(entityData) && containsChainData.get(entityData) && entityData.contains(CHAIN_DATA, 9)) {
             return entityData.getList(CHAIN_DATA, 10);
         }
-        return new ListTag();
+        else if (entityData.contains(CHAIN_DATA, 9)) {
+            containsChainData.put(entityData, true);
+            return entityData.getList(CHAIN_DATA, 10);
+        } else {
+            containsChainData.put(entityData, false);
+            return new ListTag();
+        }
     }
 
     public static void updateData(LivingEntity entity) {

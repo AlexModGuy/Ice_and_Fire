@@ -3,9 +3,10 @@ package com.github.alexthe666.iceandfire.misc;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.NewRegistryEvent;
 
 import java.lang.reflect.Field;
 
@@ -269,19 +270,19 @@ public final class IafSoundRegistry {
 
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
-        return new SoundEvent(soundID).setRegistryName(soundID);
+        return new SoundEvent(soundID);
     }
 
     @SubscribeEvent
-    public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
+    public static void registerSoundEvents(final NewRegistryEvent event) {
         try {
             for (Field f : IafSoundRegistry.class.getFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof SoundEvent) {
-                    event.getRegistry().register((SoundEvent) obj);
+                    ForgeRegistries.SOUND_EVENTS.register(((SoundEvent) obj).getLocation(), (SoundEvent) obj);
                 } else if (obj instanceof SoundEvent[]) {
                     for (SoundEvent soundEvent : (SoundEvent[]) obj) {
-                        event.getRegistry().register(soundEvent);
+                        ForgeRegistries.SOUND_EVENTS.register(soundEvent.getLocation(), soundEvent);
                     }
                 }
             }

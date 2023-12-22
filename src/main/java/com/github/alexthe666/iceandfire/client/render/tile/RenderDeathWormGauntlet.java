@@ -22,7 +22,7 @@ public class RenderDeathWormGauntlet extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack stack, @NotNull ItemTransforms.TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         RenderType texture;
 
         if (stack.getItem() == IafItemRegistry.DEATHWORM_GAUNTLET_RED.get()) {

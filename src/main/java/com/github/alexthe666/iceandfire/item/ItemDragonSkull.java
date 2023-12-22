@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -62,9 +60,9 @@ public class ItemDragonSkull extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
-        tooltip.add(new TranslatableComponent(iceorfire).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable(iceorfire).withStyle(ChatFormatting.GRAY));
         if (stack.getTag() != null) {
-            tooltip.add(new TranslatableComponent("dragon.stage").withStyle(ChatFormatting.GRAY).append(new TextComponent(" " + stack.getTag().getInt("Stage"))));
+            tooltip.add(Component.translatable("dragon.stage").withStyle(ChatFormatting.GRAY).append(Component.literal(" " + stack.getTag().getInt("Stage"))));
         }
     }
 

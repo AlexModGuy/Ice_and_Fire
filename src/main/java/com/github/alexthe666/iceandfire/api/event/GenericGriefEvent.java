@@ -6,7 +6,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
- * GenericGriefEvent is fired right before a non-Dragon destroys or modifies blocks in some aspect. <br>
+ * GenericGriefEvent is fired right before an entity destroys or modifies blocks in some aspect. <br>
  * {@link #targetX} x coordinate being targeted for modification. <br>
  * {@link #targetY} y coordinate being targeted for modification. <br>
  * {@link #targetZ} z coordinate being targeted for modification. <br>

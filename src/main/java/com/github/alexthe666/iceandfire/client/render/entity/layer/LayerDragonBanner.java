@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,7 +36,7 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
             matrixStackIn.pushPose();
             postRender(StreamSupport.stream(this.renderer.getModel().getAllParts().spliterator(), false).filter(cube -> cube.boxName.equals("BodyUpper")).findFirst().get(), matrixStackIn, 0.0625F);
             matrixStackIn.translate(0, -0.2F, 0.4F);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.0F));
             matrixStackIn.pushPose();
             matrixStackIn.scale(f2, f2, f2);
             Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);

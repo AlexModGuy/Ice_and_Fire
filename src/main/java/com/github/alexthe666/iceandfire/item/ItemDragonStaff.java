@@ -5,6 +5,6 @@ import net.minecraft.world.item.Item;
 
 public class ItemDragonStaff extends Item {
     public ItemDragonStaff() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
     }
 }

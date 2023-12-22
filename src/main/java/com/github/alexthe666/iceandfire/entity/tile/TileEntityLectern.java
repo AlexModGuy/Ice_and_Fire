@@ -12,7 +12,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
@@ -25,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -67,10 +67,6 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     public TileEntityLectern(BlockPos pos, BlockState state) {
         super(IafTileEntityRegistry.IAF_LECTERN.get(), pos, state);
-    }
-
-    public static String getGuiID() {
-        return IceAndFire.MODID + ":lectern";
     }
 
     public static void bookAnimationTick(Level p_155504_, BlockPos p_155505_, BlockState p_155506_, TileEntityLectern p_155507_) {
@@ -127,27 +123,26 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
         }
     }
 
-    public ItemStack getStackInSlotOnClosing(int index) {
-        if (!this.stacks.get(index).isEmpty()) {
-            ItemStack itemstack = this.stacks.get(index);
-            this.stacks.set(index, ItemStack.EMPTY);
-            return itemstack;
-        } else {
-            return ItemStack.EMPTY;
-        }
-    }
-
     @Override
     public void setItem(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.sameItem(this.stacks.get(index)) && ItemStack.tagMatches(stack, this.stacks.get(index));
+        boolean isSame = !stack.isEmpty() && ItemStack.isSame(stack, this.stacks.get(index)) && ItemStack.matches(stack, this.stacks.get(index));
         this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
         }
-        if (index == 0 && !flag) {
+
+        if (!isSame) {
             this.setChanged();
-            selectedPages = randomizePages(getItem(0), getItem(1));
+
+            if (/* Manuscripts */ this.stacks.get(1).isEmpty()) {
+                selectedPages[0] = null;
+                selectedPages[1] = null;
+                selectedPages[2] = null;
+                IceAndFire.sendMSGToAll(new MessageUpdateLectern(worldPosition.asLong(), -1, -1, -1, false, 0));
+            } else {
+                selectedPages = randomizePages(getItem(0), getItem(1));
+            }
         }
     }
 
@@ -191,6 +186,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public void saveAdditional(@NotNull CompoundTag compound) {
+        super.saveAdditional(compound);
         ContainerHelper.saveAllItems(compound, this.stacks);
     }
 
@@ -230,7 +226,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public @NotNull Component getName() {
-        return new TranslatableComponent("block.iceandfire.lectern");
+        return Component.translatable("block.iceandfire.lectern");
     }
 
     @Override
@@ -295,7 +291,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public <T> net.minecraftforge.common.util.@NotNull LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
             if (facing == Direction.DOWN)
                 return handlers[1].cast();
             else

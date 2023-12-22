@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.client.model.ModelDreadLichSkull;
 import com.github.alexthe666.iceandfire.entity.EntityDreadLichSkull;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -34,7 +33,7 @@ public class RenderDreadLichSkull extends EntityRenderer<EntityDreadLichSkull> {
             matrixStackIn.scale(1.5F, -1.5F, 1.5F);
             float yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks;
             matrixStackIn.translate(0F, 0F, 0F);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw - 180, true));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(yaw - 180.0F));
             VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn, RenderType.eyes(TEXTURE), false, false);
             MODEL_SPIRIT.renderToBuffer(matrixStackIn, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStackIn.popPose();

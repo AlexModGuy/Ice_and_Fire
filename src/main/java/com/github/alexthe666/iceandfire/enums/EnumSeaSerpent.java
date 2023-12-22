@@ -38,23 +38,22 @@ public enum EnumSeaSerpent {
     EnumSeaSerpent(ChatFormatting color) {
         this.resourceName = this.name().toLowerCase(Locale.ROOT);
         this.color = color;
-        this.scaleBlock = IafBlockRegistry.BLOCKS.register("sea_serpent_scale_block_%s".formatted(this.resourceName), () -> new BlockSeaSerpentScales(resourceName, color));
-        //this.scaleBlock = new BlockSeaSerpentScales(this.resourceName, this.color);
     }
 
 
     public static void initArmors() {
         for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
             color.armorMaterial = new IafArmorMaterial("iceandfire:sea_serpent_scales_" + color.resourceName, 30, new int[]{4, 8, 7, 4}, 25, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F);
-            color.scale = IafItemRegistry.ITEMS.register("sea_serpent_scales_" + color.resourceName, () ->
+            color.scaleBlock = IafBlockRegistry.register("sea_serpent_scale_block_" + color.resourceName, () -> new BlockSeaSerpentScales(color.resourceName, color.color));
+            color.scale = IafItemRegistry.registerItem("sea_serpent_scales_" + color.resourceName, () ->
                 new ItemSeaSerpentScales(color.resourceName, color.color));
-            color.helmet = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_helmet", () ->
+            color.helmet = IafItemRegistry.registerItem("tide_" + color.resourceName + "_helmet", () ->
                 new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.HEAD));
-            color.chestplate = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_chestplate", () ->
+            color.chestplate = IafItemRegistry.registerItem("tide_" + color.resourceName + "_chestplate", () ->
                 new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.CHEST));
-            color.leggings = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_leggings", () ->
+            color.leggings = IafItemRegistry.registerItem("tide_" + color.resourceName + "_leggings", () ->
                 new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.LEGS));
-            color.boots = IafItemRegistry.ITEMS.register("tide_" + color.resourceName + "_boots", () ->
+            color.boots = IafItemRegistry.registerItem("tide_" + color.resourceName + "_boots", () ->
                 new ItemSeaSerpentArmor(color, color.armorMaterial, EquipmentSlot.FEET));
         }
     }

@@ -47,9 +47,7 @@ public class BlockJar extends BaseEntityBlock {
                     .dynamicShape()
                     .strength(1, 2)
                     .sound(SoundType.GLASS)
-                    .lightLevel((state) -> {
-                        return pixieType == -1 ? 0 : 10;
-                    })
+                    .lightLevel((state) -> pixieType == -1 ? 0 : 10)
                     .dropsLike(IafBlockRegistry.JAR_EMPTY.get())
 				: Properties
                 .of(Material.GLASS)

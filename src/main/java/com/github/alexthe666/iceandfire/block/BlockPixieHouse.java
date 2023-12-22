@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -76,7 +76,7 @@ public class BlockPixieHouse extends BaseEntityBlock {
     }
 
     @Override
-    public void initializeClient(@NotNull Consumer<IBlockRenderProperties> consumer) {
+    public void initializeClient(@NotNull Consumer<IClientBlockExtensions> consumer) {
         super.initializeClient(consumer);
     }
 
@@ -98,7 +98,7 @@ public class BlockPixieHouse extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? createTickerHelper(entityType, PIXIE_HOUSE.get(), TileEntityPixieHouse::tick) : null;
+        return level.isClientSide ? createTickerHelper(entityType, PIXIE_HOUSE.get(), TileEntityPixieHouse::tickClient) : createTickerHelper(entityType, PIXIE_HOUSE.get(), TileEntityPixieHouse::tickServer);
     }
 
     @Nullable

@@ -1,5 +1,5 @@
 {
-  "itemGroup.iceandfire": "Ice And Fire Przedmioty",
+  "itemGroup.iceandfire.items": "Ice And Fire Przedmioty",
   "itemGroup.iceandfire.blocks": "Ice And Fire Bloki",
   "iceandfire.empty": "Puste",
 
@@ -18,13 +18,9 @@
   "block.iceandfire.silver_pile": "Kupka Srebra",
   "block.iceandfire.copper_pile": "Kupka Miedzi",
   "block.iceandfire.silver_ore": "Złoże Srebra",
-  "block.iceandfire.copper_ore": "Złoże Miedzi",
   "block.iceandfire.sapphire_ore": "Złoże Szafiru",
-  "block.iceandfire.amythest_ore": "Złoże Ametystu",
   "block.iceandfire.silver_block": "Blok Srebra",
-  "block.iceandfire.copper_block": "Blok Miedzi",
   "block.iceandfire.sapphire_block": "Blok Szafiru",
-  "block.iceandfire.amythest_block": "Blok Ametystu",
   "block.iceandfire.chared_dirt": "Zwęglona Ziemia",
   "block.iceandfire.chared_grass": "Zwęglona Trawa",
   "block.iceandfire.chared_stone": "Zwęglony Kamień",
@@ -137,7 +133,6 @@
   "item.iceandfire.amythest_gem": "Ametyst",
   "item.iceandfire.silver_ingot": "Srebrna Sztabka",
   "item.iceandfire.silver_nugget": "Bryłka Srebra",
-  "item.iceandfire.copper_ingot": "Sztabka Miedzi",
   "item.iceandfire.copper_nugget": "Bryłka Miedzi",
   "item.iceandfire.armor_silver_metal_helmet": "Srebrny Hełm",
   "item.iceandfire.armor_silver_metal_chestplate": "Srebrny Napierśnik",
