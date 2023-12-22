@@ -1860,6 +1860,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             final double extraY = (riding.isShiftKeyDown() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.yHeadRot = ((Player) riding).yHeadRot;
             this.setYRot(((Player) riding).yHeadRot);
+            // TODO: consider removing this, up and down is handled in travel()
             this.setPos(riding.getX() + extraX, riding.getY() + extraY, riding.getZ() + extraZ);
             if ((this.getControlState() == 1 << 4 || ((Player) riding).isFallFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
