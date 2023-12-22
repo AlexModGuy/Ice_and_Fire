@@ -27,11 +27,19 @@ if (build_snapshot) {
 }
 
 if (build_id != null) {
+    // get last two parts of build id
+    def split = build_id.split('-')
+    if (split.length >= 2) {
+        def build_id_last = split[split.length - 1]
+        def build_id_second = split[split.length - 2]
+        build_id = build_id_second + "-" + build_id_last
+    }
+
     version += "+build.${build_id}"
 }
 
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-//archivesBaseName = 'iceandfire'
+archivesBaseName = 'iceandfire'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
