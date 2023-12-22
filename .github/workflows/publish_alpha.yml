@@ -23,8 +23,6 @@ jobs:
         run: echo "DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
       - name: Set Version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> ${GITHUB_ENV}
-      - name: Set Minecraft Version
-        run: echo "MINECRAFT_VERSION=${GITHUB_REF##*/}" >> ${GITHUB_ENV}
       - name: Build jar
         run: ./gradlew build
         env:
@@ -35,6 +33,6 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
-          title: Alpha Release ${{env.MINECRAFT_VERSION}}-${{env.RELEASE_VERSION}}
+          title: Alpha Release ${{env.RELEASE_VERSION}}
           files: |
             build/libs/*
