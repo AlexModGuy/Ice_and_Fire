@@ -26,11 +26,6 @@ public class DataGenerators {
         ExistingFileHelper helper = event.getExistingFileHelper();
         generator.addProvider(event.includeServer(), new BannerPatternTagGenerator(generator, helper));
         generator.addProvider(event.includeServer(), new POITagGenerator(generator, helper));
-        // TODO :: 1.19.2 - is this still needed?
-//        generator.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
-//                Component.literal("Resources for Ice and Fire"),
-//                DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
-//                Arrays.stream(PackType.values()).collect(Collectors.toMap(Function.identity(), DetectedVersion.BUILT_IN::getPackVersion)))));
         generator.addProvider(event.includeServer(), new IafBiomeTagGenerator(generator, helper));
         IafBlockTags blockTagsProvider = new IafBlockTags(generator, helper);
         generator.addProvider(event.includeServer(), blockTagsProvider);
