@@ -81,7 +81,7 @@ public class GorgonTempleStructure extends IafStructure {
 
         return new GorgonTempleStructure(
                 new Structure.StructureSettings(
-                        context.lookup(Registries.BIOME).getOrThrow(IafBiomeTagGenerator.HAS_MAUSOLEUM),
+                        context.lookup(Registries.BIOME).getOrThrow(IafBiomeTagGenerator.HAS_GORGON_TEMPLE),
                         new HashMap<>(),
                         GenerationStep.Decoration.SURFACE_STRUCTURES,
                         TerrainAdjustment.BEARD_THIN
