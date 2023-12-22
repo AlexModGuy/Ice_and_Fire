@@ -36,6 +36,6 @@ public class SpawnDeathWorm extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }

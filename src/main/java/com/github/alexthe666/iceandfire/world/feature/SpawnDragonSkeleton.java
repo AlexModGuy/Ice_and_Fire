@@ -45,6 +45,6 @@ public class SpawnDragonSkeleton extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }

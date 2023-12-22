@@ -39,6 +39,6 @@ public class SpawnSeaSerpent extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }

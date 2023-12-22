@@ -45,6 +45,6 @@ public class SpawnWanderingCyclops extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }
