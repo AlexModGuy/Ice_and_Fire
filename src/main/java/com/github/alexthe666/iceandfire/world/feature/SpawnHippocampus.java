@@ -40,6 +40,6 @@ public class SpawnHippocampus extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }

@@ -40,6 +40,6 @@ public class SpawnStymphalianBird extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        return false;
+        return true;
     }
 }
