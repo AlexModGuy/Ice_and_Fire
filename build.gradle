@@ -69,7 +69,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
+    mappings channel: 'parchment', version: "${parchment_version}-${mc_version}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     copyIdeResources = true
@@ -134,7 +134,7 @@ processResources {
 }
 
 dependencies {
-    minecraft 'net.neoforged:forge:1.20.1-47.1.79'
+    minecraft "net.neoforged:forge:${mc_version}-${forge_version}"
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     // at runtime, use the full JEI jar
@@ -152,7 +152,7 @@ jar {
         attributes([
                 "Specification-Title": "iceandfire",
                 "Specification-Vendor": "alexthe667",
-                "Specification-Version": "2.1.11", // We are version 1 of ourselves
+                "Specification-Version": mod_version, // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"alexthe667",
