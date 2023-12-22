@@ -38,7 +38,8 @@ public class ParticleDragonFlame extends SpriteTexturedParticle {
         this.initialX = xCoordIn;
         this.initialY = yCoordIn;
         this.initialZ = zCoordIn;
-        targetX = xCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
+        Float random_for_target=this.rand.nextFloat() - this.rand.nextFloat();
+        targetX = xCoordIn + (double) (random_for_target* 1.75F * dragonSize);
         targetY = yCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
         targetZ = zCoordIn + (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 1.75F * dragonSize);
         this.setPosition(posX, posY, posZ);

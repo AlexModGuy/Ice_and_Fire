@@ -21,7 +21,7 @@ public class FoodUtils {
     }
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish) {
-        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFood() != null) {
+        if (isFoodItemExists(item)) {
             int food = item.getItem().getFood().getHealing() * 10;
             if (!meatOnly) {
                 return food;
@@ -32,6 +32,9 @@ public class FoodUtils {
             }
         }
         return 0;
+    }
+    public static Boolean isFoodItemExists(ItemStack item){
+        return (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFood() != null);
     }
 
     public static boolean isSeeds(ItemStack stack) {
