@@ -1901,6 +1901,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             final double extraY = (riding.isShiftKeyDown() ? 1.2D : 1.4D) + (i == 2 ? 0.4D : 0D);
             this.yHeadRot = ((Player) riding).yHeadRot;
             this.setYRot(((Player) riding).yHeadRot);
+            // TODO: consider removing this, up and down is handled in travel()
             this.setPos(riding.getX() + extraX, riding.getY() + extraY, riding.getZ() + extraZ);
             if ((this.getControlState() == 1 << 4 || ((Player) riding).isFallFlying()) && !riding.isPassenger()) {
                 this.stopRiding();
@@ -2052,6 +2053,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return super.isInWater() && this.getFluidHeight(FluidTags.WATER) > Mth.floor(this.getDragonStage() / 2.0f);
     }
 
+    public final boolean IGNORE_PHYSICS_ON_SERVER = false;
     public boolean allowLocalMotionControl = true;
     public boolean allowMousePitchControl = true;
     protected boolean gliding = false;
@@ -2472,6 +2474,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
                 super.move(pType, pPos);
             } else {
+                // Use noPhysics tag to disable server side collision check
+                this.noPhysics = IGNORE_PHYSICS_ON_SERVER;
                 super.move(pType, pPos);
             }
 

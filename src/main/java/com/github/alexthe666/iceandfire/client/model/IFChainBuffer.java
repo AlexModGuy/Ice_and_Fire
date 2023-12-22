@@ -170,8 +170,8 @@ public class IFChainBuffer {
         this.prevYawVariation = this.yawVariation;
 
         if (!compareDouble(entity.yHeadRotO, entity.yHeadRot) && Mth.abs(this.yawVariation) < maxAngle) {
-            this.yawVariation += Mth.clamp((entity.yHeadRot - entity.yHeadRotO) / divisor, -maxAngle, maxAngle);
-            if (entity instanceof IFlapable && Math.abs(entity.yHeadRot - entity.yHeadRotO) > 15D) {
+            this.yawVariation += Mth.clamp((entity.yHeadRotO - entity.yHeadRot) / divisor, -maxAngle, maxAngle);
+            if (entity instanceof IFlapable && Math.abs(entity.yHeadRotO - entity.yHeadRot) > 15D) {
                 ((IFlapable) entity).flapWings();
             }
         }

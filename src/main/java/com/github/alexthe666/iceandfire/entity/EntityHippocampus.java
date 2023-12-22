@@ -122,7 +122,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new HippocampusAIRide(this));
+        //this.goalSelector.addGoal(0, new HippocampusAIRide(this));
         this.goalSelector.addGoal(0, new AquaticAITempt(this, 1.0D, false, IafItemTags.TEMPT_HIPPOCAMPUS));
         this.goalSelector.addGoal(1, new AquaticAIFindWaterTarget(this, 10, true));
         this.goalSelector.addGoal(2, new AquaticAIGetInWater(this, 1.0D));
@@ -302,12 +302,12 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
             if (!this.isInWater() && this.airBorneCounter == 0 && isOnGround()) {
                 this.jumpFromGround();
             } else if (this.isInWater()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4D, 0));
+//                this.setDeltaMovement(this.getDeltaMovement().add(0, 0.4D, 0));
             }
         }
-        if (this.down()) {
-            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4D, 0));
-        }
+//        if (this.down()) {
+//            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.4D, 0));
+//        }
         if (this.isInWater() && this.isLandNavigator) {
             switchNavigator(false);
         }
