@@ -23,7 +23,6 @@ public class ChangePageButton extends Button {
         if (this.active) {
             ResourceLocation resourceLocation = new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png");
             boolean flag = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
-            RenderSystem.setShaderTexture(0, resourceLocation);
             int i = 0;
             int j = 64;
             if (flag) {

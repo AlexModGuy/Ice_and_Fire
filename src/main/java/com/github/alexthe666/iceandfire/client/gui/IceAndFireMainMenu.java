@@ -164,16 +164,13 @@ public class IceAndFireMainMenu extends TitleScreen {
     public void render(@NotNull GuiGraphics ms, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
-        RenderSystem.setShaderTexture(0, TABLE_TEXTURE);
         int width = this.width;
         int height = this.height;
         ms.blit(TABLE_TEXTURE, 0, 0, 0, 0, width, height, width, height);
-        RenderSystem.setShaderTexture(0, BESTIARY_TEXTURE);
         ms.blit(BESTIARY_TEXTURE, 50, 0, 0, 0, width - 100, height, width - 100, height);
         float f11 = 1.0F;
         int l = Mth.ceil(f11 * 255.0F) << 24;
         if (this.isFlippingPage) {
-            RenderSystem.setShaderTexture(0, pageFlipTextures[Math.min(5, pageFlip)]);
             ms.blit(pageFlipTextures[Math.min(5, pageFlip)], 50, 0, 0, 0, width - 100, height, width - 100, height);
         } else {
             int middleX = width / 2;
@@ -184,7 +181,6 @@ public class IceAndFireMainMenu extends TitleScreen {
             for (Picture picture : drawnPictures) {
                 float alpha = (picture.alpha * globalAlpha + 0.01F);
                 RenderSystem.enableBlend();
-                RenderSystem.setShaderTexture(0, drawingTextures[picture.image]);
                 RenderSystem.setShaderColor(1, 1, 1, 1);
                 ms.blit(drawingTextures[picture.image], (int) (picture.x * widthScale) + middleX, (int) ((picture.y * heightScale) + middleY), 0, 0, (int) imageScale, (int) imageScale, (int) imageScale, (int) imageScale);
                 RenderSystem.disableBlend();
@@ -193,7 +189,6 @@ public class IceAndFireMainMenu extends TitleScreen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager._enableBlend();
         this.getMinecraft().font.drawInBatch("Ice and Fire " + ChatFormatting.YELLOW + IceAndFire.VERSION, 2, height - 10, 0xFFFFFFFF, false, ms.pose().last().pose(), ms.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
-        RenderSystem.setShaderTexture(0, MINECRAFT_TITLE_TEXTURES);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         ms.blit(MINECRAFT_TITLE_TEXTURES, width / 2 - 256 / 2, 10, 0, 0, 256, 64, 256, 64);
 

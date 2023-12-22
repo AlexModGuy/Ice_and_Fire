@@ -154,7 +154,6 @@ public class GuiBestiary extends Screen {
         for (int i = 0; i < this.indexButtons.size(); i++) {
             this.indexButtons.get(i).active = i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index;
         }
-        RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int cornerX = (width - X) / 2;
         int cornerY = (height - Y) / 2;

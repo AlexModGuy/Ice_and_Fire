@@ -38,7 +38,6 @@ public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
     @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, PODUIM_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         pGuiGraphics.blit(PODUIM_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
