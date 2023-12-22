@@ -51,6 +51,14 @@ if (build_snapshot) {
     version += '-SNAPSHOT'
 }
 if (build_id != null) {
+    // get last two parts of build id
+    def split = build_id.split('-')
+    if (split.length >= 2) {
+        def build_id_last = split[split.length - 1]
+        def build_id_second = split[split.length - 2]
+        build_id = build_id_second + "-" + build_id_last
+    }
+
     version += "+build.${build_id}"
 }
 
