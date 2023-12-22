@@ -962,7 +962,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
         // Todo: move wrongly fix
-        if (allowLocalMotionControl && this.getControllingPassenger() != null && canBeControlledByRider()) {
+        if (allowLocalMotionControl && this.getControllingPassenger() != null) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
             if (rider == null) {
                 super.travel(pTravelVector);
