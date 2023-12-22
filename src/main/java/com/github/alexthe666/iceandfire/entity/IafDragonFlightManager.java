@@ -299,7 +299,7 @@ public class IafDragonFlightManager {
 
         @Override
         public void tick() {
-            if (dragon instanceof EntityDragonBase theDragon && theDragon.getControllingPassenger() != null) {
+            if (dragon instanceof EntityDragonBase theDragon && theDragon.getControllingPassenger() != null || dragon.getControllingPassenger() != null) {
                 // New ride system doesn't need move controller
                 // The flight move control is disabled here, the walking move controller will stay Operation.WAIT so nothing will happen too
                 return;

@@ -928,7 +928,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Math.round(minimumHealth + (healthStep * this.getAgeInDays())));
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Math.round(minimumDamage + (attackStep * this.getAgeInDays())));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * this.getAgeInDays()));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(minimumSpeed + (speedStep * Math.min(this.getAgeInDays(), 125)));
         final double baseValue = minimumArmor + (armorStep * this.getAgeInDays());
         this.getAttribute(Attributes.ARMOR).setBaseValue(baseValue);
         if (!this.level.isClientSide) {
@@ -2023,6 +2023,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return super.isInWater() && this.getFluidHeight(FluidTags.WATER) > Mth.floor(this.getDragonStage() / 2.0f);
     }
 
+    public final boolean IGNORE_PHYSICS_ON_SERVER = false;
     public boolean allowLocalMotionControl = true;
     public boolean allowMousePitchControl = true;
     protected boolean gliding = false;
@@ -2446,7 +2447,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 super.move(pType, pPos);
             } else {
                 // Use noPhysics tag to disable server side collision check
-                this.noPhysics = true;
+                this.noPhysics = IGNORE_PHYSICS_ON_SERVER;
                 super.move(pType, pPos);
             }
             // Set no gravity flag to prevent getting kicked by flight disabled servers
@@ -2641,7 +2642,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         // Extra delta when moving
         // The linear part of the tuning
-        final float linearFactor = Mth.map(Math.max(this.getAgeInDays() - 50, 0), 0, 75, 0, 1);
+        final float linearFactor = Mth.map(Math.max(Math.min(this.getAgeInDays(), 125) - 50, 0), 0, 75, 0, 1);
         if (this.getControllingPassenger() instanceof LivingEntity rider) {
             // Extra height when rider and the dragon look upwards, this will reduce model clipping
             if (rider.getXRot() < 0) {

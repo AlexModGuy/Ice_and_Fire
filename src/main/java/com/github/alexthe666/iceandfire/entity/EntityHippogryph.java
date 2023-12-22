@@ -14,7 +14,6 @@ import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.pathfinding.PathNavigateFlyingCreature;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.AdvancedPathNavigate;
-import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.google.common.base.Predicate;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -54,7 +53,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -763,7 +761,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return movingobjectposition == null || movingobjectposition.getType() != HitResult.Type.BLOCK;
     }
 
-    public final boolean DISABLE_MOVEMENT_CHECK = true;
+    public final boolean IGNORE_PHYSICS_ON_SERVER = false;
     @Override
     public void travel(@NotNull Vec3 pTravelVector) {
         if (!this.canMove() && !this.isVehicle()) {
@@ -829,7 +827,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                     // Happens when stepping up blocks
                     // Might because client & server's onGround flag is out of sync
                     // I can't get it fixed, so it's disabled
-                    this.noPhysics = DISABLE_MOVEMENT_CHECK;
+                    this.noPhysics = IGNORE_PHYSICS_ON_SERVER;
                 }
 
                 this.calculateEntityAnimation(this, false);

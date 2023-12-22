@@ -98,7 +98,7 @@ public class MessageDragonControl {
                             if (amphi.isOwnedBy(player)) {
                                 amphi.setControlState(message.controlState);
                             }
-                            amphi.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+//                            amphi.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
                         }
                     }
                 }
