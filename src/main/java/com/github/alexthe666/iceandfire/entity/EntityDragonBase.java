@@ -2070,7 +2070,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
         // Todo: move wrongly fix
-        float flyingSpeed;
+        float flyingSpeed; // FIXME :: Why overlay the flyingSpeed variable from LivingEntity
         if (allowLocalMotionControl && this.getControllingPassenger() != null) {
             LivingEntity rider = this.getControllingPassenger();
             if (rider == null) {
@@ -2204,7 +2204,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             // Walking control
             else {
                 double forward = rider.zza;
-                double strafing = rider.xxa;
+                double strafing = rider.xxa * 0.5f;
                 // Inherit y motion for dropping
                 double vertical = pTravelVector.y;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -2217,13 +2217,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 forward *= rider.isSprinting() ? 1.2f : 1.0f;
                 // Slower going back
                 forward *= rider.zza > 0 ? 1.0f : 0.2f;
-                // Slower going sideway
-                strafing *= 0.05f;
 
                 if (this.isControlledByLocalInstance()) {
-                    flyingSpeed = speed * 0.1F;
-                    this.setSpeed(flyingSpeed);
-
+                    this.setSpeed(speed);
                     // Vanilla walking behavior includes going up steps
                     super.travel(new Vec3(strafing, vertical, forward));
                 } else {
@@ -2231,7 +2227,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
                 this.tryCheckInsideBlocks();
                 this.updatePitch(this.yOld - this.getY());
-                return;
             }
         }
         // No rider move control
