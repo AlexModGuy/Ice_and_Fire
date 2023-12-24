@@ -618,11 +618,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         };
     }
 
-    @Override
-    public boolean removeWhenFarAway(double pDistanceToClosestPlayer) {
-        return super.removeWhenFarAway(pDistanceToClosestPlayer);
-    }
-
     public int getArmorOrdinal(ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() instanceof ItemDragonArmor armorItem) {
             return armorItem.type.ordinal() + 1;
