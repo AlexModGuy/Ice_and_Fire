@@ -470,8 +470,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     protected void updateBurnTarget() {
         if (burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isBaby()) {
             float maxDist = 115 * this.getDragonStage();
-            if (level.getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput && ((TileEntityDragonforgeInput) level.getBlockEntity(burningTarget)).isAssembled()
-                    && this.distanceToSqr(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D) < maxDist && canPositionBeSeen(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D)) {
+            if (level.getBlockEntity(burningTarget) instanceof TileEntityDragonforgeInput forge && forge.isAssembled() && this.distanceToSqr(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D) < maxDist && canPositionBeSeen(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D)) {
                 this.getLookControl().setLookAt(burningTarget.getX() + 0.5D, burningTarget.getY() + 0.5D, burningTarget.getZ() + 0.5D, 180F, 180F);
                 this.breathFireAtPos(burningTarget);
                 this.setBreathingFire(true);
@@ -617,6 +616,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             case 5 -> 650;
             default -> 5;
         };
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double pDistanceToClosestPlayer) {
+        return super.removeWhenFarAway(pDistanceToClosestPlayer);
     }
 
     public int getArmorOrdinal(ItemStack stack) {
