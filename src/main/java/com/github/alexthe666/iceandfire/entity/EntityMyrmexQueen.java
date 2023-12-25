@@ -203,15 +203,14 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if (this.getAnimation() == ANIMATION_STING && this.getTarget() != null && this.getAnimationTick() == 6) {
             if (this.getAttackBounds().intersects(this.getTarget().getBoundingBox())) {
                 LivingEntity attackTarget = this.getTarget();
-                this.getTarget().hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
-                this.getTarget().addEffect(new MobEffectInstance(MobEffects.POISON, 200, 2));
-                this.getTarget().hasImpulse = true;
+                attackTarget.hurt(this.level().damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
+                attackTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 2));
+                attackTarget.hasImpulse = true;
                 float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
-                this.getTarget().hasImpulse = true;
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().multiply(0.5D, 1, 0.5D));
                 attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(-0.5 / f * 4, 1, -0.5 / f * 4));
 
-                if (this.getTarget().onGround()) {
+                if (attackTarget.onGround()) {
                     attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(0, 0.4, 0));
                 }
             }

@@ -286,7 +286,8 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 14D && this.getAnimationTick() == 12) {
             this.getTarget().hurt(this.level().damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
-            this.getTarget().knockback(2, this.getX() - this.getTarget().getX(), this.getZ() - this.getTarget().getZ());
+            if (this.getTarget() != null)
+                this.getTarget().knockback(2, this.getX() - this.getTarget().getX(), this.getZ() - this.getTarget().getZ());
 
         }
         if (this.getAnimation() != ANIMATION_EATPLAYER && this.getTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getTarget())) {
