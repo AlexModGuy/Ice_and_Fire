@@ -361,9 +361,10 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_STRIKE_HORIZONTAL && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 4D && this.getAnimationTick() == 10 && this.deathTime <= 0) {
-            this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            LivingEntity target = this.getTarget();
+            target.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             float f1 = 0.5F;
-            float f2 = this.getTarget().zza;
+            float f2 = target.zza;
             float f3 = 0.6F;
             float f4 = Mth.sqrt(f2 * f2 + f3 * f3);
 
@@ -378,7 +379,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             float f6 = Mth.cos(this.getYRot() * 0.017453292F);
             // float f7 = f2 * f6 - f3 * f5;
             // float f8 = f3 * f6 + f2 * f5;
-            this.getTarget().setDeltaMovement(f5, f6, 0.4F);
+            target.setDeltaMovement(f5, f6, 0.4F);
         }
         if (this.getNavigation().isDone() && this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 3 && this.distanceToSqr(this.getTarget()) < 30 && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             this.lookAt(this.getTarget(), 30, 30);
