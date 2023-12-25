@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
 
-
+    private final int MAX_ISLAND_RADIUS = 10;
     public WorldGenSirenIsland(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);
     }
@@ -69,7 +69,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> {
     }
 
     private int getRadius(int layer, int up) {
-        return layer > up ? (int) (layer * 0.25) + up : layer;
+        return layer > up ? (int) (layer * 0.25) + up : Math.min(layer, MAX_ISLAND_RADIUS);
     }
 
     private BlockState getStone(Random random) {
