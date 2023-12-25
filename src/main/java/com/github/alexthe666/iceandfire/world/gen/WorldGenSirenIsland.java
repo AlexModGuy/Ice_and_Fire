@@ -18,6 +18,8 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> implements TypedFeature {
+
+    private final int MAX_ISLAND_RADIUS = 10;
     public WorldGenSirenIsland(final Codec<NoneFeatureConfiguration> configuration) {
         super(configuration);
     }
@@ -69,7 +71,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
     }
 
     private int getRadius(int layer, int up) {
-        return layer > up ? (int) (layer * 0.25) + up : layer;
+        return layer > up ? (int) (layer * 0.25) + up : Math.min(layer, MAX_ISLAND_RADIUS);
     }
 
     private BlockState getStone(RandomSource random) {
