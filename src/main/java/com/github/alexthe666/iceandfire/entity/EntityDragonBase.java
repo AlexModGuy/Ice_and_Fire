@@ -2071,7 +2071,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
         // Todo: move wrongly fix
-        float flyingSpeed; // FIXME :: Why overlay the flyingSpeed variable from LivingEntity
+
         if (allowLocalMotionControl && this.getControllingPassenger() != null) {
             LivingEntity rider = this.getControllingPassenger();
             if (rider == null) {
@@ -2085,8 +2085,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 double strafing = rider.xxa;
                 double vertical = 0;
                 float speed = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-                // Bigger difference in speed for young and elder dragons
-//                float airSpeedModifier = (float) (5.2f + 1.0f * Mth.map(Math.min(this.getAgeInDays(), 125), 0, 125, 0f, 1.5f));
+
                 float airSpeedModifier = (float) (5.2f + 1.0f * Mth.map(speed, this.minimumSpeed, this.maximumSpeed, 0f, 1.5f));
                 // Apply speed mod
                 speed *= airSpeedModifier;
