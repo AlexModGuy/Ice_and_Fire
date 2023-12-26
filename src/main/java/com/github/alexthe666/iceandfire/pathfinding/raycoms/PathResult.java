@@ -18,6 +18,7 @@ public class PathResult<T extends Callable<Path>>
      * The pathfinding status
      */
     protected PathFindingStatus status = PathFindingStatus.IN_PROGRESS_COMPUTING;
+    private static boolean threadException = false;
 
     /**
      * Whether the pathfinding job reached its destination
@@ -167,7 +168,17 @@ public class PathResult<T extends Callable<Path>>
     {
         if (job != null)
         {
-            pathCalculation = executorService.submit(job);
+            try {
+                if (!threadException)
+                    pathCalculation = executorService.submit(job);
+            } catch (NullPointerException e) {
+                IceAndFire.LOGGER.error("Mod tried to move an entity from non server thread",e);
+            } catch (RuntimeException e) {
+                threadException = true;
+                IceAndFire.LOGGER.catching(e);
+            } catch (Exception e) {
+                IceAndFire.LOGGER.catching(e);
+            }
         }
     }
 
