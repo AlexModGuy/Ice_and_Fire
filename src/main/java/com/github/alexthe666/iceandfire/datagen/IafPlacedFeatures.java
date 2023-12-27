@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.datagen;
 
+import com.github.alexthe666.iceandfire.world.CustomBiomeFilter;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
-import com.github.alexthe666.iceandfire.world.CustomBiomeFilter;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -51,34 +51,38 @@ public final class IafPlacedFeatures {
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        context.register(PLACED_FIRE_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_DRAGON_ROOST), List.of(BiomeFilter.biome())));
-        context.register(PLACED_ICE_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.ICE_DRAGON_ROOST), List.of(BiomeFilter.biome())));
-        context.register(PLACED_LIGHTNING_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_ROOST), List.of(BiomeFilter.biome())));
-        context.register(PLACED_FIRE_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
-        context.register(PLACED_ICE_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.ICE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
-        context.register(PLACED_LIGHTNING_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
-        context.register(PLACED_CYCLOPS_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.CYCLOPS_CAVE), List.of(BiomeFilter.biome())));
-        context.register(PLACED_PIXIE_VILLAGE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.PIXIE_VILLAGE), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SIREN_ISLAND, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SIREN_ISLAND), List.of(BiomeFilter.biome())));
-        context.register(PLACED_HYDRA_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.HYDRA_CAVE), List.of(BiomeFilter.biome())));
-        context.register(PLACED_MYRMEX_HIVE_DESERT, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.MYRMEX_HIVE_DESERT), List.of(BiomeFilter.biome())));
-        context.register(PLACED_MYRMEX_HIVE_JUNGLE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.MYRMEX_HIVE_JUNGLE), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_DEATH_WORM, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DEATH_WORM), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_DRAGON_SKELETON_L, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_L), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_DRAGON_SKELETON_F, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_F), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_DRAGON_SKELETON_I, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_I), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_HIPPOCAMPUS, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_HIPPOCAMPUS), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_SEA_SERPENT, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_SEA_SERPENT), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_STYMPHALIAN_BIRD, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_STYMPHALIAN_BIRD), List.of(BiomeFilter.biome())));
-        context.register(PLACED_SPAWN_WANDERING_CYCLOPS, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_WANDERING_CYCLOPS), List.of(BiomeFilter.biome())));
+        // Surface
+        context.register(PLACED_FIRE_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_DRAGON_ROOST), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_ICE_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.ICE_DRAGON_ROOST), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_LIGHTNING_DRAGON_ROOST, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_ROOST), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_CYCLOPS_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.CYCLOPS_CAVE), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_PIXIE_VILLAGE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.PIXIE_VILLAGE), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SIREN_ISLAND, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SIREN_ISLAND), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_HYDRA_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.HYDRA_CAVE), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_MYRMEX_HIVE_DESERT, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.MYRMEX_HIVE_DESERT), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_MYRMEX_HIVE_JUNGLE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.MYRMEX_HIVE_JUNGLE), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_DEATH_WORM, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DEATH_WORM), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_DRAGON_SKELETON_L, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_L), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_DRAGON_SKELETON_F, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_F), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_DRAGON_SKELETON_I, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_DRAGON_SKELETON_I), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_HIPPOCAMPUS, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_HIPPOCAMPUS), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_SEA_SERPENT, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_SEA_SERPENT), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_STYMPHALIAN_BIRD, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_STYMPHALIAN_BIRD), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+        context.register(PLACED_SPAWN_WANDERING_CYCLOPS, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SPAWN_WANDERING_CYCLOPS), List.of(PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
+       //TODO: Check gen chance VegetationFeatures.java
+        context.register(PLACED_FIRE_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        context.register(PLACED_FROST_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FROST_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        context.register(PLACED_LIGHTNING_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+
+        // Underground
         //TODO: Make it different from copper ore
         context.register(PLACED_SILVER_ORE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SILVER_ORE), commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)))));
         //TODO: Maybe copper emerald ore?
         context.register(PLACED_SAPPHIRE_ORE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.SAPPHIRE_ORE), commonOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)))));
-        //TODO: Check gen chance VegetationFeatures.java
-        context.register(PLACED_FIRE_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
-        context.register(PLACED_FROST_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FROST_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
-        context.register(PLACED_LIGHTNING_LILY, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_LILY), List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        context.register(PLACED_FIRE_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.FIRE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
+        context.register(PLACED_ICE_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.ICE_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
+        context.register(PLACED_LIGHTNING_DRAGON_CAVE, new PlacedFeature(features.getOrThrow(IafConfiguredFeatures.LIGHTNING_DRAGON_CAVE), List.of(CustomBiomeFilter.biome())));
+
     }
 
     public static ResourceKey<PlacedFeature> registerKey(String name) {

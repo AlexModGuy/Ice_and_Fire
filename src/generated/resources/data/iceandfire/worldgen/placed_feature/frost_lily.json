@@ -10,10 +10,10 @@
     },
     {
       "type": "minecraft:heightmap",
-      "heightmap": "WORLD_SURFACE_WG"
+      "heightmap": "MOTION_BLOCKING"
     },
     {
-      "type": "iceandfire:biome_custom"
+      "type": "minecraft:biome"
     }
   ]
 }
