@@ -34,6 +34,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -47,6 +48,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -235,7 +237,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DragonAIRide<>(this));
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AmphithereAIAttackMelee(this, 1.0D, true));
@@ -266,7 +267,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.navigation = new PathNavigateFlyingCreature(this, level());
             this.navigatorType = 1;
         } else {
-            this.moveControl = new IafDragonFlightManager.PlayerFlightMoveHelper<>(this);
+            this.moveControl = new FlyingMoveControl(this, 20, false);
             this.navigation = new PathNavigateFlyingCreature(this, level());
             this.navigatorType = 2;
         }
@@ -422,9 +423,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         } else if (!diving && diveProgress > 0.0F) {
             diveProgress -= 1F;
         }
-        if (this.isFlying()) {
-            this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.08D, this.getDeltaMovement().z);
-        }
+
         if (this.isFallen && this.flightBehavior != FlightBehavior.NONE) {
             this.flightBehavior = FlightBehavior.NONE;
         }
@@ -580,6 +579,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 .add(Attributes.MOVEMENT_SPEED, 0.4D)
                 //ATTACK
                 .add(Attributes.ATTACK_DAMAGE, IafConfig.amphithereAttackStrength)
+                .add(Attributes.FLYING_SPEED, IafConfig.amphithereFlightSpeed)
                 //FOLLOW RANGE
                 .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
@@ -588,6 +588,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public void setConfigurableAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.amphithereMaxHealth);
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(IafConfig.amphithereAttackStrength);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(IafConfig.amphithereFlightSpeed);
     }
 
     @Override
@@ -744,11 +745,6 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             return true;
         }
         return false;
-    }
-
-    // FIXME :: Unused
-    public boolean isRidingPlayer(Player player) {
-        return getRidingPlayer() != null && player != null && getRidingPlayer().getUUID().equals(player.getUUID());
     }
 
     @Override
@@ -934,13 +930,63 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return world.getBlockState(pos).getBlock() instanceof LeavesBlock;
     }
 
+    // FIXME: I don't know what's is overriding the flight speed (I assume it's on the server side)
+    @Override
+    protected float getRiddenSpeed(@NotNull Player pPlayer) {
+        return (this.isFlying() || this.isHovering()) ? (float) this.getAttributeValue(Attributes.FLYING_SPEED) * 2F : (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.5F;
+    }
+
     @Override
     public void travel(@NotNull Vec3 travelVector) {
-        if (!this.canMove() && !this.isVehicle()) {
-            super.travel(travelVector.multiply(0, 1, 0));
-            return;
+        if (this.isControlledByLocalInstance()) {
+            if (this.isInWater()) {
+                this.moveRelative(0.02F, travelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
+            } else if (this.isInLava()) {
+                this.moveRelative(0.02F, travelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
+            } else if (this.isFlying() || this.isHovering()) {
+                this.moveRelative(0.1F, travelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            } else {
+                super.travel(travelVector);
+            }
+        } else {
+            super.travel(travelVector);
         }
-        super.travel(travelVector);
+    }
+
+    @Override
+    protected void tickRidden(@NotNull Player player, @NotNull Vec3 travelVector) {
+        super.tickRidden(player, travelVector);
+        Vec2 vec2 = this.getRiddenRotation(player);
+        this.setRot(vec2.y, vec2.x);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if (this.isControlledByLocalInstance()) {
+            Vec3 vec3 = this.getDeltaMovement();
+            float vertical = this.isGoingUp() ? 0.2F : this.isGoingDown() ? -0.2F : 0F;
+            if (!this.isFlying() && !this.isHovering()) {
+                vertical = (float) travelVector.y;
+            }
+            this.setDeltaMovement(vec3.add(0, vertical, 0));
+        }
+    }
+
+    @Override
+    protected @NotNull Vec3 getRiddenInput(Player player, @NotNull Vec3 travelVector) {
+        float f = player.xxa * 0.5F;
+        float f1 = player.zza;
+        if (f1 <= 0.0F) {
+            f1 *= 0.25F;
+        }
+
+        return new Vec3(f, 0.0D, f1);
+    }
+    protected Vec2 getRiddenRotation(LivingEntity entity) {
+        return new Vec2(entity.getXRot() * 0.5F, entity.getYRot());
     }
 
     public boolean canMove() {

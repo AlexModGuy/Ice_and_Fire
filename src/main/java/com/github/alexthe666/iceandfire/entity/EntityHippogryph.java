@@ -763,6 +763,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         }
     }
 
+    @Override
     protected @NotNull Vec3 getRiddenInput(Player player, @NotNull Vec3 travelVector) {
         float f = player.xxa * 0.5F;
         float f1 = player.zza;
