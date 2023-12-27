@@ -20,7 +20,7 @@ public class SuppressVehicleMovedWronglyMixin {
         if (this.player.getRootVehicle() instanceof EntityHippocampus) {
             instance.debug(s,o);
         } else {
-            original.call();
+            instance.warn(s,o);
         }
     }
 
