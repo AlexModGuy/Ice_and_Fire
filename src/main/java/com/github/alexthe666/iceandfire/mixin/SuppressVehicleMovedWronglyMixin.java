@@ -19,6 +19,8 @@ public class SuppressVehicleMovedWronglyMixin {
     private void iaf_lowerVehicleMovedWronglyLoggingLevel(Logger instance, String s, Object[] o, Operation<Void> original) {
         if (this.player.getRootVehicle() instanceof EntityHippocampus) {
             instance.debug(s,o);
+        } else {
+            original.call();
         }
     }
 

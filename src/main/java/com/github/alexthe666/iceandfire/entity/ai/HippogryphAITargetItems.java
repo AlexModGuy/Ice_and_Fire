@@ -54,9 +54,7 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     private boolean updateList() {
-        if (this.mob.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.mob.level().getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
-
+        list = this.mob.level().getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
         } else {
