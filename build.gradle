@@ -144,6 +144,7 @@ dependencies {
     //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
     implementation fg.deobf("curse.maven:citadel-331936:4744075")
 
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2"))
     implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.3.2")) {
         jarJar.ranged(it, "[0.3.2,)")
     }
