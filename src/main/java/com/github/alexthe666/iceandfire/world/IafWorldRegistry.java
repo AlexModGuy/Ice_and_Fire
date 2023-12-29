@@ -199,7 +199,7 @@ public class IafWorldRegistry {
     }
 
     private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimple = (name, feat) -> {
-        return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE), BiomeFilter.biome());
+        return register("%s:%s".formatted(IceAndFire.MODID, name), new ConfiguredFeature<>(feat, FeatureConfiguration.NONE), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
     };
 
     private static final BiFunction<String, Feature, Holder<PlacedFeature>> registerSimpleCave = (name, feat) -> {
