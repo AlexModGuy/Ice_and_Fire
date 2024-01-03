@@ -85,6 +85,8 @@ public class GuiBestiary extends Screen {
     @Override
     protected void init() {
         super.init();
+        this.clearWidgets();
+        this.indexButtons.clear();
         int centerX = (width - X) / 2;
         int centerY = (height - Y) / 2;
         this.previousPage = new ChangePageButton(centerX + 15, centerY + 215, false, 0, (p_214132_1_) -> {
