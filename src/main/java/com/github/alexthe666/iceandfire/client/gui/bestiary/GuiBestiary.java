@@ -13,13 +13,11 @@ import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +26,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.ItemDecoratorHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +59,7 @@ public class GuiBestiary extends Screen {
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY.get()) {
             if (book.getTag() != null) {
                 Set<EnumBestiaryPages> pages = EnumBestiaryPages
-                    .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));
+                        .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));
                 allPageTypes.addAll(pages);
                 // Make sure the pages are sorted according to the enum
                 allPageTypes.sort(Comparator.comparingInt(Enum::ordinal));
@@ -125,17 +122,17 @@ public class GuiBestiary extends Screen {
                 int yIndex = i % 10;
                 int id = 2 + i;
                 IndexPageButton button = new IndexPageButton(centerX + 15 + (xIndex * 200),
-                    centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0),
-                    Component.translatable("bestiary."
-                        + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
-                    (p_214132_1_) -> {
-                        if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
-                            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
-                            this.index = false;
-                            this.bookPages = 0;
-                            this.pageType = allPageTypes.get(id - 2);
-                        }
-                    });
+                        centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0),
+                        Component.translatable("bestiary."
+                                + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
+                        (p_214132_1_) -> {
+                            if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
+                                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(IafSoundRegistry.BESTIARY_PAGE, 1.0F));
+                                this.index = false;
+                                this.bookPages = 0;
+                                this.pageType = allPageTypes.get(id - 2);
+                            }
+                        });
                 this.indexButtons.add(button);
                 this.addRenderableWidget(button);
             }
@@ -862,29 +859,25 @@ public class GuiBestiary extends Screen {
         int k = (this.width - X + 84) / 2;
         int l = (this.height - Y + 40) / 2;
         ms.pose().pushPose();
-        ms.pose().translate(k + x, l + y, 0.0D);
+        ms.pose().translate(x, y, 0.0D);
         ms.pose().scale(scale, scale, scale);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         ms.pose().popPose();
-        PoseStack poseStack = RenderSystem.getModelViewStack();
         for (int i = 0; i < 9; i++) {
-            ItemDecoratorHandler itemDecoratorHandler = ItemDecoratorHandler.of(ingredients[i]);
-            poseStack.pushPose();
-            poseStack.translate(k, l, 32.0D);
-            poseStack.translate(((x + (i % 3 * 22) * scale)), ((y + (i / 3 * 22) * scale)), 0.0D);
-            poseStack.scale(scale, scale, scale);
-            itemDecoratorHandler.render(ms, font, ingredients[i], 0, 0);
-            poseStack.popPose();
+            ms.pose().pushPose();
+            ms.pose().translate(44, 20, 32.0D);
+            ms.pose().translate(((x + (i % 3 * 22) * scale)), ((y + (i / 3 * 22) * scale)), 0.0D);
+            ms.pose().scale(scale, scale, scale);
+            ms.renderItem(ingredients[i], 0, 0);
+            ms.pose().popPose();
         }
-        poseStack.pushPose();
-        poseStack.translate(k, l, 32.0D);
+        ms.pose().pushPose();
+        ms.pose().translate(40, 20, 32.0D);
         float finScale = scale * 1.5F;
-        poseStack.translate((x + 70.0F * finScale), (y + 10.0F * finScale), 0.0D);
-        poseStack.scale(finScale, finScale, finScale);
-        ItemDecoratorHandler resultDecoratorHandler = ItemDecoratorHandler.of(result);
-        resultDecoratorHandler.render(ms, font, result, 0, 0);
-        poseStack.popPose();
-        RenderSystem.applyModelViewMatrix();
+        ms.pose().translate((x + 70.0F * finScale), (y + 10.0F * finScale), 0.0D);
+        ms.pose().scale(finScale, finScale, finScale);
+        ms.renderItem(result, 0, 0);
+        ms.pose().popPose();
+
         ms.pose().pushPose();
         ms.pose().translate(x, y, 0);
         ms.pose().scale(scale, scale, 0);
@@ -945,37 +938,23 @@ public class GuiBestiary extends Screen {
         ms.pose().pushPose();
         RenderSystem.setShaderTexture(0, texture);
         ms.pose().scale(scale / 512F, scale / 512F, scale / 512F);
-        ms.blit(texture,x, y, u, v, width, height, 512, 512);
+        ms.blit(texture, x, y, u, v, width, height, 512, 512);
         ms.pose().popPose();
     }
 
     private void drawItemStack(GuiGraphics ms, ItemStack stack, int x, int y, float scale) {
-        int cornerX = (width - X) / 2;
-        int cornerY = (height - Y) / 2;
-
         ms.pose().pushPose();
-        ms.pose().translate(cornerX, cornerY, 0.0D);
-        ms.pose().scale(scale* 0.92f, scale* 0.92f,scale* 0.92f);
+        ms.pose().scale(scale, scale, scale);
         ms.renderItem(stack, x, y);
         ms.pose().popPose();
-
     }
 
 
     private void drawBlockStack(GuiGraphics ms, ItemStack stack, int x, int y, float scale, int zScale) {
-        int cornerX = (width - X) / 2;
-        int cornerY = (height - Y) / 2;
-
         ms.pose().pushPose();
-        PoseStack poseStack = RenderSystem.getModelViewStack();
-        poseStack.pushPose();
-        poseStack.translate(cornerX, cornerY, 0.0D);
-        poseStack.scale(scale, scale, scale);
-        ItemDecoratorHandler itemDecoratorHandler = ItemDecoratorHandler.of(stack);
-        itemDecoratorHandler.render(ms, font, stack, x, y);
-        poseStack.popPose();
+        ms.pose().scale(scale, scale, scale);
+        ms.pose().translate(0, 0, zScale * 10);
+        ms.renderItem(stack, x, y);
         ms.pose().popPose();
-        RenderSystem.applyModelViewMatrix();
-
     }
 }
