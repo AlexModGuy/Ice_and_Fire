@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
@@ -148,8 +147,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
                 level.setBlockAndUpdate(blockPosition(), IafBlockRegistry.EGG_IN_ICE.get().defaultBlockState());
                 level.playLocalSound(getX(), getY() + getEyeHeight(), getZ(), SoundEvents.GLASS_BREAK, getSoundSource(), 2.5F, 1.0F, false);
 
-                if (state.getBlock() instanceof BlockEggInIce) {
-                    TileEntityEggInIce eggInIce = (TileEntityEggInIce) level.getBlockEntity(blockPosition());
+                if (level.getBlockEntity(blockPosition()) instanceof TileEntityEggInIce eggInIce) {
                     eggInIce.type = getEggType();
                     eggInIce.ownerUUID = getOwnerId();
                 }
