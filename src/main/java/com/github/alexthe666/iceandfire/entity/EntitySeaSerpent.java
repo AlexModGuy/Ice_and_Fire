@@ -204,6 +204,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
     public void setConfigurableAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(IafConfig.seaSerpentBaseHealth);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IafConfig.dragonTargetSearchLength));
+        this.updateAttributes();
     }
 
     public void resetParts(float scale) {
