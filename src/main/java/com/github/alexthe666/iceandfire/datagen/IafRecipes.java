@@ -646,6 +646,15 @@ public class IafRecipes extends RecipeProvider {
         CustomShapeless.shapeless(Items.GRAVEL)
                 .requires(IafItemTags.CRACKLED_BLOCKS, 9)
                 .save(consumer, location("crackled_to_gravel"));
+
+        CustomShaped.shaped(IafItemRegistry.SEA_SERPENT_ARROW.get(), 4)
+                .pattern("X")
+                .pattern("#")
+                .pattern("Y")
+                .define('#', Tags.Items.RODS_WOODEN)
+                .define('X', IafItemRegistry.SERPENT_FANG.get())
+                .define('Y', IafItemTags.SCALES_SEA_SERPENT)
+                .save(consumer);
     }
 
     private void smithing(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike base, final ItemLike material, final Item result) {
