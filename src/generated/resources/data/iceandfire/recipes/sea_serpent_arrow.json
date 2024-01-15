@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "tag": "forge:rods/wooden"
+    },
+    "X": {
+      "item": "iceandfire:sea_serpent_fang"
+    },
+    "Y": {
+      "tag": "iceandfire:scales/sea_serpent"
+    }
+  },
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "result": {
+    "count": 4,
+    "item": "iceandfire:sea_serpent_arrow"
+  },
+  "show_notification": true
+}

@@ -21,11 +21,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -543,6 +539,16 @@ public class IafRecipes extends RecipeProvider {
                 .pattern("RR")
                 .define('R', IafItemRegistry.MYRMEX_JUNGLE_RESIN.get())
                 .unlockedBy("has_item", has(IafItemRegistry.MYRMEX_JUNGLE_RESIN.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, IafItemRegistry.SEA_SERPENT_ARROW.get(), 4)
+                .pattern("X")
+                .pattern("#")
+                .pattern("Y")
+                .define('#', Tags.Items.RODS_WOODEN)
+                .define('X', IafItemRegistry.SERPENT_FANG.get())
+                .define('Y', IafItemTags.SCALES_SEA_SERPENT)
+                .unlockedBy("has_item", has(IafItemRegistry.SERPENT_FANG.get()))
                 .save(consumer);
 
         armorSet(consumer, IafItemRegistry.MYRMEX_DESERT_CHITIN.get(),
