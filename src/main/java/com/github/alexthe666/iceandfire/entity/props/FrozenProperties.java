@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -21,17 +22,16 @@ public class FrozenProperties {
     private static final Random rand = new Random();
 
     // FIXME: All of these hashmap optimizations are temporary to resolve performance issues, ideally we create a different system
-    private static HashMap<CompoundTag, Boolean> containsFrozenData = new HashMap<>();
+    private static final HashMap<CompoundTag, Boolean> containsFrozenData = new HashMap<>();
 
     private static CompoundTag getOrCreateFrozenData(LivingEntity entity) {
         return getOrCreateFrozenData(CitadelEntityData.getCitadelTag(entity));
     }
 
     private static CompoundTag getOrCreateFrozenData(CompoundTag entityData) {
-
-        if (containsFrozenData.containsKey(entityData) && containsFrozenData.get(entityData) && entityData.contains(FROZEN_DATA, 10)) {
+        if (containsFrozenData.containsKey(entityData) && containsFrozenData.getOrDefault(entityData, false) && entityData.contains(FROZEN_DATA, ListTag.TAG_COMPOUND)) {
             return (CompoundTag) entityData.get(FROZEN_DATA);
-        } else if (entityData.contains(FROZEN_DATA, 10)) {
+        } else if (entityData.contains(FROZEN_DATA, ListTag.TAG_COMPOUND)) {
             containsFrozenData.put(entityData, true);
             return (CompoundTag) entityData.get(FROZEN_DATA);
         } else {
@@ -45,7 +45,7 @@ public class FrozenProperties {
         return clearFrozenStatus(nbt);
     }
 
-    private static CompoundTag clearFrozenStatus(CompoundTag nbt, LivingEntity entity, boolean breakIce) {
+    private static void clearFrozenStatus(CompoundTag nbt, LivingEntity entity, boolean breakIce) {
         if (breakIce) {
             for (int i = 0; i < 15; i++) {
                 entity.level.addParticle(
@@ -58,7 +58,8 @@ public class FrozenProperties {
             }
             entity.playSound(SoundEvents.GLASS_BREAK, 3, 1);
         }
-        return clearFrozenStatus(nbt);
+
+        clearFrozenStatus(nbt);
     }
 
     private static CompoundTag clearFrozenStatus(CompoundTag nbt) {
