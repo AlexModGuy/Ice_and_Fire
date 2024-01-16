@@ -25,12 +25,12 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_BADLANDS.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_SAVANNA.location().toString(), 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, IS_FOREST.location().toString(), 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 4)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:rose_fields", 5)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:prairie", 6)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 7)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 8)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:lush_stacks", 9);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:steppe", 2)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:rose_fields", 3)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:prairie", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:firecracker_shrubland", 5)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:autumnal_valley", 6)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:lush_stacks", 7);
     public static final SpawnBiomeData FIREDRAGON_CAVE = FIREDRAGON_ROOST;
     public static final SpawnBiomeData ICEDRAGON_ROOST = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, IS_COLD_OVERWORLD.location().toString(), 0)
