@@ -19,15 +19,37 @@ public class BlockReturningState extends Block {
     private final BlockState returnState;
 
     public static BlockReturningState builder(float hardness, float resistance, SoundType sound, boolean slippery, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).instrument(instrument).pushReaction(reaction).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
-        if (ignited)
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks();
+
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+
+        if (ignited) {
             props.ignitedByLava();
+        }
+
         return new BlockReturningState(props, returnToState);
     }
     public static BlockReturningState builder(float hardness, float resistance, SoundType sound, MapColor color, NoteBlockInstrument instrument, PushReaction reaction, boolean ignited, BlockState returnToState) {
-        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).instrument(instrument).pushReaction(reaction).sound(sound).strength(hardness, resistance).randomTicks();
-        if (ignited)
+        BlockBehaviour.Properties props = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(hardness, resistance).randomTicks();
+
+        if (instrument != null) {
+            props.instrument(instrument);
+        }
+
+        if (reaction != null) {
+            props.pushReaction(reaction);
+        }
+
+        if (ignited) {
             props.ignitedByLava();
+        }
+
         return new BlockReturningState(props, returnToState);
     }
 
