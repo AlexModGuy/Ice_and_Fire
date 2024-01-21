@@ -1,5 +1,6 @@
 {
   "values": [
-    "#forge:bosses"
+    "#forge:bosses",
+    "minecraft:warden"
   ]
 }
