@@ -258,14 +258,19 @@ public class IafItemTags extends ItemTagsProvider {
                 tag(ItemTags.ARROWS).add(item);
             } else if (item instanceof SwordItem) {
                 tag(Tags.Items.TOOLS).add(item);
+                tag(ItemTags.SWORDS);
             } else if (item instanceof PickaxeItem) {
                 tag(Tags.Items.TOOLS).add(item);
+                tag(ItemTags.PICKAXES);
             } else if (item instanceof AxeItem) {
                 tag(Tags.Items.TOOLS).add(item);
+                tag(ItemTags.AXES);
             } else if (item instanceof ShovelItem) {
                 tag(Tags.Items.TOOLS).add(item);
+                tag(ItemTags.SHOVELS);
             } else if (item instanceof HoeItem) {
                 tag(Tags.Items.TOOLS).add(item);
+                tag(ItemTags.HOES);
             } else if (item instanceof BowItem) {
                 tag(Tags.Items.TOOLS_BOWS).add(item);
             } else if (item instanceof TridentItem) {

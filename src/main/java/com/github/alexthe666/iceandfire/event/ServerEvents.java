@@ -162,6 +162,10 @@ public class ServerEvents {
     }
 
     public static boolean isRidingOrBeingRiddenBy(final Entity first, final Entity entityIn) {
+        if (first == null || entityIn == null) {
+            return false;
+        }
+
         for (final Entity entity : first.getPassengers()) {
             if (entity.equals(entityIn) || isRidingOrBeingRiddenBy(entity, entityIn)) {
                 return true;
@@ -256,9 +260,7 @@ public class ServerEvents {
             }
             event.setAmount(event.getAmount() * multi);
         }
-        String damageType = event.getSource().getMsgId();
-        if (IafDamageRegistry.DRAGON_FIRE_TYPE.equals(damageType) || IafDamageRegistry.DRAGON_ICE_TYPE.equals(damageType) ||
-                IafDamageRegistry.DRAGON_LIGHTNING_TYPE.equals(damageType)) {
+        if (event.getSource().is(IafDamageRegistry.DRAGON_FIRE_TYPE) || event.getSource().is(IafDamageRegistry.DRAGON_ICE_TYPE) || event.getSource().is(IafDamageRegistry.DRAGON_LIGHTNING_TYPE)) {
             float multi = 1;
             if (event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemScaleArmor ||
                     event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ItemDragonsteelArmor) {

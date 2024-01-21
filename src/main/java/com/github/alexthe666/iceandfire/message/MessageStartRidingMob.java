@@ -40,27 +40,30 @@ public class MessageStartRidingMob {
         public Handler() {
         }
 
-        public static void handle(MessageStartRidingMob message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageStartRidingMob message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level().getEntity(message.dragonId);
-                    if (entity != null && entity instanceof ISyncMount && entity instanceof TamableAnimal) {
-                        TamableAnimal dragon = (TamableAnimal) entity;
-                        if (dragon.isOwnedBy(player) && dragon.distanceTo(player) < 14) {
+
+                    if (entity instanceof ISyncMount && entity instanceof TamableAnimal tamable) {
+                        if (tamable.isOwnedBy(player) && tamable.distanceTo(player) < 14) {
                             if (message.ride) {
                                 if (message.baby) {
-                                    dragon.startRiding(player, true);
+                                    tamable.startRiding(player, true);
                                 } else {
-                                    player.startRiding(dragon, true);
+                                    player.startRiding(tamable, true);
                                 }
                             } else {
                                 if (message.baby) {
-                                    dragon.stopRiding();
+                                    tamable.stopRiding();
                                 } else {
                                     player.stopRiding();
                                 }
@@ -68,7 +71,9 @@ public class MessageStartRidingMob {
                         }
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

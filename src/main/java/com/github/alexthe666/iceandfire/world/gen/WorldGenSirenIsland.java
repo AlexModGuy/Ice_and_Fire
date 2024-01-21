@@ -35,7 +35,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
         int layer = 0;
         int sirens = 1 + context.random().nextInt(3);
 
-        while (!context.level().getBlockState(center).canOcclude() && center.getY() >= 0) {
+        while (!context.level().getBlockState(center).canOcclude() && center.getY() >= context.level().getMinBuildHeight()) {
             layer++;
 
             for (float i = 0; i < getRadius(layer, up); i += 0.5f) {

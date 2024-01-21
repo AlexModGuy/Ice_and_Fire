@@ -37,28 +37,34 @@ public class MessageMultipartInteract {
         public Handler() {
         }
 
-        public static void handle(MessageMultipartInteract message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageMultipartInteract message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level().getEntity(message.creatureID);
-                    if (entity != null && entity instanceof LivingEntity) {
-                        double dist = player.distanceTo(entity);
-                        LivingEntity mob = (LivingEntity) entity;
+
+                    if (entity instanceof LivingEntity livingEntity) {
+                        double dist = player.distanceTo(livingEntity);
+
                         if (dist < 100) {
                             if (message.dmg > 0F) {
-                                mob.hurt(player.level().damageSources().mobAttack(player), message.dmg);
+                                livingEntity.hurt(player.level().damageSources().mobAttack(player), message.dmg);
                             } else {
-                                mob.interact(player, InteractionHand.MAIN_HAND);
+                                livingEntity.interact(player, InteractionHand.MAIN_HAND);
                             }
                         }
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

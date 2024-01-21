@@ -37,19 +37,26 @@ public class MessageSirenSong {
         public Handler() {
         }
 
-        public static void handle(MessageSirenSong message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null && player.level()!= null) {
-                Entity entity = player.level().getEntity(message.sirenId);
-                if (entity != null && entity instanceof EntitySiren) {
-                    EntitySiren siren = (EntitySiren) entity;
-                    siren.setSinging(message.isSinging);
+        public static void handle(final MessageSirenSong message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
                 }
-            }
+
+                if (player != null) {
+                    Entity entity = player.level().getEntity(message.sirenId);
+
+                    if (entity instanceof EntitySiren siren) {
+                        siren.setSinging(message.isSinging);
+                    }
+                }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 

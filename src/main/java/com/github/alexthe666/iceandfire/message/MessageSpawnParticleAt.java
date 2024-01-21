@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -41,17 +42,26 @@ public class MessageSpawnParticleAt {
         public Handler() {
         }
 
-        public static void handle(MessageSpawnParticleAt message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
-                    player.level().addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
+        public static void handle(final MessageSpawnParticleAt message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
                 }
-            }
+
+                if (player != null) {
+                    ItemStack mainHand = player.getMainHandItem();
+
+                    if (!mainHand.isEmpty() && mainHand.getItem() == IafItemRegistry.DRAGON_DEBUG_STICK.get()) {
+                        player.level().addParticle(ParticleTypes.SMOKE, message.x, message.y, message.z, 0, 0, 0);
+                    }
+                }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

@@ -12,7 +12,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class MessageDragonSetBurnBlock {
-
     public int dragonId;
     public boolean breathingFire;
     public int posX;
@@ -26,10 +25,6 @@ public class MessageDragonSetBurnBlock {
         posY = pos.getY();
         posZ = pos.getZ();
     }
-
-    public MessageDragonSetBurnBlock() {
-    }
-
 
     public static MessageDragonSetBurnBlock read(FriendlyByteBuf buf) {
         return new MessageDragonSetBurnBlock(buf.readInt(), buf.readBoolean(), new BlockPos(buf.readInt(), buf.readInt(), buf.readInt()));
@@ -47,24 +42,27 @@ public class MessageDragonSetBurnBlock {
         public Handler() {
         }
 
-        public static void handle(MessageDragonSetBurnBlock message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
-                    if (player.level()!= null) {
-                        Entity entity = player.level().getEntity(message.dragonId);
-                        if (entity != null && entity instanceof EntityDragonBase) {
-                            EntityDragonBase dragon = (EntityDragonBase) entity;
-                            dragon.setBreathingFire(message.breathingFire);
-                            dragon.burningTarget = new BlockPos(message.posX, message.posY, message.posZ);
-                        }
+        public static void handle(final MessageDragonSetBurnBlock message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
+                    Entity entity = player.level().getEntity(message.dragonId);
+
+                    if (entity instanceof EntityDragonBase dragon) {
+                        dragon.setBreathingFire(message.breathingFire);
+                        dragon.burningTarget = new BlockPos(message.posX, message.posY, message.posZ);
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }
