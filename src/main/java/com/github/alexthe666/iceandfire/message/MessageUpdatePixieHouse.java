@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -41,24 +42,31 @@ public class MessageUpdatePixieHouse {
         public Handler() {
         }
 
-        public static void handle(MessageUpdatePixieHouse message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level != null) {
+        public static void handle(final MessageUpdatePixieHouse message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level.getBlockEntity(pos) != null && player.level.getBlockEntity(pos) instanceof TileEntityPixieHouse house) {
+                    BlockEntity blockEntity = player.level.getBlockEntity(pos);
+
+                    if (blockEntity instanceof TileEntityPixieHouse house) {
                         house.hasPixie = message.hasPixie;
                         house.pixieType = message.pixieType;
-                    } else if (player.level.getBlockEntity(pos) != null && player.level.getBlockEntity(pos) instanceof TileEntityJar jar) {
+                    } else if (blockEntity instanceof TileEntityJar jar) {
                         jar.hasPixie = message.hasPixie;
                         jar.pixieType = message.pixieType;
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 

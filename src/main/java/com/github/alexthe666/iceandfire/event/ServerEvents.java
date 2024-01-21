@@ -161,6 +161,10 @@ public class ServerEvents {
     }
 
     public static boolean isRidingOrBeingRiddenBy(final Entity first, final Entity entityIn) {
+        if (first == null || entityIn == null) {
+            return false;
+        }
+
         for (final Entity entity : first.getPassengers()) {
             if (entity.equals(entityIn) || isRidingOrBeingRiddenBy(entity, entityIn)) {
                 return true;
@@ -640,17 +644,18 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityJoinWorld(final EntityJoinLevelEvent event) {
-        // Note: Avoid world (chunk) interaction with not-fully-loaded chunks
-        if (event.getEntity() instanceof Mob mob) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Mob mob) {
             try {
-                if (event.getEntity() != null && isSheep(event.getEntity()) && event.getEntity() instanceof Animal animal) {
+                if (isSheep(mob) && mob instanceof Animal animal) {
                     animal.goalSelector.addGoal(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
                 }
-                if (event.getEntity() != null && isVillager(event.getEntity()) && event.getEntity() != null && IafConfig.villagersFearDragons) {
+                if (isVillager(mob) && IafConfig.villagersFearDragons) {
                     mob.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) mob, LivingEntity.class, 8.0F, 0.8D, 0.8D, VILLAGER_FEAR));
                 }
-                if (event.getEntity() != null && isLivestock(event.getEntity()) && event.getEntity() != null && IafConfig.animalsFearDragons) {
-                    mob.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) mob, LivingEntity.class, 30, 1.0D, 0.5D, entity -> entity instanceof IAnimalFear iAnimalFear && iAnimalFear.shouldAnimalsFear(mob)));
+                if (isLivestock(mob) && IafConfig.animalsFearDragons) {
+                    mob.goalSelector.addGoal(1, new VillagerAIFearUntamed((PathfinderMob) mob, LivingEntity.class, 30, 1.0D, 0.5D, livingEntity -> livingEntity instanceof IAnimalFear fear && fear.shouldAnimalsFear(mob)));
                 }
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Tried to add unique behaviors to vanilla mobs and encountered an error");

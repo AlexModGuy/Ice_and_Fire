@@ -36,19 +36,26 @@ public class MessageDaytime {
         public Handler() {
         }
 
-        public static void handle(MessageDaytime message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                Entity entity = player.level.getEntity(message.dragonId);
-                if (entity instanceof EntityDragonBase) {
-                    EntityDragonBase dragon = (EntityDragonBase) entity;
-                    dragon.isDaytime = message.isDay;
+        public static void handle(final MessageDaytime message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
                 }
-            }
+
+                if (player != null) {
+                    Entity entity = player.level.getEntity(message.dragonId);
+
+                    if (entity instanceof EntityDragonBase dragon) {
+                        dragon.isDaytime = message.isDay;
+                    }
+                }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

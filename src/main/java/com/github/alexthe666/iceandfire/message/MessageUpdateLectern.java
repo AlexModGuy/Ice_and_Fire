@@ -64,14 +64,17 @@ public class MessageUpdateLectern {
             ctx.get().setPacketHandled(true);
         }
 
-        public static void handlePacket(MessageUpdateLectern message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level != null) {
+        public static void handlePacket(final MessageUpdateLectern message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
                     if (player.level.hasChunkAt(pos) && player.level.getBlockEntity(pos) instanceof TileEntityLectern lectern) {
                         if (message.updateStack) {
@@ -89,7 +92,9 @@ public class MessageUpdateLectern {
 
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 

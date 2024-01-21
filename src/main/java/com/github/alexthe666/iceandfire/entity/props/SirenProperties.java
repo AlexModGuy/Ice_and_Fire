@@ -31,7 +31,7 @@ public class SirenProperties {
     }
 
     private static CompoundTag getOrCreateCharmData(CompoundTag entityData) {
-        if (containsCharmedData.containsKey(entityData) && containsCharmedData.get(entityData) && entityData.contains(SIREN_DATA, 10)) {
+        if (containsCharmedData.containsKey(entityData) && containsCharmedData.getOrDefault(entityData, false) && entityData.contains(SIREN_DATA, 10)) {
             return (CompoundTag) entityData.get(SIREN_DATA);
         } else if (entityData.contains(SIREN_DATA, 10)) {
             containsCharmedData.put(entityData, true);

@@ -42,8 +42,8 @@ public class MessageDragonSetBurnBlock {
         public Handler() {
         }
 
-        public static void handle(final MessageDragonSetBurnBlock message, final Supplier<NetworkEvent.Context> supplier) {
-            NetworkEvent.Context context = supplier.get();
+        public static void handle(final MessageDragonSetBurnBlock message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
 
             context.enqueueWork(() -> {
                 Player player = context.getSender();
