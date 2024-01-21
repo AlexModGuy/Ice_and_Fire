@@ -290,6 +290,10 @@ public class IafItemTags extends ItemTagsProvider {
 
             if (item instanceof TieredItem || item instanceof BowItem || item instanceof TridentItem) {
                 tag(Tags.Items.TOOLS).add(item);
+
+                if (item instanceof TridentItem) {
+                    tag(ItemTags.TOOLS).add(item);
+                }
             }
         });
 
