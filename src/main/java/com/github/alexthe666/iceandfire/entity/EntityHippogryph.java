@@ -755,7 +755,6 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return movingobjectposition == null || movingobjectposition.getType() != HitResult.Type.BLOCK;
     }
 
-    public final boolean IGNORE_PHYSICS_ON_SERVER = false;
     @Override
     public void travel(@NotNull Vec3 pTravelVector) {
         if (!this.canMove() && !this.isVehicle()) {
@@ -820,28 +819,21 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                     }
                 } else if (rider instanceof Player) {
                     this.setDeltaMovement(Vec3.ZERO);
-                    // Disable server side vehicle movement check, in case of console log spam
-                    // Happens when stepping up blocks
-                    // Might because client & server's onGround flag is out of sync
-                    // I can't get it fixed, so it's disabled
-                    this.noPhysics = IGNORE_PHYSICS_ON_SERVER;
                 }
 
                 this.calculateEntityAnimation(this, isFlying);
                 this.tryCheckInsideBlocks();
             } else {
                 this.setNoGravity(false);
-                this.noPhysics = false;
 
-                this.setSpeed(0.02F);
-                flyingSpeed = getSpeed();
+                setSpeed((float) getAttributeValue(Attributes.MOVEMENT_SPEED));
+                flyingSpeed = 0.02f;
 
                 super.travel(pTravelVector);
             }
         } else {
             // Return to defaults
             this.setNoGravity(false);
-            this.noPhysics = false;
         }
     }
 
