@@ -202,9 +202,11 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+
+        if (id != null && level() instanceof ServerLevel serverLevel) {
+            return serverLevel.getEntity(id);
         }
+
         return null;
     }
 
@@ -225,10 +227,6 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     public void collideWithNearbyEntities() {
@@ -275,11 +273,6 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
-    }
-
-    public boolean shouldNotExist() {
-        Entity parent = getParent();
-        return !parent.isAlive();
     }
 
     public boolean shouldContinuePersisting() {

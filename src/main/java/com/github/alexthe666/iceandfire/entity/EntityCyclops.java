@@ -315,17 +315,16 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 }
             }
         }
+
         AnimationHandler.INSTANCE.updateAnimations(this);
+
         if (eyeEntity == null) {
             eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.5F, 1);
             eyeEntity.copyPosition(this);
-            eyeEntity.setParent(this);
+        }
 
-        }
-        if (!eyeEntity.shouldContinuePersisting()) {
-            level().addFreshEntity(eyeEntity);
-        }
-        eyeEntity.setParent(this);
+        EntityUtil.updatePart(eyeEntity, this);
+
         breakBlock();
     }
 

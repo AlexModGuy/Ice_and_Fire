@@ -406,41 +406,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void updateParts() {
-        addDragonPart(headPart);
-        addDragonPart(neckPart);
-        addDragonPart(rightWingUpperPart);
-        addDragonPart(rightWingLowerPart);
-        addDragonPart(leftWingUpperPart);
-        addDragonPart(leftWingLowerPart);
-        addDragonPart(tail1Part);
-        addDragonPart(tail2Part);
-        addDragonPart(tail3Part);
-        addDragonPart(tail4Part);
-    }
-
-    private void addDragonPart(final EntityDragonPart part) {
-        if (part == null || !(level() instanceof ServerLevel serverLevel) || isRemoved()) {
-            return;
-        }
-
-        if (!part.shouldContinuePersisting()) {
-            UUID uuid = part.getUUID();
-            Entity existing = serverLevel.getEntity(uuid);
-
-            // Update UUID if a different entity with the same UUID exists already
-            if (existing != null && existing != part) {
-                while (serverLevel.getEntity(uuid) != null) {
-                    uuid = Mth.createInsecureUUID(getRandom());
-                }
-
-                IceAndFire.LOGGER.debug("Updated the UUID of [{}] due to a clash with [{}]", part, existing);
-            }
-
-            part.setUUID(uuid);
-            level().addFreshEntity(part);
-        }
-
-        part.setParent(this);
+        EntityUtil.updatePart(headPart, this);
+        EntityUtil.updatePart(neckPart, this);
+        EntityUtil.updatePart(rightWingUpperPart, this);
+        EntityUtil.updatePart(rightWingLowerPart, this);
+        EntityUtil.updatePart(leftWingUpperPart, this);
+        EntityUtil.updatePart(leftWingLowerPart, this);
+        EntityUtil.updatePart(tail1Part, this);
+        EntityUtil.updatePart(tail2Part, this);
+        EntityUtil.updatePart(tail3Part, this);
+        EntityUtil.updatePart(tail4Part, this);
     }
 
     protected void updateBurnTarget() {

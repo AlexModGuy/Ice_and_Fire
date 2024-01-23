@@ -253,40 +253,37 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     @Override
     public void tick() {
         super.tick();
+
         if (prevHeadCount != this.getHeadCount()) {
             resetParts();
         }
-        onUpdateParts();
+
         float partY = 1.0F - this.walkAnimation.speed() * 0.5F;
+
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
-            headBoxes[i].setParent(this);
-            if (!headBoxes[i].shouldContinuePersisting()) {
-                level().addFreshEntity(headBoxes[i]);
-            }
+            EntityUtil.updatePart(headBoxes[i], this);
+
             headBoxes[HEADS + i].setPos(headBoxes[HEADS + i].getX(), this.getY() + partY, headBoxes[HEADS + i].getZ());
-            headBoxes[HEADS + i].setParent(this);
-            if (!headBoxes[HEADS + i].shouldContinuePersisting()) {
-                level().addFreshEntity(headBoxes[HEADS + i]);
-            }
+            EntityUtil.updatePart(headBoxes[HEADS + 1], this);
         }
+
         if (getHeadCount() > 1 && !isOnFire()) {
             if (this.getHealth() < this.getMaxHealth() && this.tickCount % 30 == 0) {
                 int level = getHeadCount() - 1;
                 if (this.getSeveredHead() != -1) {
                     level--;
                 }
+
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 30, level, false, false));
             }
         }
+
         if (isOnFire()) {
             this.removeEffect(MobEffects.REGENERATION);
         }
 
         prevHeadCount = this.getHeadCount();
-    }
-
-    public void onUpdateParts() {
     }
 
     private void clearParts() {
