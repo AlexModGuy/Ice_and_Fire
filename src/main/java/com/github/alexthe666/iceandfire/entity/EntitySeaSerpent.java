@@ -224,11 +224,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
 
     public void onUpdateParts() {
         for (EntityMutlipartPart entity : segments) {
-            if (entity != null) {
-                if (!entity.shouldContinuePersisting()) {
-                    level.addFreshEntity(entity);
-                }
-            }
+            EntityUtil.updatePart(entity, this);
         }
     }
 
