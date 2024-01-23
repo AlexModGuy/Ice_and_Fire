@@ -406,65 +406,45 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void updateParts() {
-        if (headPart != null) {
-            if (!headPart.shouldContinuePersisting()) {
-                level().addFreshEntity(headPart);
-            }
-            headPart.setParent(this);
+        addDragonPart(headPart);
+        addDragonPart(neckPart);
+        addDragonPart(rightWingUpperPart);
+        addDragonPart(rightWingLowerPart);
+        addDragonPart(leftWingUpperPart);
+        addDragonPart(leftWingLowerPart);
+        addDragonPart(tail1Part);
+        addDragonPart(tail2Part);
+        addDragonPart(tail3Part);
+        addDragonPart(tail4Part);
+    }
+
+    private void addDragonPart(final EntityDragonPart part) {
+        if (part == null || isRemoved() || level().isClientSide()) {
+            return;
         }
-        if (neckPart != null) {
-            if (!neckPart.shouldContinuePersisting()) {
-                level().addFreshEntity(neckPart);
+
+        boolean added = true;
+
+        if (!part.shouldContinuePersisting()) {
+            // Since the addition could've also been blocked by the forge event result (EntityJoinLevelEvent)
+            int retries = 3;
+
+            for (int i = 0; i < retries; i++) {
+                added = level().addFreshEntity(part);
+
+                if (added) {
+                    break;
+                } else {
+                    part.setUUID(UUID.randomUUID());
+                }
             }
-            neckPart.setParent(this);
         }
-        if (rightWingUpperPart != null) {
-            if (!rightWingUpperPart.shouldContinuePersisting()) {
-                level().addFreshEntity(rightWingUpperPart);
-            }
-            rightWingUpperPart.setParent(this);
-        }
-        if (rightWingLowerPart != null) {
-            if (!rightWingLowerPart.shouldContinuePersisting()) {
-                level().addFreshEntity(rightWingLowerPart);
-            }
-            rightWingLowerPart.setParent(this);
-        }
-        if (leftWingUpperPart != null) {
-            if (!leftWingUpperPart.shouldContinuePersisting()) {
-                level().addFreshEntity(leftWingUpperPart);
-            }
-            leftWingUpperPart.setParent(this);
-        }
-        if (leftWingLowerPart != null) {
-            if (!leftWingLowerPart.shouldContinuePersisting()) {
-                level().addFreshEntity(leftWingLowerPart);
-            }
-            leftWingLowerPart.setParent(this);
-        }
-        if (tail1Part != null) {
-            if (!tail1Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail1Part);
-            }
-            tail1Part.setParent(this);
-        }
-        if (tail2Part != null) {
-            if (!tail2Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail2Part);
-            }
-            tail2Part.setParent(this);
-        }
-        if (tail3Part != null) {
-            if (!tail3Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail3Part);
-            }
-            tail3Part.setParent(this);
-        }
-        if (tail4Part != null) {
-            if (!tail4Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail4Part);
-            }
-            tail4Part.setParent(this);
+
+        if (added) {
+            part.setParent(this);
+        } else {
+            IceAndFire.LOGGER.warn("Was not able to properly spawn dragon [{}]", this);
+            remove(RemovalReason.DISCARDED);
         }
     }
 
