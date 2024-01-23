@@ -419,33 +419,28 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     private void addDragonPart(final EntityDragonPart part) {
-        if (part == null || isRemoved() || level().isClientSide()) {
+        if (part == null || !(level() instanceof ServerLevel serverLevel) || isRemoved()) {
             return;
         }
 
-        boolean added = true;
-
         if (!part.shouldContinuePersisting()) {
-            // Since the addition could've also been blocked by the forge event result (EntityJoinLevelEvent)
-            int retries = 3;
+            UUID uuid = part.getUUID();
+            Entity existing = serverLevel.getEntity(uuid);
 
-            for (int i = 0; i < retries; i++) {
-                added = level().addFreshEntity(part);
-
-                if (added) {
-                    break;
-                } else {
-                    part.setUUID(UUID.randomUUID());
+            // Update UUID if a different entity with the same UUID exists already
+            if (existing != null && existing != part) {
+                while (serverLevel.getEntity(uuid) != null) {
+                    uuid = Mth.createInsecureUUID(getRandom());
                 }
+
+                IceAndFire.LOGGER.debug("Updated the UUID of [{}] due to a clash with [{}]", part, existing);
             }
+
+            part.setUUID(uuid);
+            level().addFreshEntity(part);
         }
 
-        if (added) {
-            part.setParent(this);
-        } else {
-            IceAndFire.LOGGER.warn("Was not able to properly spawn dragon [{}]", this);
-            remove(RemovalReason.DISCARDED);
-        }
+        part.setParent(this);
     }
 
     protected void updateBurnTarget() {
