@@ -27,7 +27,7 @@ public class DragonSteelTier {
         return TierSortingRegistry.registerTier(
             new ForgeTier(5, 8000, 10, 21, 10, DRAGONSTEEL_TIER_TAG, ingredient),
             new ResourceLocation(IceAndFire.MODID, name),
-            List.of(Tiers.DIAMOND), List.of());
+            List.of(Tiers.NETHERITE), List.of());
     }
 
 
