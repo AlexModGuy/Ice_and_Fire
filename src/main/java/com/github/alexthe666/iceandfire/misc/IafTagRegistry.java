@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.misc;
 import net.minecraft.resources.ResourceLocation;
 
 public class IafTagRegistry { // FIXME :: Clean up
-    public static final ResourceLocation DRAGON_ARROWS = new ResourceLocation("iceandfire", "dragon_arrows");
     public static final ResourceLocation MYRMEX_HARVESTABLES = new ResourceLocation("iceandfire", "myrmex_harvestables");
     public static final ResourceLocation CHICKENS = new ResourceLocation("iceandfire", "chickens");
     public static final ResourceLocation FEAR_DRAGONS = new ResourceLocation("iceandfire", "fear_dragons");

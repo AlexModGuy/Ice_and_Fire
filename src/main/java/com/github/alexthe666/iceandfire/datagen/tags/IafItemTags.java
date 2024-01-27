@@ -50,6 +50,7 @@ public class IafItemTags extends ItemTagsProvider {
 
     // Logic
     public static TagKey<Item> MAKE_ITEM_DROPS_FIREIMMUNE = createKey("make_item_drops_fireimmune");
+    public static TagKey<Item> DRAGON_ARROWS = createKey("dragon_arrows");
 
     public static TagKey<Item> DRAGON_BLOODS = createKey("dragon_bloods");
     public static TagKey<Item> DRAGON_HEARTS = createKey("dragon_hearts");
@@ -92,6 +93,9 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_AXE.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_SHOVEL.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_HOE.get());
+
+        tag(DRAGON_ARROWS)
+                .add(IafItemRegistry.DRAGONBONE_ARROW.get());
 
         tag(DRAGON_BLOODS)
                 .add(IafItemRegistry.FIRE_DRAGON_BLOOD.get())
