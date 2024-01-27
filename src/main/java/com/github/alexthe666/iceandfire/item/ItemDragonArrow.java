@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,11 +24,11 @@ public class ItemDragonArrow extends ArrowItem {
 
     @Override
     public boolean isInfinite(@NotNull final ItemStack arrow, @NotNull final ItemStack bow, @NotNull final Player player) {
-        // In a normal setting this will always return false, since this bow can only use Dragon Bone arrows - it's more a compat layer for Apotheosis' Endless Quiver enchantment
+        // Technically this would always return false - it's more a compat layer for Apotheosis' Endless Quiver enchantment
         boolean isInfinite = super.isInfinite(arrow, bow, player);
 
         if (!isInfinite) {
-            isInfinite = bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) > 0 && arrow.is(IafItemTags.DRAGON_ARROWS);
+            isInfinite = bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) > 0 && getClass() == ItemDragonArrow.class;
         }
 
         return isInfinite;
