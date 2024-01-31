@@ -19,6 +19,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
@@ -539,6 +540,12 @@ public class IafRecipes extends RecipeProvider {
                 IafItemRegistry.MYRMEX_JUNGLE_HOE.get()
         );
 
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(IafItemRegistry.RAW_SILVER.get()), IafItemRegistry.SILVER_INGOT.get(), 0.7f, 200, RecipeSerializer.SMELTING_RECIPE)
+                .group("raw_silver")
+                .unlockedBy(getHasName(IafItemRegistry.RAW_SILVER.get()), has(IafItemRegistry.RAW_SILVER.get())).save(consumer, location(getItemName(IafItemRegistry.SILVER_INGOT.get())) + "_from_smelting_" + getItemName(IafItemRegistry.RAW_SILVER.get()));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(IafItemRegistry.RAW_SILVER.get()), IafItemRegistry.SILVER_INGOT.get(), 0.7f, 100, RecipeSerializer.BLASTING_RECIPE)
+                .group("raw_silver")
+                .unlockedBy(getHasName(IafItemRegistry.RAW_SILVER.get()), has(IafItemRegistry.RAW_SILVER.get())).save(consumer, location(getItemName(IafItemRegistry.SILVER_INGOT.get())) + "_from_blasting_" + getItemName(IafItemRegistry.RAW_SILVER.get()));
         compact(consumer, IafItemRegistry.SILVER_INGOT.get(), IafBlockRegistry.SILVER_BLOCK.get());
         compact(consumer, IafItemRegistry.SILVER_NUGGET.get(), IafItemRegistry.SILVER_INGOT.get());
 
