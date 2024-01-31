@@ -2,6 +2,7 @@
   "values": [
     "iceandfire:silver_ore",
     "iceandfire:deepslate_silver_ore",
-    "iceandfire:silver_block"
+    "iceandfire:silver_block",
+    "iceandfire:raw_silver_block"
   ]
 }

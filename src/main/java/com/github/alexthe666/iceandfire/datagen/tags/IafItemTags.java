@@ -158,6 +158,7 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get().asItem())
                 .add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem())
                 .add(IafBlockRegistry.SILVER_BLOCK.get().asItem())
+                .add(IafBlockRegistry.RAW_SILVER_BLOCK.get().asItem())
                 .add(IafBlockRegistry.DRAGON_BONE_BLOCK.get().asItem());
 
         tag(DRAGON_FOOD_MEAT)
@@ -290,8 +291,10 @@ public class IafItemTags extends ItemTagsProvider {
         tag(INGOTS_SILVER).add(IafItemRegistry.SILVER_INGOT.get().asItem());
         tag(NUGGETS_COPPER).add(IafItemRegistry.COPPER_NUGGET.get());
         tag(NUGGETS_SILVER).add(IafItemRegistry.SILVER_NUGGET.get());
+        tag(createForgeKey("raw_materials/silver")).add(IafItemRegistry.RAW_SILVER.get());
         tag(GEMS_SAPPHIRE).add(IafItemRegistry.SAPPHIRE_GEM.get());
         tag(STORAGE_BLOCKS_SILVER).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
+        tag(createForgeKey(STORAGE_BLOCK_PATH + "/raw_silver")).add(IafBlockRegistry.RAW_SILVER_BLOCK.get().asItem());
         tag(createForgeKey(STORAGE_BLOCK_PATH + "/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
         tag(BONES_WITHER).add(IafItemRegistry.WITHERBONE.get());
     }

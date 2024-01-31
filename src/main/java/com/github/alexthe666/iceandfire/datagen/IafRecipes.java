@@ -547,6 +547,7 @@ public class IafRecipes extends RecipeProvider {
                 .group("raw_silver")
                 .unlockedBy(getHasName(IafItemRegistry.RAW_SILVER.get()), has(IafItemRegistry.RAW_SILVER.get())).save(consumer, location(getItemName(IafItemRegistry.SILVER_INGOT.get())) + "_from_blasting_" + getItemName(IafItemRegistry.RAW_SILVER.get()));
         compact(consumer, IafItemRegistry.SILVER_INGOT.get(), IafBlockRegistry.SILVER_BLOCK.get());
+        compact(consumer, IafItemRegistry.RAW_SILVER.get(), IafBlockRegistry.RAW_SILVER_BLOCK.get());
         compact(consumer, IafItemRegistry.SILVER_NUGGET.get(), IafItemRegistry.SILVER_INGOT.get());
 
         armorSet(consumer, IafItemTags.INGOTS_SILVER,
