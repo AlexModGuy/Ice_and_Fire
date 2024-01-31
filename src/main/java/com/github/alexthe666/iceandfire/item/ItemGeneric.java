@@ -29,7 +29,7 @@ public class ItemGeneric extends Item {
     }
 
     public ItemGeneric(int textLength, int stacksize) {
-        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
+        super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(stacksize));
         this.description = textLength;
     }
 

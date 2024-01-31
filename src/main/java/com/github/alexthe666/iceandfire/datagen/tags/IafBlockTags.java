@@ -108,7 +108,8 @@ public class IafBlockTags extends BlockTagsProvider {
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(IafBlockRegistry.SILVER_ORE.get())
                 .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get())
-                .add(IafBlockRegistry.SILVER_BLOCK.get());
+                .add(IafBlockRegistry.SILVER_BLOCK.get())
+                .add(IafBlockRegistry.RAW_SILVER_BLOCK.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(IafBlockRegistry.SAPPHIRE_ORE.get())

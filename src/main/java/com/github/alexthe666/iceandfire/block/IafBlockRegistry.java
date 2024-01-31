@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.item.BlockItemWithRender;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.IafTabRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -49,6 +48,7 @@ public class IafBlockRegistry {
     public static final RegistryObject<Block> SILVER_BLOCK = register("silver_block", () -> BlockGeneric.builder(3.0F, 5.0F, SoundType.METAL, MapColor.METAL, null, null, false));
     public static final RegistryObject<Block> SAPPHIRE_ORE = register("sapphire_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(4,3).requiresCorrectToolForDrops(), UniformInt.of(3,7)));
     public static final RegistryObject<Block> SAPPHIRE_BLOCK = register("sapphire_block", () -> BlockGeneric.builder(3.0F, 6.0F, SoundType.METAL, MapColor.METAL, null, null, false));
+    public static final RegistryObject<Block> RAW_SILVER_BLOCK = register("raw_silver_block", () -> BlockGeneric.builder(3.0F, 5.0F, SoundType.STONE, MapColor.METAL, NoteBlockInstrument.BASEDRUM, null, false));
     public static final RegistryObject<Block> CHARRED_DIRT = register("chared_dirt", () -> BlockReturningState.builder(0.5F, 0.0F, SoundType.GRAVEL, MapColor.DIRT, null, null, false, Blocks.DIRT.defaultBlockState()));
     public static final RegistryObject<Block> CHARRED_GRASS = register("chared_grass", () -> BlockReturningState.builder(0.6F, 0.0F, SoundType.GRAVEL, MapColor.GRASS, null, null, false, Blocks.GRASS_BLOCK.defaultBlockState()));
     public static final RegistryObject<Block> CHARRED_STONE = register("chared_stone", () -> BlockReturningState.builder(1.5F, 10.0F, SoundType.STONE, MapColor.STONE, NoteBlockInstrument.BASEDRUM, null, false, Blocks.STONE.defaultBlockState()));
