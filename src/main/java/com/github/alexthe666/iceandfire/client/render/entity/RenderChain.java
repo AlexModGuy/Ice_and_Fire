@@ -21,9 +21,8 @@ public class RenderChain {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
 
-    public static void render(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn) {
-        List<Entity> chainTargets = ChainProperties.getChainedTo(entityLivingIn);
-        for (Entity chainTarget : chainTargets) {
+    public static void render(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn, List<Entity> chainedTo) {
+        for (Entity chainTarget : chainedTo) {
             if (chainTarget == null) {
                 IceAndFire.LOGGER.warn("Found null value in list of target entities");
                 continue;

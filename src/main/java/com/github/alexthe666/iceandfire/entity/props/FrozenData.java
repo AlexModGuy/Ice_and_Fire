@@ -7,66 +7,77 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.player.Player;
 
 public class FrozenData {
     public int frozenTicks;
     public boolean isFrozen;
 
-    public boolean tickFrozen(final LivingEntity entity) {
+    private boolean triggerClientUpdate;
+
+    public void tickFrozen(final LivingEntity entity) {
+        if (!isFrozen) {
+            return;
+        }
+
         if (entity instanceof EntityIceDragon) {
             clearFrozen(entity);
-            return true;
+            return;
         }
 
         if (entity.isOnFire()) {
             clearFrozen(entity);
             entity.clearFire();
-            return true;
+            return;
         }
 
         if (entity.isDeadOrDying()) {
             clearFrozen(entity);
-            return true;
+            return;
         }
 
         if (frozenTicks > 0) {
             frozenTicks--;
         } else {
             clearFrozen(entity);
-            return true;
         }
 
-        return false;
+        if (isFrozen && !(entity instanceof Player player && player.isCreative())) {
+            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.25F, 1, 0.25F));
+
+            if (!(entity instanceof EnderDragon) && !entity.isOnGround()) {
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.2, 0));
+            }
+        }
     }
 
-    public void setFrozen(final LivingEntity entity, int duration) {
+    public void setFrozen(final LivingEntity target, int duration) {
         if (!isFrozen) {
-            entity.playSound(SoundEvents.GLASS_PLACE, 1, 1);
+            target.playSound(SoundEvents.GLASS_PLACE, 1, 1);
         }
 
         frozenTicks = duration;
         isFrozen = true;
-
-        CapabilityHandler.syncEntityData(entity);
+        triggerClientUpdate = true;
     }
 
     private void clearFrozen(final LivingEntity entity) {
-        if (isFrozen) {
-            for (int i = 0; i < 15; i++) {
-                entity.level.addParticle(
-                        new BlockParticleOption(ParticleTypes.BLOCK,
-                                IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
-                        entity.getX() + ((entity.getRandom().nextDouble() - 0.5D) * entity.getBbWidth()),
-                        entity.getY() + ((entity.getRandom().nextDouble()) * entity.getBbHeight()),
-                        entity.getZ() + ((entity.getRandom().nextDouble() - 0.5D) * entity.getBbWidth()),
-                        0, 0, 0);
-            }
-
-            entity.playSound(SoundEvents.GLASS_BREAK, 3, 1);
+        for (int i = 0; i < 15; i++) {
+            entity.level.addParticle(
+                    new BlockParticleOption(ParticleTypes.BLOCK,
+                            IafBlockRegistry.DRAGON_ICE.get().defaultBlockState()),
+                    entity.getX() + ((entity.getRandom().nextDouble() - 0.5D) * entity.getBbWidth()),
+                    entity.getY() + ((entity.getRandom().nextDouble()) * entity.getBbHeight()),
+                    entity.getZ() + ((entity.getRandom().nextDouble() - 0.5D) * entity.getBbWidth()),
+                    0, 0, 0);
         }
+
+        entity.playSound(SoundEvents.GLASS_BREAK, 3, 1);
 
         isFrozen = false;
         frozenTicks = 0;
+        triggerClientUpdate = true;
     }
 
     public void serialize(final CompoundTag tag) {
@@ -81,5 +92,14 @@ public class FrozenData {
         CompoundTag frozenData = tag.getCompound("frozenData");
         frozenTicks = frozenData.getInt("frozenTicks");
         isFrozen = frozenData.getBoolean("isFrozen");
+    }
+
+    public boolean doesClientNeedUpdate() {
+        if (triggerClientUpdate) {
+            triggerClientUpdate = false;
+            return true;
+        }
+
+        return false;
     }
 }

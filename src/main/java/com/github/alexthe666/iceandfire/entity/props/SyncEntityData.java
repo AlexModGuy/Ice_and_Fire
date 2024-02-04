@@ -22,11 +22,15 @@ public record SyncEntityData(int entityId, CompoundTag tag) {
         NetworkEvent.Context context = contextSupplier.get();
 
         if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-            Player localPlayer = CapabilityHandler.getLocalPlayer();
+            context.enqueueWork(() -> {
+                Player localPlayer = CapabilityHandler.getLocalPlayer();
 
-            if (localPlayer != null) {
-                EntityDataProvider.getCapability(localPlayer.getLevel().getEntity(message.entityId)).ifPresent(data -> data.deserialize(message.tag));
-            }
+                if (localPlayer != null) {
+                    EntityDataProvider.getCapability(localPlayer.getLevel().getEntity(message.entityId)).ifPresent(data -> data.deserialize(message.tag));
+                }
+            });
         }
+
+        context.setPacketHandled(true);
     }
 }
