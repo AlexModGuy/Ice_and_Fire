@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -79,16 +79,16 @@ public class ItemSirenFlute extends Item {
                 }
             }
         }
+
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity) {
-                MiscProperties.setLoveTicks((LivingEntity) pointedEntity, 600);
-                itemStackIn.hurtAndBreak(2, player, (entity) -> {
-                    entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-                });
+                EntityDataProvider.getCapability(pointedEntity).ifPresent(data -> data.miscData.setLoveTicks(600));
+                itemStackIn.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
             }
         }
+
         player.playSound(IafSoundRegistry.SIREN_SONG, 1, 1);
-        return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, itemStackIn);
+        return new InteractionResultHolder<>(InteractionResult.PASS, itemStackIn);
     }
 
 

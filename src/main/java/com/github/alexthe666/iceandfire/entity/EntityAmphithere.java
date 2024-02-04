@@ -7,7 +7,7 @@ import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
@@ -713,8 +713,10 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             }
         }
         if (this.getUntamedRider() != null && this.getUntamedRider().isShiftKeyDown()) {
-            if (this.getUntamedRider() instanceof LivingEntity)
-                MiscProperties.setDismountedDragon((LivingEntity) this.getUntamedRider(), true);
+            if (this.getUntamedRider() instanceof LivingEntity rider) {
+                EntityDataProvider.getCapability(rider).ifPresent(data -> data.miscData.setDismounted(true));
+            }
+
             this.getUntamedRider().stopRiding();
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {

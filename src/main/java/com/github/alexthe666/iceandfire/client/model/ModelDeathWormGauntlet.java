@@ -2,12 +2,13 @@ package com.github.alexthe666.iceandfire.client.model;
 
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -107,19 +108,23 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
 
     public void animate(ItemStack stack, float partialTick) {
         this.resetToDefaultPose();
-        if (stack.getTag() != null) {
-            Entity holder = Minecraft.getInstance().level.getEntity(stack.getTag().getInt("HolderID"));
-            if (!(holder instanceof LivingEntity))
-                return;
-            float lungeTicks = MiscProperties.getLungeTicks((LivingEntity) holder) + partialTick;
+        CompoundTag tag = stack.getOrCreateTag();
+        Entity holder = Minecraft.getInstance().level.getEntity(tag.getInt("HolderID"));
+
+        if (!(holder instanceof LivingEntity)) {
+            return;
+        }
+
+        EntityDataProvider.getCapability(holder).ifPresent(data -> {
+            float lungeTicks = data.miscData.lungeTicks + partialTick;
             progressRotation(TopJaw, lungeTicks, (float) Math.toRadians(-30), 0, 0);
             progressRotation(BottomJaw, lungeTicks, (float) Math.toRadians(30), 0, 0);
             progressPosition(JawExtender, lungeTicks, 0, 0, -4);
             progressPosition(JawExtender2, lungeTicks, 0, 0, -10);
             progressPosition(JawExtender3, lungeTicks, 0, 0, -10);
             progressPosition(JawExtender4, lungeTicks, 0, 0, -10);
+        });
 
-        }
         /*animator.setAnimation(EntityDeathWorm.ANIMATION_BITE);
         animator.startKeyframe(3);
         this.rotate(animator, TopJaw, -20, 0, 0);

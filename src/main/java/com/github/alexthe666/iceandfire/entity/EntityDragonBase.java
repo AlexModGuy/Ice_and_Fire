@@ -13,8 +13,7 @@ import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.datagen.tags.IafBlockTags;
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforgeInput;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -95,6 +94,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener {
 
@@ -2326,7 +2326,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
             // Shift key to dismount
             if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
-                MiscProperties.setDismountedDragon(this.getControllingPassenger(), true);
+                EntityDataProvider.getCapability(getControllingPassenger()).ifPresent(data -> data.miscData.setDismounted(true));
                 this.getControllingPassenger().stopRiding();
             }
             // Reset attack target when being ridden
@@ -2372,7 +2372,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
             }
             if (this.getControllingPassenger() != null && this.getControllingPassenger().isShiftKeyDown()) {
-                MiscProperties.setDismountedDragon(this.getControllingPassenger(), true);
+                EntityDataProvider.getCapability(getControllingPassenger()).ifPresent(data -> data.miscData.setDismounted(true));
                 this.getControllingPassenger().stopRiding();
             }
             if (this.isFlying()) {
@@ -2536,7 +2536,9 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean isChained() {
-        return ChainProperties.hasChainData(this);
+        AtomicBoolean isChained = new AtomicBoolean(false);
+        EntityDataProvider.getCapability(this).ifPresent(data -> isChained.set(data.chainData.getChainedTo().isEmpty()));
+        return isChained.get();
     }
 
     @Override

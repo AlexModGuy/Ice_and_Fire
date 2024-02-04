@@ -9,10 +9,7 @@ import com.github.alexthe666.iceandfire.client.particle.CockatriceBeamRender;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderChain;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderFrozenState;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
-import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
@@ -134,33 +131,32 @@ public class ClientEvents {
 
             if (player.level().isClientSide) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
-                EntitySiren siren = SirenProperties.getSiren(player);
 
-                if (IafConfig.sirenShader && siren == null && renderer != null && renderer.currentEffect() != null) {
-                    if (SIREN_SHADER.toString().equals(renderer.currentEffect().getName()))
+                EntityDataProvider.getCapability(player).ifPresent(data -> {
+                    if (IafConfig.sirenShader && data.sirenData.charmedBy == null && renderer.currentEffect() != null) {
+                        if (SIREN_SHADER.toString().equals(renderer.currentEffect().getName()))
+                            renderer.shutdownEffect();
+                    }
+
+                    if (data.sirenData.charmedBy == null) {
+                        return;
+                    }
+
+                    if (IafConfig.sirenShader && !data.sirenData.isCharmed && renderer.currentEffect() != null && SIREN_SHADER.toString().equals(renderer.currentEffect().getName())) {
                         renderer.shutdownEffect();
-                }
+                    }
 
-                if (siren == null)
-                    return;
-
-                final boolean isCharmed = SirenProperties.isCharmed(player);
-
-                if (IafConfig.sirenShader && !isCharmed && renderer != null && renderer.currentEffect() != null && SIREN_SHADER.toString().equals(renderer.currentEffect().getName())) {
-                    renderer.shutdownEffect();
-                }
-
-                if (isCharmed) {
+                if (data.sirenData.isCharmed) {
                     if (player.level().isClientSide && rand.nextInt(40) == 0) {
-                        IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getX(), player.getY(), player.getZ(), siren.getHairColor(), 0, 0);
+                        IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getX(), player.getY(), player.getZ(), data.sirenData.charmedBy.getHairColor(), 0, 0);
                     }
 
-                    if (IafConfig.sirenShader && renderer.currentEffect() == null) {
-                        renderer.loadEffect(SIREN_SHADER);
+                        if (IafConfig.sirenShader && renderer.currentEffect() == null) {
+                            renderer.loadEffect(SIREN_SHADER);
+                        }
+
                     }
-
-                }
-
+                });
             }
         }
     }
@@ -210,14 +206,20 @@ public class ClientEvents {
         if (shouldCancelRender(event.getEntity())) {
             event.setCanceled(true);
         }
+
         LivingEntity entity = event.getEntity();
-        MiscProperties.getTargetedBy(entity).forEach(caster -> {
-            CockatriceBeamRender.render(entity, caster, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
+
+        EntityDataProvider.getCapability(entity).ifPresent(data -> {
+            for (LivingEntity target : data.miscData.getTargetedByScepter()) {
+                CockatriceBeamRender.render(entity, target, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
+            }
+
+            if (data.frozenData.isFrozen) {
+                RenderFrozenState.render(event.getEntity(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.frozenData.frozenTicks);
+            }
+
+            RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.chainData.getChainedTo());
         });
-        if (FrozenProperties.isFrozen(event.getEntity())) {
-            RenderFrozenState.render(event.getEntity(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
-        }
-        RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
     }
 
     @SubscribeEvent
@@ -232,9 +234,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
-            EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase dragon && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
             if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
                 if (AUTO_ADAPT_3RD_PERSON) {
                     // Auto adjust 3rd person camera's according to dragon's size

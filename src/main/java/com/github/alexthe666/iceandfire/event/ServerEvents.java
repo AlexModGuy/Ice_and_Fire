@@ -8,10 +8,9 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.entity.props.*;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.item.*;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
@@ -38,10 +37,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.WitherSkeleton;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -232,12 +229,14 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onEntityFall(LivingFallEvent event) {
+    public void onEntityFall(final LivingFallEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (MiscProperties.hasDismounted(event.getEntity())) {
-                event.setDamageMultiplier(0);
-                MiscProperties.setDismountedDragon(event.getEntity(), false);
-            }
+            EntityDataProvider.getCapability(event.getEntity()).ifPresent(data -> {
+                if (data.miscData.hasDismounted) {
+                    event.setDamageMultiplier(0);
+                    data.miscData.setDismounted(false);
+                }
+            });
         }
     }
 
@@ -316,10 +315,14 @@ public class ServerEvents {
     @SubscribeEvent
     public void onLivingAttacked(final LivingAttackEvent event) {
         if (event.getSource() != null && event.getSource().getEntity() != null) {
-            final Entity attacker = event.getSource().getEntity();
+            Entity attacker = event.getSource().getEntity();
+
             if (attacker instanceof LivingEntity) {
-                if (MiscProperties.getLoveTicks((LivingEntity) attacker) > 0)
-                    event.setCanceled(true);
+                EntityDataProvider.getCapability(attacker).ifPresent(data -> {
+                    if (data.miscData.loveTicks > 0) {
+                        event.setCanceled(true);
+                    }
+                });
 
                 if (isChicken(event.getEntity())) {
                     signalChickenAlarm(event.getEntity(), (LivingEntity) attacker);
@@ -403,19 +406,28 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityDie(LivingDeathEvent event) {
-        if (!event.getEntity().level().isClientSide && ChainProperties.hasChainData(event.getEntity())) {
-            ItemEntity entityitem = new ItemEntity(event.getEntity().level(),
-                    event.getEntity().getX(),
-                    event.getEntity().getY() + 1,
-                    event.getEntity().getZ(),
-                    new ItemStack(IafItemRegistry.CHAIN.get(), ChainProperties.getChainedTo(event.getEntity()).size()));
-            entityitem.setDefaultPickUpDelay();
-            event.getEntity().level().addFreshEntity(entityitem);
-            ChainProperties.clearChainData(event.getEntity());
-        }
+        EntityDataProvider.getCapability(event.getEntity()).ifPresent(data -> {
+            if (event.getEntity().level().isClientSide()) {
+                return;
+            }
+
+            if (!data.chainData.getChainedTo().isEmpty()) {
+                ItemEntity entityitem = new ItemEntity(event.getEntity().level(),
+                        event.getEntity().getX(),
+                        event.getEntity().getY() + 1,
+                        event.getEntity().getZ(),
+                        new ItemStack(IafItemRegistry.CHAIN.get(), data.chainData.getChainedTo().size()));
+                entityitem.setDefaultPickUpDelay();
+                event.getEntity().level().addFreshEntity(entityitem);
+
+                data.chainData.clearChains();
+            }
+        });
+
         if (event.getEntity().getUUID().equals(ServerEvents.ALEX_UUID)) {
             event.getEntity().spawnAtLocation(new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), 1);
         }
+
         if (event.getEntity() instanceof Player && IafConfig.ghostsFromPlayerDeaths) {
             Entity attacker = event.getEntity().getLastHurtByMob();
             if (attacker instanceof Player && event.getEntity().getRandom().nextInt(3) == 0) {
@@ -459,34 +471,6 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingTickEvent event) {
-
-        if (ChainProperties.hasChainData(event.getEntity())) {
-            ChainProperties.tickChain(event.getEntity());
-        }
-
-        if (IafConfig.chickensLayRottenEggs && !event.getEntity().level().isClientSide && isChicken(event.getEntity()) && !event.getEntity().isBaby() && event.getEntity() instanceof Animal) {
-            ChickenProperties.tickChicken(event.getEntity());
-        }
-
-        if (FrozenProperties.isFrozen(event.getEntity())) {
-            FrozenProperties.tickFrozenEntity(event.getEntity());
-
-            if (!(event.getEntity() instanceof Player && ((Player) event.getEntity()).isCreative())) {
-                event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().multiply(0.25F, 1, 0.25F));
-                if (!(event.getEntity() instanceof EnderDragon) && !event.getEntity().onGround()) {
-                    event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().add(0, -0.2, 0));
-                }
-
-            }
-        }
-
-        if (event.getEntity() instanceof Player || event.getEntity() instanceof AbstractVillager || event.getEntity() instanceof IHearsSiren) {
-            SirenProperties.tickCharmedEntity(event.getEntity());
-        }
-
-        if (MiscProperties.getLoveTicks(event.getEntity()) > 0) {
-            MiscProperties.tickLove(event.getEntity());
-        }
         if (AiDebug.isEnabled() && event.getEntity() instanceof Mob && AiDebug.contains((Mob) event.getEntity())) {
             AiDebug.logData();
         }
@@ -496,16 +480,18 @@ public class ServerEvents {
     public void onEntityInteract(final PlayerInteractEvent.EntityInteract event) {
         // Handle chain removal
         if (event.getTarget() instanceof LivingEntity target) {
-            if (ChainProperties.isChainedTo(target, event.getEntity())) {
-                ChainProperties.removeChain(target, event.getEntity());
+            EntityDataProvider.getCapability(target).ifPresent(data -> {
+                if (data.chainData.isChainedTo(event.getEntity())) {
+                    data.chainData.removeChain(event.getEntity());
 
-                if (!event.getLevel().isClientSide) {
-                    event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN.get(), 1);
+                    if (!event.getLevel().isClientSide()) {
+                        event.getTarget().spawnAtLocation(IafItemRegistry.CHAIN.get(), 1);
+                    }
+
+                    event.setCanceled(true);
+                    event.setCancellationResult(InteractionResult.SUCCESS);
                 }
-
-                event.setCanceled(true);
-                event.setCancellationResult(InteractionResult.SUCCESS);
-            }
+            });
         }
 
         // Handle debug path render
@@ -578,7 +564,7 @@ public class ServerEvents {
         }
     }
 
-    //@SubscribeEvent
+    //@SubscribeEvent // FIXME :: Unused
     public static void onChestGenerated(LootTableLoadEvent event) {
         final ResourceLocation eventName = event.getName();
         final boolean condition1 = eventName.equals(BuiltInLootTables.SIMPLE_DUNGEON)
@@ -622,22 +608,6 @@ public class ServerEvents {
             for (Entity entity : event.getEntity().getPassengers()) {
                 entity.stopRiding();
             }
-        }
-    }
-
-    @SubscribeEvent
-    public void onPlayerStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof LivingEntity target) {
-            // Make sure that when a player starts tracking an entity that has additional data
-            // it gets relayed from the server to the client
-            if (ChainProperties.hasChainData(target))
-                ChainProperties.updateData(target);
-            if (FrozenProperties.isFrozen(target))
-                FrozenProperties.updateData(target);
-            if (MiscProperties.getLoveTicks(target) > 0)
-                MiscProperties.updateData(target);
-            if (SirenProperties.isCharmed(target))
-                SirenProperties.updateData(target);
         }
     }
 

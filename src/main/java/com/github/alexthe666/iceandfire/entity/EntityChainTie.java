@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EntityChainTie extends HangingEntity {
 
@@ -124,15 +125,18 @@ public class EntityChainTie extends HangingEntity {
     public void remove(Entity.@NotNull RemovalReason removalReason) {
         super.remove(removalReason);
         double d0 = 30D;
+
         List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+
         for (LivingEntity livingEntity : list) {
-            if (ChainProperties.isChainedTo(livingEntity, this)) {
-                ChainProperties.removeChain(livingEntity, this);
-                ItemEntity entityitem = new ItemEntity(this.level(), this.getX(), this.getY() + 1, this.getZ(),
-                    new ItemStack(IafItemRegistry.CHAIN.get()));
-                entityitem.setDefaultPickUpDelay();
-                this.level().addFreshEntity(entityitem);
-            }
+            EntityDataProvider.getCapability(livingEntity).ifPresent(data -> {
+                if (data.chainData.isChainedTo(this)) {
+                    data.chainData.removeChain(this);
+                    ItemEntity entityitem = new ItemEntity(this.level(), this.getX(), this.getY() + 1, this.getZ(), new ItemStack(IafItemRegistry.CHAIN.get()));
+                    entityitem.setDefaultPickUpDelay();
+                    this.level().addFreshEntity(entityitem);
+                }
+            });
         }
     }
 
@@ -141,19 +145,21 @@ public class EntityChainTie extends HangingEntity {
         if (this.level().isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            boolean flag = false;
-            double d0 = 30D;
-            List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - d0, this.getY() - d0, this.getZ() - d0, this.getX() + d0, this.getY() + d0, this.getZ() + d0));
+            AtomicBoolean flag = new AtomicBoolean(false);
+            double radius = 30D;
+            List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - radius, this.getY() - radius, this.getZ() - radius, this.getX() + radius, this.getY() + radius, this.getZ() + radius));
 
             for (LivingEntity livingEntity : list) {
-                if (ChainProperties.isChainedTo(livingEntity, player)) {
-                    ChainProperties.removeChain(livingEntity, player);
-                    ChainProperties.attachChain(livingEntity, this);
-                    flag = true;
-                }
+                EntityDataProvider.getCapability(livingEntity).ifPresent(data -> {
+                    if (data.chainData.isChainedTo(player)) {
+                        data.chainData.removeChain(player);
+                        data.chainData.attachChain(this);
+                        flag.set(true);
+                    }
+                });
             }
 
-            if (!flag) {
+            if (!flag.get()) {
                 this.remove(RemovalReason.DISCARDED);
                 return InteractionResult.SUCCESS;
             }
@@ -164,7 +170,7 @@ public class EntityChainTie extends HangingEntity {
 
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
