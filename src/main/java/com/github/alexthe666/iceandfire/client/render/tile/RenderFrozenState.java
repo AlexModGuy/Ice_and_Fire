@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
-import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
