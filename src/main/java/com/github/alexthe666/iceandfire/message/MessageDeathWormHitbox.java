@@ -37,21 +37,26 @@ public class MessageDeathWormHitbox {
         public Handler() {
         }
 
-        public static void handle(MessageDeathWormHitbox message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level != null) {
+        public static void handle(final MessageDeathWormHitbox message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level.getEntity(message.deathWormId);
-                    if (entity != null && entity instanceof EntityDeathWorm) {
-                        EntityDeathWorm worm = (EntityDeathWorm) entity;
-                        worm.initSegments(message.scale);
+
+                    if (entity instanceof EntityDeathWorm deathWorm) {
+                        deathWorm.initSegments(message.scale);
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

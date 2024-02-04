@@ -39,23 +39,26 @@ public class MessageUpdatePodium {
         public Handler() {
         }
 
-        public static void handle(MessageUpdatePodium message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level != null) {
+        public static void handle(final MessageUpdatePodium message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof TileEntityPodium podium) {
-                            podium.setItem(0, message.heldStack);
-                        }
+
+                    if (player.level.getBlockEntity(pos) instanceof TileEntityPodium podium) {
+                        podium.setItem(0, message.heldStack);
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
-
 }

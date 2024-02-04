@@ -42,27 +42,34 @@ public class MessageMyrmexSettings {
         public Handler() {
         }
 
-        public static void handle(MessageMyrmexSettings message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level != null) {
+        public static void handle(final MessageMyrmexSettings message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level.getEntity(message.queenID);
-                    if (entity != null && entity instanceof EntityMyrmexBase) {
-                        MyrmexHive hive = ((EntityMyrmexBase) entity).getHive();
+
+                    if (entity instanceof EntityMyrmexBase myrmex) {
+                        MyrmexHive hive = myrmex.getHive();
+
                         if (hive != null) {
                             hive.reproduces = message.reproduces;
+
                             if (message.deleteRoom) {
                                 hive.removeRoom(BlockPos.of(message.roomToDelete));
                             }
                         }
                     }
                 }
-            }
+            });
 
+            context.setPacketHandled(true);
         }
     }
 }

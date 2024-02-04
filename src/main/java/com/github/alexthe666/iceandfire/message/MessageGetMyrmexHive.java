@@ -34,23 +34,29 @@ public class MessageGetMyrmexHive {
         public Handler() {
         }
 
-        public static void handle(MessageGetMyrmexHive message, Supplier<NetworkEvent.Context> context) {
-            Player player = context.get().getSender();
-            MyrmexHive serverHive = MyrmexHive.fromNBT(message.hive);
-            CompoundTag tag = new CompoundTag();
-            serverHive.writeVillageDataToNBT(tag);
-            serverHive.readVillageDataFromNBT(tag);
-            IceAndFire.PROXY.setReferencedHive(serverHive);
-            context.get().setPacketHandled(true);
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }else {
-                if (MyrmexWorldData.get(player.level) != null) {
+        public static void handle(final MessageGetMyrmexHive message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                MyrmexHive serverHive = MyrmexHive.fromNBT(message.hive);
+                CompoundTag tag = new CompoundTag();
+                serverHive.writeVillageDataToNBT(tag);
+                serverHive.readVillageDataFromNBT(tag);
+                IceAndFire.PROXY.setReferencedHive(serverHive);
+
+                if (player != null) {
                     MyrmexHive realHive = MyrmexWorldData.get(player.level).getHiveFromUUID(serverHive.hiveUUID);
                     realHive.readVillageDataFromNBT(serverHive.toNBT());
                 }
-            }
+            });
 
+            context.setPacketHandled(true);
         }
     }
 }
