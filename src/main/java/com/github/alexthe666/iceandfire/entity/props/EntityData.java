@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.props;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.PacketDistributor;
 
 public class EntityData {
     public FrozenData frozenData = new FrozenData();
@@ -10,12 +11,16 @@ public class EntityData {
     public SirenData sirenData = new SirenData();
 
     public void tick(final LivingEntity entity) {
-        boolean updateClients = frozenData.tickFrozen(entity);
-        updateClients = updateClients || chainData.tickChain(entity);
-        updateClients = updateClients || sirenData.tickCharmed(entity);
+        frozenData.tickFrozen(entity);
+        chainData.tickChain(entity);
+        sirenData.tickCharmed(entity);
 
-        if (updateClients && !entity.getLevel().isClientSide()) {
-            IceAndFire.sendMSGToAll(new SyncEntityData(entity.getId(), serialize()));
+        boolean triggerClientUpdate = frozenData.doesClientNeedUpdate();
+        triggerClientUpdate = chainData.doesClientNeedUpdate() || triggerClientUpdate;
+        triggerClientUpdate = sirenData.doesClientNeedUpdate() || triggerClientUpdate;
+
+        if (triggerClientUpdate && !entity.getLevel().isClientSide()) {
+            IceAndFire.NETWORK_WRAPPER.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new SyncEntityData(entity.getId(), serialize()));
         }
     }
 

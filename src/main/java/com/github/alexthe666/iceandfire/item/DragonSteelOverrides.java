@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.event.ServerEvents;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
@@ -80,7 +81,7 @@ public interface DragonSteelOverrides<T extends TieredItem> {
             target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }
         if (isDragonsteelIce(item.getTier()) && IafConfig.dragonWeaponIceAbility) {
-            FrozenProperties.setFrozenFor(target, 300);
+            EntityDataProvider.getCapability(target).ifPresent(data -> data.frozenData.setFrozen(target, 300));
             target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 2));
             target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }

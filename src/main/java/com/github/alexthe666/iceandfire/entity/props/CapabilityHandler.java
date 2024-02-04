@@ -13,14 +13,16 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber // TODO :: clone on death (and potentially on entering end portal)
 public class CapabilityHandler {
     public static final Capability<EntityData> ENTITY_DATA_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static final ResourceLocation ENTITY_DATA = new ResourceLocation(IceAndFire.MODID, "entity_data");
@@ -34,7 +36,14 @@ public class CapabilityHandler {
 
     @SubscribeEvent
     public static void handleInitialSync(final EntityJoinLevelEvent event) {
+        // TODO :: only sync if values are not the default values?
+        // FIXME :: seems like it's not properly initialized on re-join (no chains are rendered (or even attached))?
         syncEntityData(event.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void removeCachedEntry(final EntityLeaveLevelEvent event) {
+        EntityDataProvider.removeCachedEntry(event.getEntity());
     }
 
     @SubscribeEvent
@@ -54,7 +63,7 @@ public class CapabilityHandler {
             return;
         }
 
-        EntityDataProvider.getCapability(entity).ifPresent(data -> IceAndFire.sendMSGToAll(new SyncEntityData(entity.getId(), data.serialize())));
+        EntityDataProvider.getCapability(entity).ifPresent(data -> IceAndFire.NETWORK_WRAPPER.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new SyncEntityData(entity.getId(), data.serialize())));
     }
 
     public static @Nullable Player getLocalPlayer() {

@@ -7,15 +7,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChainData {
-    public final List<Entity> chainedTo = new ArrayList<>();
-
+    private final List<Entity> chainedTo = new ArrayList<>();
     private final List<Integer> chainedToIds = new ArrayList<>();
     private boolean isInitialized;
+    private boolean triggerClientUpdate;
 
-    public boolean tickChain(final LivingEntity entity) {
+    public void tickChain(final LivingEntity entity) {
         if (!isInitialized) {
             initializeChainedTo(entity.getLevel());
         }
@@ -30,26 +31,28 @@ public class ChainData {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(x * Math.abs(x) * 0.4D, y * Math.abs(y) * 0.2D, z * Math.abs(z) * 0.4D));
             }
         }
-
-        return false;
     }
 
-    public void clearChains(final Entity capabilityHolder) {
+    public void clearChains() {
         chainedTo.clear();
         chainedToIds.clear();
-        CapabilityHandler.syncEntityData(capabilityHolder);
+        triggerClientUpdate = true;
     }
 
-    public void attachChain(final Entity capabilityHolder, final Entity chain) {
+    public void attachChain(final Entity chain) {
+        if (chainedToIds.contains(chain.getId())) {
+            return;
+        }
+
         chainedTo.add(chain);
         chainedToIds.add(chain.getId());
-        CapabilityHandler.syncEntityData(capabilityHolder);
+        triggerClientUpdate = true;
     }
 
-    public void removeChain(final Entity capabilityHolder, final Entity chain) {
-        chainedToIds.remove(chain.getId());
+    public void removeChain(final Entity chain) {
+        chainedToIds.remove(Integer.valueOf(chain.getId())); // remove by value not by index
         chainedTo.remove(chain);
-        CapabilityHandler.syncEntityData(capabilityHolder);
+        triggerClientUpdate = true;
     }
 
     public boolean isChainedTo(final Entity toCheck) {
@@ -66,6 +69,15 @@ public class ChainData {
         return false;
     }
 
+    public List<Entity> getChainedTo() {
+        /* TODO
+            There was a case of ConcurrentModificationException
+            (likely due to the packet not being enqueued initially)
+            Keeping this for now in case we need to return a copy of the list instead
+        */
+        return chainedTo;
+    }
+
     public void serialize(final CompoundTag tag) {
         CompoundTag chainedData = new CompoundTag();
         chainedData.putIntArray("chainedTo", chainedToIds);
@@ -75,25 +87,38 @@ public class ChainData {
 
     public void deserialize(final CompoundTag tag) {
         CompoundTag chainedData = tag.getCompound("chainedData");
-        ListTag chains = chainedData.getList("chainedData", ListTag.TAG_INT_ARRAY);
+        int[] loadedChainedToIds = chainedData.getIntArray("chainedTo");
 
-        chainedTo.clear();
         isInitialized = false;
+        chainedToIds.clear();
 
-        for (int i = 0; i < chains.size(); i++) {
-            chainedToIds.add(chains.getInt(i));
+        for (int i = 0; i < loadedChainedToIds.length; i++) {
+            chainedToIds.add(loadedChainedToIds[i]);
         }
     }
 
     private void initializeChainedTo(final Level level) {
+        chainedTo.clear();
+
         for (int id : chainedToIds) {
             Entity entity = level.getEntity(id);
 
             if (entity != null) {
                 chainedTo.add(entity);
+            } else {
+                System.out.println("entity was not null [" + id + "]");
             }
         }
 
         isInitialized = true;
+    }
+
+    public boolean doesClientNeedUpdate() {
+        if (triggerClientUpdate) {
+            triggerClientUpdate = false;
+            return true;
+        }
+
+        return false;
     }
 }

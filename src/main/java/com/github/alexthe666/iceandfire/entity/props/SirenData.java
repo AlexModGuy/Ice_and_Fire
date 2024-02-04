@@ -2,103 +2,121 @@ package com.github.alexthe666.iceandfire.entity.props;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
+import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 
 public class SirenData {
-    public Entity charmedBy;
+    public @Nullable EntitySiren charmedBy;
     public int charmTime; // FIXME :: when is this ever increased
     public boolean isCharmed;
 
     private int charmedById;
     private boolean isInitialized;
+    private boolean triggerClientUpdate;
 
-    public boolean tickCharmed(final LivingEntity entity) {
-        if (!isInitialized) {
-            charmedBy = entity.getLevel().getEntity(charmedById);
+    public void tickCharmed(final LivingEntity holder) {
+        if (!(holder instanceof Player || holder instanceof AbstractVillager || holder instanceof IHearsSiren)) {
+            return;
         }
 
-        if (charmedBy instanceof EntitySiren siren && siren.isActuallySinging()) {
-            if (EntitySiren.isWearingEarplugs(entity) || charmTime > IafConfig.sirenMaxSingTime) {
-                clearCharm(entity);
-                siren.singCooldown = IafConfig.sirenTimeBetweenSongs;
-                return true;
+        if (!isInitialized) {
+            Entity entity = holder.getLevel().getEntity(charmedById);
+
+            if (entity instanceof EntitySiren siren) {
+                charmedBy = siren;
+            }
+        }
+
+        if (charmedBy == null) {
+            return;
+        }
+
+        if (charmedBy.isActuallySinging()) {
+            if (EntitySiren.isWearingEarplugs(holder) || charmTime > IafConfig.sirenMaxSingTime) {
+                clearCharm();
+                charmedBy.singCooldown = IafConfig.sirenTimeBetweenSongs;
+                return;
             }
 
-            if (!siren.isAlive() || entity.distanceTo(siren) > EntitySiren.SEARCH_RANGE * 2 || entity instanceof Player player && (player.isCreative() || player.isSpectator())) {
-                clearCharm(entity);
-                return true;
+            if (!charmedBy.isAlive() || holder.distanceTo(charmedBy) > EntitySiren.SEARCH_RANGE * 2 || holder instanceof Player player && (player.isCreative() || player.isSpectator())) {
+                clearCharm();
+                return;
             }
 
-            if (entity.distanceTo(siren) < 5) {
-                clearCharm(entity);
-                siren.singCooldown = IafConfig.sirenTimeBetweenSongs;
-                siren.setSinging(false);
-                siren.setTarget(entity);
-                siren.setAggressive(true);
-                siren.triggerOtherSirens(entity);
-                return true;
+            if (holder.distanceTo(charmedBy) < 5) {
+                clearCharm();
+                charmedBy.singCooldown = IafConfig.sirenTimeBetweenSongs;
+                charmedBy.setSinging(false);
+                charmedBy.setTarget(holder);
+                charmedBy.setAggressive(true);
+                charmedBy.triggerOtherSirens(holder);
+                return;
             }
 
             isCharmed = true;
 
-            if (entity.getRandom().nextInt(7) == 0) {
+            if (holder.getRandom().nextInt(7) == 0) {
                 for (int i = 0; i < 5; i++) {
-                    entity.level.addParticle(ParticleTypes.HEART,
-                            entity.getX() + ((entity.getRandom().nextDouble() - 0.5D) * 3),
-                            entity.getY() + ((entity.getRandom().nextDouble() - 0.5D) * 3),
-                            entity.getZ() + ((entity.getRandom().nextDouble() - 0.5D) * 3),
+                    holder.level.addParticle(ParticleTypes.HEART,
+                            holder.getX() + ((holder.getRandom().nextDouble() - 0.5D) * 3),
+                            holder.getY() + ((holder.getRandom().nextDouble() - 0.5D) * 3),
+                            holder.getZ() + ((holder.getRandom().nextDouble() - 0.5D) * 3),
                             0, 0, 0);
                 }
             }
 
-            if (entity.horizontalCollision) {
-                entity.setJumping(true);
+            if (holder.horizontalCollision) {
+                holder.setJumping(true);
             }
 
-            double motionXAdd = (Math.signum(siren.getX() - entity.getX()) * 0.5D - entity.getDeltaMovement().x) * 0.100000000372529;
-            double motionYAdd = (Math.signum(siren.getY() - entity.getY() + 1) * 0.5D - entity.getDeltaMovement().y) * 0.100000000372529;
-            double motionZAdd = (Math.signum(siren.getZ() - entity.getZ()) * 0.5D - entity.getDeltaMovement().z) * 0.100000000372529;
+            double motionXAdd = (Math.signum(charmedBy.getX() - holder.getX()) * 0.5D - holder.getDeltaMovement().x) * 0.100000000372529;
+            double motionYAdd = (Math.signum(charmedBy.getY() - holder.getY() + 1) * 0.5D - holder.getDeltaMovement().y) * 0.100000000372529;
+            double motionZAdd = (Math.signum(charmedBy.getZ() - holder.getZ()) * 0.5D - holder.getDeltaMovement().z) * 0.100000000372529;
 
-            entity.setDeltaMovement(entity.getDeltaMovement().add(motionXAdd, motionYAdd, motionZAdd));
+            holder.setDeltaMovement(holder.getDeltaMovement().add(motionXAdd, motionYAdd, motionZAdd));
 
-            if (entity.isPassenger()) {
-                entity.stopRiding();
+            if (holder.isPassenger()) {
+                holder.stopRiding();
             }
 
-            if (!(entity instanceof Player)) {
-                double d0 = siren.getX() - entity.getX();
-                double d2 = siren.getZ() - entity.getZ();
-                double d1 = siren.getY() - 1 - entity.getY();
-                double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-                float f = (float) (Mth.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-                float f1 = (float) (-(Mth.atan2(d1, d3) * (180D / Math.PI)));
-                entity.setXRot(updateRotation(entity.getXRot(), f1, 30F));
-                entity.setYRot(updateRotation(entity.getYRot(), f, 30F));
+            if (!(holder instanceof Player)) {
+                double x = charmedBy.getX() - holder.getX();
+                double y = charmedBy.getY() - 1 - holder.getY();
+                double z = charmedBy.getZ() - holder.getZ();
+                double radius = Math.sqrt(x * x + z * z);
+                float xRot = (float) (-(Mth.atan2(y, radius) * (180D / Math.PI)));
+                float yRot = (float) (Mth.atan2(z, x) * (180D / Math.PI)) - 90.0F;
+                holder.setXRot(updateRotation(holder.getXRot(), xRot, 30F));
+                holder.setYRot(updateRotation(holder.getYRot(), yRot, 30F));
             }
         }
-
-        return false;
     }
 
-    public void setCharmed(final Entity charmed, final Entity siren) {
+    public void setCharmed(final Entity entity) {
+        if (!(entity instanceof EntitySiren siren)) {
+            return;
+        }
+
         charmedById = siren.getId();
         charmedBy = siren;
         isCharmed = true;
-
-        CapabilityHandler.syncEntityData(charmed);
+        triggerClientUpdate = true;
     }
 
-    public void clearCharm(final Entity charmed) {
+    public void clearCharm() {
         charmTime = 0;
         isCharmed = false;
         charmedBy = null;
         charmedById = -1;
+        triggerClientUpdate = true;
     }
 
     public void serialize(final CompoundTag tag) {
@@ -132,5 +150,14 @@ public class SirenData {
         }
 
         return angle + f;
+    }
+
+    public boolean doesClientNeedUpdate() {
+        if (triggerClientUpdate) {
+            triggerClientUpdate = false;
+            return true;
+        }
+
+        return false;
     }
 }
