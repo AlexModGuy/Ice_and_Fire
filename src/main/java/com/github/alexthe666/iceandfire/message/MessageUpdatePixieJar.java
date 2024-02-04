@@ -37,23 +37,26 @@ public class MessageUpdatePixieJar {
         public Handler() {
         }
 
-        public static void handle(MessageUpdatePixieJar message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageUpdatePixieJar message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level().getBlockEntity(pos) != null) {
-                        if (player.level().getBlockEntity(pos) instanceof TileEntityJar) {
-                            TileEntityJar jar = (TileEntityJar) player.level().getBlockEntity(pos);
-                            jar.hasProduced = message.isProducing;
-                        }
+
+                    if (player.level().getBlockEntity(pos) instanceof TileEntityJar jar) {
+                        jar.hasProduced = message.isProducing;
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

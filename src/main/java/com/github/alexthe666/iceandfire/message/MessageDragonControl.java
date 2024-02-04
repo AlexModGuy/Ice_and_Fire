@@ -59,50 +59,54 @@ public class MessageDragonControl {
         public Handler() {
         }
 
-        public static void handle(MessageDragonControl message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageDragonControl message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level().getEntity(message.dragonId);
+
                     if (ServerEvents.isRidingOrBeingRiddenBy(entity, player)) {
-                        if (entity != null && entity instanceof EntityDragonBase) {
-                            EntityDragonBase dragon = (EntityDragonBase) entity;
+                        /*
+                            For some of these entities the `setPos` is handled in `Entity#move`
+                            Doing it here would cause server-side movement checks to fail (resulting in "moved wrongly" messages)
+                        */
+                        if (entity instanceof EntityDragonBase dragon) {
                             if (dragon.isOwnedBy(player)) {
                                 dragon.setControlState(message.controlState);
                             }
-                            // The riding setPos is performed in Entity#move
-                            // Extra setPos will cause server side movement check to fail, resulting move wrongly msg
-//                            dragon.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
-                        } else if (entity instanceof EntityHippogryph) {
-                            EntityHippogryph hippo = (EntityHippogryph) entity;
+                        } else if (entity instanceof EntityHippogryph hippogryph) {
+                            if (hippogryph.isOwnedBy(player)) {
+                                hippogryph.setControlState(message.controlState);
+                            }
+                        } else if (entity instanceof EntityHippocampus hippo) {
                             if (hippo.isOwnedBy(player)) {
                                 hippo.setControlState(message.controlState);
                             }
-//                            hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
-                        } else if (entity instanceof EntityHippocampus) {
-                            EntityHippocampus hippo = (EntityHippocampus) entity;
-                            if (hippo.isOwnedBy(player)) {
-                                hippo.setControlState(message.controlState);
-                            }
+
                             hippo.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
-                        } else if (entity instanceof EntityDeathWorm) {
-                            EntityDeathWorm deathworm = (EntityDeathWorm) entity;
-                            deathworm.setControlState(message.controlState);
-                            deathworm.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
-                        } else if (entity instanceof EntityAmphithere) {
-                            EntityAmphithere amphi = (EntityAmphithere) entity;
-                            if (amphi.isOwnedBy(player)) {
-                                amphi.setControlState(message.controlState);
+                        } else if (entity instanceof EntityDeathWorm deathWorm) {
+                            deathWorm.setControlState(message.controlState);
+                            deathWorm.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+                        } else if (entity instanceof EntityAmphithere amphithere) {
+                            if (amphithere.isOwnedBy(player)) {
+                                amphithere.setControlState(message.controlState);
                             }
-                            amphi.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
+
+                            // TODO :: Is this handled by Entity#move due to recent changes?
+                            amphithere.setPos(message.getPosX(), message.getPosY(), message.getPosZ());
                         }
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

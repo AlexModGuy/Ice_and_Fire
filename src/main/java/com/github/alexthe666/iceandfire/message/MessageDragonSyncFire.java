@@ -45,21 +45,26 @@ public class MessageDragonSyncFire {
         public Handler() {
         }
 
-        public static void handle(MessageDragonSyncFire message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageDragonSyncFire message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     Entity entity = player.level().getEntity(message.dragonId);
-                    if (entity != null && entity instanceof EntityDragonBase) {
-                        EntityDragonBase dragon = (EntityDragonBase) entity;
+
+                    if (entity instanceof EntityDragonBase dragon) {
                         dragon.stimulateFire(message.posX, message.posY, message.posZ, message.syncType);
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 

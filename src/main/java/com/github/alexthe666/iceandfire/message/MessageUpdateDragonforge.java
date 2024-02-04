@@ -38,26 +38,30 @@ public class MessageUpdateDragonforge {
         public Handler() {
         }
 
-        public static void handle(MessageUpdateDragonforge message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                player = IceAndFire.PROXY.getClientSidePlayer();
-            }
-            if (player != null) {
-                if (player.level()!= null) {
+        public static void handle(final MessageUpdateDragonforge message, final Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+
+            context.enqueueWork(() -> {
+                Player player = context.getSender();
+
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    player = IceAndFire.PROXY.getClientSidePlayer();
+                }
+
+                if (player != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level().getBlockEntity(pos) != null) {
-                        if (player.level().getBlockEntity(pos) instanceof TileEntityDragonforge) {
-                            TileEntityDragonforge house = (TileEntityDragonforge) player.level().getBlockEntity(pos);
-                            house.cookTime = message.cookTime;
-                            if (message.cookTime > 0) {
-                                house.lastDragonFlameTimer = 40;
-                            }
+
+                    if (player.level().getBlockEntity(pos) instanceof TileEntityDragonforge forge) {
+                        forge.cookTime = message.cookTime;
+
+                        if (message.cookTime > 0) {
+                            forge.lastDragonFlameTimer = 40;
                         }
                     }
                 }
-            }
+            });
+
+            context.setPacketHandled(true);
         }
     }
 }

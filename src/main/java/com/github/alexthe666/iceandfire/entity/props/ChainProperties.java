@@ -69,7 +69,7 @@ public class ChainProperties {
 
     private static ListTag getOrCreateChainData(CompoundTag entityData) {
         //TODO: Look at type
-        if (containsChainData.containsKey(entityData) && containsChainData.get(entityData) && entityData.contains(CHAIN_DATA, 9)) {
+        if (containsChainData.containsKey(entityData) && containsChainData.getOrDefault(entityData, false) && entityData.contains(CHAIN_DATA, 9)) {
             return entityData.getList(CHAIN_DATA, 10);
         }
         else if (entityData.contains(CHAIN_DATA, 9)) {

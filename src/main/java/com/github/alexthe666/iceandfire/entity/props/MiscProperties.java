@@ -84,7 +84,7 @@ public class MiscProperties {
 
         CompoundTag citadelTag = CitadelEntityData.getCitadelTag(entity);
         // If we have the nbt data in the hashmap and we know it contains love data
-        if (containsLoveData.containsKey(citadelTag) && containsLoveData.get(citadelTag)) {
+        if (containsLoveData.containsKey(citadelTag) && containsLoveData.getOrDefault(citadelTag, false)) {
             CompoundTag miscData = (CompoundTag) citadelTag.get(MISC_DATA);
             if (miscData.contains(IN_LOVE_TIME)) {
                 return miscData.getInt(IN_LOVE_TIME);
