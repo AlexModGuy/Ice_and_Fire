@@ -33,6 +33,8 @@ public class SirenData {
             if (entity instanceof EntitySiren siren) {
                 charmedBy = siren;
             }
+
+            isInitialized = true;
         }
 
         if (charmedBy == null) {
@@ -41,8 +43,8 @@ public class SirenData {
 
         if (charmedBy.isActuallySinging()) {
             if (EntitySiren.isWearingEarplugs(holder) || charmTime > IafConfig.sirenMaxSingTime) {
-                clearCharm();
                 charmedBy.singCooldown = IafConfig.sirenTimeBetweenSongs;
+                clearCharm();
                 return;
             }
 
@@ -52,12 +54,12 @@ public class SirenData {
             }
 
             if (holder.distanceTo(charmedBy) < 5) {
-                clearCharm();
                 charmedBy.singCooldown = IafConfig.sirenTimeBetweenSongs;
                 charmedBy.setSinging(false);
                 charmedBy.setTarget(holder);
                 charmedBy.setAggressive(true);
                 charmedBy.triggerOtherSirens(holder);
+                clearCharm();
                 return;
             }
 
@@ -121,7 +123,7 @@ public class SirenData {
 
     public void serialize(final CompoundTag tag) {
         CompoundTag sirenData = new CompoundTag();
-        sirenData.putInt("charmedById", charmedById);
+        sirenData.putInt("charmedById", charmedById); // FIXME :: store uuid for re-join
         sirenData.putInt("charmTime", charmTime);
         sirenData.putBoolean("isCharmed", isCharmed);
 
