@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import net.minecraft.ChatFormatting;
@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -51,15 +52,11 @@ public class ItemCockatriceScepter extends Item {
     @Override
     public void releaseUsing(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull LivingEntity livingEntity, int timeLeft) {
         if (specialWeaponDmg > 0) {
-            stack.hurtAndBreak(specialWeaponDmg, livingEntity, (player) -> {
-                player.broadcastBreakEvent(livingEntity.getUsedItemHand());
-            });
+            stack.hurtAndBreak(specialWeaponDmg, livingEntity, player -> player.broadcastBreakEvent(livingEntity.getUsedItemHand()));
             specialWeaponDmg = 0;
         }
-        MiscProperties.getTargeting(livingEntity).forEach(target -> {
-            MiscProperties.removeTargetedBy(livingEntity, target);
-        });
-        MiscProperties.removeTargets(livingEntity);
+
+        EntityDataProvider.getCapability(livingEntity).ifPresent(data -> data.miscData.targetedByScepter.clear());
     }
 
     @Override
@@ -120,33 +117,38 @@ public class ItemCockatriceScepter extends Item {
                 }
 
             }
-            if (pointedEntity instanceof LivingEntity) {
-                if (!pointedEntity.isAlive())
+            if (pointedEntity instanceof LivingEntity target) {
+                if (!target.isAlive()) {
                     return;
-                MiscProperties.addScepterTargetData(player, (LivingEntity) pointedEntity);
+                }
+
+                EntityDataProvider.getCapability(player).ifPresent(data -> data.miscData.addScepterTarget(target));
             }
+
             attackTargets(player);
         }
     }
 
-    private void attackTargets(LivingEntity caster) {
-        List<LivingEntity> targets = MiscProperties.getTargeting(caster);
-        for (LivingEntity target : targets) {
-            if (!EntityGorgon.isEntityLookingAt(caster, target, 0.2F) || !caster.isAlive()) {
-                MiscProperties.removeTargetedBy(caster, target);
-                MiscProperties.removeTarget(caster, target);
-            }
-            target.addEffect(new MobEffectInstance(MobEffects.WITHER, 40, 2));
-            if (caster.tickCount % 20 == 0) {
-                specialWeaponDmg++;
-                target.hurt(DamageSource.WITHER, 2);
-            }
-            drawParticleBeam(caster, target);
-            if (!target.isAlive()) {
-                MiscProperties.removeTarget(caster, target);
-            }
+    private void attackTargets(final LivingEntity caster) {
+        EntityDataProvider.getCapability(caster).ifPresent(data -> {
+            List<LivingEntity> targets = new ArrayList<>(data.miscData.targetedByScepter);
 
-        }
+            for (LivingEntity target : targets) {
+                if (!EntityGorgon.isEntityLookingAt(caster, target, 0.2F) || !caster.isAlive() || !target.isAlive()) {
+                    data.miscData.removeScepterTarget(target);
+                    continue;
+                }
+
+                target.addEffect(new MobEffectInstance(MobEffects.WITHER, 40, 2));
+
+                if (caster.tickCount % 20 == 0) {
+                    specialWeaponDmg++;
+                    target.hurt(DamageSource.WITHER, 2);
+                }
+
+                drawParticleBeam(caster, target);
+            }
+        });
     }
 
     private void drawParticleBeam(LivingEntity origin, LivingEntity target) {

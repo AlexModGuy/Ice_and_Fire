@@ -37,7 +37,6 @@ public class CapabilityHandler {
     @SubscribeEvent
     public static void handleInitialSync(final EntityJoinLevelEvent event) {
         // TODO :: only sync if values are not the default values?
-        // FIXME :: seems like it's not properly initialized on re-join (no chains are rendered (or even attached))?
         syncEntityData(event.getEntity());
     }
 

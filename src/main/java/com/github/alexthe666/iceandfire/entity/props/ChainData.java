@@ -14,18 +14,21 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChainData {
-    private final List<Entity> chainedTo = new ArrayList<>();
+    public final List<Entity> chainedTo = new ArrayList<>();
+
+    // These lists are only for the sync (and therefor are cleared once it happened)
     private final List<Integer> chainedToIds = new ArrayList<>();
     private final List<UUID> chainedToUUIDs = new ArrayList<>();
+
     private boolean isInitialized;
     private boolean triggerClientUpdate;
 
     public void tickChain(final LivingEntity entity) {
         if (!isInitialized) {
-            initializeChainedTo(entity.getLevel());
+            initialize(entity.getLevel());
         }
 
-        for (Entity chain : chainedTo) {
+        for (Entity chain : chainedTo) { // TODO :: do `removed` / `discarded` entities need to be removed here?
             double distance = chain.distanceTo(entity);
 
             if (distance > 7) {
@@ -39,7 +42,6 @@ public class ChainData {
 
     public void clearChains() {
         chainedTo.clear();
-        chainedToIds.clear();
         triggerClientUpdate = true;
     }
 
@@ -49,12 +51,10 @@ public class ChainData {
         }
 
         chainedTo.add(chain);
-        chainedToIds.add(chain.getId());
         triggerClientUpdate = true;
     }
 
     public void removeChain(final Entity chain) {
-        chainedToIds.remove(Integer.valueOf(chain.getId())); // remove by value not by index
         chainedTo.remove(chain);
         triggerClientUpdate = true;
     }
@@ -64,41 +64,30 @@ public class ChainData {
             return false;
         }
 
-        for (Entity chain : chainedTo) {
-            if (chain.getUUID().equals(toCheck.getUUID())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public List<Entity> getChainedTo() {
-        /* TODO
-            There was a case of ConcurrentModificationException
-            (likely due to the packet not being enqueued initially)
-            Keeping this for now in case we need to return a copy of the list instead
-        */
-        return chainedTo;
+        return chainedTo.contains(toCheck);
     }
 
     public void serialize(final CompoundTag tag) {
         CompoundTag chainedData = new CompoundTag();
-        chainedData.putIntArray("chainedToIds", chainedToIds);
+        ListTag uuids = new ListTag();
+        int[] ids = new int[chainedTo.size()];
 
-        ListTag uuidList = new ListTag();
+        for (int i = 0; i< chainedTo.size(); i++) {
+            Entity entity = chainedTo.get(i);
 
-        for (Entity entity : chainedTo) {
-            uuidList.add(NbtUtils.createUUID(entity.getUUID()));
+            ids[i] = entity.getId();
+            uuids.add(NbtUtils.createUUID(entity.getUUID()));
         }
 
-        chainedData.put("chainedToUUIDs", uuidList);
+        chainedData.putIntArray("chainedToIds", ids);
+        chainedData.put("chainedToUUIDs", uuids);
         tag.put("chainedData", chainedData);
     }
 
     public void deserialize(final CompoundTag tag) {
         CompoundTag chainedData = tag.getCompound("chainedData");
         int[] loadedChainedToIds = chainedData.getIntArray("chainedToIds");
+        ListTag uuids = chainedData.getList("chainedToUUIDs", ListTag.TAG_INT_ARRAY);
 
         isInitialized = false;
         chainedToIds.clear();
@@ -108,29 +97,34 @@ public class ChainData {
             chainedToIds.add(loadedChainedToId);
         }
 
-        ListTag uuids = chainedData.getList("chainedToUUIDs", ListTag.TAG_INT_ARRAY);
-
         for (Tag uuid : uuids) {
             chainedToUUIDs.add(NbtUtils.loadUUID(uuid));
         }
     }
 
-    private void initializeChainedTo(final Level level) {
+    public boolean doesClientNeedUpdate() {
+        if (triggerClientUpdate) {
+            triggerClientUpdate = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void initialize(final Level level) {
         chainedTo.clear();
 
         // Make sure server gets the new entity ids on re-join and syncs it to the client
         if (level instanceof ServerLevel serverLevel) {
-            chainedToIds.clear();
-
             for (UUID uuid : chainedToUUIDs) {
                 Entity entity = serverLevel.getEntity(uuid);
 
                 if (entity != null) {
                     chainedTo.add(entity);
-                    chainedToIds.add(entity.getId());
                 }
             }
 
+            chainedToUUIDs.clear();
             triggerClientUpdate = true;
         } else {
             for (int id : chainedToIds) {
@@ -142,15 +136,7 @@ public class ChainData {
             }
         }
 
+        chainedToIds.clear();
         isInitialized = true;
-    }
-
-    public boolean doesClientNeedUpdate() {
-        if (triggerClientUpdate) {
-            triggerClientUpdate = false;
-            return true;
-        }
-
-        return false;
     }
 }

@@ -8,9 +8,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.AiDebug;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
-import com.github.alexthe666.iceandfire.entity.props.ChickenProperties;
 import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
@@ -229,12 +227,14 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public void onEntityFall(LivingFallEvent event) {
+    public void onEntityFall(final LivingFallEvent event) {
         if (event.getEntity() instanceof Player) {
-            if (MiscProperties.hasDismounted(event.getEntity())) {
-                event.setDamageMultiplier(0);
-                MiscProperties.setDismountedDragon(event.getEntity(), false);
-            }
+            EntityDataProvider.getCapability(event.getEntity()).ifPresent(data -> {
+                if (data.miscData.hasDismounted) {
+                    event.setDamageMultiplier(0);
+                    data.miscData.setDismounted(false);
+                }
+            });
         }
     }
 
@@ -315,10 +315,14 @@ public class ServerEvents {
     @SubscribeEvent
     public void onLivingAttacked(final LivingAttackEvent event) {
         if (event.getSource() != null && event.getSource().getEntity() != null) {
-            final Entity attacker = event.getSource().getEntity();
+            Entity attacker = event.getSource().getEntity();
+
             if (attacker instanceof LivingEntity) {
-                if (MiscProperties.getLoveTicks((LivingEntity) attacker) > 0)
-                    event.setCanceled(true);
+                EntityDataProvider.getCapability(attacker).ifPresent(data -> {
+                    if (data.miscData.loveTicks > 0) {
+                        event.setCanceled(true);
+                    }
+                });
 
                 if (isChicken(event.getEntity())) {
                     signalChickenAlarm(event.getEntity(), (LivingEntity) attacker);
@@ -408,12 +412,12 @@ public class ServerEvents {
                 return;
             }
 
-            if (!data.chainData.getChainedTo().isEmpty()) {
+            if (!data.chainData.chainedTo.isEmpty()) {
                 ItemEntity entityitem = new ItemEntity(event.getEntity().level,
                         event.getEntity().getX(),
                         event.getEntity().getY() + 1,
                         event.getEntity().getZ(),
-                        new ItemStack(IafItemRegistry.CHAIN.get(), data.chainData.getChainedTo().size()));
+                        new ItemStack(IafItemRegistry.CHAIN.get(), data.chainData.chainedTo.size()));
                 entityitem.setDefaultPickUpDelay();
                 event.getEntity().level.addFreshEntity(entityitem);
 
@@ -468,13 +472,6 @@ public class ServerEvents {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingTickEvent event) {
-        if (IafConfig.chickensLayRottenEggs && !event.getEntity().level.isClientSide && isChicken(event.getEntity()) && !event.getEntity().isBaby() && event.getEntity() instanceof Animal) {
-            ChickenProperties.tickChicken(event.getEntity());
-        }
-
-        if (MiscProperties.getLoveTicks(event.getEntity()) > 0) {
-            MiscProperties.tickLove(event.getEntity());
-        }
         if (AiDebug.isEnabled() && event.getEntity() instanceof Mob && AiDebug.contains((Mob) event.getEntity())) {
             AiDebug.logData();
         }

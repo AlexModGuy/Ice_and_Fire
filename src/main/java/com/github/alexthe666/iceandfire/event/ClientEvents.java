@@ -9,9 +9,7 @@ import com.github.alexthe666.iceandfire.client.particle.CockatriceBeamRender;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderChain;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderFrozenState;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
-import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
@@ -212,15 +210,15 @@ public class ClientEvents {
         LivingEntity entity = event.getEntity();
 
         EntityDataProvider.getCapability(entity).ifPresent(data -> {
-            MiscProperties.getTargetedBy(entity).forEach(caster -> {
-                CockatriceBeamRender.render(entity, caster, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
-            });
+            for (LivingEntity target : data.miscData.targetedByScepter) {
+                CockatriceBeamRender.render(entity, target, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
+            }
 
             if (data.frozenData.isFrozen) {
                 RenderFrozenState.render(event.getEntity(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.frozenData.frozenTicks);
             }
 
-            RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.chainData.getChainedTo());
+            RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.chainData.chainedTo);
         });
     }
 
@@ -236,9 +234,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
-            EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase dragon && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
             if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
                 if (AUTO_ADAPT_3RD_PERSON) {
                     // Auto adjust 3rd person camera's according to dragon's size
