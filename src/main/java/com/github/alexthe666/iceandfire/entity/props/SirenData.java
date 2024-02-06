@@ -140,6 +140,15 @@ public class SirenData {
         isCharmed = sirenData.getBoolean("isCharmed");
     }
 
+    public boolean doesClientNeedUpdate() {
+        if (triggerClientUpdate) {
+            triggerClientUpdate = false;
+            return true;
+        }
+
+        return false;
+    }
+
     private float updateRotation(float angle, float targetAngle, float maxIncrease) {
         float f = Mth.wrapDegrees(targetAngle - angle);
 
@@ -152,14 +161,5 @@ public class SirenData {
         }
 
         return angle + f;
-    }
-
-    public boolean doesClientNeedUpdate() {
-        if (triggerClientUpdate) {
-            triggerClientUpdate = false;
-            return true;
-        }
-
-        return false;
     }
 }

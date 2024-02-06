@@ -10,18 +10,22 @@ public class EntityData {
     public FrozenData frozenData = new FrozenData();
     public ChainData chainData = new ChainData();
     public SirenData sirenData = new SirenData();
+    public ChickenData chickenData = new ChickenData();
+    public MiscData miscData = new MiscData();
 
     public void tick(final LivingEntity entity) {
         frozenData.tickFrozen(entity);
         chainData.tickChain(entity);
         sirenData.tickCharmed(entity);
+        chickenData.tickChicken(entity);
+        miscData.tickMisc(entity);
 
         boolean triggerClientUpdate = frozenData.doesClientNeedUpdate();
         triggerClientUpdate = chainData.doesClientNeedUpdate() || triggerClientUpdate;
         triggerClientUpdate = sirenData.doesClientNeedUpdate() || triggerClientUpdate;
+        triggerClientUpdate = miscData.doesClientNeedUpdate() || triggerClientUpdate;
 
         if (triggerClientUpdate && !entity.getLevel().isClientSide()) {
-
             if (entity instanceof ServerPlayer serverPlayer) {
                 IceAndFire.NETWORK_WRAPPER.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> serverPlayer), new SyncEntityData(entity.getId(), serialize()));
             } else {
@@ -35,6 +39,8 @@ public class EntityData {
         frozenData.serialize(tag);
         chainData.serialize(tag);
         sirenData.serialize(tag);
+        chickenData.serialize(tag);
+        miscData.serialize(tag);
         return tag;
     }
 
@@ -42,5 +48,7 @@ public class EntityData {
         frozenData.deserialize(tag);
         chainData.deserialize(tag);
         sirenData.deserialize(tag);
+        chickenData.deserialize(tag);
+        miscData.deserialize(tag);
     }
 }
