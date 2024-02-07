@@ -156,8 +156,8 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource source, float amount) {
-        return source == DamageSource.OUT_OF_WORLD;
+    public boolean isInvulnerable() {
+        return true;
     }
 
     @Override
