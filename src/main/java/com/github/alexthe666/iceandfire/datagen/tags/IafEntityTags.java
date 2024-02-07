@@ -26,7 +26,8 @@ public class IafEntityTags extends EntityTypeTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(IMMUNE_TO_GORGON_STONE)
-                .addTag(Tags.EntityTypes.BOSSES);
+                .addTag(Tags.EntityTypes.BOSSES)
+                .add(EntityType.WARDEN);
     }
 
     private static TagKey<EntityType<?>> createKey(final String name) {
