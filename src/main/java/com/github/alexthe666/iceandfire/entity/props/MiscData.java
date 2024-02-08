@@ -37,7 +37,10 @@ public class MiscData {
             }
 
             if (entity instanceof Mob mob) {
+                mob.setLastHurtByPlayer(null);
+                mob.setLastHurtByMob(null);
                 mob.setTarget(null);
+                mob.setAggressive(false);
             }
 
             createLoveParticles(entity);
@@ -78,7 +81,7 @@ public class MiscData {
         miscData.putInt("loveTicks", loveTicks);
         miscData.putInt("lungeTicks", lungeTicks);
         miscData.putBoolean("hasDismounted", hasDismounted);
-        int[] ids = new int[targetedByScepterIds.size()];
+        int[] ids = new int[targetedByScepter.size()];
 
         for (int i = 0; i < targetedByScepter.size(); i++) {
             ids[i] = targetedByScepter.get(i).getId();
@@ -127,6 +130,10 @@ public class MiscData {
         targetedByScepter.clear();
 
         for (int id : targetedByScepterIds) {
+            if (id == -1) {
+                continue;
+            }
+
             Entity entity = level.getEntity(id);
 
             if (entity instanceof LivingEntity livingEntity) {

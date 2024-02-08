@@ -28,7 +28,7 @@ public class ChainData {
             initialize(entity.getLevel());
         }
 
-        for (Entity chain : chainedTo) { // TODO :: do `removed` / `discarded` entities need to be removed here?
+        for (Entity chain : chainedTo) {
             double distance = chain.distanceTo(entity);
 
             if (distance > 7) {
@@ -128,6 +128,10 @@ public class ChainData {
             triggerClientUpdate = true;
         } else {
             for (int id : chainedToIds) {
+                if (id == -1) {
+                    continue;
+                }
+
                 Entity entity = level.getEntity(id);
 
                 if (entity != null) {

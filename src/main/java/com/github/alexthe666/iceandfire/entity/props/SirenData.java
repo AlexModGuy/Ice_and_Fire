@@ -5,12 +5,18 @@ import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 
 public class SirenData {
@@ -18,6 +24,7 @@ public class SirenData {
     public int charmTime; // FIXME :: when is this ever increased
     public boolean isCharmed;
 
+    private @Nullable UUID charmedByUUID;
     private int charmedById;
     private boolean isInitialized;
     private boolean triggerClientUpdate;
@@ -28,13 +35,7 @@ public class SirenData {
         }
 
         if (!isInitialized) {
-            Entity entity = holder.getLevel().getEntity(charmedById);
-
-            if (entity instanceof EntitySiren siren) {
-                charmedBy = siren;
-            }
-
-            isInitialized = true;
+            initialize(holder.getLevel());
         }
 
         if (charmedBy == null) {
@@ -107,7 +108,6 @@ public class SirenData {
             return;
         }
 
-        charmedById = siren.getId();
         charmedBy = siren;
         isCharmed = true;
         triggerClientUpdate = true;
@@ -117,13 +117,19 @@ public class SirenData {
         charmTime = 0;
         isCharmed = false;
         charmedBy = null;
-        charmedById = -1;
         triggerClientUpdate = true;
     }
 
     public void serialize(final CompoundTag tag) {
         CompoundTag sirenData = new CompoundTag();
-        sirenData.putInt("charmedById", charmedById); // FIXME :: store uuid for re-join
+
+        if (charmedBy != null) {
+            sirenData.put("charmedByUUID", NbtUtils.createUUID(charmedBy.getUUID()));
+            sirenData.putInt("charmedById", charmedById);
+        } else {
+            sirenData.putInt("charmedById", -1);
+        }
+
         sirenData.putInt("charmTime", charmTime);
         sirenData.putBoolean("isCharmed", isCharmed);
 
@@ -134,6 +140,12 @@ public class SirenData {
         CompoundTag sirenData = tag.getCompound("sirenData");
 
         isInitialized = false;
+
+        Tag uuidTag = sirenData.get("charmedByUUID");
+
+        if (uuidTag != null) {
+            charmedByUUID = NbtUtils.loadUUID(uuidTag);
+        }
 
         charmedById = sirenData.getInt("charmedById");
         charmTime = sirenData.getInt("charmTime");
@@ -161,5 +173,28 @@ public class SirenData {
         }
 
         return angle + f;
+    }
+
+    private void initialize(final Level level) {
+        charmedBy = null;
+
+        // Make sure server gets the new entity ids on re-join and syncs it to the client
+        if (charmedByUUID != null && level instanceof ServerLevel serverLevel) {
+            Entity entity = serverLevel.getEntity(charmedByUUID);
+
+            if (entity instanceof EntitySiren siren) {
+                triggerClientUpdate = true;
+                charmedByUUID = null;
+                charmedBy = siren;
+            }
+        } else if (charmedById != -1) {
+            Entity entity = level.getEntity(charmedById);
+
+            if (entity instanceof EntitySiren siren) {
+                charmedBy = siren;
+            }
+        }
+
+        isInitialized = true;
     }
 }
