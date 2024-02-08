@@ -2544,7 +2544,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public boolean isChained() {
         AtomicBoolean isChained = new AtomicBoolean(false);
-        EntityDataProvider.getCapability(this).ifPresent(data -> isChained.set(data.chainData.chainedTo.isEmpty()));
+        EntityDataProvider.getCapability(this).ifPresent(data -> isChained.set(data.chainData.getChainedTo().isEmpty()));
         return isChained.get();
     }
 

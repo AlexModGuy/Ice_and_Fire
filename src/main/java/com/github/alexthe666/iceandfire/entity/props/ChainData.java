@@ -8,17 +8,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ChainData {
-    public final List<Entity> chainedTo = new ArrayList<>();
+    public @Nullable List<Entity> chainedTo;
 
     // These lists are only for the sync (and therefor are cleared once it happened)
-    private final List<Integer> chainedToIds = new ArrayList<>();
-    private final List<UUID> chainedToUUIDs = new ArrayList<>();
+    private @Nullable List<Integer> chainedToIds;
+    private @Nullable List<UUID> chainedToUUIDs;
 
     private boolean isInitialized;
     private boolean triggerClientUpdate;
@@ -26,6 +25,10 @@ public class ChainData {
     public void tickChain(final LivingEntity entity) {
         if (!isInitialized) {
             initialize(entity.getLevel());
+        }
+
+        if (chainedTo == null) {
+            return;
         }
 
         for (Entity chain : chainedTo) {
@@ -40,13 +43,23 @@ public class ChainData {
         }
     }
 
+    public List<Entity> getChainedTo() {
+        return Objects.requireNonNullElse(chainedTo, Collections.emptyList());
+    }
+
     public void clearChains() {
-        chainedTo.clear();
+        if (chainedTo == null) {
+            return;
+        }
+
+        chainedTo = null;
         triggerClientUpdate = true;
     }
 
     public void attachChain(final Entity chain) {
-        if (chainedToIds.contains(chain.getId())) {
+        if (chainedTo == null) {
+            chainedTo = new ArrayList<>();
+        } else if (chainedTo.contains(chain)) {
             return;
         }
 
@@ -55,12 +68,20 @@ public class ChainData {
     }
 
     public void removeChain(final Entity chain) {
+        if (chainedTo == null) {
+            return;
+        }
+
         chainedTo.remove(chain);
         triggerClientUpdate = true;
+
+        if (chainedTo.isEmpty()) {
+            chainedTo = null;
+        }
     }
 
     public boolean isChainedTo(final Entity toCheck) {
-        if (chainedTo.isEmpty()) {
+        if (chainedTo == null || chainedTo.isEmpty()) {
             return false;
         }
 
@@ -70,17 +91,21 @@ public class ChainData {
     public void serialize(final CompoundTag tag) {
         CompoundTag chainedData = new CompoundTag();
         ListTag uuids = new ListTag();
-        int[] ids = new int[chainedTo.size()];
 
-        for (int i = 0; i< chainedTo.size(); i++) {
-            Entity entity = chainedTo.get(i);
+        if (chainedTo != null) {
+            int[] ids = new int[chainedTo.size()];
 
-            ids[i] = entity.getId();
-            uuids.add(NbtUtils.createUUID(entity.getUUID()));
+            for (int i = 0; i < chainedTo.size(); i++) {
+                Entity entity = chainedTo.get(i);
+
+                ids[i] = entity.getId();
+                uuids.add(NbtUtils.createUUID(entity.getUUID()));
+            }
+
+            chainedData.putIntArray("chainedToIds", ids);
+            chainedData.put("chainedToUUIDs", uuids);
         }
 
-        chainedData.putIntArray("chainedToIds", ids);
-        chainedData.put("chainedToUUIDs", uuids);
         tag.put("chainedData", chainedData);
     }
 
@@ -90,15 +115,25 @@ public class ChainData {
         ListTag uuids = chainedData.getList("chainedToUUIDs", ListTag.TAG_INT_ARRAY);
 
         isInitialized = false;
-        chainedToIds.clear();
-        chainedToUUIDs.clear();
 
-        for (int loadedChainedToId : loadedChainedToIds) {
-            chainedToIds.add(loadedChainedToId);
+        if (loadedChainedToIds.length > 0) {
+            chainedToIds = new ArrayList<>();
+
+            for (int loadedChainedToId : loadedChainedToIds) {
+                chainedToIds.add(loadedChainedToId);
+            }
+        } else {
+            chainedToIds = null;
         }
 
-        for (Tag uuid : uuids) {
-            chainedToUUIDs.add(NbtUtils.loadUUID(uuid));
+        if (!uuids.isEmpty()) {
+            chainedToUUIDs = new ArrayList<>();
+
+            for (Tag uuid : uuids) {
+                chainedToUUIDs.add(NbtUtils.loadUUID(uuid));
+            }
+        } else {
+            chainedToUUIDs = null;
         }
     }
 
@@ -112,21 +147,20 @@ public class ChainData {
     }
 
     private void initialize(final Level level) {
-        chainedTo.clear();
+        List<Entity> entities = new ArrayList<>();
 
         // Make sure server gets the new entity ids on re-join and syncs it to the client
-        if (level instanceof ServerLevel serverLevel) {
+        if (chainedToUUIDs != null && level instanceof ServerLevel serverLevel) {
             for (UUID uuid : chainedToUUIDs) {
                 Entity entity = serverLevel.getEntity(uuid);
 
                 if (entity != null) {
-                    chainedTo.add(entity);
+                    entities.add(entity);
                 }
             }
 
-            chainedToUUIDs.clear();
             triggerClientUpdate = true;
-        } else {
+        } else if (chainedToIds != null) {
             for (int id : chainedToIds) {
                 if (id == -1) {
                     continue;
@@ -135,12 +169,19 @@ public class ChainData {
                 Entity entity = level.getEntity(id);
 
                 if (entity != null) {
-                    chainedTo.add(entity);
+                    entities.add(entity);
                 }
             }
         }
 
-        chainedToIds.clear();
+        if (!entities.isEmpty()) {
+            chainedTo = entities;
+        } else {
+            chainedTo = null;
+        }
+
+        chainedToIds = null;
+        chainedToUUIDs = null;
         isInitialized = true;
     }
 }
