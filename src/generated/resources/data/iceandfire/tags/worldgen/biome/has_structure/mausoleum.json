@@ -1,5 +1,13 @@
 {
   "values": [
-    "#minecraft:is_overworld"
+    "#forge:is_snowy",
+    {
+      "id": "terralith:wintry_forest",
+      "required": false
+    },
+    {
+      "id": "terralith:wintry_lowlands",
+      "required": false
+    }
   ]
 }

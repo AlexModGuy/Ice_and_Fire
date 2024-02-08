@@ -1,20 +1,22 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
-import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
-import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.datagen.tags.IafBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class IafStructure extends Structure {
 
@@ -41,17 +43,29 @@ public class IafStructure extends Structure {
         this.maxDistanceFromCenter = maxDistanceFromCenter;
     }
 
+    protected boolean isValidLandBiome(final GenerationContext context, final BlockPos position) {
+        return IafBiomeTags.isValidLandBiome(context.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(position.getX()), QuartPos.fromBlock(position.getY()), QuartPos.fromBlock(position.getZ()), context.randomState().sampler()));
+    }
 
-    protected boolean isBiomeValid(GenerationContext pContext, Pair<String, SpawnBiomeData> validBiomes, BlockPos blockPos) {
-        boolean validBiome = false;
-        Set<Holder<Biome>> biomes = pContext.chunkGenerator().getBiomeSource().getBiomesWithin(blockPos.getX(), blockPos.getY(), blockPos.getZ(), this.maxDistanceFromCenter, pContext.randomState().sampler());
-        for (Holder<Biome> biome : biomes) {
-            if (BiomeConfig.test(validBiomes, biome)) {
-                validBiome = true;
-                break;
-            }
-        }
-        return validBiome;
+    protected @NotNull BlockPos getPosition(final GenerationContext context) {
+        ChunkPos pos = context.chunkPos();
+        int x = pos.getMiddleBlockX();
+        int z = pos.getMiddleBlockZ();
+        AtomicInteger y = new AtomicInteger(0);
+        projectStartToHeightmap.ifPresent(heightmap -> y.set(context.chunkGenerator().getFirstOccupiedHeight(x, z, heightmap, context.heightAccessor(), context.randomState())));
+        return new BlockPos(x, y.get(), z);
+    }
+
+    protected Optional<GenerationStub> getLandPlacement(final GenerationContext context) {
+        ChunkPos chunkPos = context.chunkPos();
+
+        int y = this.startHeight.sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
+        BlockPos position = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
+
+        return isValidLandBiome(context, /* positions does not have the actual placement height yet */ getPosition(context)) ?
+                JigsawPlacement.addPieces(context, startPool, startJigsawName, size, position, false, projectStartToHeightmap, maxDistanceFromCenter)
+                :
+                Optional.empty();
     }
 
     @Override
