@@ -83,10 +83,7 @@ public class ItemSirenFlute extends Item {
 
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity) {
-                EntityDataProvider.getCapability(pointedEntity).ifPresent(data -> {
-                    data.miscData.setLoveTicks(600);
-                });
-
+                EntityDataProvider.getCapability(pointedEntity).ifPresent(data -> data.miscData.setLoveTicks(600));
                 itemStackIn.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
             }
         }

@@ -22,7 +22,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-@Mod.EventBusSubscriber // TODO :: clone on death (and potentially on entering end portal)
+@Mod.EventBusSubscriber
 public class CapabilityHandler {
     public static final Capability<EntityData> ENTITY_DATA_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static final ResourceLocation ENTITY_DATA = new ResourceLocation(IceAndFire.MODID, "entity_data");
@@ -51,6 +51,28 @@ public class CapabilityHandler {
             EntityDataProvider.getCapability(target).ifPresent(data -> IceAndFire.sendMSGToPlayer(new SyncEntityData(target.getId(), data.serialize()), serverPlayer));
         }
     }
+
+    /* Currently there is no data which would need to be kept after death
+    @SubscribeEvent
+    public static void handleDeath(final PlayerEvent.Clone event) {
+        if (event.isWasDeath()) { // TODO :: entering the end portal also triggers this but with this flag set as false
+            Player oldPlayer = event.getOriginal();
+            Player newPlayer = event.getEntity();
+
+            oldPlayer.reviveCaps();
+
+            // Unsure but at this point the cached entry might already be removed, no need to re-add it (since it will not be removed again)
+            oldPlayer.getCapability(ENTITY_DATA_CAPABILITY).ifPresent(oldData -> {
+                EntityDataProvider.getCapability(newPlayer).ifPresent(newData -> {
+                    newData.deserialize(oldData.serialize());
+                    // Sync to client is handled by 'EntityJoinLevelEvent'
+                });
+            });
+
+            oldPlayer.invalidateCaps();
+        }
+    }
+    */
 
     @SubscribeEvent
     public static void tickData(final LivingEvent.LivingTickEvent event) {
