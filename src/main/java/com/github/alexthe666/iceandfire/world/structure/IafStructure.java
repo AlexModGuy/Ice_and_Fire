@@ -52,7 +52,7 @@ public class IafStructure extends Structure {
         int x = pos.getMiddleBlockX();
         int z = pos.getMiddleBlockZ();
         AtomicInteger y = new AtomicInteger(sampledY);
-        projectStartToHeightmap.ifPresent(heightmap -> y.set(sampledY + context.chunkGenerator().getFirstFreeHeight(x, z, heightmap, context.heightAccessor(), context.randomState())));
+        projectStartToHeightmap.ifPresent(heightmap -> y.getAndAdd(context.chunkGenerator().getFirstFreeHeight(x, z, heightmap, context.heightAccessor(), context.randomState())));
         return new BlockPos(x, y.get(), z);
     }
 
