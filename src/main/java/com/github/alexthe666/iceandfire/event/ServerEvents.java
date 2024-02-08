@@ -408,12 +408,12 @@ public class ServerEvents {
                 return;
             }
 
-            if (!data.chainData.chainedTo.isEmpty()) {
+            if (!data.chainData.getChainedTo().isEmpty()) {
                 ItemEntity entityitem = new ItemEntity(event.getEntity().level,
                         event.getEntity().getX(),
                         event.getEntity().getY() + 1,
                         event.getEntity().getZ(),
-                        new ItemStack(IafItemRegistry.CHAIN.get(), data.chainData.chainedTo.size()));
+                        new ItemStack(IafItemRegistry.CHAIN.get(), data.chainData.getChainedTo().size()));
                 entityitem.setDefaultPickUpDelay();
                 event.getEntity().level.addFreshEntity(entityitem);
 

@@ -56,7 +56,7 @@ public class ItemCockatriceScepter extends Item {
             specialWeaponDmg = 0;
         }
 
-        EntityDataProvider.getCapability(livingEntity).ifPresent(data -> data.miscData.targetedByScepter.clear());
+        EntityDataProvider.getCapability(livingEntity).ifPresent(data -> data.miscData.getTargetedByScepter().clear());
     }
 
     @Override
@@ -131,7 +131,7 @@ public class ItemCockatriceScepter extends Item {
 
     private void attackTargets(final LivingEntity caster) {
         EntityDataProvider.getCapability(caster).ifPresent(data -> {
-            List<LivingEntity> targets = new ArrayList<>(data.miscData.targetedByScepter);
+            List<LivingEntity> targets = new ArrayList<>(data.miscData.getTargetedByScepter());
 
             for (LivingEntity target : targets) {
                 if (!EntityGorgon.isEntityLookingAt(caster, target, 0.2F) || !caster.isAlive() || !target.isAlive()) {

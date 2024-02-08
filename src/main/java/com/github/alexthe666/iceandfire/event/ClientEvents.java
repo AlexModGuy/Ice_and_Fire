@@ -210,7 +210,7 @@ public class ClientEvents {
         LivingEntity entity = event.getEntity();
 
         EntityDataProvider.getCapability(entity).ifPresent(data -> {
-            for (LivingEntity target : data.miscData.targetedByScepter) {
+            for (LivingEntity target : data.miscData.getTargetedByScepter()) {
                 CockatriceBeamRender.render(entity, target, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
             }
 
@@ -218,7 +218,7 @@ public class ClientEvents {
                 RenderFrozenState.render(event.getEntity(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.frozenData.frozenTicks);
             }
 
-            RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.chainData.chainedTo);
+            RenderChain.render(entity, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), data.chainData.getChainedTo());
         });
     }
 

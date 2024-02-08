@@ -6,9 +6,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MiscData {
@@ -17,8 +20,8 @@ public class MiscData {
     public boolean hasDismounted;
 
     // Transient data
-    public final List<LivingEntity> targetedByScepter = new ArrayList<>();
-    private final List<Integer> targetedByScepterIds = new ArrayList<>();
+    public @Nullable List<LivingEntity> targetedByScepter;
+    private @Nullable List<Integer> targetedByScepterIds;
 
     private boolean isInitialized;
     private boolean triggerClientUpdate;
@@ -47,8 +50,14 @@ public class MiscData {
         }
     }
 
+    public List<LivingEntity> getTargetedByScepter() {
+        return Objects.requireNonNullElse(targetedByScepter, Collections.emptyList());
+    }
+
     public void addScepterTarget(final LivingEntity target) {
-        if (targetedByScepter.contains(target)) {
+        if (targetedByScepter == null) {
+            targetedByScepter = new ArrayList<>();
+        } else if (targetedByScepter.contains(target)) {
             return;
         }
 
@@ -57,6 +66,10 @@ public class MiscData {
     }
 
     public void removeScepterTarget(final LivingEntity target) {
+        if (targetedByScepter == null) {
+            return;
+        }
+
         targetedByScepter.remove(target);
         triggerClientUpdate = true;
     }
@@ -81,13 +94,17 @@ public class MiscData {
         miscData.putInt("loveTicks", loveTicks);
         miscData.putInt("lungeTicks", lungeTicks);
         miscData.putBoolean("hasDismounted", hasDismounted);
-        int[] ids = new int[targetedByScepter.size()];
 
-        for (int i = 0; i < targetedByScepter.size(); i++) {
-            ids[i] = targetedByScepter.get(i).getId();
+        if (targetedByScepter != null) {
+            int[] ids = new int[targetedByScepter.size()];
+
+            for (int i = 0; i < targetedByScepter.size(); i++) {
+                ids[i] = targetedByScepter.get(i).getId();
+            }
+
+            tag.putIntArray("targetedByScepterIds", ids);
         }
 
-        tag.putIntArray("targetedByScepterIds", ids);
         tag.put("miscData", miscData);
     }
 
@@ -99,10 +116,13 @@ public class MiscData {
         int[] loadedChainedToIds = miscData.getIntArray("targetedByScepterIds");
 
         isInitialized = false;
-        targetedByScepterIds.clear();
 
-        for (int loadedChainedToId : loadedChainedToIds) {
-            targetedByScepterIds.add(loadedChainedToId);
+        if (loadedChainedToIds.length > 0) {
+            targetedByScepterIds = new ArrayList<>();
+
+            for (int loadedChainedToId : loadedChainedToIds) {
+                targetedByScepterIds.add(loadedChainedToId);
+            }
         }
     }
 
@@ -127,21 +147,29 @@ public class MiscData {
     }
 
     private void initialize(final Level level) {
-        targetedByScepter.clear();
+        List<LivingEntity> entities = new ArrayList<>();
 
-        for (int id : targetedByScepterIds) {
-            if (id == -1) {
-                continue;
-            }
+        if (targetedByScepterIds != null) {
+            for (int id : targetedByScepterIds) {
+                if (id == -1) {
+                    continue;
+                }
 
-            Entity entity = level.getEntity(id);
+                Entity entity = level.getEntity(id);
 
-            if (entity instanceof LivingEntity livingEntity) {
-                targetedByScepter.add(livingEntity);
+                if (entity instanceof LivingEntity livingEntity) {
+                    entities.add(livingEntity);
+                }
             }
         }
 
-        targetedByScepterIds.clear();
+        if (!entities.isEmpty()) {
+            targetedByScepter = entities;
+        } else {
+            targetedByScepter = null;
+        }
+
+        targetedByScepterIds = null;
         isInitialized = true;
     }
 }
