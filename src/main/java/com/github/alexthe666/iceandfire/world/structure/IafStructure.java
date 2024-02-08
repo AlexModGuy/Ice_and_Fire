@@ -47,12 +47,12 @@ public class IafStructure extends Structure {
         return IafBiomeTags.isValidLandBiome(context.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(position.getX()), QuartPos.fromBlock(position.getY()), QuartPos.fromBlock(position.getZ()), context.randomState().sampler()));
     }
 
-    protected @NotNull BlockPos getPosition(final GenerationContext context) {
+    protected @NotNull BlockPos getPosition(final GenerationContext context, int sampledY) {
         ChunkPos pos = context.chunkPos();
         int x = pos.getMiddleBlockX();
         int z = pos.getMiddleBlockZ();
-        AtomicInteger y = new AtomicInteger(0);
-        projectStartToHeightmap.ifPresent(heightmap -> y.set(context.chunkGenerator().getFirstOccupiedHeight(x, z, heightmap, context.heightAccessor(), context.randomState())));
+        AtomicInteger y = new AtomicInteger(sampledY);
+        projectStartToHeightmap.ifPresent(heightmap -> y.set(sampledY + context.chunkGenerator().getFirstFreeHeight(x, z, heightmap, context.heightAccessor(), context.randomState())));
         return new BlockPos(x, y.get(), z);
     }
 
@@ -62,7 +62,7 @@ public class IafStructure extends Structure {
         int y = this.startHeight.sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
         BlockPos position = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
 
-        return isValidLandBiome(context, /* positions does not have the actual placement height yet */ getPosition(context)) ?
+        return isValidLandBiome(context, /* positions does not have the actual placement height yet */ getPosition(context, y)) ?
                 JigsawPlacement.addPieces(context, startPool, startJigsawName, size, position, false, projectStartToHeightmap, maxDistanceFromCenter)
                 :
                 Optional.empty();
