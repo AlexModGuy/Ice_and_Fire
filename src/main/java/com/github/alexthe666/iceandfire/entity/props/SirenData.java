@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class SirenData {
     public @Nullable EntitySiren charmedBy;
-    public int charmTime; // FIXME :: when is this ever increased
+    public int charmTime;
     public boolean isCharmed;
 
     private @Nullable UUID charmedByUUID;
@@ -65,7 +65,7 @@ public class SirenData {
             }
 
             isCharmed = true;
-
+            charmTime++;
             if (holder.getRandom().nextInt(7) == 0) {
                 for (int i = 0; i < 5; i++) {
                     holder.level.addParticle(ParticleTypes.HEART,
