@@ -125,7 +125,7 @@ public class SirenData {
 
         if (charmedBy != null) {
             sirenData.put("charmedByUUID", NbtUtils.createUUID(charmedBy.getUUID()));
-            sirenData.putInt("charmedById", charmedById);
+            sirenData.putInt("charmedById", charmedBy.getId());
         } else {
             sirenData.putInt("charmedById", -1);
         }
@@ -138,9 +138,6 @@ public class SirenData {
 
     public void deserialize(final CompoundTag tag) {
         CompoundTag sirenData = tag.getCompound("sirenData");
-
-        isInitialized = false;
-
         Tag uuidTag = sirenData.get("charmedByUUID");
 
         if (uuidTag != null) {
@@ -150,6 +147,7 @@ public class SirenData {
         charmedById = sirenData.getInt("charmedById");
         charmTime = sirenData.getInt("charmTime");
         isCharmed = sirenData.getBoolean("isCharmed");
+        isInitialized = false;
     }
 
     public boolean doesClientNeedUpdate() {
