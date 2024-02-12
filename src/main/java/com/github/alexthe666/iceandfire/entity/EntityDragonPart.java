@@ -30,9 +30,4 @@ public class EntityDragonPart extends EntityMutlipartPart {
     @Override
     public void collideWithNearbyEntities() {
     }
-
-    @Override
-    public boolean shouldNotExist() {
-        return this.dragon != null && !this.dragon.isAlive() && !this.dragon.isModelDead();
-    }
 }

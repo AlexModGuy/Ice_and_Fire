@@ -224,10 +224,6 @@ public abstract class EntityMutlipartPart extends Entity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
     public void collideWithNearbyEntities() {
         List<Entity> entities = this.level.getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
@@ -272,11 +268,6 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return source == DamageSource.FALL || source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.LAVA || source.isFire() || super.isInvulnerableTo(source);
-    }
-
-    public boolean shouldNotExist() {
-        Entity parent = getParent();
-        return !parent.isAlive();
     }
 
     public boolean shouldContinuePersisting() {
