@@ -406,66 +406,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void updateParts() {
-        if (headPart != null) {
-            if (!headPart.shouldContinuePersisting()) {
-                level().addFreshEntity(headPart);
-            }
-            headPart.setParent(this);
-        }
-        if (neckPart != null) {
-            if (!neckPart.shouldContinuePersisting()) {
-                level().addFreshEntity(neckPart);
-            }
-            neckPart.setParent(this);
-        }
-        if (rightWingUpperPart != null) {
-            if (!rightWingUpperPart.shouldContinuePersisting()) {
-                level().addFreshEntity(rightWingUpperPart);
-            }
-            rightWingUpperPart.setParent(this);
-        }
-        if (rightWingLowerPart != null) {
-            if (!rightWingLowerPart.shouldContinuePersisting()) {
-                level().addFreshEntity(rightWingLowerPart);
-            }
-            rightWingLowerPart.setParent(this);
-        }
-        if (leftWingUpperPart != null) {
-            if (!leftWingUpperPart.shouldContinuePersisting()) {
-                level().addFreshEntity(leftWingUpperPart);
-            }
-            leftWingUpperPart.setParent(this);
-        }
-        if (leftWingLowerPart != null) {
-            if (!leftWingLowerPart.shouldContinuePersisting()) {
-                level().addFreshEntity(leftWingLowerPart);
-            }
-            leftWingLowerPart.setParent(this);
-        }
-        if (tail1Part != null) {
-            if (!tail1Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail1Part);
-            }
-            tail1Part.setParent(this);
-        }
-        if (tail2Part != null) {
-            if (!tail2Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail2Part);
-            }
-            tail2Part.setParent(this);
-        }
-        if (tail3Part != null) {
-            if (!tail3Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail3Part);
-            }
-            tail3Part.setParent(this);
-        }
-        if (tail4Part != null) {
-            if (!tail4Part.shouldContinuePersisting()) {
-                level().addFreshEntity(tail4Part);
-            }
-            tail4Part.setParent(this);
-        }
+        EntityUtil.updatePart(headPart, this);
+        EntityUtil.updatePart(neckPart, this);
+        EntityUtil.updatePart(rightWingUpperPart, this);
+        EntityUtil.updatePart(rightWingLowerPart, this);
+        EntityUtil.updatePart(leftWingUpperPart, this);
+        EntityUtil.updatePart(leftWingLowerPart, this);
+        EntityUtil.updatePart(tail1Part, this);
+        EntityUtil.updatePart(tail2Part, this);
+        EntityUtil.updatePart(tail3Part, this);
+        EntityUtil.updatePart(tail4Part, this);
     }
 
     protected void updateBurnTarget() {

@@ -216,13 +216,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     private void addSegmentsToWorld() {
-        for (Entity entity : segments) {
-            if (entity != null) {
-                if (!((EntityMutlipartPart) entity).shouldContinuePersisting()) {
-                    level().addFreshEntity(entity);
-                }
-                ((EntityMutlipartPart) entity).setParent(this);
-            }
+        for (EntityMutlipartPart entity : segments) {
+            EntityUtil.updatePart(entity, this);
         }
     }
 
