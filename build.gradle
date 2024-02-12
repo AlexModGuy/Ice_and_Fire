@@ -142,7 +142,8 @@ dependencies {
     //compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.25")
     //compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.25")
     //runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge-15.2.0.25")
-    implementation fg.deobf("curse.maven:citadel-331936:4744075")
+    // TODO: Properly implement citadels pathfinding related code
+    implementation fg.deobf("curse.maven:citadel-331936:5075402")
     // TODO: Reimplement for 1.20.2 and onwards
     //implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2"))
     //implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.3.2")) {
