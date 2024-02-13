@@ -2,17 +2,46 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "silver_ore",
       "rolls": 1,
+      "name": "silver_ore",
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "iceandfire:deepslate_silver_ore"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "iceandfire:deepslate_silver_ore"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:apply_bonus",
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:ore_drops"
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "iceandfire:raw_silver"
+            }
+          ]
         }
       ]
     }
