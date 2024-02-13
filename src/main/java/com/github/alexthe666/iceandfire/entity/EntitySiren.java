@@ -9,7 +9,7 @@ import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetInWater;
 import com.github.alexthe666.iceandfire.entity.ai.AquaticAIGetOutOfWater;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIFindWaterTarget;
 import com.github.alexthe666.iceandfire.entity.ai.SirenAIWander;
-import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
+import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.ChainBuffer;
 import com.github.alexthe666.iceandfire.entity.util.IHasCustomizableAttributes;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
@@ -326,10 +326,17 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
     public void updateLure() {
         if (this.tickCount % 20 == 0) {
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(50, 12, 50), SIREN_PREY);
+
             for (LivingEntity entity : entities) {
-                if (!isWearingEarplugs(entity) && (!SirenProperties.isCharmed(entity) || SirenProperties.getSiren(entity) == null)) {
-                    SirenProperties.setCharmedBy(entity, this);
+                if (isWearingEarplugs(entity)) {
+                    continue;
                 }
+
+                EntityDataProvider.getCapability(entity).ifPresent(data -> {
+                    if (data.sirenData.isCharmed || data.sirenData.charmedBy == null) {
+                        data.sirenData.setCharmed(this);
+                    }
+                });
             }
         }
     }

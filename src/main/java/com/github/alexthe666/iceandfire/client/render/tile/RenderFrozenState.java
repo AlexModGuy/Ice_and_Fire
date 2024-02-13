@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
-import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -18,13 +17,13 @@ public class RenderFrozenState {
     private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/block/frosted_ice_2.png");
     private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/block/frosted_ice_3.png");
 
-    public static void render(LivingEntity entity, PoseStack matrixStack, MultiBufferSource bufferIn, int light) {
+    public static void render(LivingEntity entity, PoseStack matrixStack, MultiBufferSource bufferIn, int light, int frozenTicks) {
         float sideExpand = -0.125F;
         float sideExpandY = 0.325F;
         AABB axisalignedbb1 = new AABB(-entity.getBbWidth() / 2F - sideExpand, 0, -entity.getBbWidth() / 2F - sideExpand,
             entity.getBbWidth() / 2F + sideExpand, entity.getBbHeight() + sideExpandY, entity.getBbWidth() / 2F + sideExpand);
         matrixStack.pushPose();
-        renderMovingAABB(axisalignedbb1, matrixStack, bufferIn, entity, light, 255);
+        renderMovingAABB(axisalignedbb1, matrixStack, bufferIn, light, 255, frozenTicks);
         matrixStack.popPose();
     }
 
@@ -41,10 +40,11 @@ public class RenderFrozenState {
         return TEXTURE_0;
     }
 
-    public static void renderMovingAABB(AABB boundingBox, PoseStack stack, MultiBufferSource bufferIn, LivingEntity entity, int light, int alpha) {
-        RenderType rendertype = IafRenderType.getIce(getIceTexture(FrozenProperties.ticksUntilUnfrozen(entity)));
+    public static void renderMovingAABB(AABB boundingBox, PoseStack stack, MultiBufferSource bufferIn, int light, int alpha, int frozenTicks) {
+        RenderType rendertype = IafRenderType.getIce(getIceTexture(frozenTicks));
         VertexConsumer vertexbuffer = bufferIn.getBuffer(rendertype);
         Matrix4f matrix4f = stack.last().pose();
+
         float maxX = (float) boundingBox.maxX * 0.425F;
         float minX = (float) boundingBox.minX * 0.425F;
         float maxY = (float) boundingBox.maxY * 0.425F;
