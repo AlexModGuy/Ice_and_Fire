@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
+import com.github.alexthe666.iceandfire.client.particle.IafParticleType;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -78,7 +77,7 @@ public class EntityPixieCharge extends Fireball {
         Entity shootingEntity = this.getOwner();
         if (this.level.isClientSide) {
             for (int i = 0; i < 5; ++i) {
-                IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                level.addParticle(IafParticleType.PIXIE_DUST.get(), this.getX() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 0.15F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
             }
         }
         this.clearFire();
@@ -138,7 +137,7 @@ public class EntityPixieCharge extends Fireball {
                     }
                     if (this.level.isClientSide) {
                         for (int i = 0; i < 20; ++i) {
-                            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
+                            level.addParticle(IafParticleType.PIXIE_DUST.get(), this.getX() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getY() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), this.getZ() + this.random.nextDouble() * 1F * (this.random.nextBoolean() ? -1 : 1), rgb[0], rgb[1], rgb[2]);
                         }
                     }
                     if (shootingEntity == null || !(shootingEntity instanceof Player) || !((Player) shootingEntity).isCreative()) {

@@ -6,7 +6,7 @@ public enum EnumParticles {
     Dread_Torch,
     Dread_Portal,
     Blood,
-    If_Pixie,
+    //If_Pixie,
     Siren_Appearance,
     Ghost_Appearance,
     Siren_Music,

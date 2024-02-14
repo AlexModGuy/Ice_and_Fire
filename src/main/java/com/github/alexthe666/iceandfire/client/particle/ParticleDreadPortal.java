@@ -80,15 +80,9 @@ public class ParticleDreadPortal extends TextureSheetParticle {
         return ParticleRenderType.CUSTOM;
     }
 
-
     @Override
     public int getLightColor(float partialTick) {
         return 240;
     }
-
-    public int getFXLayer() {
-        return 3;
-    }
-
 
 }

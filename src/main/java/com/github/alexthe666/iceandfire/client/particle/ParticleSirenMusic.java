@@ -94,10 +94,6 @@ public class ParticleSirenMusic extends TextureSheetParticle {
         return super.getLightColor(partialTick);
     }
 
-    public int getFXLayer() {
-        return 3;
-    }
-
     @Override
     public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;

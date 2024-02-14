@@ -72,14 +72,9 @@ public class ParticleSerpentBubble extends TextureSheetParticle {
 
     @Override
     public int getLightColor(float partialTick) {
-        //If uncomment : BlockPos needs integers
-//        BlockPos blockpos = new BlockPos(this.x, this.y, this.z);
         return 240;
     }
 
-    public int getFXLayer() {
-        return 3;
-    }
 
     @Override
     public @NotNull ParticleRenderType getRenderType() {

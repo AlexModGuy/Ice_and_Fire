@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
+import com.github.alexthe666.iceandfire.client.particle.IafParticleType;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.entity.IafVillagerRegistry;
@@ -102,6 +103,7 @@ public class IceAndFire {
         IafContainerRegistry.CONTAINERS.register(modBus);
         IafRecipeSerializers.SERIALIZERS.register(modBus);
         IafProcessors.PROCESSORS.register(modBus);
+        IafParticleType.PARTICLE_TYPES.register(modBus);
 
         IafVillagerRegistry.POI_TYPES.register(modBus);
         IafVillagerRegistry.PROFESSIONS.register(modBus);

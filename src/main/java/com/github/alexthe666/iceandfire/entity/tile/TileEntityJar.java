@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.particle.IafParticleType;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
@@ -102,7 +102,7 @@ public class TileEntityJar extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, TileEntityJar entityJar) {
         entityJar.ticksExisted++;
         if (level.isClientSide && entityJar.hasPixie) {
-            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
+            level.addParticle(IafParticleType.PIXIE_DUST.get(),
                 pos.getX() + 0.5F + (double) (entityJar.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
                 pos.getY() + (double) (entityJar.rand.nextFloat() * PARTICLE_HEIGHT),
                 pos.getZ() + 0.5F + (double) (entityJar.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[entityJar.pixieType][0], EntityPixie.PARTICLE_RGB[entityJar.pixieType][1], EntityPixie.PARTICLE_RGB[entityJar.pixieType][2]);
