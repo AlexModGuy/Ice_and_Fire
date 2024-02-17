@@ -173,7 +173,15 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public ReversedBuffer turn_buffer;
     public ChainBuffer tail_buffer;
     public int spacebarTicks;
-    public float[][] growth_stages;
+
+    public static final float[] growth_stage_1 = new float[]{1F, 3F};
+    public static final float[] growth_stage_2 = new float[]{3F, 7F};
+    public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
+    public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
+    public static final float[] growth_stage_5 = new float[]{20F, 30F};
+
+    public float[][] growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};;
+
     public LegSolverQuadruped legSolver;
     public int walkCycle;
     public BlockPos burningTarget;
