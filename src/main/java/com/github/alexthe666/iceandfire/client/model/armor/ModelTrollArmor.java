@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.armor;
 
-import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -11,18 +9,8 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class ModelTrollArmor extends ArmorModelBase {
-    // TODO: Make the inner model and outer model separate/ make them use normal minecraft armor dimensions while still looking good
-    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    public AdvancedModelBox hornR;
-    public AdvancedModelBox hornL;
-    public AdvancedModelBox hornR2;
-    public AdvancedModelBox hornL2;
-
-
-    public ModelTrollArmor(ModelPart modelPart) {
-        super(modelPart);
-    }
+    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE.extend(INNER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE.extend(OUTER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
 
     public ModelTrollArmor(boolean inner) {
         super(getBakedModel(inner));

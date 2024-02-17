@@ -1,8 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model.armor;
 
-import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -11,33 +9,8 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class ModelDragonsteelLightningArmor extends ArmorModelBase {
-    // TODO: Make the inner model and outer model separate/ make them use normal minecraft armor dimensions while still looking good
-    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    public AdvancedModelBox visor1;
-    public AdvancedModelBox HornR;
-    public AdvancedModelBox HornR4;
-    public AdvancedModelBox HornL;
-    public AdvancedModelBox HornL4;
-    public AdvancedModelBox visor2;
-    public AdvancedModelBox HornR2;
-    public AdvancedModelBox HornL2;
-    public AdvancedModelBox HornR2_1;
-    public AdvancedModelBox HornR3;
-    public AdvancedModelBox HornR5;
-    public AdvancedModelBox HornL2_1;
-    public AdvancedModelBox HornL3;
-    public AdvancedModelBox HornL5;
-    public AdvancedModelBox HornR3_1;
-    public AdvancedModelBox HornL3_1;
-    public AdvancedModelBox sleeveRight;
-    public AdvancedModelBox robeLowerLeft;
-    public AdvancedModelBox sleeveLeft;
-    public AdvancedModelBox robeLowerRight;
-
-    public ModelDragonsteelLightningArmor(ModelPart modelPart) {
-        super(modelPart);
-    }
+    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE.extend(INNER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE.extend(OUTER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
 
     public ModelDragonsteelLightningArmor(boolean inner) {
         super(getBakedModel(inner));

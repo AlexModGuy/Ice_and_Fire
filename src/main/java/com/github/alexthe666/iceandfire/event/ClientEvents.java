@@ -12,22 +12,16 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.props.EntityDataProvider;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
-import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.WorldEventContext;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -41,7 +35,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
@@ -166,39 +159,6 @@ public class ClientEvents {
         if (shouldCancelRender(event.getEntity())) {
             event.setCanceled(true);
         }
-        for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
-            ItemStack stack = event.getEntity().getItemBySlot(slot);
-            if (stack.getItem() instanceof ArmorItem armorStack && armorStack.getMaterial() instanceof IafArmorMaterial) {
-                switch (slot) {
-                    case HEAD -> {
-                        if (event.getRenderer().getModel() instanceof HumanoidModel<?> humanoidModel) {
-                            humanoidModel.hat.visible = false;
-                        }
-                    }
-                    case CHEST -> {
-                        if (event.getRenderer().getModel() instanceof PlayerModel<?> playerModel) {
-                            playerModel.jacket.visible = false;
-                            playerModel.leftSleeve.visible = false;
-                            playerModel.rightSleeve.visible = false;
-                        }
-                    }
-                    case LEGS -> {
-                        if (event.getRenderer().getModel() instanceof PlayerModel<?> playerModel) {
-                            playerModel.leftPants.visible = false;
-                            playerModel.rightPants.visible = false;
-                        }
-                    }
-                    case FEET -> {
-                        if (event.getRenderer().getModel() instanceof PlayerModel<?> playerModel) {
-                            playerModel.leftLeg.visible = false;
-                            playerModel.rightLeg.visible = false;
-                        }
-                    }
-                }
-
-            }
-        }
-
     }
 
     @SubscribeEvent
