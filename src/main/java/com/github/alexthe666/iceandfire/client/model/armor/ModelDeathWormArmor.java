@@ -9,34 +9,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class ModelDeathWormArmor extends ArmorModelBase {
-    public ModelPart spineH1;
-    public ModelPart spineH2;
-    public ModelPart spineH3;
-    public ModelPart spineH4;
-    public ModelPart spineH5;
-    public ModelPart spineH6;
-    public ModelPart spineH7;
-    public ModelPart spineR1;
-    public ModelPart spineR2;
-    public ModelPart spineL1;
-    public ModelPart spineL2;
-    // TODO: Make the inner model and outer model separate/ make them use normal minecraft armor dimensions while still looking good
-    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE.extend(INNER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE.extend(OUTER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
 
     public ModelDeathWormArmor(ModelPart modelPart) {
         super(modelPart);
-        spineH1 = modelPart.getChild("hat").getChild("spineH1");
-        spineH2 = modelPart.getChild("hat").getChild("spineH2");
-        spineH3 = modelPart.getChild("hat").getChild("spineH3");
-        spineH4 = modelPart.getChild("hat").getChild("spineH4");
-        spineH5 = modelPart.getChild("hat").getChild("spineH5");
-        spineH6 = modelPart.getChild("hat").getChild("spineH6");
-        spineH7 = modelPart.getChild("hat").getChild("spineH7");
-        spineR1 = modelPart.getChild("right_arm").getChild("spineR1");
-        spineR2 = modelPart.getChild("right_arm").getChild("spineR2");
-        spineL1 = modelPart.getChild("left_arm").getChild("spineL1");
-        spineL2 = modelPart.getChild("left_arm").getChild("spineL2");
     }
 
     public static MeshDefinition createMesh(CubeDeformation deformation, float offset) {

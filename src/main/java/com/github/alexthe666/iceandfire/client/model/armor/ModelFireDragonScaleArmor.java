@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.model.armor;
 
-import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,36 +9,9 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class ModelFireDragonScaleArmor extends ArmorModelBase {
-    // TODO: Make the inner model and outer model separate/ make them use normal minecraft armor dimensions while still looking good
-    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE, 0.0F).getRoot().bake(64, 64);
-    public AdvancedModelBox HornL;
-    public AdvancedModelBox HornR;
-    public AdvancedModelBox HornL3;
-    public AdvancedModelBox HornR3;
-    public AdvancedModelBox HeadFront;
-    public AdvancedModelBox Jaw;
-    public AdvancedModelBox HornL2;
-    public AdvancedModelBox HornR2;
-    public AdvancedModelBox Teeth1;
-    public AdvancedModelBox Teeth2;
-    public AdvancedModelBox RightShoulderSpike1;
-    public AdvancedModelBox RightShoulderSpike2;
-    public AdvancedModelBox LeftLegSpike;
-    public AdvancedModelBox LeftLegSpike2;
-    public AdvancedModelBox LeftLegSpike3;
-    public AdvancedModelBox BackSpike1;
-    public AdvancedModelBox BackSpike2;
-    public AdvancedModelBox BackSpike3;
-    public AdvancedModelBox LeftShoulderSpike1;
-    public AdvancedModelBox LeftShoulderSpike2;
-    public AdvancedModelBox RightLegSpike;
-    public AdvancedModelBox RightLegSpike2;
-    public AdvancedModelBox RightLegSpike3;
+    private static final ModelPart INNER_MODEL = createMesh(CubeDeformation.NONE.extend(INNER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
+    private static final ModelPart OUTER_MODEL = createMesh(CubeDeformation.NONE.extend(OUTER_MODEL_OFFSET), 0.0F).getRoot().bake(64, 64);
 
-    public ModelFireDragonScaleArmor(ModelPart modelPart) {
-        super(modelPart);
-    }
 
     public ModelFireDragonScaleArmor(boolean inner) {
         super(getBakedModel(inner));
