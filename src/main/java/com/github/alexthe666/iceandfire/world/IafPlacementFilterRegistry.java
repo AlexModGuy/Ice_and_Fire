@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraftforge.registries.DeferredRegister;

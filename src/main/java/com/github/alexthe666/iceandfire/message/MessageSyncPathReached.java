@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.client.render.pathfinding.PathfindingDebugRenderer;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
-import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;

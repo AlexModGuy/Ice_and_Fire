@@ -1,10 +1,7 @@
 package com.github.alexthe666.iceandfire;
 
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
-import com.google.common.collect.Lists;
 import net.minecraftforge.fml.config.ModConfig;
-
-import java.util.List;
 
 public class IafConfig {
     public static boolean customMainMenu = true;

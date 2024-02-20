@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

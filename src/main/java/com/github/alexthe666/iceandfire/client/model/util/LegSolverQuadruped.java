@@ -1,6 +1,4 @@
 package com.github.alexthe666.iceandfire.client.model.util;
-import com.github.alexthe666.iceandfire.client.model.util.LegSolver.Leg;
-
 
 /*
   Code from JurassiCraft, used with permission

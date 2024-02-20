@@ -17,9 +17,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import org.jetbrains.annotations.NotNull;
-import org.joml.*;
-
-import java.lang.Math;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 

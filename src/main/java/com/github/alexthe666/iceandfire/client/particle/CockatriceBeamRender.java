@@ -11,9 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import org.joml.*;
-
-import java.lang.Math;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class CockatriceBeamRender {
 

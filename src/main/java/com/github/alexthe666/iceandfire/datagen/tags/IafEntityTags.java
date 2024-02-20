@@ -2,9 +2,7 @@ package com.github.alexthe666.iceandfire.datagen.tags;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
