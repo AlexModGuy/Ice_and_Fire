@@ -1,5 +1,13 @@
 {
   "values": [
-    "#minecraft:is_overworld"
+    "#minecraft:is_beach",
+    {
+      "id": "byg:dacite_shore",
+      "required": false
+    },
+    {
+      "id": "byg:basalt_barrera",
+      "required": false
+    }
   ]
 }
