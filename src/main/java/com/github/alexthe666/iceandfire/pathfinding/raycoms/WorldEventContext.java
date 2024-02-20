@@ -8,6 +8,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 public class WorldEventContext {
@@ -31,6 +33,7 @@ public class WorldEventContext {
      */
     int clientRenderDist;
 
+    @OnlyIn(Dist.CLIENT)
     public void renderWorldLastEvent(final RenderLevelStageEvent event)
     {
         bufferSource = WorldRenderMacros.getBufferSource();

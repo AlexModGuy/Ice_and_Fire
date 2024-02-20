@@ -60,7 +60,6 @@ public class EntityDataProvider implements ICapabilitySerializable<CompoundTag> 
     public static void removeCachedEntry(final Entity entity) {
         if (entity instanceof LivingEntity) {
             int key = entity.getId();
-
             if (entity.getLevel().isClientSide()) {
                 if (entity == CapabilityHandler.getLocalPlayer()) {
                     // Can trigger on death or when player leaves the game (this is when we want to actually clear)
