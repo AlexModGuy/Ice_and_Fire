@@ -1,13 +1,11 @@
 package com.github.alexthe666.iceandfire.entity.props;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -18,7 +16,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,10 +89,6 @@ public class CapabilityHandler {
     }
 
     public static @Nullable Player getLocalPlayer() {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            return Minecraft.getInstance().player;
-        }
-
-        return null;
+        return IceAndFire.PROXY.getClientSidePlayer();
     }
 }
