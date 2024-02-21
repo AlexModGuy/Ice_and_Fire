@@ -2,30 +2,25 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.entity.util.EntityUtil;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
-    protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
+public class PixieAIPickupItem extends TargetGoal {
     protected final Predicate<? super ItemEntity> targetEntitySelector;
-    protected ItemEntity targetEntity;
-
-    @Nonnull
+    protected @Nullable ItemEntity targetEntity;
     private List<ItemEntity> list = IAFMath.emptyItemEntityList;
 
     public PixieAIPickupItem(EntityPixie creature, boolean checkSight) {
@@ -33,42 +28,40 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
     }
 
     public PixieAIPickupItem(EntityPixie creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 20, checkSight, onlyNearby, null);
+        super(creature, checkSight, onlyNearby);
+        this.targetEntitySelector = (Predicate<ItemEntity>) item -> checkTamed(creature, item) || checkUntamed(creature, item);
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
-    public PixieAIPickupItem(EntityPixie creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate<? super T> targetSelector) {
-        super(creature, checkSight, onlyNearby);
-        this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(creature);
+    private boolean checkUntamed(final EntityPixie pixie, final ItemEntity itemEntity) {
+        if (itemEntity == null || pixie.isTame()) {
+            return false;
+        }
 
-        this.targetEntitySelector = new Predicate<ItemEntity>() {
-            @Override
-            public boolean test(ItemEntity item) {
+        return itemEntity.getItem().is(IafItemTags.TAME_PIXIE);
+    }
 
-                return item != null && !item.getItem().isEmpty() && (item.getItem().getItem() == Items.CAKE
-                    && !creature.isTame()
-                    || item.getItem().getItem() == Items.SUGAR && creature.isTame()
-                    && creature.getHealth() < creature.getMaxHealth());
-            }
-        };
-        this.setFlags(EnumSet.of(Flag.TARGET));
+    private boolean checkTamed(final EntityPixie pixie, final ItemEntity itemEntity) {
+        if (itemEntity == null || pixie.getHealth() >= pixie.getMaxHealth() || !pixie.isTame()) {
+            return false;
+        }
+
+        return itemEntity.getItem().is(IafItemTags.HEAL_PIXIE);
     }
 
     @Override
     public boolean canUse() {
-
-        EntityPixie pixie = (EntityPixie) this.mob;
-        if (pixie.isPixieSitting()) return false;
-
-        if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
-
-        if (list.isEmpty()) {
+        if (((EntityPixie) mob).isPixieSitting()) {
             return false;
-        } else {
-            list.sort(this.theNearestAttackableTargetSorter);
-            this.targetEntity = list.get(0);
-            return true;
         }
+
+        updateList(true);
+        return targetEntity != null;
+    }
+
+    private void updateList(boolean forceNew) {
+        list = EntityUtil.updateList(mob, forceNew ? null : list, () -> this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector));
+        targetEntity = !list.isEmpty() ? list.get(0) : null;
     }
 
     protected AABB getTargetableArea(double targetDistance) {
@@ -77,38 +70,51 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
 
     @Override
     public void start() {
-        // behaviour changed to the same as AmphitereAITargetItems
-        this.mob.getMoveControl().setWantedPosition(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 0.25D);
+        updateWantedPosition();
+        super.start();
+    }
 
+    private void updateWantedPosition() {
+        if (targetEntity == null) {
+            stop();
+            return;
+        }
+
+        this.mob.getMoveControl().setWantedPosition(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 0.25D);
         LivingEntity attackTarget = this.mob.getTarget();
+
         if (attackTarget == null) {
             this.mob.getLookControl().setLookAt(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 180.0F, 20.0F);
         }
-        super.start();
     }
 
     @Override
     public void tick() {
         super.tick();
+
         if (this.targetEntity == null || !this.targetEntity.isAlive()) {
-            this.stop();
+            updateList(false);
+            updateWantedPosition();
         } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
             EntityPixie pixie = (EntityPixie) this.mob;
-            if (this.targetEntity.getItem() != null && this.targetEntity.getItem().getItem() != null)
-                if (this.targetEntity.getItem().is(IafItemTags.HEAL_PIXIE)) {
-                    pixie.heal(5);
-                } else if (this.targetEntity.getItem().is(IafItemTags.TAME_PIXIE)) {
-                    if (!pixie.isTame() && this.targetEntity.getThrowingEntity() instanceof Player player) {
-                        pixie.tame(player);
-                        pixie.setPixieSitting(true);
-                        pixie.setOnGround(true);  //  Entity.onGround = true
-                    }
+
+            if (this.targetEntity.getItem().is(IafItemTags.HEAL_PIXIE)) {
+                pixie.heal(5);
+            } else if (this.targetEntity.getItem().is(IafItemTags.TAME_PIXIE)) {
+                if (!pixie.isTame() && this.targetEntity.getThrowingEntity() instanceof Player player) {
+                    pixie.tame(player);
+                    pixie.setPixieSitting(true);
+                    pixie.setOnGround(true);
                 }
+            }
 
             pixie.setItemInHand(InteractionHand.MAIN_HAND, this.targetEntity.getItem());
             this.targetEntity.getItem().shrink(1);
             pixie.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
             stop();
+        } else if (!mob.getMoveControl().hasWanted()) {
+            updateList(false);
+            updateWantedPosition();
         }
     }
 
@@ -117,18 +123,10 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
         return true;
     }
 
-    public static class Sorter implements Comparator<Entity> {
-        private final Entity theEntity;
-
-        public Sorter(Entity theEntityIn) {
-            this.theEntity = theEntityIn;
-        }
-
-        @Override
-        public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
-            final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
-            return Double.compare(d0, d1);
-        }
+    @Override
+    public void stop() {
+        super.stop();
+        targetEntity = null;
+        list = Collections.emptyList();
     }
 }

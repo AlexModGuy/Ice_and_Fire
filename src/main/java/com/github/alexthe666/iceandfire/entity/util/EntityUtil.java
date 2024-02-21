@@ -2,14 +2,18 @@ package com.github.alexthe666.iceandfire.entity.util;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
+import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class EntityUtil {
     public static void updatePart(@Nullable final EntityMutlipartPart part, @NotNull final LivingEntity parent) {
@@ -35,5 +39,20 @@ public class EntityUtil {
         }
 
         part.setParent(parent);
+    }
+
+    public static <T extends Entity> List<T> updateList(final Mob mob, final List<T> list, final Supplier<List<T>> listSupplier) {
+        List<T> result = list;
+
+        if (list == null || mob.getLevel().getGameTime() % 4 == 0) {
+            result = listSupplier.get();
+            result.removeIf(Entity::isRemoved);
+        }
+
+        if (!result.isEmpty()) {
+            result.sort(new DragonAITargetItems.Sorter(mob));
+        }
+
+        return result;
     }
 }
