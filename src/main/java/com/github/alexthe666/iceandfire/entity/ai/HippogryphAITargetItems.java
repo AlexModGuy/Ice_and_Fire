@@ -10,12 +10,12 @@ import net.minecraft.world.entity.player.Player;
 
 public class HippogryphAITargetItems extends PickUpTargetGoal<EntityHippogryph, ItemEntity> {
     public HippogryphAITargetItems(final EntityHippogryph hippogryph, boolean mustSee, boolean mustReach) {
-        super(hippogryph, mustSee, mustReach, item -> item.getItem().is(IafItemTags.TAME_HIPPOGRYPH));
+        super(hippogryph, mustSee, mustReach, item -> item.getItem().is(IafItemTags.TAME_HIPPOGRYPH), 0.2);
     }
 
     @Override
     public boolean canUse() {
-        if (!getMob().canMove() || this.mob.getRandom().nextInt(20) != 0) {
+        if (!getMob().canMove()) {
             return false;
         }
 
@@ -47,6 +47,11 @@ public class HippogryphAITargetItems extends PickUpTargetGoal<EntityHippogryph, 
     }
 
     @Override
+    public boolean canContinueToUse() {
+        return !mob.getNavigation().isDone();
+    }
+
+    @Override
     protected void setMovement() {
         if (currentTarget == null) {
             return;
@@ -56,16 +61,11 @@ public class HippogryphAITargetItems extends PickUpTargetGoal<EntityHippogryph, 
     }
 
     @Override
-    public boolean canContinueToUse() {
-        return !mob.getNavigation().isDone();
+    protected double getSearchRange() {
+        return getFollowDistance();
     }
 
     protected double getAttackReachSqr(final Entity attackTarget) {
         return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + attackTarget.getBbWidth();
-    }
-
-    @Override
-    protected double getSearchRange() {
-        return getFollowDistance();
     }
 }

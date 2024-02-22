@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class MyrmexAIPickupBabies extends PickUpTargetGoal<EntityMyrmexWorker, LivingEntity> {
     public MyrmexAIPickupBabies(final EntityMyrmexWorker worker) {
-        super(worker, false, false, entity -> isYoungMyrmex(entity) || isMyrmexEgg(entity));
+        super(worker, false, false, entity -> isYoungMyrmex(entity) || isMyrmexEgg(entity), 1);
     }
 
     @Override

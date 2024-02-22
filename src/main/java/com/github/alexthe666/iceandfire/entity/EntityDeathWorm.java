@@ -88,7 +88,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     private final float prevScale = 0.0F;
     private final LookControl lookHelper;
     private int growthCounter = 0;
-    private Player thrower;
+    private @Nullable Player thrower;
     public DeathwormAITargetItems targetItemsGoal;
 
     public EntityDeathWorm(EntityType<EntityDeathWorm> type, Level worldIn) {
@@ -117,7 +117,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, targetItemsGoal = new DeathwormAITargetItems(this, false, false));
+        this.targetSelector.addGoal(4, targetItemsGoal = new DeathwormAITargetItems(this));
         this.targetSelector.addGoal(5, new DeathWormAITarget(this, LivingEntity.class, false, new Predicate<LivingEntity>() {
             @Override
             public boolean apply(@Nullable LivingEntity input) {
@@ -226,7 +226,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         }
     }
 
-    public void setExplosive(boolean explosive, Player thrower) {
+    public void setExplosive(final @Nullable Player thrower) {
         this.willExplode = true;
         this.ticksTillExplosion = 60;
         this.thrower = thrower;

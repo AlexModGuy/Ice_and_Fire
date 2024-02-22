@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class PixieAIPickupItem extends PickUpTargetGoal<EntityPixie, ItemEntity> {
     public PixieAIPickupItem(final EntityPixie pixie, boolean mustSee, boolean mustReach) {
-        super(pixie, mustSee, mustReach, item -> checkTamed(pixie, item) || checkUntamed(pixie, item));
+        super(pixie, mustSee, mustReach, item -> checkTamed(pixie, item) || checkUntamed(pixie, item), 1);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.ai.base;
 
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
+import com.github.alexthe666.iceandfire.entity.util.EntityUtil;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
@@ -17,18 +18,23 @@ import java.util.function.Supplier;
 
 public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends TargetGoal {
     protected final Predicate<T> targetSelector;
+    protected final double chance;
 
     protected @NotNull List<T> targets;
     protected @Nullable T currentTarget;
     protected int tickCount;
+
+    private final EntityUtil.Sorter sorter;
     private final Class<T> rawTargetClass;
     private final Supplier<List<T>> targetsSupplier;
 
     @SuppressWarnings("unchecked")
-    public PickUpTargetGoal(final @NotNull M mob, boolean mustSee, boolean mustReach, final Predicate<T> targetSelector) {
+    public PickUpTargetGoal(final @NotNull M mob, boolean mustSee, boolean mustReach, final Predicate<T> targetSelector, double chance) {
         super(mob, mustSee, mustReach);
         this.targetSelector = targetSelector;
+        this.chance = Mth.clamp(chance, 0, 1);
         this.targets = Collections.emptyList();
+        this.sorter = new EntityUtil.Sorter(mob);
         this.rawTargetClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.targetsSupplier = () -> mob.getLevel().getEntitiesOfClass(rawTargetClass, getSearchArea(), targetSelector);
         setFlags(EnumSet.of(Flag.TARGET));
@@ -36,6 +42,10 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
 
     @Override
     public boolean canUse() {
+        if (chance != 1 && chance >= mob.getRandom().nextDouble()) {
+            return false;
+        }
+
         return updateList();
     }
 
@@ -65,13 +75,17 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
         return (M) mob;
     }
 
+    public boolean hasCurrentTarget() {
+        return currentTarget != null;
+    }
+
     protected AABB getSearchArea() {
         double searchRange = getSearchRange();
         return mob.getBoundingBox().inflate(searchRange, 4, searchRange);
     }
 
     protected boolean updateList() {
-        targets = updateList(getMob(), targets, targetsSupplier);
+        targets = updateList(targets, targetsSupplier);
         return !targets.isEmpty();
     }
 
@@ -91,7 +105,7 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
         }
     }
 
-    private List<T> updateList(final M mob, final List<T> targets, final Supplier<List<T>> targetsSupplier) {
+    private List<T> updateList(final List<T> targets, final Supplier<List<T>> targetsSupplier) {
         List<T> result = targets;
 
         if (tickCount % 20 == 0) {
@@ -100,7 +114,7 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
         }
 
         if (!result.isEmpty()) {
-            result.sort(new DragonAITargetItems.Sorter(mob));
+            result.sort(sorter);
         }
 
         return result;

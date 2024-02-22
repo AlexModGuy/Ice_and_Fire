@@ -135,7 +135,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         this.goalSelector.addGoal(5, new CockatriceAIAggroLook(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, LivingEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new CockatriceAITargetItems(this, false));
+        this.targetSelector.addGoal(1, new CockatriceAITargetItems(this, false, false));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));

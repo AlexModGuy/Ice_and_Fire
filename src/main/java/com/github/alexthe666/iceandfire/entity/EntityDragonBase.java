@@ -31,6 +31,7 @@ import com.github.alexthe666.iceandfire.pathfinding.raycoms.pathjobs.ICustomSize
 import com.github.alexthe666.iceandfire.util.WorldUtil;
 import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -66,6 +67,7 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -95,8 +97,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class EntityDragonBase extends TamableAnimal implements IPassabilityNavigator, ISyncMount, IFlyingMount, IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, IHasCustomizableAttributes, ICustomSizeNavigator, ICustomMoveController, ContainerListener {
-
     public static final int FLIGHT_CHANCE_PER_TICK = 1500;
+    public static final int MAX_HUNGER = 100;
+
     protected static final EntityDataAccessor<Boolean> SWIMMING = SynchedEntityData.defineId(EntityDragonBase.class, EntityDataSerializers.BOOLEAN);
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
     private static final EntityDataAccessor<Integer> HUNGER = SynchedEntityData.defineId(EntityDragonBase.class, EntityDataSerializers.INT);
@@ -317,7 +320,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new DragonAITargetItems<>(this, 60, false, false, true));
+        this.targetSelector.addGoal(4, new DragonAITargetItems(this, 0.6, true, this instanceof EntityIceDragon));
         this.targetSelector.addGoal(5, new DragonAITargetNonTamed<>(this, LivingEntity.class, false, (Predicate<LivingEntity>) entity -> {
             if (entity instanceof Player player) {
                 return !player.isCreative();
@@ -330,7 +333,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return false;
         }));
         this.targetSelector.addGoal(6, new DragonAITarget<>(this, LivingEntity.class, true, (Predicate<LivingEntity>) entity -> DragonUtils.canHostilesTarget(entity) && entity.getType() != getType() && shouldTarget(entity) && DragonUtils.isAlive(entity)));
-        this.targetSelector.addGoal(7, new DragonAITargetItems<>(this, false));
+        this.targetSelector.addGoal(7, new DragonAITargetItems(this, false, this instanceof EntityIceDragon));
     }
 
     protected abstract boolean shouldTarget(Entity entity);
@@ -912,7 +915,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public void setHunger(int hunger) {
-        this.entityData.set(HUNGER, Mth.clamp(hunger, 0, 100));
+        this.entityData.set(HUNGER, Mth.clamp(hunger, 0, MAX_HUNGER));
     }
 
     public int getVariant() {
@@ -1155,7 +1158,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 this.spawnItemCrackParticles(stack.getItem());
                 this.spawnItemCrackParticles(Items.BONE);
                 this.spawnItemCrackParticles(Items.BONE_MEAL);
-                this.eatFoodBonus(stack);
+                this.applyFoodEffects(stack);
                 if (!player.isCreative()) {
                     stack.shrink(1);
                 }
@@ -1206,13 +1209,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.openInventory(player);
                     return InteractionResult.SUCCESS;
                 } else {
-                    int itemFoodAmount = FoodUtils.getFoodPoints(stack, true, dragonType.isPiscivore());
+                    int itemFoodAmount = FoodUtils.getFoodPoints(this, stack, true, dragonType.isPiscivore());
                     if (itemFoodAmount > 0 && (this.getHunger() < 100 || this.getHealth() < this.getMaxHealth())) {
                         this.setHunger(this.getHunger() + itemFoodAmount);
                         this.setHealth(Math.min(this.getMaxHealth(), (int) (this.getHealth() + (itemFoodAmount / 10))));
                         this.playSound(SoundEvents.GENERIC_EAT, this.getSoundVolume(), this.getVoicePitch());
                         this.spawnItemCrackParticles(stack.getItem());
-                        this.eatFoodBonus(stack);
+                        this.applyFoodEffects(stack);
                         if (!player.isCreative()) {
                             stack.shrink(1);
                         }
@@ -1227,7 +1230,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         this.spawnItemCrackParticles(stackItem);
                         this.spawnItemCrackParticles(Items.BONE);
                         this.spawnItemCrackParticles(Items.BONE_MEAL);
-                        this.eatFoodBonus(stack);
+                        this.applyFoodEffects(stack);
                         if (!player.isCreative()) {
                             stack.shrink(1);
                         }
@@ -1242,7 +1245,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
                         this.spawnItemCrackParticles(Items.POISONOUS_POTATO);
                         this.setAgingDisabled(true);
-                        this.eatFoodBonus(stack);
+                        this.applyFoodEffects(stack);
                         if (!player.isCreative()) {
                             stack.shrink(1);
                         }
@@ -1322,10 +1325,23 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return ItemStack.EMPTY;
     }
 
-    public void eatFoodBonus(ItemStack stack) {
-        // FIXME :: ?
-    }
+    public void applyFoodEffects(final ItemStack stack) {
+        if (getLevel().isClientSide()) {
+            return;
+        }
 
+        FoodProperties foodProperties = stack.getFoodProperties(this);
+
+        if (foodProperties != null) {
+            List<Pair<MobEffectInstance, Float>> effects = foodProperties.getEffects();
+
+            effects.forEach(effectData -> {
+                if (getRandom().nextFloat() < effectData.getSecond()) {
+                    addEffect(effectData.getFirst());
+                }
+            });
+        }
+    }
 
     @Override
     public boolean requiresCustomPersistence() {

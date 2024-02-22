@@ -2,18 +2,15 @@ package com.github.alexthe666.iceandfire.entity.util;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
-import com.github.alexthe666.iceandfire.entity.ai.DragonAITargetItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Comparator;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class EntityUtil {
     public static void updatePart(@Nullable final EntityMutlipartPart part, @NotNull final LivingEntity parent) {
@@ -39,5 +36,19 @@ public class EntityUtil {
         }
 
         part.setParent(parent);
+    }
+
+    /** Sorts the entries so that the closest entity is at the first position */
+    public static class Sorter implements Comparator<Entity> {
+        private final Entity baseEntity;
+
+        public Sorter(final Entity baseEntity) {
+            this.baseEntity = baseEntity;
+        }
+
+        @Override
+        public int compare(final Entity firstEntity, final Entity secondEntity) {
+            return Double.compare(baseEntity.distanceToSqr(firstEntity), baseEntity.distanceToSqr(secondEntity));
+        }
     }
 }
