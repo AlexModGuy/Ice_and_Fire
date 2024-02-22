@@ -248,20 +248,6 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
 
     }
 
-    public void fall(float distance, float damageMultiplier) {
-    }
-
-    @Override
-    public boolean isInHive() {
-        if (getHive() != null) {
-            for (BlockPos pos : getHive().getAllRooms()) {
-                if (isCloseEnoughToTarget(MyrmexHive.getGroundedPos(level, pos), 300))
-                    return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public boolean shouldMoveThroughHive() {
         return false;

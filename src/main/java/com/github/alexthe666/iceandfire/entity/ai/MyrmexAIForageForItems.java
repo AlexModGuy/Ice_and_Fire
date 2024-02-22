@@ -30,6 +30,7 @@ public class MyrmexAIForageForItems extends PickUpTargetGoal<EntityMyrmexWorker,
         super.tick();
 
         if (currentTarget == null || currentTarget.isInWater()) {
+            currentTarget = null;
             return;
         }
 
@@ -37,7 +38,7 @@ public class MyrmexAIForageForItems extends PickUpTargetGoal<EntityMyrmexWorker,
            EntityMyrmexWorker worker = getMob();
            worker.onPickupItem(currentTarget);
            worker.setItemInHand(InteractionHand.MAIN_HAND, currentTarget.getItem());
-           worker.remove(Entity.RemovalReason.DISCARDED);
+           currentTarget.remove(Entity.RemovalReason.DISCARDED);
            stop();
         }
     }

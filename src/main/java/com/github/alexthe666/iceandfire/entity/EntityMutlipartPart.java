@@ -130,7 +130,6 @@ public abstract class EntityMutlipartPart extends Entity {
         wasTouchingWater = false;
         if (this.tickCount > 10) {
             Entity parent = getParent();
-            refreshDimensions();
             if (parent != null && !level.isClientSide) {
                 float renderYawOffset = parent.getYRot();
                 if (parent instanceof LivingEntity) {
