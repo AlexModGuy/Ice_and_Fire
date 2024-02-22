@@ -187,7 +187,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new HippogryphAITargetItems(this, false));
+        this.targetSelector.addGoal(4, new HippogryphAITargetItems(this, false, false));
         this.targetSelector.addGoal(5, new HippogryphAITarget(this, LivingEntity.class, false, new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {

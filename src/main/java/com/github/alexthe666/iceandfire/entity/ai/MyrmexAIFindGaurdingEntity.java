@@ -2,47 +2,40 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexSoldier;
-import net.minecraft.world.entity.Entity;
+import com.github.alexthe666.iceandfire.entity.util.EntityUtil;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.phys.AABB;
 
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends TargetGoal {
-    protected final DragonAITargetItems.Sorter theNearestAttackableTargetSorter;
-    protected final Predicate<? super EntityMyrmexBase> targetEntitySelector;
-    public EntityMyrmexSoldier myrmex;
-    protected EntityMyrmexBase targetEntity;
+public class MyrmexAIFindGaurdingEntity extends TargetGoal {
+    private final EntityUtil.Sorter sorter;
+    private final Predicate<? super EntityMyrmexBase> targetEntitySelector;
+    private final EntityMyrmexSoldier soldier;
 
-    public MyrmexAIFindGaurdingEntity(EntityMyrmexSoldier myrmex) {
-        super(myrmex, false, false);
-        this.theNearestAttackableTargetSorter = new DragonAITargetItems.Sorter(myrmex);
-        this.targetEntitySelector = new Predicate<EntityMyrmexBase>() {
-            @Override
-            public boolean test(EntityMyrmexBase myrmex) {
-                return !(myrmex instanceof EntityMyrmexSoldier) && myrmex.getGrowthStage() > 1
-                    && EntityMyrmexBase.haveSameHive(MyrmexAIFindGaurdingEntity.this.myrmex, myrmex)
-                    && !myrmex.isBeingGuarded && myrmex.needsGaurding();
-            }
-        };
-        this.myrmex = myrmex;
+    public MyrmexAIFindGaurdingEntity(final EntityMyrmexSoldier soldier) {
+        super(soldier, false, false);
+        this.sorter = new EntityUtil.Sorter(soldier);
+        this.targetEntitySelector = (Predicate<EntityMyrmexBase>) myrmex -> shouldGuardMyrmex(soldier, myrmex);
+        this.soldier = soldier;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
     public boolean canUse() {
-        if (!this.myrmex.canMove() || this.myrmex.getTarget() != null || this.myrmex.guardingEntity != null) {
+        if (!soldier.canMove() || soldier.getTarget() != null || soldier.guardingEntity != null) {
             return false;
         }
+
         List<EntityMyrmexBase> list = this.mob.level.getEntitiesOfClass(EntityMyrmexBase.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
+
         if (list.isEmpty()) {
             return false;
         } else {
-            list.sort(this.theNearestAttackableTargetSorter);
-            this.myrmex.guardingEntity = list.get(0);
+            list.sort(this.sorter);
+            this.soldier.guardingEntity = list.get(0);
             return true;
         }
     }
@@ -56,18 +49,11 @@ public class MyrmexAIFindGaurdingEntity<T extends EntityMyrmexBase> extends Targ
         return false;
     }
 
-    public static class Sorter implements Comparator<Entity> {
-        private final Entity theEntity;
-
-        public Sorter(EntityMyrmexBase theEntityIn) {
-            this.theEntity = theEntityIn;
+    private static boolean shouldGuardMyrmex(final EntityMyrmexSoldier instance, final EntityMyrmexBase myrmex) {
+        if (myrmex instanceof EntityMyrmexSoldier) {
+            return false;
         }
 
-        @Override
-        public int compare(Entity p_compare_1_, Entity p_compare_2_) {
-            final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
-            final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
-            return Double.compare(d0, d1);
-        }
+        return myrmex.getGrowthStage() > 1 && EntityMyrmexBase.haveSameHive(instance, myrmex) && !myrmex.isBeingGuarded && myrmex.needsGaurding();
     }
 }

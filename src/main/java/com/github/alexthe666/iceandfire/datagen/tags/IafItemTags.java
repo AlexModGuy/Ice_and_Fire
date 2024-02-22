@@ -55,6 +55,7 @@ public class IafItemTags extends ItemTagsProvider {
     public static TagKey<Item> DRAGON_BLOODS = createKey("dragon_bloods");
     public static TagKey<Item> DRAGON_HEARTS = createKey("dragon_hearts");
 
+    public static TagKey<Item> TNT = createKey("tnt");
     public static TagKey<Item> BREED_AMPITHERE = createKey("breed_ampithere");
     public static TagKey<Item> BREED_HIPPOCAMPUS = createKey("breed_hippocampus");
     public static TagKey<Item> BREED_HIPPOGRYPH = createKey("breed_hippogryph");
@@ -182,6 +183,9 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(Items.CHICKEN, Items.COOKED_CHICKEN)
                 .add(Items.MUTTON, Items.COOKED_MUTTON)
                 .add(Items.PORKCHOP, Items.COOKED_PORKCHOP);
+
+        tag(TNT)
+                .add(Items.TNT);
 
         tag(BREED_AMPITHERE)
                 .add(Items.COOKIE);

@@ -249,7 +249,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new AmphithereAIHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.addGoal(3, new AmphithereAITargetItems<>(this, false));
+        this.targetSelector.addGoal(3, new AmphithereAITargetItems(this));
     }
 
     public boolean isStill() {

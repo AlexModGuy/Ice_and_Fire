@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 public class EntityUtil {
@@ -35,5 +36,19 @@ public class EntityUtil {
         }
 
         part.setParent(parent);
+    }
+
+    /** Sorts the entries so that the closest entity is at the first position */
+    public static class Sorter implements Comparator<Entity> {
+        private final Entity baseEntity;
+
+        public Sorter(final Entity baseEntity) {
+            this.baseEntity = baseEntity;
+        }
+
+        @Override
+        public int compare(final Entity firstEntity, final Entity secondEntity) {
+            return Double.compare(baseEntity.distanceToSqr(firstEntity), baseEntity.distanceToSqr(secondEntity));
+        }
     }
 }
