@@ -42,7 +42,7 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
 
     @Override
     public boolean canUse() {
-        if (chance != 1 && chance >= mob.getRandom().nextDouble()) {
+        if (chance != 1 && chance < mob.getRandom().nextDouble()) {
             return false;
         }
 
