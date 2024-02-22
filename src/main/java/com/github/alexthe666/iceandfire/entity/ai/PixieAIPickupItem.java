@@ -2,119 +2,50 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.datagen.tags.IafItemTags;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.github.alexthe666.iceandfire.entity.util.EntityUtil;
+import com.github.alexthe666.iceandfire.entity.ai.base.PickUpTargetGoal;
 import com.github.alexthe666.iceandfire.misc.IafSoundRegistry;
-import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
-
-public class PixieAIPickupItem extends TargetGoal {
-    protected final Predicate<? super ItemEntity> targetEntitySelector;
-    protected @Nullable ItemEntity targetEntity;
-    private List<ItemEntity> list = IAFMath.emptyItemEntityList;
-
-    public PixieAIPickupItem(EntityPixie creature, boolean checkSight) {
-        this(creature, checkSight, false);
-    }
-
-    public PixieAIPickupItem(EntityPixie creature, boolean checkSight, boolean onlyNearby) {
-        super(creature, checkSight, onlyNearby);
-        this.targetEntitySelector = (Predicate<ItemEntity>) item -> checkTamed(creature, item) || checkUntamed(creature, item);
-        this.setFlags(EnumSet.of(Flag.TARGET));
-    }
-
-    private boolean checkUntamed(final EntityPixie pixie, final ItemEntity itemEntity) {
-        if (itemEntity == null || pixie.isTame()) {
-            return false;
-        }
-
-        return itemEntity.getItem().is(IafItemTags.TAME_PIXIE);
-    }
-
-    private boolean checkTamed(final EntityPixie pixie, final ItemEntity itemEntity) {
-        if (itemEntity == null || pixie.getHealth() >= pixie.getMaxHealth() || !pixie.isTame()) {
-            return false;
-        }
-
-        return itemEntity.getItem().is(IafItemTags.HEAL_PIXIE);
+public class PixieAIPickupItem extends PickUpTargetGoal<EntityPixie, ItemEntity> {
+    public PixieAIPickupItem(final EntityPixie pixie, boolean mustSee, boolean mustReach) {
+        super(pixie, mustSee, mustReach, item -> checkTamed(pixie, item) || checkUntamed(pixie, item));
     }
 
     @Override
     public boolean canUse() {
-        if (((EntityPixie) mob).isPixieSitting()) {
+        if (getMob().isPixieSitting()) {
             return false;
         }
 
-        updateList(true);
-        return targetEntity != null;
-    }
-
-    private void updateList(boolean forceNew) {
-        list = EntityUtil.updateList(mob, forceNew ? null : list, () -> this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector));
-        targetEntity = !list.isEmpty() ? list.get(0) : null;
-    }
-
-    protected AABB getTargetableArea(double targetDistance) {
-        return this.mob.getBoundingBox().inflate(targetDistance, 4.0, targetDistance);
-    }
-
-    @Override
-    public void start() {
-        updateWantedPosition();
-        super.start();
-    }
-
-    private void updateWantedPosition() {
-        if (targetEntity == null) {
-            stop();
-            return;
-        }
-
-        this.mob.getMoveControl().setWantedPosition(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 0.25D);
-        LivingEntity attackTarget = this.mob.getTarget();
-
-        if (attackTarget == null) {
-            this.mob.getLookControl().setLookAt(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 180.0F, 20.0F);
-        }
+        return super.canUse();
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        if (this.targetEntity == null || !this.targetEntity.isAlive()) {
-            updateList(false);
-            updateWantedPosition();
-        } else if (this.mob.distanceToSqr(this.targetEntity) < 1) {
-            EntityPixie pixie = (EntityPixie) this.mob;
+        if (currentTarget != null && mob.distanceToSqr(currentTarget) < 1) {
+            EntityPixie pixie = getMob();
+            ItemStack stack = currentTarget.getItem();
 
-            if (this.targetEntity.getItem().is(IafItemTags.HEAL_PIXIE)) {
+            if (stack.is(IafItemTags.HEAL_PIXIE)) {
                 pixie.heal(5);
-            } else if (this.targetEntity.getItem().is(IafItemTags.TAME_PIXIE)) {
-                if (!pixie.isTame() && this.targetEntity.getThrowingEntity() instanceof Player player) {
-                    pixie.tame(player);
-                    pixie.setPixieSitting(true);
-                    pixie.setOnGround(true);
-                }
             }
 
-            pixie.setItemInHand(InteractionHand.MAIN_HAND, this.targetEntity.getItem());
-            this.targetEntity.getItem().shrink(1);
-            pixie.playSound(IafSoundRegistry.PIXIE_TAUNT, 1F, 1F);
+            if (stack.is(IafItemTags.TAME_PIXIE) && currentTarget.getThrowingEntity() instanceof Player player && !pixie.isTame()) {
+                pixie.tame(player);
+                pixie.setPixieSitting(true);
+                pixie.setOnGround(true);
+            }
+
+            pixie.setItemInHand(InteractionHand.MAIN_HAND, stack);
+            pixie.playSound(IafSoundRegistry.PIXIE_TAUNT, 1, 1);
+            stack.shrink(1);
+
             stop();
-        } else if (!mob.getMoveControl().hasWanted()) {
-            updateList(false);
-            updateWantedPosition();
         }
     }
 
@@ -124,9 +55,28 @@ public class PixieAIPickupItem extends TargetGoal {
     }
 
     @Override
-    public void stop() {
-        super.stop();
-        targetEntity = null;
-        list = Collections.emptyList();
+    protected void setMovement() {
+        if (currentTarget == null) {
+            return;
+        }
+
+        this.mob.getMoveControl().setWantedPosition(currentTarget.getX(), currentTarget.getY(), currentTarget.getZ(), 0.25D);
+
+        if (/* Attack target */ mob.getTarget() == null) {
+            this.mob.getLookControl().setLookAt(currentTarget, 180.0F, 20.0F);
+        }
+    }
+
+    @Override
+    protected double getSearchRange() {
+        return getFollowDistance();
+    }
+
+    private static boolean checkUntamed(final EntityPixie pixie, final ItemEntity itemEntity) {
+        return !pixie.isTame() && itemEntity.getItem().is(IafItemTags.TAME_PIXIE);
+    }
+
+    private static boolean checkTamed(final EntityPixie pixie, final ItemEntity itemEntity) {
+        return pixie.getHealth() < pixie.getMaxHealth() && pixie.isTame() && itemEntity.getItem().is(IafItemTags.HEAL_PIXIE);
     }
 }

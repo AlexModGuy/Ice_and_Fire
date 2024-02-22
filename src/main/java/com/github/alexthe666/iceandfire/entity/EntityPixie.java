@@ -257,7 +257,7 @@ public class EntityPixie extends TamableAnimal {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
-        this.goalSelector.addGoal(2, new PixieAIPickupItem(this, false));
+        this.goalSelector.addGoal(2, new PixieAIPickupItem(this, false, false));
         this.goalSelector.addGoal(2, new PixieAIFlee<>(this, Player.class, 10, (Predicate<Player>) entity -> true));
         this.goalSelector.addGoal(2, new PixieAISteal(this, 1.0D));
         this.goalSelector.addGoal(3, new PixieAIMoveRandom(this));

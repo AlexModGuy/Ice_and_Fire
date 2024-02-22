@@ -40,19 +40,4 @@ public class EntityUtil {
 
         part.setParent(parent);
     }
-
-    public static <T extends Entity> List<T> updateList(final Mob mob, final List<T> list, final Supplier<List<T>> listSupplier) {
-        List<T> result = list;
-
-        if (list == null || mob.getLevel().getGameTime() % 4 == 0) {
-            result = listSupplier.get();
-            result.removeIf(Entity::isRemoved);
-        }
-
-        if (!result.isEmpty()) {
-            result.sort(new DragonAITargetItems.Sorter(mob));
-        }
-
-        return result;
-    }
 }
