@@ -68,6 +68,7 @@ public abstract class PickUpTargetGoal<M extends Mob, T extends Entity> extends 
         super.stop();
         currentTarget = null;
         targets = Collections.emptyList();
+        tickCount = 0;
     }
 
     @SuppressWarnings("unchecked")

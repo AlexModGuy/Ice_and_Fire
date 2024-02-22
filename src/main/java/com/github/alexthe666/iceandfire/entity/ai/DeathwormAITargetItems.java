@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.entity.ai.base.PickUpTargetGoal;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -27,10 +28,11 @@ public class DeathwormAITargetItems extends PickUpTargetGoal<EntityDeathWorm, It
         }
     }
 
-    @Override // FIXME :: Test
+    @Override
     public boolean canContinueToUse() {
         if (currentTarget != null) {
-            if (mob.getTeam() == currentTarget.getTeam()) {
+            Entity thrower = currentTarget.getThrowingEntity();
+            if (/* Can be null */ thrower != null && thrower.isAlliedTo(mob)) {
                 return false;
             } else {
                 double distance = this.getFollowDistance();
