@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "iceandfire.refmap.json",
   "mixins": [
+    "PersistentEntitySectionManagerMixin",
     "gen.NoLakesInStructuresMixin",
     "gen.WorldGenRegionMixin"
   ],

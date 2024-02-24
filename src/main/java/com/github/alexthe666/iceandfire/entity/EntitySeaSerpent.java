@@ -58,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
+public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPartParent, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_SPEAK = Animation.create(15);
@@ -224,9 +224,10 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         }
     }
 
-    public void onUpdateParts() {
-        for (EntityMutlipartPart entity : segments) {
-            EntityUtil.updatePart(entity, this);
+    @Override
+    public void updateParts() {
+        for (EntityMutlipartPart segment : segments) {
+            EntityUtil.updatePart(segment, this);
         }
     }
 
@@ -281,7 +282,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
             jumpCooldown--;
         }
         refreshDimensions();
-        onUpdateParts();
+        updateParts();
         if (this.isInWater()) {
             spawnParticlesAroundEntity(ParticleTypes.BUBBLE, this, (int) this.getSeaSerpentScale());
 

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
+public class EntityHydra extends Monster implements IAnimatedEntity, MultiPartParent, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
@@ -284,6 +284,13 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         }
 
         prevHeadCount = this.getHeadCount();
+    }
+
+    @Override
+    public void updateParts() {
+        for (EntityHydraHead head : headBoxes) {
+            EntityUtil.updatePart(head, this);
+        }
     }
 
     private void clearParts() {
