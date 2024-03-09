@@ -22,12 +22,12 @@ public class EntityUtil {
             Entity existing = serverLevel.getEntity(uuid);
 
             // Update UUID if a different entity with the same UUID exists already
-            if (existing != null && existing != part) {
-                while (serverLevel.getEntity(uuid) != null) {
-                    uuid = Mth.createInsecureUUID(parent.getRandom());
-                }
+            while (serverLevel.getEntity(uuid) != null) {
+                uuid = Mth.createInsecureUUID(parent.getRandom());
+            }
 
-                IceAndFire.LOGGER.debug("Updated the UUID of [{}] due to a clash with [{}]", part, existing);
+            if (part.getUUID() != uuid) {
+                IceAndFire.LOGGER.warn("Updated the UUID of [{}] due to a clash with [{}]", part, existing);
             }
 
             part.setUUID(uuid);
