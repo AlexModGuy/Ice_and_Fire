@@ -1,0 +1,45 @@
+<recipe><iceandfire:graveyard_soil 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:coarse_dirt 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 5 60 1>
+Un fantasma también puede surgir
+en el mundo cuando un ser humano
+es asesinado por otro humano de
+manera horrible.
+
+
+
+
+
+
+
+
+
+
+
+Los cofres malditos invocan un
+fantasma que puede aparecer por
+el día al ser abiertos. La tierra
+de cementerio genera fantasmas
+por la noche, en total oscuridad.
+
+<item><iceandfire:ghost_ingot 10 110 4 1.25>
+
+
+
+
+
+Los fantasmas también pueden
+dejar caer un lingote fantasmal,
+que puede ser empleado para
+convertir una espada de hueso de
+dragón en una espada fantasmal
+en la mesa de herrería.
+<item><iceandfire:ghost_sword 10 110 55 1.25>
+
+
+
+
+
+
+La espada fantasmal es poderosa
+por sí sola, pero también dispara
+apariciones fantasmales capaces
+de atravesar bloques.

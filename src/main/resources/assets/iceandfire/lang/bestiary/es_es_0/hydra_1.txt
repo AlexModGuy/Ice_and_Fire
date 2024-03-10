@@ -1,0 +1,42 @@
+Después de que una cabeza reciba
+un daño significativo, será cortada
+y un muñón ensangrentado ocupará
+su lugar.
+
+<image><drawings_2.png 40 70 0 210 114 44 1>
+
+
+
+
+
+Sin embargo, si la criatura no
+está en llamas en los próximos
+segundos, del muñón crecerán dos
+nuevas cabezas.
+<image><drawings_2.png 40 160 0 255 114 48 1>
+
+
+
+
+
+
+
+La única forma de dañar a esta
+serpiente sin aumentar su poder es
+asegurarse de que la hidra esté
+ardiendo. Mientras esté en llamas,
+cada muñón se cauterizará y a la
+hidra no le crecerán más cabezas
+que las que ya tiene. También
+perderá sus efectos regenerativos.
+
+La hidra sólo morirá de verdad
+cuando le quede una cabeza. En
+caso contrario, sobrevivirá.
+
+Una vez muerta, es posible acceder
+libremente a la guarida de la hidra
+a por el botín de los viajeros
+devorados. La hidra muerta también
+deja caer dos objetos únicos: sus
+colmillos y raras veces su corazón.

@@ -1,19 +1,30 @@
-Las calaveras de dragón también es solo
-una vez por cuerpo. Estas
-huesos grandes se utilizan para hacer
-báculos para comandar y puede ser
-colocada en el suelo. Ellos también
-se pueden utilizar en estandartes para
-crear una figura de un dragón.
+Los cráneos de dragón también se
+obtienen una sola vez por cadáver.
+Se utilizan para fabricar bastones
+de comando y también se pueden
+colocar en el suelo y paredes.
+Además, pueden usarse para crear
+un diseño de estandarte de dragón.
 
 
 
 
 
 
-Sangre de dragón, ambas varian de
-fuego o hielo, ciertamente
-tienen propiedades mágicas.
-Sin embargo, estas propiedades son
-sin duda desconocidas, y debo
-investigar más sobre ellas ...
+La sangre de dragón, en todas sus
+variantes, ciertamente tiene
+propiedades mágicas. Sin embargo,
+estas propiedades son ciertamente
+elusivas y debo investigar más al
+respecto...
+
+
+Parece que los huesos y escamas
+de dragón se pueden compactar de
+forma segura en cubos grandes
+para su almacenamiento. Preveo que
+consolidar una masa tan grande de
+presencia mágica en un bloque
+podría tener usos imprevistos.
+<recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 70 1>
+<recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 130 1>

@@ -1,39 +1,43 @@
-Simplemente el crear un aliento de
-escarcha no es la única forma en que
-ellos atacan. También poseen muchos
-ataques diferentes.
+El aliento helado no es la única
+forma en que los dragones de
+hielo eliminan a sus presas.
+Tienen muchos ataques diferentes.
+
+
+
+<image><drawings_icedragon_attacks.png 20 110 0 91 264 90 0.65>
+
+
+
+
+El ataque de explosión de hielo del
+dragón lanza un flujo constante de
+escarcha desde la boca de la bestia.
+Los dragones más jóvenes son poco
+efectivos en este ataque, mientras
+que los más grandes pueden helar
+el terreno cercano e infligir
+enormes cantidades de daño.
+
+
+<image><drawings_icedragon_attacks.png 280 10 0 0 210 81 0.75>
 
 
 
 
 
+La explosión de hielo no es el
+único ataque elemental. El dragón
+también puede condensar escarcha
+en un bloque sólido. Luego, esta
+explosiva bloque de hielo se lanza
+hacia la presa del dragón.
+Sólo los dragones más viejos son
+capaces de realizar este ataque.
 
-
-Ataque explosivo de escarcha del 
-dragón, dispara una corriente
-constante de hielo desde la boca
-de la bestia. Mas débil mientras
-mas joven el dragón, mientra que
-los mas grandes inclusive pueden
-congelar el terreno cercano, 
-infligiendo mucho daño.
-
-
-
+<image><drawings_icedragon_attacks.png 360 242 262 211 213 78 0.6>
 
 
 
-La explosión de hielo no es el único
-ataque elemental. El dragón tambien
-puede elaborar una explosión de hielo
-en un bloque solidificado. Este cubo
-de hielo explosivo es entonces arrojada
-hacia la presa del dragón. Solo los 
-dragones mas viejos son los capaces de
-este ataque.
-
-
-
-
-Uno de los ataques más
-comunes es la mordida del dragón.
+Uno de los ataques más comunes
+del dragón es su mordedura.

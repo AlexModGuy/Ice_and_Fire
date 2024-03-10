@@ -1,0 +1,44 @@
+El aura mágica de las escamas y
+huesos de dragón definitivamente
+tiene propiedades poderosas, como
+es sabido. Cuando se combinan con
+piedra, se vuelven indestructibles
+ante el aliento de los dragones.
+<recipe><iceandfire:dragonforge_fire_brick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 5 76 1>
+
+
+
+
+
+
+
+
+
+Parece que se pueden construir
+varios objetos con estos ladrillos
+especiales. Se sabe que existen
+variantes para todos los tipos:
+fuego, hielo y eléctrico.
+<recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
+<recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+Una vez adquiridos un núcleo de
+forja, una apertura de aliento, 8
+bloques de huesos de dragón y 17
