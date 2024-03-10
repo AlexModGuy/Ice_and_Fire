@@ -1,0 +1,50 @@
+El resultado es un metal conocido
+como acero dracónico. Este es uno
+de los materiales más versátiles y
+poderosos conocidos por el hombre.
+Con él se pueden crear armaduras,
+armas y herramientas de dragón. 
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+La forja de dragón también se
+puede construir teniendo en cuenta
+a los dragones de hielo, para crear
+acero dracónico utilizando el frío
+puro de su aliento helado.
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+
+El acero dracónico de fuego
+prende en llamas a su objetivo por
+hasta 15 segundos y lo hace
+retroceder. El acero dracónico de
+hielo congela completamente a las
+criaturas. Ambos tipos de acero
+dracónico infligen cantidades
+grandes de daño y pueden acabar
+fácilmente con un dragón grande.
+La armadura de acero dracónico
+brinda mayor protección contra
+los ataques de aliento de dragón.

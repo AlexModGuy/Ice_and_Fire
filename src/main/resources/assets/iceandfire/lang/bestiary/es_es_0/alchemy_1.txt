@@ -1,0 +1,26 @@
+Al combinarla con un diamante, una
+perla de ender y una esmeralda o
+zafiro, se puede crear un cristal.
+
+<item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
+<item><iceandfire:summoning_crystal_ice 0 45 22 1.25>
+
+
+
+
+Al interactuar con un dragón,
+el cristal se vinculará a él.
+Interactuando con el cristal en
+la misma dimensión hará que el
+cristal teletransporte e invoque
+al dragón vinculado.
+
+Si el dragón muere o es imposible
+de ubicar, el cristal vinculado
+no se desvinculará.
+
+
+
+Para desvincular el cristal,
+hay que colocarlo en el espacio
+de fabricación.

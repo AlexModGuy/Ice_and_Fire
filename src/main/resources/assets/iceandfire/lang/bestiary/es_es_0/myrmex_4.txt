@@ -1,0 +1,38 @@
+Comerciar con myrmex es un negocio
+lucrativo. Los obreros no ofrecen
+gran calidad, pero están dispuestos
+a comerciar algo de resina por
+sedimentos y una que otra gema. Por
+otro lado, Los soldados ofrecerán
+recompensas comunes de criaturas
+y los centinelas darán objetos más
+raros y venenosos. La realeza
+ofrecerá artefactos e ingredientes
+alquímicos. Las reinas comercian
+exclusivamente huevos.
+
+
+
+
+
+Los bastones myrmex se pueden usar
+para modificar la estructura de las
+colonias myrmex. Llevar uno en la
+
+mano e interactuar con un myrmex
+lo vinculará a su colonia. Al
+usarlo, se pueden eliminar ciertas
+salas de la colonia y desactivar
+la reproducción de la reina. Usarlo
+estando agachado permite agregar
+una nueva sala en la posición
+actual. El bastón solo se puede
+usar si el valor de reputación en
+la colonia es de al menos 75.
+
+Los huevos solo eclosionan cuando
+están bajo tierra. Un huevo de
+reina myrmex, cuando nace cerca de
+un jugador, se vinculará a él, y
+la colonia que se forme tendrá una
+opinión permanente de 100.

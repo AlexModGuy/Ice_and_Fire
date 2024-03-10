@@ -1,0 +1,45 @@
+
+<image><drawings_2.png 70 30 0 96 58 36 1>
+
+
+
+
+Los necrófagos aterradores son
+zombis que se mueven rápidamente y
+tienen garras muy afiladas, listas
+para destrozar a sus presas.
+
+<image><drawings_2.png 65 110 0 133 69 28 1>
+
+
+
+Las bestias aterradoras son restos
+putrefactos de animales convertidos
+por el liche aterrador. Se mueven
+rápidamente y muerden a cualquier
+ser vivo que encuentren a su paso.
+
+<image><drawings_2.png 275 5 70 111 37 50 1>
+
+
+
+
+
+
+Los arácnidos aterradores son
+monstruosos bichos no muertos,
+listos para hundir sus enormes
+colmillos en cualquier cosa que
+su amo les ordene.
+
+<item><iceandfire:dread_shard 0 95 43 1.25>
+<item><iceandfire:dread_key 0 125 43 1.25>
+
+
+
+Todas las criaturas aterradoras
+sueltan fragmentos de terror, que
+pueden usarse para crear bloques
+decorativos. El liche también rara
+vez deja caer una llave, que puede
+abrir la puerta de un Mausoleo...
