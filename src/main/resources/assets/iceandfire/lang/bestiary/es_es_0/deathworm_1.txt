@@ -1,10 +1,10 @@
-Los gusanos de la muerte
-tienen dos grandes ataques.
-El primero y mas común es
-usar la garra de su lengua.
-El gusano dispara su lengua
-hacia delante para agarrar y 
-herir a su presa.
+Los gusanos de la muerte tienen
+dos ataques principales. El 
+primero y más común es el agarre
+de lengua. El gusano sacará por
+la boca un apéndice con aspecto
+de lengua retráctil para agarrar
+y herir a su presa.
 
 
 
@@ -12,11 +12,12 @@ herir a su presa.
 
 
 
-El segundo y más raro ataque
-se produce cuando el gusano
-lanza bloques cercanos a el
-aire. Empujando hacia arriba
-a quien este sobre ellos
+El segundo ataque, y más raro,
+consiste en que el gusano lanza
+bloques cercanos al aire. Estos
+mandarán a volar a quienes estén
+sobre ellos y, al momento de caer,
+los bloques pueden aplastar a la
 
 
 
@@ -33,7 +34,8 @@ a quien este sobre ellos
 
 
 
-y los bloques que caen pueden
-herir a la presa del gusano.
-Su poder aumenta dependiendo
+
+
+presa del gusano. El poder de este
+ataque se incrementa dependiendo
 del tamaño del gusano.

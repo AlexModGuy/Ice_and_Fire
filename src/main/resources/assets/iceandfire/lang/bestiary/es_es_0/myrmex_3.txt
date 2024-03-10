@@ -1,0 +1,40 @@
+Todas estas armas de myrmex son
+débiles contra los artrópodos, pero
+causan daño adicional a los no
+artrópodos y gusanos de la muerte.
+
+
+
+
+Los aguijones se usan para crear
+espadas venenosas, más poderosas
+que las armas de myrmex normales.
+
+
+
+Myrmex de todas las castas sueltan
+trozos de resina. Pueden producir
+este material por sí mismos, pero
+aun así buscarán algo de él si
+pueden encontrarlo. Arrojar trozos
+de resina al suelo a la vista de
+
+obreros myrmex permite que un
+ser humano pueda mejorar su
+reputación en la colmena.
+
+La reputación es un concepto
+importante a considerar cuando se
+trata de colonias myrmex. Esta se
+puede aumentar mediante regalos
+y comercio, y se puede reducir
+atacando o matando a cualquier
+miembro de la colonia.
+
+El valor de reputación por defecto
+de los humanos para cada colonia
+es 0. Con 25, los myrmex pasarán a
+ser neutrales. Con 50, se abrirán
+al comercio. Con 75, permitirán
+usar bastones myrmex en toda la
+colonia.

@@ -1,21 +1,19 @@
-Aún más apreciado que la quitina.
-Estos gusanos domesticados no son
-controlables en sentido general,
-pero estos gusanos se negarán
-a atacar a su dueño y su ganado.
-Crecen extremadamente rápido y 
-atacan criaturas hostiles.
-No seguirán ordenes, en lugar de 
-ello se mantienen en un radio de 
-50 bloques de donde nacieron. Por 
-lo tanto son buena opción para
-proteger sus terrenos.
+Estos gusanos "domesticados" no
+son controlables en el sentido
+general, pero se negarán a atacar
+a su dueño o a su ganado. Crecen
+extremadamente rápido y atacan a
+la mayoría de criaturas hostiles.
+No siguen ni rechazan ninguna
+orden, sino que acechan en un
+radio general de 50 metros en
+torno al lugar en el que
+eclosionaron.
 
-Las leyendas hablan de huevos raros
-que puede engendrar gusanos de muerte
-gigantes. Quizá por ello el desierto 
-esta lleno de esqueletos de dragones.
-
+Hay leyendas sobre huevos raros
+de los que nacen gusanos gigantes.
+Quizás por esto en los desiertos 
+hay tantos esqueletos de dragón.
 
 
 
@@ -23,8 +21,9 @@ esta lleno de esqueletos de dragones.
 
 
 
-Como lo dicen las leyendas, incluso hay
-una forma de montar gusanos. Usando dos
-cañas de pescar, uno puede de forma segura
-guía a un gusano desde arriba de la 
-criatura, e incluso ordenar que ataque.
+
+Según cuentan, existe una forma
+de montar gusanos, incluso a los
+salvajes. Con dos cañas de pescar,
+se puede guiar a un gusano desde
+arriba e incluso ordenarle atacar.

@@ -1,38 +1,42 @@
-    Entonces las leyendas son
-verdaderas, bestias como la de
-esta entrada existen. Muy bien.
-Yo intentaré tan bien como pueda
-describir a la bestia y sus
-ocupaciones.
+Entonces las leyendas son ciertas.
+Bestias como aquella en la que se
+centra esta entrada existen.
+Muy bien. Intentaré describir lo
+mejor que pueda tal bestia y sus
+actividades.
+
+
+
+<image><drawings_icedragon.png 0 80 0 0 194 93 1>
 
 
 
 
 
 
+Tiene una apariencia obviamente
+reptiliana. Sin embargo, es mucho
+más grande que el reptil promedio;
+¡los individuos que he visto varían
 
+desde el tamaño de un cerdo hasta
+25 metros! Incluso hay rumores de
+dragones más grandes que duermen
+en antiguas criptas bajo el hielo.
 
+Otra característica destacable que
+poseen es la capacidad de volar.
+Esto se evidencia en el desarrollo
+de grandes alas funcionales.
+Aunque las bestias parecen lentas
+al principio, pueden despegar y
+volar rápidamente tras sus presas.
+Quizás el aspecto más peligroso de
+ellos es su capacidad de producir
+aliento helado con la boca. Usan
+este poder para congelar vivas a
+sus presas.
 
-La apariencia de la bestia es
-obviamente reptil. De igual
-manera, eso es más grande que
-el promedio reptil; vi algunos
-
-que van desde el tamaño de un cerdo
-a 25 bloques. Incluso hay rumores de
-algunos más grandes, durmiendo en 
-criptas bajo hielo.
-
-Otra característica notable que
-poseen es la capacidad de vuelo.
-Esto está indicado por desarrollo 
-de alas grandes. Aunque todas las
-bestian puedan parecer perezosas al
-principio, pueden despegar y volar
-rápidamente.
-
-    Quizás el más peligroso aspecto
-sobre ellos es su capacidad para 
-producir aliento de escarcha de sus bocas.
-Usan este poder para congelar a su
-presa viva.
+Los dragones machos tienen alas
+moteadas y guardan más tesoros,
+las hembras tienen cuernos curvos.

@@ -1,0 +1,67 @@
+ladrillos de forja, se puede
+construir la estructura que
+servirá como forja de dragón.
+
+<block><iceandfire:dragon_bone_block 0 40 30 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<block><iceandfire:dragon_bone_block 0 56 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<block><iceandfire:dragon_bone_block 0 24 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<block><iceandfire:dragon_bone_block 0 40 46 1>
+Nivel 1
+
+
+
+
+
+
+
+<block><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<block><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<block><iceandfire:dragonforge_fire_core 0 40 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<block><iceandfire:dragonforge_fire_input 0 32 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 86 1>
+Nivel 2
+
+
+
+
+
+
+
+
+<block><iceandfire:dragon_bone_block 0 140 10 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<block><iceandfire:dragon_bone_block 0 156 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<block><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<block><iceandfire:dragon_bone_block 0 124 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<block><iceandfire:dragon_bone_block 0 140 26 1>
+Nivel 3
+
+
+
+
+
+
+La forja se construye colocando
+el nivel 1, luego el nivel 2 encima
+del 1 y al final el nivel 3 encima
+del 2. Cuando esté finalizada,
+necesitará algún tipo de poder.
+
+Para darle poder a la forja, se
+requiere aliento de dragón. Esto
+se puede lograr llevando un dragón
+domesticado a la estructura o
+capturando un dragón salvaje por
+medio de cadenas.

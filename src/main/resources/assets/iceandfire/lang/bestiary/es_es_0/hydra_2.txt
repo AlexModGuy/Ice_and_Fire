@@ -1,0 +1,42 @@
+<item><iceandfire:hydra_fang 0 35 4 1.25>
+<item><iceandfire:hydra_heart 0 110 4 1.25>
+
+
+
+El colmillo de hidra es un objeto
+valioso que se puede utilizar para
+crear flechas venenosas especiales.
+
+<recipe><iceandfire:hydra_arrow 0 minecraft:air 0 iceandfire:hydra_fang 0 minecraft:air 0 minecraft:air 0 minecraft:stick 0 minecraft:air 0 minecraft:air 0 minecraft:waterlily 0 minecraft:air 0 0 75 1>
+
+
+
+
+
+
+
+
+Estas flechas tienen un efecto
+adicional: cuando impactan en el
+objetivo, le arrebatan vida y curan
+a quien disparó la flecha.
+
+
+
+
+
+
+El corazón de hidra es un objeto
+muy raro y codiciado por sus
+efectos. Cuando está en la barra
+de acceso rápido, el corazón
+proporcionará niveles crecientes
+de regeneración según la cantidad
+de salud que haya perdido el
+usuario.
+
+El poderoso corazón de este
+monstruo hace que la difícil batalla
+valga la pena, y quizás explique
+por qué la guarida de la hidra
+contiene tantos huesos.

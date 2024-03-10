@@ -1,0 +1,44 @@
+En los rincones más fríos del mundo,
+una fuerza nefasta se ha sellado.
+Enormes complejos conocidos como
+Mausoleos, construidos con la
+indestructible piedra aterradora,
+mantienen alejado a un antiguo mal.
+
+Sin embargo, su poder se ha ido
+debilitando. Se han visto seres de
+otra era y lugar emergiendo de
+estas estructuras y explorando los
+páramos helados.
+
+El que se ve más comúnmente es el
+liche aterrador, un peligroso
+nigromante capaz de convocar
+abominaciones no muertas para
+defenderse.
+
+<image><drawings_2.png 230 25 0 0 36 42 1>
+<image><drawings_2.png 300 10 37 0 38 59 1>
+
+
+
+
+
+
+
+Equipado con su bastón, el
+nigromante disparará un cráneo de
+alma congelada a su objetivo o
+invocará a alguno de estos seres:
+<image><drawings_2.png 250 120 0 60 87 35 1>
+
+
+
+
+
+Los esclavos aterradores son
+débiles esqueletos convocados
+por el nigromante. Al emerger del
+suelo, están equipados con espadas
+rotas y armaduras que usaron en
+sus vidas pasadas.

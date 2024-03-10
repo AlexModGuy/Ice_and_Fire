@@ -1,0 +1,44 @@
+Durante demasiado tiempo hemos oido
+cuentos de reptiles gigantes que
+encarnan un elemento primordial;
+fuego y hielo. Pero se ha corrido
+la voz de una criatura similar que
+persiste sólo en los biomas más
+exóticos: el dragón eléctrico.
+
+
+<image><drawings_lightningdragon.png 0 80 0 0 194 93 1>
+
+
+
+
+
+
+El dragón eléctrico, que acecha los
+negros cielos nocturnos de sabanas,
+mesetas y junglas, es nocturno, a
+diferencia de sus primos de hielo
+y fuego. Habita en nidos y cuevas
+subterráneas llenas de bloques que
+se han agrietado al ser alcanzados
+por sus rayos. Al igual que los
+dragones de hielo y fuego tienen
+afinidades por ciertos metales y
+gemas, los dragones eléctricos
+aman el cobre y la amatista.
+
+<item><minecraft:copper_ingot 100 130 40 1>
+<item><minecraft:copper_ore 100 110 40 1>
+<item><minecraft:amethyst_shard 100 170 40 1>
+<item><minecraft:amethyst_block 100 150 40 1>
+
+
+
+La mena de cobre se puede hallar a
+gran altura en cualquier parte del
+mundo. La amatista se encuentra
+a gran profundidad en las sabanas.
+
+El cobre puede adoptar cualquier
+forma que la plata pueda, aunque
+es un metal mucho más débil.
