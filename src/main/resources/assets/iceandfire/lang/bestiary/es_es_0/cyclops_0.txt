@@ -27,7 +27,7 @@ valiosos, además de ovejas.
 
 
 
-**********************************
+
 Los cíclopes son criaturas muy
 vigilantes, capaces de ver presas
 y amenazas potenciales desde
@@ -36,5 +36,4 @@ tienen un solo ojo, este se vuelve
 un punto débil y su habilidad
 puede verse gravemente disminuida.
 
-
-Tomando una flecha y apuntando
+Al tomar una flecha y dispararla
