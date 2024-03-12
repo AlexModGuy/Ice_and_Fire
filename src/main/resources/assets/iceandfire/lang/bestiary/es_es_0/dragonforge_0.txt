@@ -15,10 +15,10 @@ ante el aliento de los dragones.
 
 
 Parece que se pueden construir
-varios objetos con ladrillos de
-forja de dragón. Se sabe que
-existen variantes para todos los
-tipos: fuego, hielo y eléctrico.
+varios objetos con estos ladrillos
+especiales. Se sabe que existen
+variantes para todos los tipos:
+fuego, hielo y eléctrico.
 <recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
 <recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
 
@@ -38,7 +38,7 @@ tipos: fuego, hielo y eléctrico.
 
 
   
-**********************************
+
 Una vez adquiridos un núcleo de
 forja, una apertura de aliento, 8
 bloques de huesos de dragón y 17
