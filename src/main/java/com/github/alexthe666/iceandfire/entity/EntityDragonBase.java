@@ -370,7 +370,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             }
 
             if (!wasSuccessful) {
-                resetParts(1);
+                resetParts(getRenderSize() / 3);
             }
         }
     }
