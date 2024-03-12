@@ -32,6 +32,7 @@ import com.github.alexthe666.iceandfire.world.DragonPosWorldData;
 import com.google.common.base.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -221,16 +222,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     private Animation currentAnimation;
     private float lastScale;
 
-    private EntityDragonPart headPart;
-    private EntityDragonPart neckPart;
-    private EntityDragonPart rightWingUpperPart;
-    private EntityDragonPart rightWingLowerPart;
-    private EntityDragonPart leftWingUpperPart;
-    private EntityDragonPart leftWingLowerPart;
-    private EntityDragonPart tail1Part;
-    private EntityDragonPart tail2Part;
-    private EntityDragonPart tail3Part;
-    private EntityDragonPart tail4Part;
+    protected @Nullable List<EntityDragonPart> parts;
+    private @Nullable EntityDragonPart headPart;
     private boolean isOverAir;
 
     private LazyOptional<?> itemHandler = null;
@@ -339,92 +332,47 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public void resetParts(float scale) {
         removeParts();
+
         headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
-        headPart.copyPosition(this);
-        headPart.setParent(this);
-        neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
-        neckPart.copyPosition(this);
-        neckPart.setParent(this);
-        rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
-        rightWingUpperPart.copyPosition(this);
-        rightWingUpperPart.setParent(this);
-        rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
-        rightWingLowerPart.copyPosition(this);
-        rightWingLowerPart.setParent(this);
-        leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
-        leftWingUpperPart.copyPosition(this);
-        leftWingUpperPart.setParent(this);
-        leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
-        leftWingLowerPart.copyPosition(this);
-        leftWingLowerPart.setParent(this);
-        tail1Part = new EntityDragonPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
-        tail1Part.copyPosition(this);
-        tail1Part.setParent(this);
-        tail2Part = new EntityDragonPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
-        tail2Part.copyPosition(this);
-        tail2Part.setParent(this);
-        tail3Part = new EntityDragonPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
-        tail3Part.copyPosition(this);
-        tail3Part.setParent(this);
-        tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
-        tail4Part.copyPosition(this);
-        tail4Part.setParent(this);
+        EntityDragonPart neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
+        EntityDragonPart rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        EntityDragonPart rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        EntityDragonPart leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        EntityDragonPart leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        EntityDragonPart tail1Part = new EntityDragonPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail2Part = new EntityDragonPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail3Part = new EntityDragonPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
+
+        parts = NonNullList.of(headPart, neckPart, rightWingUpperPart, rightWingLowerPart, leftWingUpperPart, leftWingLowerPart, tail1Part, tail2Part, tail3Part, tail4Part);
     }
 
     public void removeParts() {
-        if (headPart != null) {
-            headPart.remove(RemovalReason.DISCARDED);
+        if (parts != null) {
+            for (EntityDragonPart part : parts) {
+                part.discard();
+            }
+
+            parts = null;
             headPart = null;
-        }
-        if (neckPart != null) {
-            neckPart.remove(RemovalReason.DISCARDED);
-            neckPart = null;
-        }
-        if (rightWingUpperPart != null) {
-            rightWingUpperPart.remove(RemovalReason.DISCARDED);
-            rightWingUpperPart = null;
-        }
-        if (rightWingLowerPart != null) {
-            rightWingLowerPart.remove(RemovalReason.DISCARDED);
-            rightWingLowerPart = null;
-        }
-        if (leftWingUpperPart != null) {
-            leftWingUpperPart.remove(RemovalReason.DISCARDED);
-            leftWingUpperPart = null;
-        }
-        if (leftWingLowerPart != null) {
-            leftWingLowerPart.remove(RemovalReason.DISCARDED);
-            leftWingLowerPart = null;
-        }
-        if (tail1Part != null) {
-            tail1Part.remove(RemovalReason.DISCARDED);
-            tail1Part = null;
-        }
-        if (tail2Part != null) {
-            tail2Part.remove(RemovalReason.DISCARDED);
-            tail2Part = null;
-        }
-        if (tail3Part != null) {
-            tail3Part.remove(RemovalReason.DISCARDED);
-            tail3Part = null;
-        }
-        if (tail4Part != null) {
-            tail4Part.remove(RemovalReason.DISCARDED);
-            tail4Part = null;
         }
     }
 
-    public void updateParts() {
-        EntityUtil.updatePart(headPart, this);
-        EntityUtil.updatePart(neckPart, this);
-        EntityUtil.updatePart(rightWingUpperPart, this);
-        EntityUtil.updatePart(rightWingLowerPart, this);
-        EntityUtil.updatePart(leftWingUpperPart, this);
-        EntityUtil.updatePart(leftWingLowerPart, this);
-        EntityUtil.updatePart(tail1Part, this);
-        EntityUtil.updatePart(tail2Part, this);
-        EntityUtil.updatePart(tail3Part, this);
-        EntityUtil.updatePart(tail4Part, this);
+    public void addPartsToLevel() {
+        if (parts != null) {
+            boolean wasSuccessful = true;
+
+            for (EntityDragonPart part : parts) {
+                if (!EntityUtil.addPartToLevel(part, this)) {
+                    IceAndFire.LOGGER.error("Failed to add multipart [{}] of entity [{}] to level - trying again", part, this);
+                    wasSuccessful = false;
+                }
+            }
+
+            if (!wasSuccessful) {
+                resetParts(1);
+            }
+        }
     }
 
     protected void updateBurnTarget() {
@@ -1718,7 +1666,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void tick() {
         super.tick();
         refreshDimensions();
-        updateParts();
+        addPartsToLevel();
         this.prevDragonPitch = getDragonPitch();
         level().getProfiler().push("dragonLogic");
         this.setMaxUpStep(getStepHeight());
@@ -2780,12 +2728,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return super.canAttack(target) && DragonUtils.isAlive(target);
     }
 
-    public boolean isPart(Entity entityHit) {
-        return headPart != null && headPart.is(entityHit) || neckPart != null && neckPart.is(entityHit) ||
-                leftWingLowerPart != null && leftWingLowerPart.is(entityHit) || rightWingLowerPart != null && rightWingLowerPart.is(entityHit) ||
-                leftWingUpperPart != null && leftWingUpperPart.is(entityHit) || rightWingUpperPart != null && rightWingUpperPart.is(entityHit) ||
-                tail1Part != null && tail1Part.is(entityHit) || tail2Part != null && tail2Part.is(entityHit) ||
-                tail3Part != null && tail3Part.is(entityHit) || tail4Part != null && tail4Part.is(entityHit);
+    public boolean isPart(final Entity entityHit) {
+        if (parts == null) {
+            return false;
+        }
+
+        for (EntityDragonPart part : parts) {
+            if (part.is(entityHit)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

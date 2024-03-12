@@ -262,10 +262,10 @@ public class EntityHydra extends Monster implements IAnimatedEntity, MultiPartPa
 
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
-            EntityUtil.updatePart(headBoxes[i], this);
+            EntityUtil.addPartToLevel(headBoxes[i], this);
 
             headBoxes[HEADS + i].setPos(headBoxes[HEADS + i].getX(), this.getY() + partY, headBoxes[HEADS + i].getZ());
-            EntityUtil.updatePart(headBoxes[HEADS + 1], this);
+            EntityUtil.addPartToLevel(headBoxes[HEADS + 1], this);
         }
 
         if (getHeadCount() > 1 && !isOnFire()) {
@@ -287,9 +287,9 @@ public class EntityHydra extends Monster implements IAnimatedEntity, MultiPartPa
     }
 
     @Override
-    public void updateParts() {
+    public void addPartsToLevel() {
         for (EntityHydraHead head : headBoxes) {
-            EntityUtil.updatePart(head, this);
+            EntityUtil.addPartToLevel(head, this);
         }
     }
 

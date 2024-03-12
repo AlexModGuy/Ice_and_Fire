@@ -225,9 +225,9 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
     }
 
     @Override
-    public void updateParts() {
+    public void addPartsToLevel() {
         for (EntityMutlipartPart segment : segments) {
-            EntityUtil.updatePart(segment, this);
+            EntityUtil.addPartToLevel(segment, this);
         }
     }
 
@@ -282,7 +282,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
             jumpCooldown--;
         }
         refreshDimensions();
-        updateParts();
+        addPartsToLevel();
         if (this.isInWater()) {
             spawnParticlesAroundEntity(ParticleTypes.BUBBLE, this, (int) this.getSeaSerpentScale());
 

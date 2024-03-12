@@ -273,9 +273,4 @@ public abstract class EntityMutlipartPart extends Entity {
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
-
-    public boolean shouldExist() {
-        Entity parent = getParent();
-        return parent != null && parent.isAddedToWorld() && !isRemoved();
-    }
 }
