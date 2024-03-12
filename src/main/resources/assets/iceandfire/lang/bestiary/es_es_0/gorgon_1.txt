@@ -1,29 +1,30 @@
-Una vez que la criatura es derrotada,
-el valiente alma que lo mató puede
-obtener la cabeza de la criatura.
+Derrotado el monstruo, aquel que
+le haya matado puede extraer la
+cabeza de la criatura del cadáver.
 
 
 
 
 
-Esta cabeza puede aprovechar el
-inmenso poder de la gorgona para poder
-convertir lo que sea que mire en piedra.
-Simplemente sostenga la cabeza cortada y
-apúntele a cualquier criatura que quieras
-convertir en piedra.
+Aunque muerta, la cabeza conserva
+el inmenso poder de la gorgona de
+convertir en piedra a cualquiera
+que la mire. Con levantarla y
+apuntarla hacia una criatura, esta
+se petrificará inmediatamente.
 
 
 
 
 
-
+**********************************
+Cualquier estatua 
 Cualquier cosa convertida en piedra puede 
 ser minada con un pico y solo caerá
 adoquín, a menos que se use un pico con
 toque de seda se utiliza en la estatua,
 en en ese caso, caerá una piedra
 estatua como ella misma.
-
-Ten cuidado, ya que la cabeza de la gorgona
+**********************************
+Cuidado, ¡la cabeza de la gorgona
 solo se puede usar una vez!
