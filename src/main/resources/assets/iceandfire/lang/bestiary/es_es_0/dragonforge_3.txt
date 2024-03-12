@@ -20,7 +20,7 @@ armas y herramientas de dragón.
 
 
 
-**********************************
+
 El acero dracónico puede crearse
 también con el frío aliento del
 dragón de hielo y las chispeantes
@@ -29,20 +29,29 @@ respectivas forjas.
 <item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
 <item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
 <item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+<item><iceandfire:dragonforge_lightning_brick 0 70 20 1.5>
+<item><iceandfire:dragonforge_lightning_input 0 90 20 1.5>
+<item><iceandfire:dragonforge_lightning_core 0 110 20 1.5>
 
 
 
 
 
 
-FFire dragonsteel sets attackers
-aflame for up to 15 seconds and
-deals a large amount of knockback.
-Ice dragonsteel freezes targets
-into a giant block of ice. Both
-types of dragonsteel deal high
-amounts of damage and can easily
-dispatch a large dragon.
-Dragonsteel armor also provides
-increased protection against
-dragon breath attacks.
+
+
+
+
+
+
+El acero dragónico de fuego prende
+en llamas a su objetivo por 15
+segundos y lo hace retroceder. El
+de hielo congela completamente a
+las criaturas y el eléctrico hace
+que les caiga un rayo. Todos los
+tipos causan grandes cantidades de
+daño y pueden acabar fácilmente
+con dragones grandes. La armadura
+brinda mayor protección contra los
+ataques de aliento de dragón.
