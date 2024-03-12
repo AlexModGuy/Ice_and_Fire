@@ -66,6 +66,7 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -2926,4 +2927,15 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return pDeltaMovement;
         return super.handleRelativeFrictionAndCalculateMovement(pDeltaMovement, pFriction);
     }
-}
+
+    public void dropEverything() {
+        if (level() instanceof ServerLevel serverLevel) {
+            dragonInventory.removeAllItems().forEach(stack -> serverLevel.addFreshEntity(new ItemEntity(serverLevel, getX(), getY(), getZ(), stack)));
+
+            getArmorSlots().forEach(stack -> {
+                if (!stack.isEmpty()) {
+                    serverLevel.addFreshEntity(new ItemEntity(serverLevel, getX(), getY(), getZ(), stack));
+                }
+            });
+        }
+    }}

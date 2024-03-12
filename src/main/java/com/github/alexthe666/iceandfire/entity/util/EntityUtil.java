@@ -31,6 +31,8 @@ public class EntityUtil {
 
             if (attempts == 0 && !part.isAddedToWorld()) {
                 if (parent instanceof EntityDragonBase dragon) {
+                    dragon.dropEverything();
+
                     ResourceLocation location = Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(dragon.getType()));
                     UUID owner = dragon.getOwnerUUID();
 
