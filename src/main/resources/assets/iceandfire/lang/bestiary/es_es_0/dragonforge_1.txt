@@ -11,7 +11,7 @@ servirá como forja de dragón.
 <block><iceandfire:dragon_bone_block 0 24 38 1>
 <block><iceandfire:dragonforge_fire_brick 0 32 42 1>
 <block><iceandfire:dragon_bone_block 0 40 46 1>
-              Nivel 1              
+Nivel 1
 
 
 
@@ -28,7 +28,7 @@ servirá como forja de dragón.
 <block><iceandfire:dragonforge_fire_brick 0 24 78 1>
 <block><iceandfire:dragonforge_fire_input 0 32 82 1>
 <block><iceandfire:dragonforge_fire_brick 0 40 86 1>
-              Nivel 2              
+Nivel 2
 
 
 
@@ -46,15 +46,15 @@ servirá como forja de dragón.
 <block><iceandfire:dragon_bone_block 0 124 18 1>
 <block><iceandfire:dragonforge_fire_brick 0 132 22 1>
 <block><iceandfire:dragon_bone_block 0 140 26 1>
-              Nivel 3              
+Nivel 3
 
 
 
 
 
 
-La forja se construye colocando el
-nivel 1, luego el nivel 2 encima
+La forja se construye colocando
+el nivel 1, luego el nivel 2 encima
 del 1 y al final el nivel 3 encima
 del 2. Cuando esté finalizada,
 necesitará algún tipo de poder.
