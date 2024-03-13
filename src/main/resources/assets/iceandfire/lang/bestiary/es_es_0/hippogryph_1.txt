@@ -1,22 +1,22 @@
-Una vez que la bestia se ha dado un festín
-con las patas de conejo, La bestia
-se mostrara sumisa. El propietario ahora
-puede colarse e interactuar con la bestia
-al mismo tiempo puede colocar una montura,
-una armadura o incluso un cofre de 
-almacenamiento.
+Una vez que la bestia se haya dado
+un festín con las patas de conejo,
+se acostará y mostrará sumisión.
+Su amo ahora puede agacharse e
+interactuar con él con la mano libre
+para abrir su inventario y equiparle
+una montura, armadura o cofre.
 
 
 
 
 
-Un simple palo se puede usar para
-ordenar al hipogrifo ya sea
-sentarse o vagar. Se recomienda
-montar a un hipogrifo cuando
-este este en modo deambular.
 
 
+Se puede utilizar un simple palo
+para ordenarle al hipogrifo que se
+siente o deambule. Se recomienda
+montar al hipogrifo cuando se le
+haya ordenado deambular.
 
 
 
@@ -26,15 +26,15 @@ este este en modo deambular.
 
 
 La armadura de hipogrifo se puede
-hacer como se muestra arriba.
+fabricar como se muestra arriba.
 
 
 
 
 
-Finalmente, uno puede criar dos
-hipográficos al alimentar ambos
-con estofado de conejo.
-Tenga cuidado al alojar
-hipogrifos, ya que pueden volar
-vastas distancias.
+Por último, se pueden criar dos
+hipogrifos alimentando a ambos con
+estofado de conejo. Cuidado al
+albergar hipogrifos, pueden volar
+grandes distancias. Se les puede
+llamar con una flauta de hueso.
