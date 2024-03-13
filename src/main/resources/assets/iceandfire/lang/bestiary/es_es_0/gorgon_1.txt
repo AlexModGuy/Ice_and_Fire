@@ -17,14 +17,13 @@ se petrificará inmediatamente.
 
 
 
-**********************************
-Cualquier estatua 
-Cualquier cosa convertida en piedra puede 
-ser minada con un pico y solo caerá
-adoquín, a menos que se use un pico con
-toque de seda se utiliza en la estatua,
-en en ese caso, caerá una piedra
-estatua como ella misma.
-**********************************
+
+Cualquier estatua de piedra puede
+minarse con un pico y se romperá
+dejando caer solo roca, a menos que
+se use un pico con Toque de seda,
+en cuyo caso se podrá obtener la
+estatua de piedra intacta.
+
 Cuidado, ¡la cabeza de la gorgona
 solo se puede usar una vez!
