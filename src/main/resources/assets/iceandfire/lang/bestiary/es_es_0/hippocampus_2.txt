@@ -1,28 +1,16 @@
-Los hipocampos pueden quedarse
-sentados cuando usted interactúa
-con ellos sosteniendo un palo.
+Se puede hacer que el hipocampo se
+siente a esperar interactuando con
+él mientras se sostiene un palo.
 
 
 
 
 
-Al morir, un hipocampo soltará
+Al morir, un hipocampo deja caer
 escamas brillantes.
 
-Estas escamas brillantes se pueden utilizar
-para crear pociones misteriosas que
-conceden respiración acuática.
-
-
-
-
-
-
-
-
-
-
-
-Cuanto más escamas use en el
-proceso, mayor será la
-duración del efecto de la poción.
+Estas escamas brillantes, cuando
+se mezclan con un frasco con agua
+en un soporte para pociones, se
+pueden convertir en pociones de
+Apnea/Respiración.
