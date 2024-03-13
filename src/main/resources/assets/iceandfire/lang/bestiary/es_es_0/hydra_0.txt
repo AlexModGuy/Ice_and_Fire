@@ -27,5 +27,16 @@ por viajeros descuidados. Pues ni
 siquiera un cíclope o un dragón de
 hielo podrían derrotar a esta bestia.
 
-  
-**********************************
+La hidra se caracteriza no solo por
+su aliento y mordedura altamente
+venenosos, sino también por sus
+potentes habilidades regenerativas.
+Por cada cabeza cortada, dos tomarán
+su lugar. Y por cada cabeza que
+crece, la hidra adquiere efectos
+regenerativos cada vez más fuertes.
+
+La hidra puede tener un máximo de
+nueve cabezas y, a menos que se
+encuentre en llamas, se curará
+constantemente a gran velocidad.
