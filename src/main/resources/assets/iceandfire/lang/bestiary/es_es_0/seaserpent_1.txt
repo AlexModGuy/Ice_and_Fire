@@ -35,6 +35,6 @@ varias razones.
 
 En primer lugar, los dientes y
 escamas se pueden utilizar para
-crear flechas místicas que viajan
-a través del agua como si de aire
-se tratase.
+crear flechas místicas que no se
+inundan de agua como todos los
+demás tipos de flecha.
