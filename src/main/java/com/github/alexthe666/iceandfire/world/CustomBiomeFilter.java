@@ -1,11 +1,13 @@
 package com.github.alexthe666.iceandfire.world;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.datagen.IafBiomeTagGenerator;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -46,7 +48,7 @@ public class CustomBiomeFilter extends PlacementFilter {
         TagKey<Biome> blacklist = blacklistReference.get();
         Holder<Biome> biome = context.getLevel().getBiome(position);
 
-        if (blacklist != null && biome.is(blacklist)) {
+        if (blacklist != null && (biome.is(blacklist) || /* Try to avoid Alex's Caves */ IceAndFire.ALEX_CAVES && isCloseToBlacklist(context.getLevel(), position, blacklist))) {
             // This is the underground biome (where the cave feature will actually be placed) - meaning if it's in the blacklist there is no need to do further checks
             return false;
         }
@@ -63,6 +65,14 @@ public class CustomBiomeFilter extends PlacementFilter {
         }
 
         return hasFeature;
+    }
+
+    /** Currently only called if Alex's Caves is present since otherwise it shouldn't really be relevant (and would just cost performance) */
+    private boolean isCloseToBlacklist(final WorldGenLevel level, final BlockPos position, final TagKey<Biome> blacklist) {
+        return level.getBiome(position.offset(32, 0, 32)).is(blacklist) ||
+                level.getBiome(position.offset(32, 0, -32)).is(blacklist) ||
+                level.getBiome(position.offset(-32, 0, 32)).is(blacklist) ||
+                level.getBiome(position.offset(-32, 0, -32)).is(blacklist);
     }
 
     public @NotNull PlacementModifierType<?> type() {

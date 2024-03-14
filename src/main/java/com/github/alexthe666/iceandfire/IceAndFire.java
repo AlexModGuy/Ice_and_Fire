@@ -55,6 +55,8 @@ public class IceAndFire {
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     private static int packetsRegistered = 0;
 
+    public static boolean ALEX_CAVES;
+
     static {
         NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("iceandfire", "main_channel"));
         String version = PROTOCOL_VERSION;
@@ -110,6 +112,8 @@ public class IceAndFire {
         modBus.addListener(this::setup);
         modBus.addListener(this::setupComplete);
         modBus.addListener(this::setupClient);
+
+        ALEX_CAVES = ModList.get().isLoaded("alexscaves");
     }
 
     @SubscribeEvent
