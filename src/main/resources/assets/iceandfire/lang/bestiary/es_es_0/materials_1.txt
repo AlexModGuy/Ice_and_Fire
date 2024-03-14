@@ -1,8 +1,8 @@
 
 
 
-El hueso de Wither también se puede
-convertir en fragmentos, que
+El hueso de Wither también puede
+convertirse en fragmentos, que
 reemplazan al pedernal al hacer
 flechas de hueso de dragón.
 
@@ -12,24 +12,16 @@ flechas de hueso de dragón.
 
 
 
-La carne de dragón también se puede
-extraer de los dragones. No se puede
-cocinar y tiene distintos efectos
-según el tipo de dragón del que
-proviene. La carne del dragón de
-fuego quemará a quien la com
-**********************************
-La carne de dragón también puede obtenerse
-de cadáveres. Esta carne no puede ser
-cocinada y tiene diferentes efectos
-dependiendo de que clase de dragón vino.
-La carne de dragón de fuego
+También se puede extraer carne de
+los dragones muertos. Esta carne
+no se puede cocinar y tiene efectos
+diferentes según el tipo elemental
+del dragón del que proviene,
 
-
-golpea a su comensal, y la carne de dragón
-de hielo puede retardar a su consumidor a
-un alto. Toda carne restaura tanto
-como carne cocida.
+pudiendo quemar, ralentizar o
+electrocutar a quien la consuma.
+Todas las carnes sacian tanto como
+un filete asado.
 
 
 
@@ -37,7 +29,6 @@ como carne cocida.
 
 
 
-Los corazones de dragón solo pueden soltarse
-una vez por cada cadáver. Yo actualmente
-no estoy al tanto de su propósito ...
-
+Es posible obtener un único corazón
+de dragón por cadáver. Actualmente
+no estoy al tanto de su propósito...
