@@ -1,32 +1,45 @@
-    Una nota pequeña y desgastada
-permanece fijada en el bestiario. ella
-dice:
+_Una pequeña nota andrajosa cuelga
+de la encuadernación del bestiario.
+Dice lo siguiente:_
 
+<item><iceandfire:manuscript 0 38 20 1>
 
-"Este manuscrito es una guía
-dedicado a aquellas personas
-que buscan informarse sobre
-las maravillas del reino sobrenatural.
-Este libro abarca conceptos básicos
-para diseñar herramientas, armaduras, y armas
-para rastrear, cazar, y aprender un poco
-sobre esas misteriosas criaturas"
+**Este manuscrito pretende ser una
+guía para aquellos que deseen saber
+sobre las mayores maravillas de
+este reino sobrenatural. Cubrirá
+algunos de los conceptos básicos
+del diseño de herramientas, armas
+y armaduras para rastrear, cazar y
+aprender sobre seres misteriosos.**
 
-    El bestiario luego pasa a
-describir cambios sobrenaturales en
-la generación del mundo, comenzando
-con extraños minerales.
+_Luego, el bestiario continúa
+describiendo cambios sobrenaturales
+en la generación del mundo,
+comenzando con minerales extraños._
 
 
 Un mineral con propiedades místicas,
-El mineral de plata generalmente
-aparece en las mismas capas que el oro.
+la plata se puede encontrar a la
+misma profundidad que el oro.
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
 
 
 
 
-Puede fundirse en lingotes
-que tienen una variedad de usos.
+Se puede fundir en lingotes, que
+tienen diversos usos.
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
 
 
 
@@ -35,6 +48,7 @@ que tienen una variedad de usos.
 
 
 
-Las armas de plata hacen daño
-extra a los muertos vivientes,
-debido a sus propiedades mágicas.
+
+Las armas de plata confieren daño
+adicional a los no-muertos, debido
+a sus propiedades mágicas.
