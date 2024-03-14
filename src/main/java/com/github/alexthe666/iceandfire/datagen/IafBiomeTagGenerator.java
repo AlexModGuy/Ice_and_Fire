@@ -19,6 +19,10 @@ public class IafBiomeTagGenerator extends BiomeTagsProvider {
     public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
     public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "has_structure/graveyard"));
 
+    public static final TagKey<Biome> BLACKLIST_FIRE_DRAGON_CAVE = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "blacklist/fire_dragon_cave"));
+    public static final TagKey<Biome> BLACKLIST_ICE_DRAGON_CAVE = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "blacklist/fire_ice_cave"));
+    public static final TagKey<Biome> BLACKLIST_LIGHTNING_DRAGON_CAVE = TagKey.create(ForgeRegistries.BIOMES.getRegistryKey(), new ResourceLocation(IceAndFire.MODID, "blacklist/fire_lightning_cave"));
+
 
     public IafBiomeTagGenerator(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(pOutput, pProvider, IceAndFire.MODID, existingFileHelper);
@@ -29,6 +33,10 @@ public class IafBiomeTagGenerator extends BiomeTagsProvider {
         tag(HAS_GRAVEYARD).addTag(BiomeTags.IS_OVERWORLD);
         tag(HAS_MAUSOLEUM).addTag(BiomeTags.IS_OVERWORLD);
         tag(HAS_GORGON_TEMPLE).addTag(BiomeTags.IS_OVERWORLD);
+
+        tag(BLACKLIST_FIRE_DRAGON_CAVE).addOptionalTag(new ResourceLocation("alexscaves", "alexs_caves_biomes"));
+        tag(BLACKLIST_ICE_DRAGON_CAVE).addOptionalTag(new ResourceLocation("alexscaves", "alexs_caves_biomes"));
+        tag(BLACKLIST_LIGHTNING_DRAGON_CAVE).addOptionalTag(new ResourceLocation("alexscaves", "alexs_caves_biomes"));
     }
 
     @Override
