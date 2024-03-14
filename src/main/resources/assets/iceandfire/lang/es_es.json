@@ -696,7 +696,7 @@
   "amphithere.command.1": "Este anfíptero está esperando.",
   "amphithere.command.2": "Este anfíptero te está siguiendo.",
 
-  "container.lectern.no_bestiary": "No se pueden añadir páginas",
+  "container.lectern.no_bestiary": "Se necesita un bestiario.",
   "container.lectern.costs": "Costo:",
   "container.lectern.manuscript.many": "%s manuscritos",
   "container.myrmex_cocoon": "Capullo de myrmex",
@@ -788,7 +788,7 @@
 
   "key.dragon_strike": "Ataque de dragón",
   "key.dragon_fireAttack": "Aliento de dragón",
-  "key.dragon_down": "Descender en el dragón",
+  "key.dragon_down": "Descender con el dragón",
   "key.dragon_change_view": "Cambiar la cámara para el dragón",
 
   "tc.aspect.mythus": "Criatura mitológica, Ser legendario, Críptido, Bicho temible",
