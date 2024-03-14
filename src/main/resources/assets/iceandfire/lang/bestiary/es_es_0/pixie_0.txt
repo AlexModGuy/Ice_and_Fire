@@ -1,7 +1,7 @@
-Las hadas son seres mágicos y
-misteriosos que habitan en el 
-interior de bosques oscuros
-o de bosques mágicos.
+Los pixies son seres mágicos y
+misteriosos que habitan en lo
+profundo de biomas forestales
+oscuros o mágicos.
 
 
 
@@ -9,27 +9,27 @@ o de bosques mágicos.
 
 
 
-Las hadas generalmente no atacan 
-personas directamente, sin embargo,
-son criaturas muy vanas y
-intentarán robar sus artículos
-cuando usted no está mirando 
-directamente a ellas. Un hada que
-robó alguno de sus artículos lo
-dejará al atacar.
+Los pixies generalmente no atacan
+al ser vistos, sin embargo, son
+criaturas muy vanidosas y, como
+tales, intentarán robar objetos de
+las personas que no los miran
+directamente. Un pixie que haya
+robado un objeto debería dejarlo
+caer si es atacado.
 
-La mayoría de las hadas viven en chozas
-pequeñas, reunidos en pueblos bajo 
-árboles.
-
-
+Suelen vivir en pequeñas cabañas,
+reunidas en extrañas aldeas bajo
+una espesa cubierta de árboles.
 
 
 
 
-Los duendes producen naturalmente polvo
-deh ada. Este polvo se puede cosechar en
-grandes cantidades al matar a un hada o
-atrapando a un hada en un frasco.
-Los hadas hadas encerradas producen un
-solo polvo de hada cada tres días.
+
+
+Los pixies naturalmente producen
+polvillo mágico. Puede recolectarse
+en grandes cantidades matando a un
+pixie o atrapándolo en un tarro.
+Los pixies en tarros producen una
+unidad de polvillo cada tres días.
