@@ -21,11 +21,12 @@ public class EntityHydraHead extends EntityMutlipartPart {
         this(IafEntityRegistry.HYDRA_MULTIPART.get(), worldIn);
     }
 
-    public EntityHydraHead(EntityHydra entity, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
-        super(IafEntityRegistry.HYDRA_MULTIPART.get(), entity, radius, angle, y, width, height, damageMulti);
+    public EntityHydraHead(EntityHydra parent, float radius, float angle, float y, float width, float height, float damageMulti, int headIndex, boolean neck) {
+        super(IafEntityRegistry.HYDRA_MULTIPART.get(), parent, radius, angle, y, width, height, damageMulti);
         this.headIndex = headIndex;
         this.neck = neck;
-        this.hydra = entity;
+        this.hydra = parent;
+        copyPosition(parent);
     }
 
     @Override

@@ -222,7 +222,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     private Animation currentAnimation;
     private float lastScale;
 
-    protected @Nullable List<EntityDragonPart> parts;
+    protected @Nullable List<EntityMutlipartPart> parts;
     private @Nullable EntityDragonPart headPart;
     private boolean isOverAir;
 
@@ -255,6 +255,44 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         switchNavigator(0);
         randomizeAttacks();
         resetParts(1);
+    }
+
+    @Override
+    public void resetParts(float scale) {
+        EntityUtil.removeParts(this);
+
+        headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
+        EntityDragonPart neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
+        EntityDragonPart rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        EntityDragonPart rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        EntityDragonPart leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
+        EntityDragonPart leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
+        EntityDragonPart tail1Part = new EntityDragonPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail2Part = new EntityDragonPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail3Part = new EntityDragonPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
+        EntityDragonPart tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
+
+        parts = NonNullList.of(headPart, neckPart, rightWingUpperPart, rightWingLowerPart, leftWingUpperPart, leftWingLowerPart, tail1Part, tail2Part, tail3Part, tail4Part);
+    }
+
+    @Override
+    public float getPartScale() {
+        return getRenderSize() / 3;
+    }
+
+    @Override
+    public void handleRemoveParts() {
+        headPart = null;
+    }
+
+    @Override
+    public List<EntityMutlipartPart> getCustomParts() {
+        return parts;
+    }
+
+    @Override
+    public void setCustomParts(List<EntityMutlipartPart> parts) {
+        this.parts = parts;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -329,51 +367,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     protected abstract boolean shouldTarget(Entity entity);
-
-    public void resetParts(float scale) {
-        removeParts();
-
-        headPart = new EntityDragonPart(this, 1.55F * scale, 0, 0.6F * scale, 0.5F * scale, 0.35F * scale, 1.5F);
-        EntityDragonPart neckPart = new EntityDragonPart(this, 0.85F * scale, 0, 0.7F * scale, 0.5F * scale, 0.2F * scale, 1);
-        EntityDragonPart rightWingUpperPart = new EntityDragonPart(this, scale, 90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
-        EntityDragonPart rightWingLowerPart = new EntityDragonPart(this, 1.4F * scale, 100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
-        EntityDragonPart leftWingUpperPart = new EntityDragonPart(this, scale, -90, 0.5F * scale, 0.85F * scale, 0.3F * scale, 0.5F);
-        EntityDragonPart leftWingLowerPart = new EntityDragonPart(this, 1.4F * scale, -100, 0.3F * scale, 0.85F * scale, 0.2F * scale, 0.5F);
-        EntityDragonPart tail1Part = new EntityDragonPart(this, -0.75F * scale, 0, 0.6F * scale, 0.35F * scale, 0.35F * scale, 1);
-        EntityDragonPart tail2Part = new EntityDragonPart(this, -1.15F * scale, 0, 0.45F * scale, 0.35F * scale, 0.35F * scale, 1);
-        EntityDragonPart tail3Part = new EntityDragonPart(this, -1.5F * scale, 0, 0.35F * scale, 0.35F * scale, 0.35F * scale, 1);
-        EntityDragonPart tail4Part = new EntityDragonPart(this, -1.95F * scale, 0, 0.25F * scale, 0.45F * scale, 0.3F * scale, 1.5F);
-
-        parts = NonNullList.of(headPart, neckPart, rightWingUpperPart, rightWingLowerPart, leftWingUpperPart, leftWingLowerPart, tail1Part, tail2Part, tail3Part, tail4Part);
-    }
-
-    public void removeParts() {
-        if (parts != null) {
-            for (EntityDragonPart part : parts) {
-                part.discard();
-            }
-
-            parts = null;
-            headPart = null;
-        }
-    }
-
-    public void addPartsToLevel() {
-        if (parts != null) {
-            boolean wasSuccessful = true;
-
-            for (EntityDragonPart part : parts) {
-                if (!EntityUtil.addPartToLevel(part, this)) {
-                    IceAndFire.LOGGER.error("Failed to add multipart [{}] of entity [{}] to level - trying again", part, this);
-                    wasSuccessful = false;
-                }
-            }
-
-            if (!wasSuccessful) {
-                resetParts(getRenderSize() / 3);
-            }
-        }
-    }
 
     protected void updateBurnTarget() {
         if (burningTarget != null && !this.isSleeping() && !this.isModelDead() && !this.isBaby()) {
@@ -511,7 +504,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public void remove(Entity.@NotNull RemovalReason reason) {
-        removeParts();
+        EntityUtil.removeParts(this);
         super.remove(reason);
     }
 
@@ -1644,16 +1637,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void refreshDimensions() {
         super.refreshDimensions();
         final float scale = Math.min(this.getRenderSize() * 0.35F, 7F);
-//        double prevX = getPosX();
-//        double prevY = getPosY();
-//        double prevZ = getPosZ();
-//        float localWidth = this.getWidth();
-//        if (this.getWidth() > localWidth && !this.firstUpdate && !this.world.isRemote) {
-//            this.setPosition(prevX, prevY, prevZ);
-//        }
+
         if (scale != lastScale) {
-            resetParts(this.getRenderSize() / 3);
+            resetParts(getPartScale());
         }
+
         lastScale = scale;
     }
 
@@ -1666,7 +1654,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void tick() {
         super.tick();
         refreshDimensions();
-        addPartsToLevel();
+        EntityUtil.addPartsToLevel(this);
         this.prevDragonPitch = getDragonPitch();
         level().getProfiler().push("dragonLogic");
         this.setMaxUpStep(getStepHeight());
@@ -2733,7 +2721,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return false;
         }
 
-        for (EntityDragonPart part : parts) {
+        for (EntityMutlipartPart part : parts) {
             if (part.is(entityHit)) {
                 return true;
             }

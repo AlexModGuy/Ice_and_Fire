@@ -51,7 +51,7 @@ public class MessageDeathWormHitbox {
                     Entity entity = player.level().getEntity(message.deathWormId);
 
                     if (entity instanceof EntityDeathWorm deathWorm) {
-                        deathWorm.initSegments(message.scale);
+                        deathWorm.resetParts(message.scale);
                     }
                 }
             });

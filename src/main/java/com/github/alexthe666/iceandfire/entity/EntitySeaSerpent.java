@@ -56,6 +56,7 @@ import net.minecraftforge.common.IPlantable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPartParent, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
@@ -81,6 +82,9 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
             return entity instanceof LivingEntity && !(entity instanceof EntitySeaSerpent) && DragonUtils.isAlive((LivingEntity) entity) && entity.isInWaterOrBubble();
         }
     };
+
+    private static final int MAX_SIZE = 9;
+
     public int swimCycle;
     public float jumpProgress = 0.0F;
     public float wantJumpProgress = 0.0F;
@@ -91,7 +95,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
     public boolean attackDecision = false;
     private int animationTick;
     private Animation currentAnimation;
-    private EntityMutlipartPart[] segments = new EntityMutlipartPart[9];
+    private @Nullable List<EntityMutlipartPart> parts;
     private float lastScale;
     private boolean isLandNavigator;
     private boolean changedSwimBehavior = false;
@@ -107,8 +111,42 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
         super(t, worldIn);
         switchNavigator(false);
         this.noCulling = true;
-        resetParts(1.0F);
+        resetParts(1);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+    }
+
+    @Override
+    public void resetParts(float scale) {
+        EntityUtil.removeParts(this);
+        parts = new ArrayList<>();
+
+        for (int i = 0; i < MAX_SIZE; i++) {
+            EntitySlowPart part;
+
+            if (i > 3) {
+                part = new EntitySlowPart(i == 4 ? this : parts.get(i - 1), 0.5F * scale, 180, 0, 0.5F * scale, 0.5F * scale, 1);
+            } else {
+                part = new EntitySlowPart(i == 0 ? this : parts.get(i - 1), -0.4F * scale, 180, 0, 0.45F * scale, 0.4F * scale, 1);
+            }
+
+            part.copyPosition(this);
+            parts.add(part);
+        }
+    }
+
+    @Override
+    public float getPartScale() {
+        return getSeaSerpentScale();
+    }
+
+    @Override
+    public List<EntityMutlipartPart> getCustomParts() {
+        return parts;
+    }
+
+    @Override
+    public void setCustomParts(List<EntityMutlipartPart> parts) {
+        this.parts = parts;
     }
 
     private static BlockPos clampBlockPosToWater(Entity entity, Level world, BlockPos pos) {
@@ -209,39 +247,9 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
         this.updateAttributes();
     }
 
-    public void resetParts(float scale) {
-        clearParts();
-        segments = new EntityMutlipartPart[9];
-        for (int i = 0; i < segments.length; i++) {
-            if (i > 3) {
-                Entity parentToSet = i <= 4 ? this : segments[i-1];
-                segments[i] = new EntitySlowPart(parentToSet, 0.5F * scale, 180, 0, 0.5F * scale, 0.5F * scale, 1);
-            } else {
-                Entity parentToSet = i == 0 ? this : segments[i-1];
-                segments[i] = new EntitySlowPart(parentToSet, -0.4F * scale, 180, 0, 0.45F * scale, 0.4F * scale, 1);
-            }
-            segments[i].copyPosition(this);
-        }
-    }
-
-    @Override
-    public void addPartsToLevel() {
-        for (EntityMutlipartPart segment : segments) {
-            EntityUtil.addPartToLevel(segment, this);
-        }
-    }
-
-    private void clearParts() {
-        for (EntityMutlipartPart entity : segments) {
-            if (entity != null) {
-                entity.remove(RemovalReason.DISCARDED);
-            }
-        }
-    }
-
     @Override
     public void remove(@NotNull RemovalReason reason) {
-        clearParts();
+        EntityUtil.removeParts(this);
         super.remove(reason);
     }
 
@@ -259,12 +267,13 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
     public void refreshDimensions() {
         super.refreshDimensions();
         float scale = this.getSeaSerpentScale();
+
         if (scale != lastScale) {
-            resetParts(this.getSeaSerpentScale());
+            resetParts(getPartScale());
         }
+
         lastScale = scale;
     }
-
 
     @Override
     public boolean doHurtTarget(@NotNull Entity entityIn) {
@@ -282,7 +291,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
             jumpCooldown--;
         }
         refreshDimensions();
-        addPartsToLevel();
+        EntityUtil.addPartsToLevel(this);
         if (this.isInWater()) {
             spawnParticlesAroundEntity(ParticleTypes.BUBBLE, this, (int) this.getSeaSerpentScale());
 
@@ -310,20 +319,20 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    public float getPieceYaw(int index, float partialTicks){
-        if(index < segments.length && index >= 0){
+    public float getPieceYaw(int index, float partialTicks) {
+        if (parts != null && index < parts.size() && index >= 0) {
             return prevTailYaw[index] + (tailYaw[index] - prevTailYaw[index]) * partialTicks;
         }
+
         return 0;
     }
 
-    public float getPiecePitch(int index, float partialTicks){
-        if(index < segments.length && index >= 0){
+    public float getPiecePitch(int index, float partialTicks) {
+        if (parts != null && index < parts.size() && index >= 0) {
             return prevTailPitch[index] + (tailPitch[index] - prevTailPitch[index]) * partialTicks;
         }
         return 0;
     }
-
 
     private void spawnParticlesAroundEntity(ParticleOptions type, Entity entity, int count) {
         for (int i = 0; i < count; i++) {
@@ -625,11 +634,17 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
         if (this.getBoundingBox().expandTowards(1, 1, 1).intersects(entity.getBoundingBox())) {
             return true;
         }
-        for (Entity segment : segments) {
-            if (segment.getBoundingBox().expandTowards(1, 1, 1).intersects(entity.getBoundingBox())) {
+
+        if (parts == null) {
+            return false;
+        }
+
+        for (EntityMutlipartPart part : parts) {
+            if (part.getBoundingBox().expandTowards(1, 1, 1).intersects(entity.getBoundingBox())) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -774,14 +789,14 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
                 if (this.tickCount % 40 == 0) {
                     this.playSound(IafSoundRegistry.SEA_SERPENT_BREATH, 4, 1);
                 }
-                if (this.tickCount % 10 == 0) {
+                if (parts != null && this.tickCount % 10 == 0) {
                     setYRot(yBodyRot);
                     float f1 = 0;
                     float f2 = 0;
                     float f3 = 0;
-                    float headPosX = f1 + (float) (this.segments[0].getX() + 1.3F * getSeaSerpentScale() * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
-                    float headPosZ = f2 + (float) (this.segments[0].getZ() + 1.3F * getSeaSerpentScale() * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
-                    float headPosY = f3 + (float) (this.segments[0].getY() + 0.2F * getSeaSerpentScale());
+                    float headPosX = f1 + (float) (parts.get(0).getX() + 1.3F * getSeaSerpentScale() * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
+                    float headPosZ = f2 + (float) (parts.get(0).getZ() + 1.3F * getSeaSerpentScale() * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
+                    float headPosY = f3 + (float) (parts.get(0).getY() + 0.2F * getSeaSerpentScale());
                     double d2 = entity.getX() - headPosX;
                     double d3 = entity.getY() - headPosY;
                     double d4 = entity.getZ() - headPosZ;
@@ -795,7 +810,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, MultiPa
                     if (!level().isClientSide) {
                         level().addFreshEntity(entitylargefireball);
                     }
-                    if (!entity.isAlive() || entity == null) {
+                    if (!entity.isAlive()) {
                         this.setBreathing(false);
                         this.attackDecision = this.getRandom().nextBoolean();
                     }
