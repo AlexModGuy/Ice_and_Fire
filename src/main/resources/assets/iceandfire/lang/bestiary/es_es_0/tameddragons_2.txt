@@ -1,22 +1,22 @@
-    Los dragones adultos pueden 
-ser criados dándoles una mezcla
-de artículos elementales, pero 
-primero estos artículos deben ser reunidos.
+Los dragones adultos pueden criar
+alimentándolos con una mezcla de
+objetos elementales, pero primero
+se deben recolectar estos objetos.
 
 
 
 
 
 
-Los lirios de fuego y lirios de Hielo son
-usados para hacer mezclas de fuego y
-mezclas de hielo, respectivamente.
-Estas mezclas sirven para procrear dos
-dragones domesticados. interactuar
-la sustancia con un dragón macho
-y, a continuación, interactuar con
-un dragón femenino, inmediatamente 
-la sustancia hará que se apareen.
+Los lirios de fuego, de hielo o
+del rayo se utilizan para hacer
+estofados de sus respectivos
+elementos. Al interactuar con un
+dragón macho con la sustancia y
+luego interactuar con un dragón
+hembra dará como resultado que los
+dos se reproduzcan.
+
 
 
 
@@ -25,8 +25,8 @@ la sustancia hará que se apareen.
 
 
 Una vez que los dragones terminen
-el apareamiento, la hembra pondrá una
-solo huevo, de cualquier color.
+de aparearse, la hembra pondrá un
+único huevo, de cualquier color.
 
 
 
@@ -34,8 +34,8 @@ solo huevo, de cualquier color.
 
 
 
-Los cuernos de dragón se pueden utilizar 
-para invocar o almacenar dragones domesticados. 
-Cuando usted toca un dragón con el cuerno se
-quedará dentro de el cuerno, y al
-soplarlo el dragón aparecera.
+Los cuernos de dragón sirven para
+convocar y retirar dragones. Se
+puede guardar un dragón dentro del
+cuerno interactuando con él, y al
+soplarlo el dragón aparecerá.
