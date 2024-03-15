@@ -1,40 +1,43 @@
-Simplemente el crear fuego no es
-la única forma en que ellos atacan.
-También poseen muchos ataques
-diferentes.
+El aliento de fuego no es la única
+forma en que los dragones de fuego
+eliminan a sus presas. También
+tienen muchos ataques diferentes.
+
+
+
+<image><drawings_firedragon_attacks.png 20 110 0 106 264 77 0.65>
+
+
+
+
+El ataque de explosión de fuego del
+dragón lanza un flujo constante de
+llamas desde la boca de la bestia.
+Los dragones más jóvenes son menos
+efectivos en este ataque, mientras
+que los más grandes pueden quemar
+el terreno cercano e infligir
+enormes cantidades de daño.
+
+
+<image><drawings_firedragon_attacks.png 280 10 0 0 210 81 0.75>
 
 
 
 
 
+La explosión de fuego no es el
+único ataque elemental. El dragón
+también puede condensar sus llamas
+en un bloque sólido. Luego, esta
+explosiva bola de fuego se lanza
+hacia la presa del dragón.
+Sólo los dragones más viejos son
+capaces de realizar este ataque.
 
-
-Ataque explosivo de fuego del 
-dragón, dispara una corriente
-constante de llamas desde la boca
-de la bestia. Mas débil mientras
-mas joven el dragón, mientra que
-los mas grandes inclusive pueden
-quemar el terreno cercano, 
-infligiendo mucho daño.
-
-
-
+<image><drawings_firedragon_attacks.png 360 242 262 220 213 78 0.6>
 
 
 
-
-La explosión de hielo no es el único
-ataque elemental. El dragón tambien
-puede elaborar una explosión de llamas
-en un bloque solidificado. Este bola
-de fuego explosiva es entonces arrojada
-hacia la presa del dragón. Solo los 
-dragones mas viejos son los capaces de
-este ataque.
-
-
-
-
-Uno de los ataques más 
-comunes es la mordida del dragón.
+Uno de los ataques más comunes del
+dragón es su mordedura.
