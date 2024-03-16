@@ -7,9 +7,10 @@ de su atacante.
 
 Al perseguir a uno y montarlo, la
 bestia finalmente comenzará a
-contraatacar para deshacerse de su
-jinete. El animal intentará morder
-a cualquiera que se le suba.
+contraatacar para intentar
+deshacerse de su jinete. El
+animal intentará morder a
+cualquiera que se le suba.
 
 Pero como la mayoría de animales,
 el anfíptero se puede doblegar. Al
