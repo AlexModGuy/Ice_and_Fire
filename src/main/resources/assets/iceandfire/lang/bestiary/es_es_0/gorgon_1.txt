@@ -20,10 +20,11 @@ se petrificará inmediatamente.
 
 Cualquier estatua de piedra puede
 minarse con un pico y se romperá
-dejando caer solo roca, a menos que
-se use un pico con Toque de seda,
-en cuyo caso se podrá obtener la
-estatua de piedra intacta.
+dejando caer solo roca, a menos
+que se use un pico encantado con
+Toque de seda, en cuyo caso se
+podrá obtener la estatua de
+piedra intacta.
 
 Cuidado, ¡la cabeza de la gorgona
 solo se puede usar una vez!
