@@ -3,13 +3,13 @@ dragón de fuego. Es poderoso y
 rápido, pero no suele ser mortal
 al instante. Sin embargo, el dragón
 tiene un segundo ataque más raro:
-sacudir a la presa hasta matarla.
+
 
 <image><drawings_firedragon_attacks.png 40 100 290 124 186 69 0.7>
 
 
 
-En este ataque, el dragón toma a
+en este ataque, el dragón toma a
 su objetivo con su boca y lo
 sacude rápidamente para herirlo
 de gravedad.
