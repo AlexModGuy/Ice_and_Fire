@@ -26,7 +26,6 @@ defenderse.
 
 
 
-
 Equipado con su bastón, el
 nigromante disparará un cráneo de
 alma congelada a su objetivo o
@@ -36,8 +35,9 @@ invocará a alguno de estos seres:
 
 
 
-Los esclavos aterradores son lentos
-y débiles esqueletos convocados
+
+Los esclavos aterradores son
+débiles esqueletos convocados
 por el nigromante. Al emerger del
 suelo, están equipados con espadas
 rotas y armaduras que usaron en
