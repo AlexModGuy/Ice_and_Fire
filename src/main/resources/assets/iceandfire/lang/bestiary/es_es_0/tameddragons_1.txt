@@ -1,22 +1,21 @@
-Esta mezcla de hueso y proteína se
-puede preparar con cualquier carne.
+Esta mezcla de hueso y proteína
+se puede preparar con cualquier
+carne.
 
-Al alimentar a mi dragón con esto
+Al alimentar a mi dragón con esto,
 pude hacerlo crecer rápidamente.
 Noté que podía interactuar con mi
-dragón para comprobar su progreso.
+dragón y comprobar su progreso.
 Puedo ver cuántos años tiene,
 saber de qué género es y qué tan
 hambriento está.
 
-Crear un bastón con una empuñadura
-de cráneo de dragón tiene un efecto
-interesante en un dragón doméstico.
-Al usarlo en tu dragón, le puedes
-ordenar esperar o deambular.
-
-
-
+Crear un bastón poniendo un palo
+encima de un cráneo de dragón
+tiene un efecto interesante en un
+dragón doméstico. Al usarlo en tu
+dragón, le puedes ordenar esperar
+o deambular.
 
 
 
@@ -34,7 +33,8 @@ saltar, se puede hacer que un
 dragón despegue y vuele. También
 se puede hacer que la bestia
 descienda hasta volver al suelo.
-
-Un dragón puede escupir su aliento
-al presionar una determinada orden,
-que es diferente para cada persona.
+**********************************
+Un dragón puede lanzar su aliento
+al presionar una determinada
+orden, que es diferente para cada
+persona.
