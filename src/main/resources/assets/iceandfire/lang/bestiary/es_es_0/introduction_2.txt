@@ -1,15 +1,17 @@
 Una vez colocado el atril, se
 puede interactuar con él haciendo
 clic derecho. El interior tendrá
-tres ranuras, una a la izquierda
+tres ranuras: una a la izquierda
 para poner un bestiario incompleto,
 una abajo para añadir manuscritos
 y una a la derecha para recoger
 el bestiario completo. Por cada
 manuscrito, aparecerá un nuevo
-índice en el bestiario. Estas nuevas
-páginas pueden contener información
-sobre criaturas místicas, distintas
+índice en el bestiario.
+
+Estas nuevas páginas pueden
+contener información sobre
+criaturas místicas, distintas
 locaciones, guías de elaboración
 de objetos e incluso alquimia
 básica.
