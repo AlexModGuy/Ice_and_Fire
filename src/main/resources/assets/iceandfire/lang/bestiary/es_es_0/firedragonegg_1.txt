@@ -19,6 +19,7 @@ el huevo. Pensé en retirarlo de la
 pila y buscar otro método para
 hacerlo eclosionar, pero luego
 
+
 recordé que los dragones son seres
 grandes que requieren una gran
 cantidad de tiempo para crecer.
