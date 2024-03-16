@@ -1,38 +1,42 @@
-    Después de derribar uno de los
-dragones de fuego más monstruosos,
-había encontrado una caverna, noté
-que la bestia estaba protegiendo su
-propio nido. Estos huevos fueron una
-multitud de hermosos colores, todos 
-cubiertos en escamas brillantes.
+Después de derrotar a uno de los
+dragones de fuego más monstruosos
+que encontré en una caverna, noté
+que la bestia estaba protegiendo
+su propia nidada de huevos. Eran
+de muchos hermosos colores, todos
+cubiertos de escamas brillantes.
+
+<image><drawings_0.png 20 95 327 118 24 33 1>
+<image><drawings_0.png 60 95 303 118 24 33 1>
+<image><drawings_0.png 95 95 351 118 24 33 1>
+<image><drawings_0.png 135 95 375 118 24 33 1>
 
 
 
 
+Instantáneamente pensé en cuánto
+valor podrían venderse estos huevos,
+probablemente incluso más que
+muchos diamantes. Sin embargo, los
+huevos tienen un propósito para el
+dragón: propagar su propia especie.
+Recordando algo que había leído en
 
-Inmediatamente pensé en el valor que
-estos huevos tendrían, probablemente 
-incluso más que muchos diamantes.
-Sin embargo, los huevos tienen un
-propósito para el dragón: poder
-propagar su especie. Recorde que
+manuscritos antiguos sobre cómo los
+dragones tienen fuertes instintos
+maternos y cuidan de sus crías, me
+propuse descubrir cómo criar mi
+propia prole de dragones.
 
-Había leído en manuscritos antiguos,
-que los dragones poseen una relación
-materna fuerte y instintiva que se 
-basaba en proteger los jovenes, 
-me propuse descubrir como tener
-mi propio nido de dragones.
+Mientras trasladaba los huevos a
+un lugar seguro cerca de mi casa,
+noté que estos huevos estaban
+mucho más calientes que los de una
+gallina u otra ave. Esto me dio
+una idea de cómo desbloquear los
+secretos de los dragones...
 
-Mientras movía los huevos a un lugar
-más seguro ubicado cerca de mi casa, 
-noté que estos huevos eran mucho más
-calientes que los de un pollo u otro
-pájaro. Esto me dio una idea sobre
-cómo desbloquear los secretos de
-dragones...
-
-Apilé un poco de madera y
-piedra del nether en una pila grande
-y coloqué el más grande de los huevos
-allí.
+Apilé un poco de madera y piedra
+del inframundo en una pila grande
+y coloqué el más grande de los
+huevos encima.
