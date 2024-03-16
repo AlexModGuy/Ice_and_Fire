@@ -1,6 +1,6 @@
 La habilidad más sorprendente del
 dragón eléctrico es la de arrojar
-relámpagos crepitantes por su boca,
+relámpagos crepitantes por la boca,
 capaces de electrocutar. Sin
 embargo, también poseen una
 variedad de ataques diferentes.
@@ -38,5 +38,5 @@ devastadores.
 
 
 
-Uno de los ataques más comunes del
-dragón es su mordedura.
+Uno de los ataques más comunes
+del dragón es su mordedura.
