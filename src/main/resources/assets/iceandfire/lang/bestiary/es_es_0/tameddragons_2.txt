@@ -15,8 +15,8 @@ sirven para criar dos dragones
 domesticados. Interactuar con un
 dragón macho con la sustancia y
 luego interactuar con un dragón
-hembra dará como resultado que los
-dos se reproduzcan.
+hembra dará como resultado que
+los dos se reproduzcan.
 
 
 
@@ -34,8 +34,8 @@ de aparearse, la hembra pondrá un
 
 
 
-Los cuernos de dragón sirven para
+El cuerno de dragón sirve para
 convocar y retirar dragones. Se
-puede guardar un dragón dentro del
+puede guardar un dragón en el
 cuerno interactuando con él, y al
 soplarlo el dragón aparecerá.
