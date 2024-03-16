@@ -12,8 +12,8 @@ Los lirios de fuego y de hielo se
 utilizan para hacer estofados de
 sus respectivos elementos, que
 sirven para criar dos dragones
-domesticados. Al interactuar con
-un dragón macho con la sustancia y
+domesticados. Interactuar con un
+dragón macho con la sustancia y
 luego interactuar con un dragón
 hembra dará como resultado que los
 dos se reproduzcan.
