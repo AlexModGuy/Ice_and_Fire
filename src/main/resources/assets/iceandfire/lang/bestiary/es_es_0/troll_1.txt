@@ -17,9 +17,9 @@ muchos otros objetos al morir. Si
 no sueltan un arma, soltarán los
 materiales con los que la crearon.
 Los troles de montaña también
+pueden dejar caer una esmeralda
 
-pueden dejar caer una esmeralda al
-morir. Los de hielo puedan soltar
+al morir. Los de hielo puedan soltar
 un solo zafiro y los de bosque
 pueden soltar setas. Pero lo más
 valioso que dejan caer son sus
