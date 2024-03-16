@@ -29,6 +29,6 @@ un filete asado.
 
 
 
-Es posible obtener un único corazón
-de dragón por cadáver. Actualmente
+Es posible obtener un solo corazón
+de dragón por cadáver. Por ahora
 no estoy al tanto de su propósito...
