@@ -17,6 +17,7 @@ consiste en que el gusano lanza
 bloques cercanos al aire. Estos
 mandarán a volar a quienes estén
 sobre ellos y, al momento de caer,
+los bloques pueden aplastar a la
 
 
 
@@ -34,7 +35,7 @@ sobre ellos y, al momento de caer,
 
 
 
-los blqoues pueden aplastar a la
+
 presa del gusano. El poder de este
 ataque se incrementa dependiendo
 del tamaño del gusano.
