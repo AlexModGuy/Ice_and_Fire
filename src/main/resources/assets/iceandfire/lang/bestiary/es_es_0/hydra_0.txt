@@ -21,20 +21,22 @@ cabezas conocida como la hidra.
 
 
 
+
 Enterrada bajo su pequeña colina,
 esta criatura no debe ser abordada
 por viajeros descuidados. Pues ni
 siquiera un cíclope o un dragón de
-hielo podrían derrotar a esta bestia.
+hielo podrían derrotar a la bestia.
 
 La hidra se caracteriza no solo por
 su aliento y mordedura altamente
 venenosos, sino también por sus
 potentes habilidades regenerativas.
-Por cada cabeza cortada, dos tomarán
-su lugar. Y por cada cabeza que
-crece, la hidra adquiere efectos
-regenerativos cada vez más fuertes.
+Por cada cabeza que se le corte,
+dos tomarán su lugar. Y por cada
+cabeza que le crezca, la hidra
+adquiere efectos regenerativos
+cada vez más fuertes.
 
 La hidra puede tener un máximo de
 nueve cabezas y, a menos que se
