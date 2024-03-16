@@ -3,7 +3,7 @@
 
 
 
-<image><drawings_2.png 45 30 157 69 99 67 1>
+<image><drawings_2.png 60 30 157 69 99 67 1>
 
 
 
