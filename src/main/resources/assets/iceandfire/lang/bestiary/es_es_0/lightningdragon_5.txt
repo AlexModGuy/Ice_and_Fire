@@ -10,19 +10,19 @@ hielo y fuego.
 
 
 
-Los dragones eléctricos dejan caer
-su sangre, huesos, cráneos, escamas
-y más, al igual que sus primos de
-hielo y fuego, y se pueden utilizar
-de la misma manera. En general,
-cualquier uso u objeto derivado de
-dragones de hielo o fuego también
-se puede hacer con los eléctricos,
+Los dragones eléctricos dejan
+caer su sangre, huesos, cráneos,
+escamas y más, al igual que sus
+primos de hielo y fuego. Estas
+se pueden utilizar de la misma
+manera. En general, cualquier uso
+u objeto derivado de dragones de
+hielo o fuego también se puede
 
-
-tal como: armaduras de escamas de
-dragón, frascos de sangre, acero
-dracónico, bloques de escamas, etc.
+hacer con los eléctricos, tal como:
+armaduras de escamas de dragón,
+frascos de sangre, acero dracónico,
+bloques de escamas y más.
 
 <item><iceandfire:dragonscale_amythest 100 120 40 1>
 <item><iceandfire:armor_amythest_helmet 100 140 30 1>
