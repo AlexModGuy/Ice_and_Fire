@@ -35,14 +35,16 @@ puro de su aliento helado.
 
 
 
-El acero dracónico de fuego prende
-en llamas a su objetivo por hasta
-15 segundos y lo hace retroceder.
-El acero dracónico de hielo congela
-completamente a las criaturas.
-Ambos tipos de acero infligen
-grandes cantidades de daño y pueden
-acabar fácilmente con un dragón
-grande. La armadura brinda mayor
-protección contra los ataques de
-aliento de dragón.
+
+El acero dracónico de fuego
+prende en llamas a su objetivo por
+hasta 15 segundos y lo hace
+retroceder. El acero dracónico de
+hielo congela completamente a las
+criaturas. Ambos tipos de acero
+dracónico infligen cantidades
+grandes de daño y pueden acabar
+fácilmente con un dragón grande.
+La armadura de acero dracónico
+brinda mayor protección contra
+los ataques de aliento de dragón.
