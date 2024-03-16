@@ -7,10 +7,10 @@ were a multitude of faded
 colors, all coated in shiny scales.
 
 
-<image><drawings_0.png 35 95 303 366 24 33 1>
-<image><drawings_0.png 75 95 327 366 24 33 1>
-<image><drawings_0.png 115 95 351 366 24 33 1>
-<image><drawings_0.png 155 95 375 366 24 33 1>
+<image><drawings_0.png 30 95 303 366 24 33 1>
+<image><drawings_0.png 70 95 327 366 24 33 1>
+<image><drawings_0.png 110 95 351 366 24 33 1>
+<image><drawings_0.png 150 95 375 366 24 33 1>
 
 
 I instantly thought of how much
