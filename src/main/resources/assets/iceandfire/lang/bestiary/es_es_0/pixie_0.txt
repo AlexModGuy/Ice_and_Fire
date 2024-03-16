@@ -9,6 +9,7 @@ oscuros o mágicos.
 
 
 
+
 Los pixies generalmente no atacan
 al ser vistos, sin embargo, son
 criaturas muy vanidosas y, como
@@ -17,7 +18,6 @@ las personas que no los miran
 directamente. Un pixie que haya
 robado un objeto debería dejarlo
 caer si es atacado.
-
 Suelen vivir en pequeñas cabañas,
 reunidas en extrañas aldeas bajo
 una espesa cubierta de árboles.
