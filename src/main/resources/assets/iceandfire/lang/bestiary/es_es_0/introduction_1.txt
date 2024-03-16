@@ -5,6 +5,7 @@ mineral de zafiro.
 
 
 
+
 El mineral de zafiro se encuentra
 al azar en biomas nevados.
 
@@ -14,7 +15,6 @@ al azar en biomas nevados.
 Las pepitas de oro o plata se
 pueden almacenar en pilas que se
 colocan de la siguiente manera.
-
 
 
 
