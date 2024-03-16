@@ -11,8 +11,9 @@ bloques en lugar de lingotes.
 También se puede crear hábilmente
 una flauta con hierro y huesos de
 dragón. Este instrumento puede
-calmar a un dragón domesticado que
-vuele y llevarlo hacia el suelo.
+calmar a un dragón domesticado
+que esté volando y llevarlo hacia
+el suelo.
 
 Estas flautas también son eficaces
 en otras criaturas voladoras,
