@@ -20,6 +20,7 @@ nuevas cabezas.
 
 
 
+
 La única forma de dañar a esta
 serpiente sin aumentar su poder es
 asegurarse de que la hidra esté
@@ -29,9 +30,9 @@ hidra no le crecerán más cabezas
 que las que ya tiene. También
 perderá sus efectos regenerativos.
 
-La hidra sólo puede morir de verdad
-cuando le queda una cabeza. En caso
-contrario, sobrevivirá.
+La hidra sólo morirá de verdad
+cuando le quede una cabeza. En
+caso contrario, sobrevivirá.
 
 Una vez muerta, es posible acceder
 libremente a la guarida de la hidra
