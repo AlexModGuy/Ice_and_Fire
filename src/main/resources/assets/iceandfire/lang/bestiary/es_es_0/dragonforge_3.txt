@@ -21,37 +21,28 @@ armas y herramientas de dragón.
 
 
 
-El acero dracónico puede crearse
-también con el frío aliento del
-dragón de hielo y las chispeantes
-cargas del dragón eléctrico en sus
-respectivas forjas.
+La forja de dragón también se
+puede construir teniendo en cuenta
+a los dragones de hielo, para crear
+acero dracónico utilizando el frío
+puro de su aliento helado.
 <item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
 <item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
 <item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
-<item><iceandfire:dragonforge_lightning_brick 0 70 20 1.5>
-<item><iceandfire:dragonforge_lightning_input 0 90 20 1.5>
-<item><iceandfire:dragonforge_lightning_core 0 110 20 1.5>
 
 
 
 
 
 
-
-
-
-
-
-
-El acero dragónico de fuego prende
-en llamas a su objetivo por 15
-segundos y lo hace retroceder. El
-de hielo congela completamente a
-las criaturas y el eléctrico hace
-que les caiga un rayo. Todos los
-tipos causan grandes cantidades de
-daño y pueden acabar fácilmente
-con dragones grandes. La armadura
-brinda mayor protección contra los
-ataques de aliento de dragón.
+El acero dracónico de fuego prende
+en llamas a su objetivo por hasta
+15 segundos y lo hace retroceder.
+El acero dracónico de hielo congela
+completamente a las criaturas.
+Ambos tipos de acero infligen
+grandes cantidades de daño y pueden
+acabar fácilmente con un dragón
+grande. La armadura brinda mayor
+protección contra los ataques de
+aliento de dragón.
