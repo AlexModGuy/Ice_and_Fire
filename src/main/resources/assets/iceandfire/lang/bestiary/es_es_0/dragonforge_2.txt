@@ -20,13 +20,13 @@ salvaje necesitará muros de hueso.
 
 
 
+
 Para energizar adecuadamente una
 forja, se debe colocar al dragón
 directamente frente a la apertura.
 Entonces el dragón empezará a
 lanzar su aliento, siempre que
 haya objetos válidos en la forja.
-
 
 La mayoría de objetos, cuando se
 colocan en una forja, se volverán
