@@ -26,13 +26,14 @@ a quien disparó la flecha.
 
 
 
-El corazón de hidra es un objeto muy
-raro y codiciado por sus efectos.
-Cuando está en la barra de acceso
-rápido, el corazón proporcionará
-niveles crecientes de regeneración
-según la cantidad de salud que haya
-perdido el usuario.
+El corazón de hidra es un objeto
+muy raro y codiciado por sus
+efectos. Cuando está en la barra
+de acceso rápido, el corazón
+proporcionará niveles crecientes
+de regeneración según la cantidad
+de salud que haya perdido el
+usuario.
 
 El poderoso corazón de este
 monstruo hace que la difícil batalla
