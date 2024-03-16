@@ -6,10 +6,10 @@ su propia nidada de huevos. Eran
 de muchos hermosos colores, todos
 cubiertos de escamas brillantes.
 
-<image><drawings_0.png 20 95 327 118 24 33 1>
-<image><drawings_0.png 60 95 303 118 24 33 1>
-<image><drawings_0.png 95 95 351 118 24 33 1>
-<image><drawings_0.png 135 95 375 118 24 33 1>
+<image><drawings_0.png 35 95 303 118 24 33 1>
+<image><drawings_0.png 75 95 327 118 24 33 1>
+<image><drawings_0.png 115 95 351 118 24 33 1>
+<image><drawings_0.png 155 95 375 118 24 33 1>
 
 
 
