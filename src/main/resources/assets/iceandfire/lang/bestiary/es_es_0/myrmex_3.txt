@@ -17,11 +17,11 @@ trozos de resina. Pueden producir
 este material por sí mismos, pero
 aun así buscarán algo de él si
 pueden encontrarlo. Arrojar trozos
-
 de resina al suelo a la vista de
+
 obreros myrmex permite que un
-humano pueda mejorar su reputación
-en la colmena.
+ser humano pueda mejorar su
+reputación en la colmena.
 
 La reputación es un concepto
 importante a considerar cuando se
