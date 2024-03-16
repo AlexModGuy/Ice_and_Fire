@@ -29,7 +29,7 @@ una espesa cubierta de árboles.
 
 Los pixies naturalmente producen
 polvillo mágico. Puede recolectarse
-en grandes cantidades matando a un
-pixie o atrapándolo en un tarro.
+en grandes cantidades matando a
+un pixie o atrapándolo en un tarro.
 Los pixies en tarros producen una
 unidad de polvillo cada tres días.
