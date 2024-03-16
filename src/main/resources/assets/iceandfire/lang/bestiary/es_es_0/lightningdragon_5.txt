@@ -18,9 +18,9 @@ se pueden utilizar de la misma
 manera. En general, cualquier uso
 u objeto derivado de dragones de
 hielo o fuego también se puede
-
 hacer con los eléctricos, tal como:
 armaduras de escamas de dragón,
+
 frascos de sangre, acero dracónico,
 bloques de escamas y más.
 
