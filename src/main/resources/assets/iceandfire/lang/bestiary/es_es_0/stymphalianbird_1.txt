@@ -5,6 +5,7 @@
 
 
 
+
 Estas flechas parecen desafiar la
 gravedad y son capaces de volar
 continuamente, de forma similar a
@@ -23,6 +24,6 @@ estas bandadas definitivamente
 necesitará algún tipo de protección
 contra los proyectiles de las aves.
 
-También puede ser necesario equipo
+También puede necesitarse equipo
 de largo alcance para derribar a
-las aves que vuelan alto.
+las aves que vuelan muy alto.
