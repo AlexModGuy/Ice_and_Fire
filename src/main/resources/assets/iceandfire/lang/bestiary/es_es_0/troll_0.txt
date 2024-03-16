@@ -17,9 +17,7 @@ del mundo.
 
 Cada una de estas descomunales
 criaturas empuña un arma enorme
-
 que utilizan para aplastar a sus
-presas potenciales.
 
 
 
@@ -30,6 +28,10 @@ presas potenciales.
 
 
 
+
+
+
+potenciales presas.
 
 Ya sea con un golpe lateral o un
 mazazo, el trol golpea con
