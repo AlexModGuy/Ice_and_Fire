@@ -4,20 +4,20 @@
 
 <item><iceandfire:manuscript 0 38 20 1>
 
-§lEste manuscrito pretende ser una
-guía para quienes deseen saber
-sobre las mayores maravillas de
-este reino sobrenatural. Cubrirá
-algunos de los conceptos básicos
-del diseño de herramientas, armas y
-armaduras para rastrear, cazar y
-aprender sobre seres misteriosos.
+§lEste manuscrito pretende ser
+§luna guía para quienes deseen
+§lsaber sobre las maravillas de
+§leste reino sobrenatural.
+§lCubrirá algunos conceptos
+§lbásicos del diseño de armas,
+§lherramientas y armaduras para
+§lrastrear, cazar y aprender
+§lsobre seres misteriosos.
 
 §oLuego, §oel §obestiario §oprocede §oa
 §odescribir §ocambios §osobrenaturales
 §oen §ola §ogeneración §odel §omundo,
 §oempezando §ocon §ominerales §oextraños.
-
 
 Un mineral con propiedades místicas,
 la plata se puede encontrar a la
