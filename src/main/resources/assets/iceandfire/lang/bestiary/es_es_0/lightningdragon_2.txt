@@ -1,0 +1,43 @@
+Este es el ataque principal del
+dragón eléctrico. Es poderoso y
+rápido, pero no suele ser mortal
+al instante. Sin embargo, el dragón
+tiene un segundo ataque más raro:
+sacudir a la presa hasta matarla.
+
+<image><drawings_lightningdragon_attacks.png 40 112 290 124 186 69 0.7>
+
+
+
+
+En este ataque, el dragón toma a
+su objetivo con su boca y lo
+sacude rápidamente para herirlo
+de gravedad.
+
+
+<image><drawings_lightningdragon_attacks.png 80 234 330 20 117 77 0.7>
+
+
+
+
+El dragón también tiene un ataque
+cuerpo a cuerpo final, en el que
+acumula energía cinética en su cola
+para dar latigazos. Este ataque es
+muy eficaz, pero cargarlo lleva un
+rato. También puede batir sus alas 
+para hacer retroceder a su presa.
+
+Derribar a un dragón de cualquier 
+etapa no es una tarea fácil. Dado
+que los dragones eléctricos usan
+ataques elementales a distancia,
+sería inteligente usar pociones
+protectoras y armamento de largo
+alcance. Si quieres acabar con uno
+de ellos, intenta evitar los rayos
+y presta atención a la carga de
+algunos de sus ataques. Una vez
+hayas derrotado a uno, tendrás
+acceso a objetos muy valiosos.
