@@ -18,6 +18,7 @@ engendrarán una cría.
 
 
 
+
 Una vez domesticado un hipocampo,
 se puede colocar una montura y
 montar a la bestia. También se les
@@ -27,9 +28,9 @@ protección y permitir que el animal
 transporte artículos.
 
 Montar un hipocampo es similar a
-montar criaturas voladoras, excepto
+montar criaturas voladoras, salvo
 que el hipocampo es acuático. Muy
-lento en tierra pero extremadamente
+lento en tierra pero sumamente
 rápido en el mar, es la montura
 perfecta para marineros, piratas y
 exploradores.
