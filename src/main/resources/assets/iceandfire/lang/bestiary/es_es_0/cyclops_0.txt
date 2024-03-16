@@ -7,7 +7,7 @@ El cíclope es una bestia con un
 solo ojo. Aunque son temibles para
 casi todo ser vivo, los cíclopes
 son pastores natos. A menudo se 
-pueden encontrar cíclopes cuidando
+puede encontrar cíclopes cuidando
 rebaños de ovejas de un tamaño
 decente.
 
@@ -17,6 +17,7 @@ excavadas en la costa. Dentro de
 estas cuevas yacen restos de sus
 últimas comidas y también tesoros
 valiosos, además de ovejas.
+
 
 
 
