@@ -1,4 +1,4 @@
-sus vidas pasadas.
+
 <image><drawings_2.png 70 30 0 96 58 36 1>
 
 
@@ -14,7 +14,7 @@ para destrozar a sus presas.
 
 
 Las bestias aterradoras son restos
-destrozados de animales convertidos
+putrefactos de animales convertidos
 por el liche aterrador. Se mueven
 rápidamente y muerden a cualquier
 ser vivo que encuentren a su paso.
