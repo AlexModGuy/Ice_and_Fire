@@ -1,7 +1,7 @@
 El aliento de fuego no es la única
-forma en que los dragones de fuego
-eliminan a sus presas. También
-tienen muchos ataques diferentes.
+forma en que los dragones de
+fuego eliminan a sus presas.
+Tienen muchos ataques diferentes.
 
 
 
@@ -13,7 +13,7 @@ tienen muchos ataques diferentes.
 El ataque de explosión de fuego del
 dragón lanza un flujo constante de
 llamas desde la boca de la bestia.
-Los dragones más jóvenes son menos
+Los dragones más jóvenes son poco
 efectivos en este ataque, mientras
 que los más grandes pueden quemar
 el terreno cercano e infligir
@@ -39,5 +39,5 @@ capaces de realizar este ataque.
 
 
 
-Uno de los ataques más comunes del
-dragón es su mordedura.
+Uno de los ataques más comunes
+del dragón es su mordedura.
