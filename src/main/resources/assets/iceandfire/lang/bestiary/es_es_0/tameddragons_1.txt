@@ -33,7 +33,7 @@ saltar, se puede hacer que un
 dragón despegue y vuele. También
 se puede hacer que la bestia
 descienda hasta volver al suelo.
-**********************************
+
 Un dragón puede lanzar su aliento
 al presionar una determinada
 orden, que es diferente para cada
