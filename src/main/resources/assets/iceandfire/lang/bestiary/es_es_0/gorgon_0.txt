@@ -1,6 +1,6 @@
 §lNO §lLA §lMIRES §lA §lLOS §lOJOS
 
-La gorgona es una horripilante
+§rLa gorgona es una horripilante
 criatura que parece mitad mujer,
 mitad serpiente. Estas monstruosas
 abominaciones son uno de los seres 
