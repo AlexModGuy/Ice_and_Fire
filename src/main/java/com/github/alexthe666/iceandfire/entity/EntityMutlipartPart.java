@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class EntityMutlipartPart extends Entity {
-
     private static final EntityDataAccessor<Optional<UUID>> PARENT_UUID = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Float> SCALE_WIDTH = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> SCALE_HEIGHT = SynchedEntityData.defineId(EntityMutlipartPart.class, EntityDataSerializers.FLOAT);
@@ -273,9 +272,5 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
-    }
-
-    public boolean shouldContinuePersisting() {
-        return isAddedToWorld() || this.isRemoved();
     }
 }

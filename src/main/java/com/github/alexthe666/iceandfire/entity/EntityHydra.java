@@ -29,12 +29,14 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
+public class EntityHydra extends Monster implements IAnimatedEntity, MultiPartParent, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
     public static final int HEADS = 9;
     public static final double HEAD_HEALTH_THRESHOLD = 20;
@@ -64,7 +66,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
     public float[] headDamageTracker = new float[HEADS];
     private int animationTick;
     private Animation currentAnimation;
-    private EntityHydraHead[] headBoxes = new EntityHydraHead[HEADS * 9];
+    private @Nullable List<EntityMutlipartPart> parts;
     private int strikeCooldown = 0;
     private int breathCooldown = 0;
     private int lastHitHead = 0;
@@ -75,8 +77,33 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     public EntityHydra(EntityType<EntityHydra> type, Level worldIn) {
         super(type, worldIn);
-        resetParts();
+        resetParts(1);
         headDamageThreshold = Math.max(5, (float) IafConfig.hydraMaxHealth * 0.08F);
+    }
+
+    @Override
+    public void resetParts(float scale) {
+        EntityUtil.removeParts(this);
+        int headCount = getHeadCount();
+
+        EntityHydraHead[] heads = new EntityHydraHead[headCount * 2];
+
+        for (int i = 0; i < headCount; i++) {
+            heads[i] = new EntityHydraHead(this, 3.2F, ROTATE[headCount - 1][i] * 1.1F, 1.0F, 0.75F, 1.75F, 1, i, false);
+            heads[headCount + i] = new EntityHydraHead(this, 2.1F, ROTATE[headCount - 1][i] * 1.1F, 1.0F, 0.75F, 0.75F, 1, i, true);
+        }
+
+        parts = List.of(heads);
+    }
+
+    @Override
+    public List<EntityMutlipartPart> getCustomParts() {
+        return parts;
+    }
+
+    @Override
+    public void setCustomParts(List<EntityMutlipartPart> parts) {
+        this.parts = parts;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -128,13 +155,19 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
                     if (strikeCooldown == 0 && strikingProgress[index] == 0) {
                         isBreathing[index] = false;
                         isStriking[index] = true;
-                        this.level().broadcastEntityEvent(this, (byte) (40 + index));
+                        byte id = (byte) (40 + index);
+                        if (/* Causes unchecked cast to Sniffer */ id != EntityEvent.SNIFFER_DIGGING_SOUND) {
+                            this.level().broadcastEntityEvent(this, id);
+                        }
                         strikeCooldown = 3;
                     }
                 } else if (random.nextBoolean() && breathCooldown == 0) {
                     isBreathing[index] = true;
                     isStriking[index] = false;
-                    this.level().broadcastEntityEvent(this, (byte) (50 + index));
+                    byte id = (byte) (50 + index);
+                    if (/* Causes unchecked cast to Sniffer */ id != EntityEvent.SNIFFER_DIGGING_SOUND) {
+                        this.level().broadcastEntityEvent(this, id);
+                    }
                     breathCooldown = 15;
                 }
 
@@ -154,14 +187,14 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
                 }
             }
             if (breathing) {
-                if (tickCount % 7 == 0 && attackTarget != null && i < this.getHeadCount()) {
+                if (parts != null && tickCount % 7 == 0 && attackTarget != null && i < this.getHeadCount()) {
                     Vec3 Vector3d = this.getViewVector(1.0F);
                     if (random.nextFloat() < 0.2F) {
                         this.playSound(IafSoundRegistry.HYDRA_SPIT, this.getSoundVolume(), this.getVoicePitch());
                     }
-                    double headPosX = this.headBoxes[i].getX() + Vector3d.x;
-                    double headPosY = this.headBoxes[i].getY() + 1.3F;
-                    double headPosZ = this.headBoxes[i].getZ() + Vector3d.z;
+                    double headPosX = this.parts.get(i).getX() + Vector3d.x;
+                    double headPosY = this.parts.get(i).getY() + 1.3F;
+                    double headPosZ = this.parts.get(i).getZ() + Vector3d.z;
                     double d2 = attackTarget.getX() - headPosX + this.random.nextGaussian() * 0.4D;
                     double d3 = attackTarget.getY() + attackTarget.getEyeHeight() - headPosY + this.random.nextGaussian() * 0.4D;
                     double d4 = attackTarget.getZ() - headPosZ + this.random.nextGaussian() * 0.4D;
@@ -236,36 +269,22 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         }
     }
 
-    public void resetParts() {
-        clearParts();
-        headBoxes = new EntityHydraHead[HEADS * 2];
-        for (int i = 0; i < getHeadCount(); i++) {
-            float maxAngle = 5;
-            headBoxes[i] = new EntityHydraHead(this, 3.2F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 1.75F, 1, i, false);
-            headBoxes[HEADS + i] = new EntityHydraHead(this, 2.1F, ROTATE[getHeadCount() - 1][i] * 1.1F, 1.0F, 0.75F, 0.75F, 1, i, true);
-            headBoxes[i].copyPosition(this);
-            headBoxes[HEADS + i].copyPosition(this);
-            headBoxes[i].setParent(this);
-            headBoxes[HEADS + i].setParent(this);
-        }
-    }
-
     @Override
     public void tick() {
         super.tick();
 
         if (prevHeadCount != this.getHeadCount()) {
-            resetParts();
+            resetParts(1);
         }
 
         float partY = 1.0F - this.walkAnimation.speed() * 0.5F;
 
-        for (int i = 0; i < getHeadCount(); i++) {
-            headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
-            EntityUtil.updatePart(headBoxes[i], this);
+        if (parts != null) {
+            for (EntityMutlipartPart part : parts) {
+                part.setPos(part.position().add(0, partY, 0));
+            }
 
-            headBoxes[HEADS + i].setPos(headBoxes[HEADS + i].getX(), this.getY() + partY, headBoxes[HEADS + i].getZ());
-            EntityUtil.updatePart(headBoxes[HEADS + 1], this);
+            EntityUtil.addPartsToLevel(this);
         }
 
         if (getHeadCount() > 1 && !isOnFire()) {
@@ -286,17 +305,9 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
         prevHeadCount = this.getHeadCount();
     }
 
-    private void clearParts() {
-        for (Entity entity : headBoxes) {
-            if (entity != null) {
-                entity.remove(RemovalReason.DISCARDED);
-            }
-        }
-    }
-
     @Override
     public void remove(@NotNull RemovalReason reason) {
-        clearParts();
+        EntityUtil.removeParts(this);
         super.remove(reason);
     }
 

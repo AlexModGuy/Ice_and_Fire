@@ -63,8 +63,10 @@ import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
+public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, MultiPartParent, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
 
     public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
     public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
@@ -80,6 +82,8 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     private static final EntityDataAccessor<BlockPos> HOME = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.BLOCK_POS);
     public static Animation ANIMATION_BITE = Animation.create(10);
 
+    private static final int MAX_SIZE = 7;
+
     public ChainBuffer tail_buffer;
     public float jumpProgress;
     public float prevJumpProgress;
@@ -87,7 +91,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     private boolean willExplode = false;
     private int ticksTillExplosion = 60;
     private Animation currentAnimation;
-    private EntityMutlipartPart[] segments = new EntityMutlipartPart[6];
+    private @Nullable List<EntityMutlipartPart> parts;
     private boolean isSandNavigator;
     private final float prevScale = 0.0F;
     private final LookControl lookHelper;
@@ -107,6 +111,33 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         }
         this.setMaxUpStep(1F);
         this.switchNavigator(false);
+    }
+
+    @Override
+    public void resetParts(float scale) {
+        EntityUtil.removeParts(this);
+        parts = new ArrayList<>();
+
+        for (int i = 0; i < MAX_SIZE; i++) {
+            EntitySlowPart part = new EntitySlowPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
+            part.copyPosition(this);
+            parts.add(part);
+        }
+    }
+
+    @Override
+    public float getPartScale() {
+        return getScale() * (this.getWormAge() / 5F);
+    }
+
+    @Override
+    public List<EntityMutlipartPart> getCustomParts() {
+        return parts;
+    }
+
+    @Override
+    public void setCustomParts(List<EntityMutlipartPart> parts) {
+        this.parts = parts;
     }
 
     @Override
@@ -185,49 +216,9 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
                 && this.level().getMaxLocalRawBrightness(blockpos) > 8;
     }
 
-    public void onUpdateParts() {
-        addSegmentsToWorld();
-        // FIXME :: Unused
-//        if (isSandBelow()) {
-//            int i = Mth.floor(this.getX());
-//            int j = Mth.floor(this.getY() - 1);
-//            int k = Mth.floor(this.getZ());
-//            BlockPos blockpos = new BlockPos(i, j, k);
-//            BlockState BlockState = this.level.getBlockState(blockpos);
-//
-//            if (level.isClientSide) {
-//                world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, BlockState), this.getPosX() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getSurface((int) Math.floor(this.getPosX()), (int) Math.floor(this.getPosY()), (int) Math.floor(this.getPosZ())) + 0.5F, this.getPosZ() + (double) (this.rand.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
-//            }
-//        }
-    }
-
     @Override
     public int getExperienceReward() {
         return this.getScale() > 3 ? 20 : 10;
-    }
-
-    public void initSegments(float scale) {
-        segments = new EntityMutlipartPart[7];
-        for (int i = 0; i < segments.length; i++) {
-            segments[i] = new EntitySlowPart(this, (-0.8F - (i * 0.8F)) * scale, 0, 0, 0.7F * scale, 0.7F * scale, 1);
-            segments[i].copyPosition(this);
-            segments[i].setParent(this);
-        }
-    }
-
-    private void addSegmentsToWorld() {
-        for (EntityMutlipartPart entity : segments) {
-            EntityUtil.updatePart(entity, this);
-        }
-    }
-
-    private void clearSegments() {
-        for (Entity entity : segments) {
-            if (entity != null) {
-                entity.kill();
-                entity.remove(RemovalReason.KILLED);
-            }
-        }
     }
 
     public void setExplosive(boolean explosive, Player thrower) {
@@ -253,9 +244,9 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     @Override
-    public void die(@NotNull DamageSource cause) {
-        clearSegments();
-        super.die(cause);
+    public void remove(@NotNull RemovalReason reason) {
+        EntityUtil.removeParts(this);
+        super.remove(reason);
     }
 
     @Override
@@ -381,10 +372,12 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     public void setDeathWormScale(float scale) {
         this.entityData.set(SCALE, scale);
         this.updateAttributes();
-        clearSegments();
+        EntityUtil.removeParts(this);
+
         if (!this.level().isClientSide) {
-            initSegments(scale * (this.getWormAge() / 5F));
-            IceAndFire.sendMSGToAll(new MessageDeathWormHitbox(this.getId(), scale * (this.getWormAge() / 5F)));
+            float partScale = getPartScale();
+            resetParts(partScale);
+            IceAndFire.sendMSGToAll(new MessageDeathWormHitbox(this.getId(), partScale));
         }
     }
 
@@ -583,7 +576,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             }
         }
         if (this.tickCount == 1) {
-            initSegments(this.getScale());
+            resetParts(getScale());
         }
         if (isInSandStrict()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
@@ -591,7 +584,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         if (growthCounter > 1000 && this.getWormAge() < 5) {
             growthCounter = 0;
             this.setWormAge(Math.min(5, this.getWormAge() + 1));
-            this.clearSegments();
+            EntityUtil.removeParts(this);
             this.heal(15);
             this.setDeathWormScale(this.getDeathwormScale());
             if (level().isClientSide) {
@@ -672,7 +665,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     public void tick() {
         super.tick();
         refreshDimensions();
-        onUpdateParts();
+        EntityUtil.addPartsToLevel(this);
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
             LivingEntity target = DragonUtils.riderLookingAtEntity(this, this.getControllingPassenger(), 3);
             if (this.getAnimation() != ANIMATION_BITE) {
@@ -798,10 +791,6 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     @Override
     public Animation[] getAnimations() {
         return new Animation[]{ANIMATION_BITE};
-    }
-
-    public Entity[] getWormParts() {
-        return segments;
     }
 
     @Override
