@@ -1,0 +1,42 @@
+La habilidad más sorprendente del
+dragón eléctrico es la de arrojar
+relámpagos crepitantes por la boca,
+capaces de electrocutar. Sin
+embargo, también poseen una
+variedad de ataques diferentes.
+
+
+<image><drawings_lightningdragon_attacks.png 20 130 0 101 270 77 0.65>
+
+
+
+
+El ataque de explosión de rayos del
+dragón dispara un fuerte relámpago
+directo desde la boca de la bestia.
+Este ataque no quema ni congela a
+la víctima, pero causa mucho más
+daño directo que una explosión de
+fuego o hielo.
+
+
+<image><drawings_lightningdragon_attacks.png 280 10 0 0 220 90 0.75>
+
+
+
+
+La explosión de rayos no es el
+único ataque elemental. Los
+dragones eléctricos más viejos
+también pueden enviar una carga
+condensada de relámpagos a su
+objetivo, destruyendo el terreno
+a su alrededor y causando daños
+devastadores.
+
+<image><drawings_lightningdragon_attacks.png 360 220 262 212 230 78 0.6>
+
+
+
+Uno de los ataques más comunes
+del dragón es su mordedura.

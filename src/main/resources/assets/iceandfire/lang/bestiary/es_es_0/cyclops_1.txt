@@ -1,6 +1,6 @@
-para el ojo de la criatura con
-las flechas nos es posible cegar
-al mounstro.
+directamente al ojo de la bestia,
+es posible cegar por completo al
+monstruo.
 
 
 
@@ -11,17 +11,17 @@ al mounstro.
 
 
 
-Los cíclopes ciegos tienen una 
-percepción muy limitada del
-medio ambiente. Esto nos hace
-más facil la tarea de llegar
-a las cercanías del cíclope sin
-ser detectado.
 
+Un cíclope cegado, aunque no está
+totalmente indefenso, tiene una
+percepción muy reducida de su
+entorno. En este caso, es posible
+acercarse mucho al cíclope sin
+correr el riesgo de ser detectado.
 
-Otra manera de pasar evitando
-la mirada de los cíclopes es
-disfrazarse como una oveja. Esto
-se nos puede posible con la 
-creación de  una armadura de
-disfraz de oveja.
+Otra manera de pasar desapercibido
+frente a un cíclope sería por
+medio de un disfraz. Esto se puede
+conseguir creando un conjunto de
+disfraz de oveja, con lana blanca
+y ropa de cuero.

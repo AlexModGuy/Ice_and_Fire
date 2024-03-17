@@ -1,0 +1,43 @@
+<recipe><iceandfire:chain 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 4 10 1>
+
+
+
+
+
+
+
+
+Las cadenas permiten capturar
+dragones salvajes y más monstruos
+y atarlos a las paredes. Los
+dragones destruirán la mayoría de
+paredes, como las de roca, por lo
+que quien desee usar un dragón
+salvaje necesitará muros de hueso.
+<recipe><iceandfire:dragon_bone_wall 0 minecraft:air 0 minecraft:air 0 minecraft:air 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 25 145 0.75>
+
+
+
+
+
+
+Para energizar adecuadamente una
+forja, se debe colocar al dragón
+directamente frente a la apertura.
+Entonces el dragón empezará a
+lanzar su aliento, siempre que
+haya objetos válidos en la forja.
+
+La mayoría de objetos, cuando se
+colocan en una forja, se volverán
+cenizas o hielo de dragón, pero
+colocar un lingote de hierro y
+sangre de dragón (debe coincidir
+con el tipo de forja) resultará
+en un poderoso metal alquímico.
+<item><minecraft:iron_ingot 0 110 78 1>
+<item><iceandfire:fire_dragon_blood 0 130 78 1>
+<item><iceandfire:dragonsteel_fire_ingot 0 170 78 1>
+<item><minecraft:iron_ingot 0 110 92 1>
+<item><iceandfire:ice_dragon_blood 0 130 92 1>
+<item><iceandfire:dragonsteel_ice_ingot 0 170 92 1>
