@@ -95,7 +95,8 @@ public class ParticleHydraBreath extends TextureSheetParticle {
         return super.getLightColor(partialTick);
     }
 
-    public void onUpdate() {
+    @Override
+    public void tick() {
         this.xo = x;
         this.yo = y;
         this.zo = z;

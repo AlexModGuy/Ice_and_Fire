@@ -2,9 +2,9 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
+import com.github.alexthe666.iceandfire.client.particle.IafParticleType;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
-import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import net.minecraft.core.BlockPos;
@@ -54,12 +54,12 @@ public class TileEntityPixieHouse extends BlockEntity {
 
     public static void tickClient(Level level, BlockPos pos, BlockState state, TileEntityPixieHouse entityPixieHouse) {
         if (entityPixieHouse.hasPixie) {
-            IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie,
-                pos.getX() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
-                pos.getY() + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_HEIGHT),
-                pos.getZ() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
-                EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][0], EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][1],
-                EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][2]);
+            level.addParticle(IafParticleType.PIXIE_DUST.get(),
+                    pos.getX() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                    pos.getY() + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_HEIGHT),
+                    pos.getZ() + 0.5F + (double) (entityPixieHouse.rand.nextFloat() * PARTICLE_WIDTH * 2F) - PARTICLE_WIDTH,
+                    EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][0], EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][1],
+                    EntityPixie.PARTICLE_RGB[entityPixieHouse.pixieType][2]);
         }
     }
 

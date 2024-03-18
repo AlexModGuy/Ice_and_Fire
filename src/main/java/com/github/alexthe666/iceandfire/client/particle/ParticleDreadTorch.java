@@ -85,10 +85,6 @@ public class ParticleDreadTorch extends TextureSheetParticle {
         return 240;
     }
 
-    public int getFXLayer() {
-        return 3;
-    }
-
     @Override
     public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;

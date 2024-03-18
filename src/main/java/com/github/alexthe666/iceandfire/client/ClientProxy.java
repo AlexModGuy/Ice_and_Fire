@@ -109,9 +109,6 @@ public class ClientProxy extends CommonProxy {
             case Blood:
                 particle = new ParticleBlood(world, x, y, z);
                 break;
-            case If_Pixie:
-                particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
-                break;
             case Siren_Appearance:
                 particle = new ParticleSirenAppearance(world, x, y, z, (int) motX);
                 break;
