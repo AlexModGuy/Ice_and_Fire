@@ -1,0 +1,53 @@
+　ボロボロになった小さなメモが幻想生物
+譚の装丁に貼ってあり、そこにはこう書か
+れていた：
+
+<item><iceandfire:manuscript 0 38 20 1>
+
+
+"この記録は、超自然領域における無上の奇
+蹟について知りたい者たちへのガイドとな
+ろう。道具、防具、武器の設計から追跡、
+狩猟、幻想生物についての学習まで、基本
+的なことをいくつか網羅する。"
+
+
+　この幻想生物譚は、奇妙な鉱石から始ま
+る世界の創生における超常的な変化につい
+て述べている。
+
+
+
+
+　神秘的な性質を持つ鉱石である銀鉱石は
+金鉱石と同じ層で見られる。
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
+
+
+
+
+
+製錬してインゴットにすることができ、様
+々な用途に使用できる。
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
+
+
+
+
+
+
+
+
+
+銀の武器はその超常的特性により、アンデ
+ッドに特段大きな傷を負わせる。

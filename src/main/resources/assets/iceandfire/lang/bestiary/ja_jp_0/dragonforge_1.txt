@@ -1,0 +1,63 @@
+
+<block><iceandfire:dragon_bone_block 0 40 20 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 24 1>
+<block><iceandfire:dragon_bone_block 0 56 28 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 24 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 28 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 32 1>
+<block><iceandfire:dragon_bone_block 0 24 28 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 32 1>
+<block><iceandfire:dragon_bone_block 0 40 36 1>
+第一層
+
+
+
+
+
+
+
+
+
+<block><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<block><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<block><iceandfire:dragonforge_fire_core 0 40 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<block><iceandfire:dragonforge_fire_input 0 32 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 86 1>
+第二層
+
+
+
+
+
+
+
+
+<block><iceandfire:dragon_bone_block 0 140 10 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<block><iceandfire:dragon_bone_block 0 156 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<block><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<block><iceandfire:dragon_bone_block 0 124 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<block><iceandfire:dragon_bone_block 0 140 26 1>
+第三層
+
+
+
+
+
+
+
+第一層を置き、第一層の上に第二層を置き、
+第二層の上に第三層を置いて炉を作る。炉
+が完成したら、何らかの動力が必要になる。
+
+炉にパワーを供給するには、ドラゴンのブ
+レスが必要だ。そのためには、飼いならさ
+れたドラゴンの近くに構造物を建てるか、
+鎖を使って野生のドラゴンを捕獲する。

@@ -1,0 +1,43 @@
+　よく知られているように、ドラゴンの骨
+や鱗が持つ超常的なオーラには強力な特性
+がある。石と組み合わせると、ドラゴンの
+氷や炎で破壊されなくなる。
+<recipe><iceandfire:dragonforge_fire_brick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 5 76 1>
+
+
+
+
+
+
+
+
+
+
+
+竜炉レンガで作れる構築物はいくつかある
+ようだ。また、アイスドラゴン版の亜種が
+存在することも知られている。
+<recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
+<recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+竜炉コア、竜炉焚口、ドラゴンの骨ブロッ
+ク8個、竜炉レンガ17個を手に入れたら、
+竜炉本体を建設することができる。

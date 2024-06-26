@@ -1,0 +1,37 @@
+<item><iceandfire:hydra_fang 0 35 4 1.25>
+<item><iceandfire:hydra_heart 0 110 4 1.25>
+
+
+
+　ヒドラの牙は、対象に毒を与える特殊な
+矢を作るのに使える貴重なアイテムだ。
+
+<recipe><iceandfire:hydra_arrow 0 minecraft:air 0 iceandfire:hydra_fang 0 minecraft:air 0 minecraft:air 0 minecraft:stick 0 minecraft:air 0 minecraft:air 0 minecraft:waterlily 0 minecraft:air 0 0 75 1>
+
+
+
+
+
+
+
+
+
+この矢には、もう一つの重要な特性がある。
+標的に当たると生命力を吸い取り、矢を射
+た者を回復する。
+
+
+
+
+
+
+
+　ヒドラの心臓は、その効果から多くの者
+が憧れる化け物の希少な戦利品だ。ホット
+バーにあるとき、ヒドラの心臓は、使用者
+の体力の損失量に応じて、回復効果を増加
+させる。
+
+この怪物の強力な心臓は、困難な戦いにも
+十分価値があり、ヒドラの巣穴にこれほど
+多くの骨がある理由も説明できるだろう。
