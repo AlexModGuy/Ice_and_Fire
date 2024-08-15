@@ -1,0 +1,44 @@
+<recipe><iceandfire:graveyard_soil 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:coarse_dirt 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 5 60 1>
+人間が他の人間に恐ろしい方法で殺された
+ときにも、幽霊が出現することがある。
+
+
+
+
+
+
+
+
+
+
+
+
+呪われたチェストは、開けると日中に幽霊
+を召喚する。墓地の土は、完全に暗い夜に
+幽霊を生み出す。
+
+<item><iceandfire:ghost_ingot 10 110 4 1.25>
+
+
+
+
+
+
+　ゴーストは幻影のインゴットを落とす可
+能性がある。このインゴットは、鍛冶台に
+あるドラゴンの骨の剣を幻影の剣にアップ
+グレードするために使用できる。
+<item><iceandfire:ghost_sword 10 110 55 1.25>
+
+
+
+
+
+
+
+
+
+
+幻影の剣はそれ自体が強力な剣であるが、
+ブロックを通り抜けるゴーストのような幻
+影を発射することもできる。

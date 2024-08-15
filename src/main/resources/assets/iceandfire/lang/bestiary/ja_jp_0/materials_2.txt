@@ -1,0 +1,27 @@
+ドラゴンの頭骨も死体から1つだけ入手で
+きる。これらの大きな骨は指令杖を作るの
+に使われ、地面に置くことができる。また、
+旗に貼ってドラゴンの形にすることもでき
+る。
+
+
+
+
+
+
+
+
+
+ドラゴンの血は、火と氷の両方の変種があ
+り、非常に不思議な性質を持っている。し
+かし、これらの特性はとらえどころがない。
+
+
+
+ドラゴンの骨や鱗は、大きな立方体に圧縮
+して安全に保管できるようになったようだ。
+私は、このような大量の超常的存在をブロ
+ックに集約することで、予期せぬ使い方が
+できるのではないかと予測している。
+<recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 60 0.75>
+<recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 120 0.75>

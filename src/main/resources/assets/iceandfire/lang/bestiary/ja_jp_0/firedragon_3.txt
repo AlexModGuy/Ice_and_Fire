@@ -1,0 +1,8 @@
+　もう1つ、ファイアドラゴンに関して注
+意しなければならないのは、そのライフス
+テージの違いである。
+<image><drawings_firedragon.png 10 30 198 352 184 93 1>
+<image><drawings_firedragon.png 10 130 198 263 184 93 1>
+<image><drawings_firedragon.png 200 5 8 429 184 78 1>
+<image><drawings_firedragon.png 200 75 8 342 184 78 1>
+<image><drawings_firedragon.png 200 150 8 263 184 78 1>

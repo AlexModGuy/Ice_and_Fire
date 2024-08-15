@@ -1,0 +1,45 @@
+その結果、竜鋼という金属が生まれた。竜
+鋼は、人類が知る限り最も強く、最も用途
+の広い素材のひとつである。道具や人間の
+鎧、ドラゴンの鎧を作ることができる。
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+
+
+
+竜炉はアイスドラゴンを想定して建設する
+こともでき、彼らのフロストブレスの冷た
+さを利用して氷竜鋼を作ることができる。
+
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+
+
+
+火竜鋼は攻撃対象を最大15秒間燃え上がら
+せ、大量のノックバックを与える。氷竜鋼
+は対象を凍らせて巨大な氷の塊にする。ど
+ちらのタイプの竜鋼も高いダメージを与え、
+大型のドラゴンを簡単に倒すことができる。
+また、竜鋼の防具はドラゴンのブレス攻撃
+に対する防御力を増加させる。
