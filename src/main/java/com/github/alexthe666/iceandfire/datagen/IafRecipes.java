@@ -302,6 +302,17 @@ public class IafRecipes extends RecipeProvider {
         forgeCore(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), IafItemRegistry.LIGHTNING_DRAGON_HEART.get(), IafBlockRegistry.DRAGONFORGE_LIGHTNING_CORE_DISABLED.get());
         forgeInput(consumer, IafBlockRegistry.DRAGONFORGE_LIGHTNING_BRICK.get(), Tags.Items.INGOTS_IRON, IafBlockRegistry.DRAGONFORGE_LIGHTNING_INPUT.get());
 
+        podium(consumer, Blocks.OAK_PLANKS, Blocks.OAK_SLAB, IafBlockRegistry.PODIUM_OAK.get());
+        podium(consumer, Blocks.BIRCH_PLANKS, Blocks.BIRCH_SLAB, IafBlockRegistry.PODIUM_BIRCH.get());
+        podium(consumer, Blocks.SPRUCE_PLANKS, Blocks.SPRUCE_SLAB, IafBlockRegistry.PODIUM_SPRUCE.get());
+        podium(consumer, Blocks.JUNGLE_PLANKS, Blocks.JUNGLE_SLAB, IafBlockRegistry.PODIUM_JUNGLE.get());
+        podium(consumer, Blocks.DARK_OAK_PLANKS, Blocks.DARK_OAK_SLAB, IafBlockRegistry.PODIUM_DARK_OAK.get());
+        podium(consumer, Blocks.ACACIA_PLANKS, Blocks.ACACIA_SLAB, IafBlockRegistry.PODIUM_ACACIA.get());
+        podium(consumer, Blocks.CRIMSON_PLANKS, Blocks.CRIMSON_SLAB, IafBlockRegistry.PODIUM_CRIMSON.get());
+        podium(consumer, Blocks.WARPED_PLANKS, Blocks.WARPED_SLAB, IafBlockRegistry.PODIUM_WARPED.get());
+        podium(consumer, Blocks.MANGROVE_PLANKS, Blocks.MANGROVE_SLAB, IafBlockRegistry.PODIUM_MANGROVE.get());
+        podium(consumer, Blocks.CHERRY_PLANKS, Blocks.CHERRY_SLAB, IafBlockRegistry.PODIUM_CHERRY.get());
+        
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, IafItemRegistry.DRAGON_MEAL.get())
                 .pattern("BMB")
                 .pattern("MBM")
@@ -995,6 +1006,18 @@ public class IafRecipes extends RecipeProvider {
                 .save(consumer);
     }
 
+    private void podium(@NotNull final Consumer<FinishedRecipe> consumer, final ItemLike planks, final ItemLike slab, final ItemLike result) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, result)
+                .pattern("SPS")
+                .pattern(" P ")
+                .pattern("SPS")
+                .define('S', slab)
+                .define('P', planks)
+                .unlockedBy("has_planks", has(planks.asItem()))
+                .unlockedBy("has_slab", has(slab.asItem()))
+                .save(consumer);
+    }
+    
     private static ResourceLocation location(final String path) {
         return new ResourceLocation(IceAndFire.MODID, path);
     }
