@@ -12,8 +12,7 @@ import java.util.function.Supplier;
 
 public class IafTileEntityRegistry {
 
-    public static final DeferredRegister<BlockEntityType<?>> TYPES = DeferredRegister
-        .create(ForgeRegistries.BLOCK_ENTITY_TYPES, IceAndFire.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, IceAndFire.MODID);
 
     //@formatter:off
     public static final RegistryObject<BlockEntityType<TileEntityLectern>> IAF_LECTERN = registerTileEntity(() -> BlockEntityType.Builder.of(TileEntityLectern::new, IafBlockRegistry.LECTERN.get()), "lectern");
