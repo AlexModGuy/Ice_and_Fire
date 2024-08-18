@@ -7,13 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:spruce_slab"
+      "item": "minecraft:dark_oak_slab"
     },
     "P": {
-      "item": "minecraft:spruce_planks"
+      "item": "minecraft:dark_oak_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium_spruce"
+    "item": "iceandfire:podium_dark_oak"
   }
 }

@@ -7,13 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:birch_slab"
+      "item": "minecraft:crimson_slab"
     },
     "P": {
-      "item": "minecraft:birch_planks"
+      "item": "minecraft:crimson_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium_birch"
+    "item": "iceandfire:podium_crimson"
   }
 }
