@@ -103,6 +103,7 @@ public class ClientEvents {
                     byte previousState = moveController.getControlState();
                     moveController.up(mc.options.keyJump.isDown());
                     moveController.down(IafKeybindRegistry.dragon_down.isDown());
+                    moveController.sprint(mc.options.keySprint.isDown());
                     moveController.attack(IafKeybindRegistry.dragon_strike.isDown());
                     moveController.dismount(mc.options.keyShift.isDown());
                     moveController.strike(IafKeybindRegistry.dragon_fireAttack.isDown());

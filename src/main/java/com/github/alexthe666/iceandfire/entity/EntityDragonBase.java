@@ -637,6 +637,10 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return (entityData.get(CONTROL_STATE) >> 4 & 1) == 1;
     }
 
+    public boolean isSprinting() {
+        return (entityData.get(CONTROL_STATE) >> 5 & 1) == 1;
+    }
+
     @Override
     public void up(boolean up) {
         setStateField(0, up);
@@ -662,6 +666,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         setStateField(4, dismount);
     }
 
+    @Override
+    public void sprint(boolean sprint) {
+        setStateField(5, sprint);
+    }
+
     private void setStateField(int i, boolean newState) {
         byte prevState = entityData.get(CONTROL_STATE);
         if (newState) {
@@ -679,6 +688,14 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public void setControlState(byte state) {
         entityData.set(CONTROL_STATE, state);
+    }
+
+    /**
+     * Required in LocalPlayer#canStartSprinting
+     */
+    @Override
+    public boolean canSprint() {
+        return true;
     }
 
     public int getCommand() {
@@ -2027,7 +2044,12 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         // Note: when motion is handled by the client no server side setDeltaMovement() should be called
         // otherwise the movement will halt
         // Todo: move wrongly fix
-        float flyingSpeed; // FIXME :: Why overlay the flyingSpeed variable from LivingEntity
+
+        // LivingEntity#flyingSpeed from 1.18 controls how fast entity moves when falling
+        // it has little to do with the flying here and is deprecated in 1.20
+        // flyingSpeed is now semi-hardcoded in LivingEntity#getFlyingSpeed
+        // Todo: remove flyingSpeed
+        float flyingSpeed;
         if (allowLocalMotionControl && this.getControllingPassenger() != null) {
             LivingEntity rider = this.getControllingPassenger();
             if (rider == null) {
@@ -2061,6 +2083,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     this.setTackling(false);
                 }
 
+                // Todo: use ICustomMoveController#sprint for custom control
+                // Todo: FOV effect visual hint
                 gliding = allowMousePitchControl && rider.isSprinting();
                 if (!gliding) {
                     // Mouse controlled yaw
