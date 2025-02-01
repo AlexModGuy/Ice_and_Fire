@@ -112,22 +112,37 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get())
                 .add(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get());
-
+        tag(INGOTS_SILVER).add(IafItemRegistry.SILVER_INGOT.get().asItem());
+        
         tag(Tags.Items.NUGGETS)
                 .add(IafItemRegistry.COPPER_NUGGET.get())
                 .add(IafItemRegistry.SILVER_NUGGET.get());
 
+        tag(NUGGETS_COPPER).add(IafItemRegistry.COPPER_NUGGET.get());
+        tag(NUGGETS_SILVER).add(IafItemRegistry.SILVER_NUGGET.get());
+        
         tag(Tags.Items.ORES)
                 .add(IafBlockRegistry.SILVER_ORE.get().asItem())
                 .add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem())
                 .add(IafBlockRegistry.SAPPHIRE_ORE.get().asItem());
+        
+        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
+        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
+
+        
+        tag(Tags.Items.RAW_MATERIALS)
+                .add(IafItemRegistry.RAW_SILVER.get());
+        tag(createForgeKey("raw_materials/silver")).add(IafItemRegistry.RAW_SILVER.get());
 
         tag(Tags.Items.GEMS)
                 .add(IafItemRegistry.SAPPHIRE_GEM.get());
 
+        tag(GEMS_SAPPHIRE).add(IafItemRegistry.SAPPHIRE_GEM.get());
+
         tag(Tags.Items.BONES)
                 .add(IafItemRegistry.DRAGON_BONE.get())
                 .add(IafItemRegistry.WITHERBONE.get());
+        tag(BONES_WITHER).add(IafItemRegistry.WITHERBONE.get());
 
         tag(Tags.Items.EGGS)
                 .add(IafItemRegistry.HIPPOGRYPH_EGG.get())
@@ -167,7 +182,10 @@ public class IafItemTags extends ItemTagsProvider {
                 .add(IafBlockRegistry.SILVER_BLOCK.get().asItem())
                 .add(IafBlockRegistry.RAW_SILVER_BLOCK.get().asItem())
                 .add(IafBlockRegistry.DRAGON_BONE_BLOCK.get().asItem());
-
+        tag(STORAGE_BLOCKS_SILVER).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
+        tag(createForgeKey(STORAGE_BLOCK_PATH + "/raw_silver")).add(IafBlockRegistry.RAW_SILVER_BLOCK.get().asItem());
+        tag(createForgeKey(STORAGE_BLOCK_PATH + "/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
+        
         tag(DRAGON_FOOD_MEAT)
                 // Vanilla
                 .add(Items.BEEF, Items.COOKED_BEEF)
@@ -296,19 +314,6 @@ public class IafItemTags extends ItemTagsProvider {
                 }
             }
         });
-
-        // Might be used by other mods
-        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.SILVER_ORE.get().asItem());
-        tag(createForgeKey(ORES_PATH + "/silver")).add(IafBlockRegistry.DEEPSLATE_SILVER_ORE.get().asItem());
-        tag(INGOTS_SILVER).add(IafItemRegistry.SILVER_INGOT.get().asItem());
-        tag(NUGGETS_COPPER).add(IafItemRegistry.COPPER_NUGGET.get());
-        tag(NUGGETS_SILVER).add(IafItemRegistry.SILVER_NUGGET.get());
-        tag(createForgeKey("raw_materials/silver")).add(IafItemRegistry.RAW_SILVER.get());
-        tag(GEMS_SAPPHIRE).add(IafItemRegistry.SAPPHIRE_GEM.get());
-        tag(STORAGE_BLOCKS_SILVER).add(IafBlockRegistry.SILVER_BLOCK.get().asItem());
-        tag(createForgeKey(STORAGE_BLOCK_PATH + "/raw_silver")).add(IafBlockRegistry.RAW_SILVER_BLOCK.get().asItem());
-        tag(createForgeKey(STORAGE_BLOCK_PATH + "/sapphire")).add(IafBlockRegistry.SAPPHIRE_BLOCK.get().asItem());
-        tag(BONES_WITHER).add(IafItemRegistry.WITHERBONE.get());
     }
 
     private static TagKey<Item> createKey(final String name) {
