@@ -1,9 +1,7 @@
-
 Les lutins sont des êtres magiques
 et mystérieux qui vivent dans des
 biomes forestiers sombres ou
 magiques.
-
 
 
 
@@ -20,13 +18,10 @@ directement. Un pixie qui a volé un
 objet doit le laisser tomber s'il
 est attaqué.
 
-
 La plupart des lutins vivent dans de
 petites masures, rassemblés dans
 d'étranges villages sous une épaisse
 couverture d'arbres.
-
-
 
 
 

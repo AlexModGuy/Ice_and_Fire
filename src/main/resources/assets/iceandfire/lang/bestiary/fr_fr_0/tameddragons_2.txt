@@ -1,11 +1,8 @@
-    
 Les dragons adultes peuvent être
 élevés en les nourrissant d'un
 mélange d'objets élémentaires, mais
 il faut d'abord rassembler ces
 objets.
-
-
 
 
 
@@ -27,12 +24,9 @@ femelle, les deux se reproduiront.
 
 
 
-
-
 Une fois l'accouplement terminé, la
 femelle pond un seul œuf, de
 n'importe quelle couleur.
-
 
 
 

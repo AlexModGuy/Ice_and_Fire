@@ -1,4 +1,3 @@
-
 Dans les savanes, le lis foudroyant
 pousse rarement à partir de la
 terre. Cette fleur peut être
@@ -8,8 +7,6 @@ manière que pour les dragons de
 glace et de feu.
 <item><iceandfire:lightning_lily 100 20 40 1>
 <item><iceandfire:lightning_stew 100 60 40 1>
-
-
 
 
 
@@ -25,22 +22,18 @@ ou de feu peut également être
 fabriqué à partir des dragons de
 foudre.
 
-
-
 Par exemple : armos d'écailles de
 dragons foudroyants, bouteilles de
 sang, acier de dragon, blocs
 d'écailles, et plus encore.
-
 <item><iceandfire:dragonscale_amythest 100 120 40 1>
 <item><iceandfire:armor_amythest_helmet 100 140 30 1>
 <item><iceandfire:dragonsteel_lightning_ingot 100 160 40 1>
-
 <item><iceandfire:dragonforge_lightning_core 100 140 50 1>
-
 <item><iceandfire:summoning_crystal_lightning 100 120 60 1>
 <item><iceandfire:lightning_dragon_blood 100 140 70 1>
 <item><iceandfire:dragonbone_sword_lightning 100 160 60 1>
+
 
 
 

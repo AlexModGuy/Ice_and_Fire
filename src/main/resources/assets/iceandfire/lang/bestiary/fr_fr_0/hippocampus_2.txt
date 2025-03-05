@@ -1,4 +1,3 @@
-
 Il est possible de faire asseoir les
 hippocampes en interagissant avec
 eux tout en tenant un bâton.
@@ -7,10 +6,8 @@ eux tout en tenant un bâton.
 
 
 
-
 S'il est tué, l'hippocampe laisse
 tomber des écailles brillantes.
-
 
 Ces écailles brillantes, mélangées à
 une bouteille d'eau dans un stand de

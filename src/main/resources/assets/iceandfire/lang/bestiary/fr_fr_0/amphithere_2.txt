@@ -1,7 +1,5 @@
-
 À la mort, les amphithéâtres
 laissent tomber leurs belles plumes.
-
 
 
 
@@ -20,14 +18,11 @@ amphithéâtres.
 
 
 
-
-
 Ces flèches ont une capacité
 spéciale : elles sont capables de
 faire reculer n'importe quel
 personnage avec une puissante rafale
 de vent, tout comme l'amphithéâtre.
-
 
 Lorsqu'il doit se débarrasser d'un
 assaillant, l'amphithéâtre dispose

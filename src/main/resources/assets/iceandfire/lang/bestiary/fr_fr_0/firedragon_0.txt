@@ -1,14 +1,12 @@
-    
 Les légendes sont donc vraies. Les
 bêtes comme celle qui fait l'objet
 de cet article existent bel et bien.
 Très bien. Je vais essayer de
 décrire au mieux cette bête et ses
 activités.
-
-
-
 <image><drawings_firedragon.png 0 80 0 0 194 93 1>
+
+
 
 
 
@@ -22,14 +20,12 @@ Cependant, elle est beaucoup plus
 grande que la moyenne des reptiles ;
 les individus que j'ai vus
 
-
 La taille des dragons varie de celle
 d'un cochon à celle de 25 blocs !
 Des rumeurs font même état de
 dragons plus grands, dormant dans
 d'anciennes cryptes sous la terre.
 
-    
 Une autre caractéristique notable
 qu'ils possèdent est la capacité de
 voler. Cela se traduit par le
@@ -45,7 +41,6 @@ du feu à partir de leur bouche. Ils
 utilisent ce pouvoir pour cuire
 leurs proies vivantes.
 
-    
 Les dragons de feu mâles ont des
 ailes à motifs et collectent un
 butin plus précieux, tandis que les

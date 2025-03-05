@@ -1,4 +1,3 @@
-    
 Depuis trop longtemps, nous
 entendons parler de reptiles géants,
 qui sont tous deux des incarnations
@@ -8,10 +7,7 @@ répandue d'une créature similaire
 qui ne subsiste que dans les biomes
 les plus exotiques : le dragon de
 foudre.
-
-
 <image><drawings_lightningdragon.png 0 80 0 0 194 93 1>
-
 
 
 
@@ -31,12 +27,10 @@ et de feu ont des affinités pour
 certains métaux et pierres
 précieuses, les dragons de foudre
 aiment le cuivre et l'améthyste.
-
 <item><minecraft:copper_ingot 100 130 40 1>
 <item><minecraft:copper_ore 100 110 40 1>
 <item><minecraft:amethyst_shard 100 170 40 1>
 <item><minecraft:amethyst_block 100 150 40 1>
-
 
 
 
@@ -45,7 +39,6 @@ trouvé en haute altitude n'importe
 où dans l'overworld. L'améthyste ne
 se trouve que dans les profondeurs
 des savanes.
-
 
 Le cuivre peut être transformé en
 n'importe quelle forme que l'argent

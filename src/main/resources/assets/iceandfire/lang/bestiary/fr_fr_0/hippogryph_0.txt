@@ -1,4 +1,3 @@
-
 Un hippogriffe est une créature
 étrange qui semble avoir l'avant
 d'un oiseau et l'arrière d'un
@@ -19,9 +18,6 @@ motifs différents.
 
 
 
-
-
-
 La plupart des hippogryphes sont des
 prédateurs et attaquent presque
 toutes les créatures plus petites
@@ -31,9 +27,6 @@ moyen d'apprivoiser ces créatures
 hostiles et sont capables
 d'exploiter leur grande vitesse et
 leurs capacités aériennes.
-
-
-
 
 
 

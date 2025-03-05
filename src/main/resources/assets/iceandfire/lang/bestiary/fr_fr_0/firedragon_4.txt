@@ -1,4 +1,3 @@
-
 Chaque étape de la vie d'un dragon
 entraîne des changements différents
 dans son comportement et ses
@@ -14,10 +13,10 @@ de feu, qui peut infliger
 d'importants dégâts.
 
 
+
 Les dragons de stade 3 sont
 également les plus courants dans la
 nature.
-
 
 Alors que le stade 3 correspondait à
 la dernière forme adolescente du
@@ -28,7 +27,6 @@ plus puissant et ne se trouve pas
 dans les perchoirs. Ils occupent de
 grandes cavernes sous la surface de
 la terre.
-
 
 Le stade 5 produit un animal
 vraiment terrifiant. Il suit toutes

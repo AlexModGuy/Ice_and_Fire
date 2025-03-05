@@ -1,4 +1,3 @@
-    
 Une fois le lutrin placé, il est
 possible d'interagir avec lui en
 cliquant dessus avec le bouton droit

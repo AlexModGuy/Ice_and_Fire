@@ -7,7 +7,6 @@
 
 
 
-
 Des chaînes peuvent être créées pour
 capturer les dragons sauvages et
 tout autre monstre. Elles peuvent
@@ -21,9 +20,6 @@ besoin de murs en os de dragon.
 
 
 
-
-
-
 Pour alimenter correctement une
 forge, il faut placer le dragon
 enchaîné ou apprivoisé directement
@@ -32,8 +28,6 @@ commencera alors à cracher des
 flammes ou du givre tant qu'il y
 aura des objets valides dans la
 forge.
-
-
 
 La plupart des objets, lorsqu'ils
 sont placés dans une forge, sont

@@ -1,9 +1,7 @@
-    
 Après avoir tué un dragon ou être
 tombé sur son cadavre, il est
 possible de le piller en
 interagissant avec lui.
-
 
 
 
@@ -20,10 +18,8 @@ armures très résistantes.
 
 
 
-
 Les os de dragon constituent le
 deuxième butin le plus courant.
-
 
 
 

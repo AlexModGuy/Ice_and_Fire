@@ -1,4 +1,3 @@
-
 Les armures pour dragons peuvent
 également être fabriquées. Elles
 sont le plus souvent fabriquées à
@@ -9,16 +8,12 @@ les armures normales, mais elles
 utilisent des blocs au lieu de
 lingots.
 
-
-
-
 On peut aussi fabriquer habilement
 une flûte en os de dragon à partir
 de fer et d'os de dragon. Cet
 instrument peut calmer un dragon
 volant apprivoisé et le ramener au
 sol.
-
 
 Ces flûtes sont également efficaces
 sur d'autres créatures volantes

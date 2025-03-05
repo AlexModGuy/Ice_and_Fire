@@ -1,6 +1,44 @@
 
-
 <image><drawings_0.png 100 100 0 0 127 62 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //item
 <item><minecraft:planks 0 100 100 1>

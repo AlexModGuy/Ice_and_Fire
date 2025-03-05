@@ -1,7 +1,5 @@
-
 Ces flèches glissent dans l'eau
 comme dans l'air.
-
 
 
 
@@ -20,11 +18,9 @@ de gardien de marée.
 
 
 
-
 L'armure du gardien des marées peut
 offrir de multiples avantages à son
 porteur.
-
 
 Chaque pièce de l'armure du gardien
 des marées permet de respirer dans
@@ -32,7 +28,6 @@ l'eau. Chaque pièce additionnelle
 permet d'obtenir un niveau de Force
 supplémentaire lorsque le porteur se
 trouve dans l'eau ou sous la pluie.
-
 
 Dans l'ensemble, l'armure est
 légèrement meilleure qu'une armure

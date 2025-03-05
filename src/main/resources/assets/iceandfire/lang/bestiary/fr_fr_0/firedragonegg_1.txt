@@ -1,9 +1,8 @@
-
-
-
-
-
 <image><drawings_2.png 60 30 157 69 99 67 1>
+
+
+
+
 
 
 
@@ -28,7 +27,6 @@ quantité d'énergie. Décidant de ne
 pas me précipiter, j'ai laissé l'œuf
 reposer sur le feu perpétuel pendant
 trois jours.
-
 
 Ma décision a été couronnée de
 succès ! L'œuf du dragon a éclos et

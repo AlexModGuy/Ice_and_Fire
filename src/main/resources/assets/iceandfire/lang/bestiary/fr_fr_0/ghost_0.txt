@@ -1,4 +1,3 @@
-
 Les fantômes sont la manifestation
 des morts-vivants sur le plan
 spirituel. De nature éthérée, ils ne
@@ -17,8 +16,6 @@ feu.
 
 
 
-
-
 Les fantômes sont connus pour hanter
 les cimetières qui parsèment le
 monde, attendant que le voile de la
@@ -28,13 +25,10 @@ n'importe quel bloc grâce à leur
 
 
 
-
-
 Ils ont des capacités
 fantasmagoriques et n'ont que peu de
 patience pour ceux qui sont tombés
 sur leurs tombes.
-
 
 Le meilleur moyen d'éliminer un
 fantôme est d'utiliser une épée en
@@ -45,7 +39,6 @@ terrestres. En tant que morts-
 vivants, ils subissent également des
 dégâts supplémentaires.
 <item><iceandfire:ectoplasm 20 110 4 1.25>
-
 
 Les fantômes peuvent laisser de
 l'ectoplasme à leur mort. Celui-ci

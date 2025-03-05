@@ -1,12 +1,9 @@
-
 Combiné à un diamant, une perle
 d'ender et une émeraude ou un
 saphir, il permet de créer un
 cristal d'invocation.
-
 <item><iceandfire:summoning_crystal_fire 0 15 22 1.25>
 <item><iceandfire:summoning_crystal_ice 0 45 22 1.25>
-
 
 
 
@@ -17,7 +14,6 @@ cristal y est lié. Si vous cliquez à
 nouveau n'importe où dans la même
 dimension, le cristal se téléporte
 et libère le dragon.
-
 
 Si le dragon est tué ou introuvable,
 le cristal ne se défera pas.

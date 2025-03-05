@@ -1,4 +1,3 @@
-
 Le résultat est un métal connu sous
 le nom d'acier de dragon. L'acier de
 dragon est l'un des matériaux les
@@ -22,8 +21,6 @@ armures de dragon.
 
 
 
-
-
 Gardez à l'esprit que les forges de
 dragons peuvent être construites
 pour les dragons de glace, afin de
@@ -33,8 +30,6 @@ souffle de givre.
 <item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
 <item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
 <item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
-
-
 
 
 

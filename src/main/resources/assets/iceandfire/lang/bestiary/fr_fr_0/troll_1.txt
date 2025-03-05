@@ -2,7 +2,6 @@
 
 
 
-
 Ces armes peuvent parfois être
 abandonnées par le troll à sa mort.
 Bien qu'elles soient assez
@@ -10,12 +9,10 @@ puissantes, elles sont extrêmement
 lourdes et ont un temps de recharge
 important entre les attaques.
 
-
 Lorsqu'ils manient ces armes, les
 trolls sont capables de briser les
 blocs qui se trouvent sur leur
 chemin en les écrasant.
-
 
 Les trolls laissent également tomber
 une multitude d'autres objets à leur
@@ -26,7 +23,6 @@ des montagnes ont également une
 chance de laisser tomber une
 émeraude
 
-
 à la mort. Les trolls des glaces ont
 également la possibilité de laisser
 tomber un seul saphir. Les trolls
@@ -35,9 +31,6 @@ champignons. Mais les objets les
 plus précieux qu'ils laissent tomber
 sont leurs défenses et leurs peaux
 de cuir.
-
-
-
 
 
 

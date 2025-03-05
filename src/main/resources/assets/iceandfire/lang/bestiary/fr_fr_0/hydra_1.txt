@@ -1,9 +1,7 @@
-
 Lorsqu'une tête unique subit des
 dommages importants, elle est coupée
 et un moignon sanguinolent prend sa
 place.
-
 <image><drawings_2.png 40 70 0 210 114 44 1>
 
 
@@ -22,7 +20,6 @@ nouvelles têtes sur la bête.
 
 
 
-
 Le seul moyen d'endommager ce
 serpent sans qu'il ne gagne en
 puissance est de s'assurer que
@@ -33,12 +30,10 @@ souche finira par brûler. Elle
 perdra également ses effets
 régénérateurs.
 
-
 L'hydre ne peut vraiment mourir que
 lorsqu'elle n'a plus qu'une seule
 tête. Dans le cas contraire, la
 créature continue à survivre.
-
 
 Une fois tuée, vous pouvez accéder
 librement au butin des voyageurs

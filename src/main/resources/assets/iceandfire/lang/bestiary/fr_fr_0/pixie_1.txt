@@ -1,7 +1,5 @@
-
 Il suffit d'interagir avec un lutin
 tenant un bocal pour le capturer.
-
 
 La consommation de poussière de
 lutin permet de léviter et de
@@ -12,17 +10,14 @@ plus puissant : l'ambroisie.
 
 
 
-
 Lorsque l'ambroisie est consommée,
 elle restaure une grande quantité de
 santé ainsi que de nombreux effets
 de potion puissants.
 
-
 Il est également possible de se lier
 d'amitié avec les Pixies en leur
 offrant
-
 
 gâteau. En jetant le gâteau près des
 lutins, il est probable que l'un

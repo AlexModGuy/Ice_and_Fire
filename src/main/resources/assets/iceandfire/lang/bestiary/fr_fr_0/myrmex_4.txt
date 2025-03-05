@@ -1,4 +1,3 @@
-
 Le commerce avec les myrmex est une
 activité lucrative. Les travailleurs
 sont généralement de piètre qualité,
@@ -15,15 +14,11 @@ reines échangent exclusivement des
 
 
 
-
-
-
 Les bâtons de Myrmex peuvent être
 utilisés pour modifier la structure
 des colonies de Myrmex. en
 interagissant avec un bâton de
 Myrmex.
-
 
 Les myrmex qui en ont un en main le
 lient à leur colonie. En
@@ -35,7 +30,6 @@ faufilant, on peut ajouter une
 nouvelle pièce à sa position. On ne
 peut utiliser ce bâton que si l'on a
 une réputation de 75 ou plus.
-
 
 Les œufs de Myrmex n'éclosent que
 sous terre. Un œuf de reine,

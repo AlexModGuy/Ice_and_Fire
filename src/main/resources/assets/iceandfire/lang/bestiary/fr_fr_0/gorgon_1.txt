@@ -1,10 +1,7 @@
-
 Une fois le monstre vaincu, l'âme
 courageuse qui l'a tué peut prélever
 la tête de la créature sur son
 corps.
-
-
 
 
 
@@ -21,8 +18,6 @@ transformer en pierre.
 
 
 
-
-
 Tout ce qui a été transformé en
 pierre peut être miné avec une
 pioche et ne laissera que des pavés,
@@ -31,7 +26,6 @@ toucher de soie ne soit utilisée sur
 la statue, auquel cas elle laissera
 une statue de pierre identique à
 elle-même.
-
 
 Attention, la tête de la gorgone ne
 peut être utilisée qu'une seule fois

@@ -1,10 +1,8 @@
-
 Les bêtes suivront ceux qui
 détiennent ces objets. Si le varech
 est donné à l'hippocampe, il peut
 commencer à faire confiance à la
 personne.
-
 
 
 
@@ -20,7 +18,6 @@ engendreront une progéniture.
 
 
 
-
 Une fois l'hippocampe apprivoisé, il
 est possible de lui mettre une selle
 et de le monter. Il est également
@@ -29,7 +26,6 @@ armure et d'un coffre, afin de le
 protéger et de lui permettre de
 transporter des objets.
 
-
 Monter un hippocampe est similaire à
 monter des créatures volantes, sauf
 que l'hippocampe est aquatique. Lent
@@ -37,7 +33,6 @@ sur terre mais extrêmement rapide
 sur mer, c'est une monture parfaite
 pour les marins, les explorateurs et
 les pirates.
-
 
 Certains mythes affirment même que
 le fait d'en chevaucher un permet à

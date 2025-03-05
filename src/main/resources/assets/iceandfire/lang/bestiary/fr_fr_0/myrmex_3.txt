@@ -1,11 +1,8 @@
-
 Toutes les armes en chitine de
 Myrmex sont faibles contre les
 arthropodes, mais infligent des
 dégâts supplémentaires aux non-
 arthropodes et aux vers de la mort.
-
-
 
 
 
@@ -15,8 +12,6 @@ plus puissantes que les armes
 normales de myrmex.
 
 
-
-
 Les morceaux de résine de myrmex
 sont lâchés par les myrmex de toutes
 les castes. Les myrmex produisent
@@ -24,13 +19,11 @@ eux-mêmes ce matériau étrange, mais
 ils cherchent à s'en procurer s'ils
 en ont besoin.
 
-
 qu'elles puissent la trouver. En
 jetant des morceaux de résine sur le
 sol près des ouvrières Myrmex, on
 peut améliorer sa réputation auprès
 de la ruche.
-
 
 La réputation est un concept
 important à prendre en compte dans
@@ -39,7 +32,6 @@ réputation peut être augmentée par
 des dons et des échanges, et peut
 être diminuée en attaquant ou en
 tuant des membres de la colonie.
-
 
 La réputation par défaut de chaque
 colonie envers les humains est de 0.

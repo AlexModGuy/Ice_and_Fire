@@ -1,4 +1,3 @@
-
 Une fois que la bête s'est régalée
 de quelques pattes de lapin, elle
 s'allonge et se soumet. Le
@@ -7,8 +6,6 @@ et interagir avec l'animal en même
 temps pour lui appliquer une selle,
 une armure ou même un coffre de
 rangement.
-
-
 
 
 
@@ -30,7 +27,6 @@ lorsqu'il est en mode promenade.
 
 L'armure d'hippogriffe peut être
 fabriquée comme indiqué ci-dessus.
-
 
 
 

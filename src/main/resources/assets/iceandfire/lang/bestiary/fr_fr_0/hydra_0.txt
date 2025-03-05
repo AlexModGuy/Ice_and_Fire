@@ -1,4 +1,3 @@
-
 Parmi les marécages et les
 tourbières les plus sales du monde
 se trouve un serpent à plusieurs
@@ -22,14 +21,12 @@ têtes connu sous le nom d'Hydre.
 
 
 
-
 Enfouie sous sa petite colline,
 cette créature ne doit pas être
 approchée par le voyageur non
 averti. Car même un grand dragon de
 glace ou un cyclope ne pourrait
 abattre cette bête.
-
 
 L'hydre se caractérise à la fois par
 son souffle et sa morsure
@@ -41,7 +38,6 @@ prennent sa place. Et pour chaque
 tête qui pousse, l'hydre acquiert
 des effets régénérateurs de plus en
 plus puissants.
-
 
 L'hydre peut avoir un maximum de
 neuf têtes et, à moins que la bête

@@ -1,8 +1,7 @@
-
-
-
-
 <image><drawings_2.png 55 30 157 0 106 68 1>
+
+
+
 
 
 
@@ -28,7 +27,6 @@ temps pour grandir. Décidant de ne
 pas me précipiter, j'ai laissé l'œuf
 reposer dans le lac pendant trois
 jours.
-
 
 Ma décision a été couronnée de
 succès ! L'œuf a formé de la glace

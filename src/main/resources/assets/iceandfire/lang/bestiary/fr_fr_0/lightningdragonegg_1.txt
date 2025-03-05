@@ -1,11 +1,10 @@
-
-
-
-
-
-
-
 <image><drawings_2.png 65 18 264 0 62 95 1>
+
+
+
+
+
+
 
 
 
@@ -21,11 +20,9 @@ de temps pour devenir des créatures
 aussi grandes et puissantes, alors
 j'ai laissé l'œuf à sa place.
 
-
 Décidant de ne pas me précipiter,
 j'ai laissé l'œuf reposer sous le
 ciel pluvieux pendant trois jours.
-
 
 Ma décision a été couronnée de
 succès ! L'œuf du dragon a éclos et
