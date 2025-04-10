@@ -42,6 +42,7 @@ public class ItemSummoningCrystal extends Item {
     private ServerLevel serverWorld;
     private BlockPos dragonOriginPosition;
     private ItemStack stack;
+    private long summoningTime = 0;
 
     public ItemSummoningCrystal() {
         super(new Item.Properties()/*.tab(IceAndFire.TAB_ITEMS)*/.stacksTo(1));
@@ -165,6 +166,7 @@ public class ItemSummoningCrystal extends Item {
 
         // try to load the chunk, and mark the entity to be summoned as soon as it gets added to the world
         if (ForgeChunkManager.forceChunk(serverWorld, IceAndFire.MODID, this.summoningPlayer, pos.x, pos.z, true, false)) {
+            this.summoningTime = serverWorld.getGameTime();
             DELAYED_SUMMONS.put(this.dragonUuid, this);
         } else {
             IceAndFire.LOGGER.warn("Failed to force load chunk with Dragon {}", this.dragonUuid);
@@ -193,26 +195,35 @@ public class ItemSummoningCrystal extends Item {
 
     public void delayedSummon() {
         DELAYED_SUMMONS.remove(this.dragonUuid);
-        try {
+        ChunkPos pos = new ChunkPos(this.dragonOriginPosition);
+
+        // make delayed summons expire if for some reason the chunk loading, or entity loading takes too long
+        // wouldn't want the dragon to summon minutes later at the original position
+        final long SUMMON_DELAY_TOLERANCE = 2_000;
+        if (this.serverWorld.getGameTime() - SUMMON_DELAY_TOLERANCE > this.summoningTime) {
+            IceAndFire.LOGGER.info("Dragon summon timed out for dragon {}; unloading chunk {}", dragonUuid, pos);
+        } else {
             Entity entity = serverWorld.getEntity(this.dragonUuid);
             if (entity != null) {
-                summonEntity(entity, this.serverWorld, this.dragonTargetPosition, this.dragonTargetYaw);
-                ChunkPos pos = new ChunkPos(this.dragonOriginPosition);
-                IceAndFire.LOGGER.info("Summoned dragon {} and unloading chunk {}", dragonUuid, pos);
-                ForgeChunkManager.forceChunk(this.serverWorld, IceAndFire.MODID, this.summoningPlayer, pos.x, pos.z, false, false);
+                if (this.summoningPlayer.isAlive()) {
+                    summonEntity(entity, this.serverWorld, this.dragonTargetPosition, this.dragonTargetYaw);
+                    IceAndFire.LOGGER.info("Summoned dragon {} and unloading chunk {}", dragonUuid, pos);
+                } else {
+                    IceAndFire.LOGGER.info("Player died since summoning {}; unloading chunk {}", dragonUuid, pos);
+                }
             }
-        } catch (Exception e) {
-            IceAndFire.LOGGER.warn("summoning error", e);
-            this.displayClientError();
-        } finally {
-            this.dragonUuid = null;
-            this.summoningPlayer = null;
-            this.summoningHand = null;
-            this.stack = null;
-            this.dragonTargetPosition = null;
-            this.serverWorld = null;
-            this.dragonOriginPosition = null;
         }
+
+        ForgeChunkManager.forceChunk(this.serverWorld, IceAndFire.MODID, this.summoningPlayer, pos.x, pos.z, false, false);
+
+        this.dragonUuid = null;
+        this.summoningPlayer = null;
+        this.summoningHand = null;
+        this.stack = null;
+        this.dragonTargetPosition = null;
+        this.serverWorld = null;
+        this.dragonOriginPosition = null;
+        this.summoningTime = 0;
     }
 
     private void displayClientError() {
