@@ -111,10 +111,13 @@ public class WorldUtil {
      * @return true if loaded
      */
     public static boolean isEntityChunkLoaded(final LevelAccessor world, final ChunkPos pos) {
-        if (world instanceof ServerLevel) {
-            return isChunkLoaded(world, pos) && ((ServerLevel) world).isPositionEntityTicking(pos.getWorldPosition());
-        }
-        return isChunkLoaded(world, pos);
+        if (!isChunkLoaded(world, pos))
+            return false;
+
+        if (world instanceof ServerLevel serverWorld)
+            return serverWorld.isPositionEntityTicking(pos.getWorldPosition());
+
+        return true;
     }
 
     /**
