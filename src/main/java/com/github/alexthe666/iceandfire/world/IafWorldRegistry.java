@@ -29,6 +29,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class IafWorldRegistry {
@@ -232,7 +233,7 @@ public class IafWorldRegistry {
     }
 
 
-    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {
+    private static boolean safelyTestBiome(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {
         try {
             return BiomeConfig.test(entry, biomeHolder);
         } catch (Exception e) {
