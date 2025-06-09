@@ -229,14 +229,11 @@ public class WorldUtil {
     }
 
     public static boolean canGenerate(int configChance, final WorldGenLevel level, final RandomSource random, final BlockPos origin, final String id, final IafWorldData.FeatureType type, boolean checkFluid) {
-        boolean canGenerate = random.nextInt(configChance) == 0 && IafWorldRegistry.isFarEnoughFromSpawn(level, origin) && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id, type);
+        if (checkFluid && !level.getFluidState(origin).isEmpty())
+            return false;
 
-        if (canGenerate && checkFluid) {
-            if (!level.getFluidState(origin.below()).isEmpty()) {
-                return false;
-            }
-        }
-
-        return canGenerate;
+        return random.nextInt(configChance) == 0
+                && IafWorldRegistry.isFarEnoughFromSpawn(level, origin)
+                && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id, type);
     }
 }
