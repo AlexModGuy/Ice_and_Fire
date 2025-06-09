@@ -4,104 +4,97 @@ import com.github.alexthe666.citadel.config.biome.SpawnBiomeConfig;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class BiomeConfig {
-    public static final Map.Entry<String, SpawnBiomeData> oreGenBiomes = Map.entry("iceandfire:ore_gen_biomes", DefaultBiomes.OVERWORLD);
-    public static final Map.Entry<String, SpawnBiomeData> sapphireBiomes = Map.entry("iceandfire:sapphire_gen_biomes", DefaultBiomes.VERY_SNOWY);
-    public static final Map.Entry<String, SpawnBiomeData> fireLilyBiomes = Map.entry("iceandfire:fire_lily_biomes", DefaultBiomes.VERY_HOT);
-    public static final Map.Entry<String, SpawnBiomeData> frostLilyBiomes = Map.entry("iceandfire:frost_lily_biomes", DefaultBiomes.VERY_SNOWY);
-    public static final Map.Entry<String, SpawnBiomeData> lightningLilyBiomes = Map.entry("iceandfire:lightning_lily_biomes", DefaultBiomes.SAVANNAS);
-    public static final Map.Entry<String, SpawnBiomeData> fireDragonBiomes = Map.entry("iceandfire:fire_dragon_biomes", DefaultBiomes.FIREDRAGON_ROOST);
-    public static final Map.Entry<String, SpawnBiomeData> fireDragonCaveBiomes = Map.entry("iceandfire:fire_dragon_cave_biomes", DefaultBiomes.FIREDRAGON_CAVE);
-    public static final Map.Entry<String, SpawnBiomeData> iceDragonBiomes = Map.entry("iceandfire:ice_dragon_biomes", DefaultBiomes.ICEDRAGON_ROOST);
-    public static final Map.Entry<String, SpawnBiomeData> iceDragonCaveBiomes = Map.entry("iceandfire:ice_dragon_cave_biomes", DefaultBiomes.ICEDRAGON_CAVE);
-    public static final Map.Entry<String, SpawnBiomeData> lightningDragonBiomes = Map.entry("iceandfire:lightning_dragon_biomes", DefaultBiomes.LIGHTNING_ROOST);
-    public static final Map.Entry<String, SpawnBiomeData> lightningDragonCaveBiomes = Map.entry("iceandfire:lightning_dragon_cave_biomes", DefaultBiomes.LIGHTNING_CAVE);
+    public static Pair<String, SpawnBiomeData> oreGenBiomes = Pair.of("iceandfire:ore_gen_biomes", DefaultBiomes.OVERWORLD);
+    public static Pair<String, SpawnBiomeData> sapphireBiomes = Pair.of("iceandfire:sapphire_gen_biomes", DefaultBiomes.VERY_SNOWY);
+    public static Pair<String, SpawnBiomeData> fireLilyBiomes = Pair.of("iceandfire:fire_lily_biomes", DefaultBiomes.VERY_HOT);
+    public static Pair<String, SpawnBiomeData> frostLilyBiomes = Pair.of("iceandfire:frost_lily_biomes", DefaultBiomes.VERY_SNOWY);
+    public static Pair<String, SpawnBiomeData> lightningLilyBiomes = Pair.of("iceandfire:lightning_lily_biomes", DefaultBiomes.SAVANNAS);
+    public static Pair<String, SpawnBiomeData> fireDragonBiomes = Pair.of("iceandfire:fire_dragon_biomes", DefaultBiomes.FIREDRAGON_ROOST);
+    public static Pair<String, SpawnBiomeData> fireDragonCaveBiomes = Pair.of("iceandfire:fire_dragon_cave_biomes", DefaultBiomes.FIREDRAGON_CAVE);
+    public static Pair<String, SpawnBiomeData> iceDragonBiomes = Pair.of("iceandfire:ice_dragon_biomes", DefaultBiomes.ICEDRAGON_ROOST);
+    public static Pair<String, SpawnBiomeData> iceDragonCaveBiomes = Pair.of("iceandfire:ice_dragon_cave_biomes", DefaultBiomes.ICEDRAGON_CAVE);
+    public static Pair<String, SpawnBiomeData> lightningDragonBiomes = Pair.of("iceandfire:lightning_dragon_biomes", DefaultBiomes.LIGHTNING_ROOST);
+    public static Pair<String, SpawnBiomeData> lightningDragonCaveBiomes = Pair.of("iceandfire:lightning_dragon_cave_biomes", DefaultBiomes.LIGHTNING_CAVE);
 
-    public static final Map.Entry<String, SpawnBiomeData> cyclopsCaveBiomes = Map.entry("iceandfire:cyclops_cave_biomes", DefaultBiomes.BEACHES);
-    public static final Map.Entry<String, SpawnBiomeData> hippogryphBiomes = Map.entry("iceandfire:hippogryph_biomes", DefaultBiomes.HILLS);
-    public static final Map.Entry<String, SpawnBiomeData> pixieBiomes = Map.entry("iceandfire:pixie_village_biomes", DefaultBiomes.PIXIES);
-    public static final Map.Entry<String, SpawnBiomeData> hippocampusBiomes = Map.entry("iceandfire:hippocampus_biomes", DefaultBiomes.OCEANS);
-    public static final Map.Entry<String, SpawnBiomeData> seaSerpentBiomes = Map.entry("iceandfire:sea_serpent_biomes", DefaultBiomes.OCEANS);
-    public static final Map.Entry<String, SpawnBiomeData> sirenBiomes = Map.entry("iceandfire:siren_biomes", DefaultBiomes.OCEANS);
-    public static final Map.Entry<String, SpawnBiomeData> amphithereBiomes = Map.entry("iceandfire:amphithere_biomes", DefaultBiomes.JUNGLE);
-    public static final Map.Entry<String, SpawnBiomeData> desertMyrmexBiomes = Map.entry("iceandfire:desert_myrmex_biomes", DefaultBiomes.DESERT);
-    public static final Map.Entry<String, SpawnBiomeData> jungleMyrmexBiomes = Map.entry("iceandfire:jungle_myrmex_biomes", DefaultBiomes.JUNGLE);
-    public static final Map.Entry<String, SpawnBiomeData> snowyTrollBiomes = Map.entry("iceandfire:snowy_troll_biomes", DefaultBiomes.SNOWY);
-    public static final Map.Entry<String, SpawnBiomeData> forestTrollBiomes = Map.entry("iceandfire:forest_troll_biomes", DefaultBiomes.WOODLAND);
-    public static final Map.Entry<String, SpawnBiomeData> mountainTrollBiomes = Map.entry("iceandfire:mountain_troll_biomes", DefaultBiomes.VERY_HILLY);
+    public static Pair<String, SpawnBiomeData> cyclopsCaveBiomes = Pair.of("iceandfire:cyclops_cave_biomes", DefaultBiomes.BEACHES);
+    public static Pair<String, SpawnBiomeData> hippogryphBiomes = Pair.of("iceandfire:hippogryph_biomes", DefaultBiomes.HILLS);
+    public static Pair<String, SpawnBiomeData> pixieBiomes = Pair.of("iceandfire:pixie_village_biomes", DefaultBiomes.PIXIES);
+    public static Pair<String, SpawnBiomeData> hippocampusBiomes = Pair.of("iceandfire:hippocampus_biomes", DefaultBiomes.OCEANS);
+    public static Pair<String, SpawnBiomeData> seaSerpentBiomes = Pair.of("iceandfire:sea_serpent_biomes", DefaultBiomes.OCEANS);
+    public static Pair<String, SpawnBiomeData> sirenBiomes = Pair.of("iceandfire:siren_biomes", DefaultBiomes.OCEANS);
+    public static Pair<String, SpawnBiomeData> amphithereBiomes = Pair.of("iceandfire:amphithere_biomes", DefaultBiomes.JUNGLE);
+    public static Pair<String, SpawnBiomeData> desertMyrmexBiomes = Pair.of("iceandfire:desert_myrmex_biomes", DefaultBiomes.DESERT);
+    public static Pair<String, SpawnBiomeData> jungleMyrmexBiomes = Pair.of("iceandfire:jungle_myrmex_biomes", DefaultBiomes.JUNGLE);
+    public static Pair<String, SpawnBiomeData> snowyTrollBiomes = Pair.of("iceandfire:snowy_troll_biomes", DefaultBiomes.SNOWY);
+    public static Pair<String, SpawnBiomeData> forestTrollBiomes = Pair.of("iceandfire:forest_troll_biomes", DefaultBiomes.WOODLAND);
+    public static Pair<String, SpawnBiomeData> mountainTrollBiomes = Pair.of("iceandfire:mountain_troll_biomes", DefaultBiomes.VERY_HILLY);
 
-    public static final Map.Entry<String, SpawnBiomeData> stymphalianBiomes = Map.entry("iceandfire:stymphalian_bird_biomes", DefaultBiomes.SWAMPS);
-    public static final Map.Entry<String, SpawnBiomeData> hydraBiomes = Map.entry("iceandfire:hydra_cave_biomes", DefaultBiomes.SWAMPS);
+    public static Pair<String, SpawnBiomeData> stymphalianBiomes = Pair.of("iceandfire:stymphalian_bird_biomes", DefaultBiomes.SWAMPS);
+    public static Pair<String, SpawnBiomeData> hydraBiomes = Pair.of("iceandfire:hydra_cave_biomes", DefaultBiomes.SWAMPS);
 
-    public static final Map.Entry<String, SpawnBiomeData> mausoleumBiomes = Map.entry("iceandfire:mausoleum_biomes", DefaultBiomes.MAUSOLEUM);
-    public static final Map.Entry<String, SpawnBiomeData> graveyardBiomes = Map.entry("iceandfire:graveyard_biomes", DefaultBiomes.GRAVEYARD);
-    public static final Map.Entry<String, SpawnBiomeData> gorgonTempleBiomes = Map.entry("iceandfire:gorgon_temple_biomes", DefaultBiomes.BEACHES);
+    public static Pair<String, SpawnBiomeData> mausoleumBiomes = Pair.of("iceandfire:mausoleum_biomes", DefaultBiomes.MAUSOLEUM);
+    public static Pair<String, SpawnBiomeData> graveyardBiomes = Pair.of("iceandfire:graveyard_biomes", DefaultBiomes.GRAVEYARD);
+    public static Pair<String, SpawnBiomeData> gorgonTempleBiomes = Pair.of("iceandfire:gorgon_temple_biomes", DefaultBiomes.BEACHES);
 
-    public static final Map.Entry<String, SpawnBiomeData> cockatriceBiomes = Map.entry("iceandfire:cockatrice_biomes", DefaultBiomes.SAVANNAS);
-    public static final Map.Entry<String, SpawnBiomeData> deathwormBiomes = Map.entry("iceandfire:deathworm_biomes", DefaultBiomes.DESERT);
-    public static final Map.Entry<String, SpawnBiomeData> wanderingCyclopsBiomes = Map.entry("iceandfire:wandering_cyclops_biomes", DefaultBiomes.PLAINS);
-    public static final Map.Entry<String, SpawnBiomeData> lightningDragonSkeletonBiomes = Map.entry("iceandfire:lightning_dragon_skeleton_biomes", DefaultBiomes.SAVANNAS);
-    public static final Map.Entry<String, SpawnBiomeData> fireDragonSkeletonBiomes = Map.entry("iceandfire:fire_dragon_skeleton_biomes", DefaultBiomes.DESERT);
-    public static final Map.Entry<String, SpawnBiomeData> iceDragonSkeletonBiomes = Map.entry("iceandfire:ice_dragon_skeleton_biomes", DefaultBiomes.VERY_SNOWY);
+    public static Pair<String, SpawnBiomeData> cockatriceBiomes = Pair.of("iceandfire:cockatrice_biomes", DefaultBiomes.SAVANNAS);
+    public static Pair<String, SpawnBiomeData> deathwormBiomes = Pair.of("iceandfire:deathworm_biomes", DefaultBiomes.DESERT);
+    public static Pair<String, SpawnBiomeData> wanderingCyclopsBiomes = Pair.of("iceandfire:wandering_cyclops_biomes", DefaultBiomes.PLAINS);
+    public static Pair<String, SpawnBiomeData> lightningDragonSkeletonBiomes = Pair.of("iceandfire:lightning_dragon_skeleton_biomes", DefaultBiomes.SAVANNAS);
+    public static Pair<String, SpawnBiomeData> fireDragonSkeletonBiomes = Pair.of("iceandfire:fire_dragon_skeleton_biomes", DefaultBiomes.DESERT);
+    public static Pair<String, SpawnBiomeData> iceDragonSkeletonBiomes = Pair.of("iceandfire:ice_dragon_skeleton_biomes", DefaultBiomes.VERY_SNOWY);
 
-    public static final Map.Entry<String, SpawnBiomeData> blackHippogryphBiomes = Map.entry("iceandfire:hippogryph_black_biomes", DefaultBiomes.HIPPOGRYPH_BLACK);
-    public static final Map.Entry<String, SpawnBiomeData> brownHippogryphBiomes = Map.entry("iceandfire:hippogryph_brown_biomes", DefaultBiomes.VERY_HILLY);
-    public static final Map.Entry<String, SpawnBiomeData> grayHippogryphBiomes = Map.entry("iceandfire:hippogryph_gray_biomes", DefaultBiomes.HIPPOGRYPH_GRAY);
-    public static final Map.Entry<String, SpawnBiomeData> chestnutHippogryphBiomes = Map.entry("iceandfire:hippogryph_chestnut_biomes", DefaultBiomes.HIPPOGRYPH_CHESTNUT);
-    public static final Map.Entry<String, SpawnBiomeData> creamyHippogryphBiomes = Map.entry("iceandfire:hippogryph_creamy_biomes", DefaultBiomes.HIPPOGRYPH_CREAMY);
-    public static final Map.Entry<String, SpawnBiomeData> darkBrownHippogryphBiomes = Map.entry("iceandfire:hippogryph_dark_brown_biomes", DefaultBiomes.HIPPOGRYPH_DARK_BROWN);
-    public static final Map.Entry<String, SpawnBiomeData> whiteHippogryphBiomes = Map.entry("iceandfire:hippogryph_white_biomes", DefaultBiomes.HIPPOGRYPH_WHITE);
+    public static Pair<String, SpawnBiomeData> blackHippogryphBiomes = Pair.of("iceandfire:hippogryph_black_biomes", DefaultBiomes.HIPPOGRYPH_BLACK);
+    public static Pair<String, SpawnBiomeData> brownHippogryphBiomes = Pair.of("iceandfire:hippogryph_brown_biomes", DefaultBiomes.VERY_HILLY);
+    public static Pair<String, SpawnBiomeData> grayHippogryphBiomes = Pair.of("iceandfire:hippogryph_gray_biomes", DefaultBiomes.HIPPOGRYPH_GRAY);
+    public static Pair<String, SpawnBiomeData> chestnutHippogryphBiomes = Pair.of("iceandfire:hippogryph_chestnut_biomes", DefaultBiomes.HIPPOGRYPH_CHESTNUT);
+    public static Pair<String, SpawnBiomeData> creamyHippogryphBiomes = Pair.of("iceandfire:hippogryph_creamy_biomes", DefaultBiomes.HIPPOGRYPH_CREAMY);
+    public static Pair<String, SpawnBiomeData> darkBrownHippogryphBiomes = Pair.of("iceandfire:hippogryph_dark_brown_biomes", DefaultBiomes.HIPPOGRYPH_DARK_BROWN);
+    public static Pair<String, SpawnBiomeData> whiteHippogryphBiomes = Pair.of("iceandfire:hippogryph_white_biomes", DefaultBiomes.HIPPOGRYPH_WHITE);
+
+    private static boolean init = false;
+    private static final Map<String, SpawnBiomeData> biomeConfigValues = new HashMap<>();
 
     public static void init() {
-        getBiomeConfigValues();
-    }
-
-    private static Map<String, SpawnBiomeData> getBiomeConfigValues() {
-        final class LazyInit {
-            private LazyInit() {}
-            private static final Map<String, SpawnBiomeData> BIOME_CONFIG_VALUES;
-            static {
-                var entries = new ArrayList<Map.Entry<String, SpawnBiomeData>>();
-                try {
-                    for (Field f : BiomeConfig.class.getFields()) {
-                        Object obj = f.get(null);
-                        if (obj instanceof Map.Entry entry) {
-                            String id = (String) entry.getKey();
-                            SpawnBiomeData data = (SpawnBiomeData) entry.getValue();
-                            entries.add(Map.entry(id, SpawnBiomeConfig.create(new ResourceLocation(id), data)));
-                        }
-                    }
-                }catch (Exception e){
-                    IceAndFire.LOGGER.warn("Encountered error building iceandfire biome config .json files");
-                    e.printStackTrace();
+        try {
+            for (Field f : BiomeConfig.class.getFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof Pair) {
+                    String id = (String)((Pair) obj).getLeft();
+                    SpawnBiomeData data = (SpawnBiomeData)((Pair) obj).getRight();
+                    biomeConfigValues.put(id, SpawnBiomeConfig.create(new ResourceLocation(id), data));
                 }
-                BIOME_CONFIG_VALUES = Map.ofEntries(entries.toArray(new Map.Entry[0]));
             }
+        }catch (Exception e){
+            IceAndFire.LOGGER.warn("Encountered error building iceandfire biome config .json files");
+            e.printStackTrace();
         }
-
-        return LazyInit.BIOME_CONFIG_VALUES;
+        init = true;
     }
 
     private static ResourceLocation getBiomeName(Holder<Biome> biome) {
-        return biome.unwrap().map(ResourceKey::location, (noKey) -> null);
+        return biome.unwrap().map((resourceKey) -> resourceKey.location(), (noKey) -> null);
     }
 
-    public static boolean test(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name) {
-        return getBiomeConfigValues().get(entry.getKey()).matches(biome, name);
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name) {
+        if (!init) {
+            init();
+        }
+        return biomeConfigValues.get(entry.getKey()).matches(biome, name);
     }
 
-    public static boolean test(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biome) {
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome) {
         return BiomeConfig.test(entry, biome, getBiomeName(biome));
     }
-    public static boolean test(Map.Entry<String, SpawnBiomeData> entry, Holder.Reference<Biome> biome) {
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder.Reference<Biome> biome) {
         return test(entry, biome, biome.key().location());
     }
 

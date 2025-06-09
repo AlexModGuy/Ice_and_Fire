@@ -13,7 +13,6 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,11 +41,8 @@ public class IafStructure extends Structure {
         this.maxDistanceFromCenter = maxDistanceFromCenter;
     }
 
-    protected boolean isBiomeValid(GenerationContext pContext, Pair<String, SpawnBiomeData> validBiomes, BlockPos blockPos) {
-        return isBiomeValid(pContext, validBiomes, blockPos);
-    }
 
-    protected boolean isBiomeValid(GenerationContext pContext, Map.Entry<String, SpawnBiomeData> validBiomes, BlockPos blockPos) {
+    protected boolean isBiomeValid(GenerationContext pContext, Pair<String, SpawnBiomeData> validBiomes, BlockPos blockPos) {
         boolean validBiome = false;
         Set<Holder<Biome>> biomes = pContext.chunkGenerator().getBiomeSource().getBiomesWithin(blockPos.getX(), blockPos.getY(), blockPos.getZ(), this.maxDistanceFromCenter, pContext.randomState().sampler());
         for (Holder<Biome> biome : biomes) {
