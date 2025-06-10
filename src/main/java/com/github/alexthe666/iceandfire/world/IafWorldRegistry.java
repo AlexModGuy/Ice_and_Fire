@@ -26,9 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class IafWorldRegistry {
@@ -80,10 +78,8 @@ public class IafWorldRegistry {
         return data.check(type, position, id);
     }
 
-    public static HashMap<String, Boolean> LOADED_FEATURES;
-
+    public static final Map<String, Boolean> LOADED_FEATURES = new HashMap<>(32);
     static {
-        LOADED_FEATURES = new HashMap<>();
         LOADED_FEATURES.put("iceandfire:fire_lily", false);
         LOADED_FEATURES.put("iceandfire:frost_lily", false);
         LOADED_FEATURES.put("iceandfire:lightning_lily", false);
@@ -211,6 +207,7 @@ public class IafWorldRegistry {
             IceAndFire.LOGGER.debug("Added the following features to the biome [{}]: {}", biome.unwrapKey().get().location(), featureList);
         }
 
+        ADDED_FEATURES.clear();
         ADDED_FEATURES = null;
     }
 
@@ -224,7 +221,7 @@ public class IafWorldRegistry {
 
         if (feature != null) {
             builder.getGenerationSettings().getFeatures(step).add(feature);
-            LOADED_FEATURES.put(identifier, true);
+            if (!LOADED_FEATURES.isEmpty()) LOADED_FEATURES.put(identifier, true);
             ADDED_FEATURES.add(identifier);
         } else {
             IceAndFire.LOGGER.warn("Feature [{}] could not be found", identifier);
