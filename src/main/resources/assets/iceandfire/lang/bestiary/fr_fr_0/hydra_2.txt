@@ -1,0 +1,42 @@
+<item><iceandfire:hydra_fang 0 35 4 1.25>
+<item><iceandfire:hydra_heart 0 110 4 1.25>
+
+
+
+Le croc d'hydre est un objet
+précieux qui peut être utilisé pour
+fabriquer des flèches spéciales qui
+empoisonnent leurs cibles.
+<recipe><iceandfire:hydra_arrow 0 minecraft:air 0 iceandfire:hydra_fang 0 minecraft:air 0 minecraft:air 0 minecraft:stick 0 minecraft:air 0 minecraft:air 0 minecraft:waterlily 0 minecraft:air 0 0 75 1>
+
+
+
+
+
+
+
+
+Ces flèches ont également une
+deuxième propriété importante :
+lorsqu'elles touchent la cible,
+elles lui insufflent de la vie et
+soignent le tireur de la flèche.
+
+
+
+
+
+Le cœur d'hydre est une goutte rare
+de la bête qui est très recherchée
+pour ses effets. Lorsqu'il se trouve
+dans la barre d'outils, le cœur
+d'hydre offre des niveaux de
+régénération croissants en fonction
+du nombre de points de vie perdus
+par l'utilisateur.
+
+Le cœur puissant de ce monstre fait
+que le combat difficile en vaut la
+peine, et explique peut-être
+pourquoi l'antre de l'Hydre contient
+tant d'ossements.

@@ -1,0 +1,47 @@
+C'est l'attaque principale du dragon
+de feu. Elle est puissante et
+rapide, mais n'est généralement pas
+instantanément mortelle. Cependant,
+le dragon dispose d'une attaque de
+mêlée plus rare : secouer sa proie
+jusqu'à ce qu'elle meure.
+<image><drawings_firedragon_attacks.png 40 100 290 124 186 69 0.7>
+
+
+
+Lors de cette attaque, le dragon
+saisit sa cible dans sa gueule et la
+secoue rapidement afin de blesser
+gravement sa proie.
+<image><drawings_firedragon_attacks.png 80 220 330 20 117 77 0.7>
+
+
+
+
+
+
+Le dragon dispose également d'une
+dernière attaque de mêlée, dans
+laquelle il accumule une force
+cinétique dans sa queue pour frapper
+sa cible. Cette attaque est très
+efficace, mais elle prend du temps à
+se développer. Il peut également
+battre des ailes pour repousser ses
+proies.
+
+Il n'est pas facile d'abattre un
+dragon, quel que soit son stade de
+développement. Comme les dragons de
+feu utilisent des attaques
+élémentaires à distance, il serait
+judicieux d'utiliser des potions de
+protection et des armes à longue
+portée. Si vous voulez vaincre l'une
+de ces bêtes, essayez d'éviter les
+flammes et surveillez le
+comportement de charge de nombreuses
+attaques. Une fois que vous aurez
+vaincu l'une de ces bêtes, vous
+aurez accès à de précieuses
+marchandises.

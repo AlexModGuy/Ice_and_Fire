@@ -1,0 +1,46 @@
+<recipe><iceandfire:chain 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 minecraft:air 0 minecraft:chain 0 minecraft:air 0 4 10 1>
+
+
+
+
+
+
+
+
+Des chaînes peuvent être créées pour
+capturer les dragons sauvages et
+tout autre monstre. Elles peuvent
+être attachées à des murs. Les
+dragons détruisent la plupart des
+murs, comme les murs en pavés, et
+ceux qui souhaitent alimenter leur
+fourneau avec un dragon ont donc
+besoin de murs en os de dragon.
+<recipe><iceandfire:dragon_bone_wall 0 minecraft:air 0 minecraft:air 0 minecraft:air 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 25 145 0.75>
+
+
+
+Pour alimenter correctement une
+forge, il faut placer le dragon
+enchaîné ou apprivoisé directement
+devant l'ouverture. Le dragon
+commencera alors à cracher des
+flammes ou du givre tant qu'il y
+aura des objets valides dans la
+forge.
+
+La plupart des objets, lorsqu'ils
+sont placés dans une forge, sont
+transformés en cendres ou en glace
+de dragon. Mais en plaçant un lingot
+de fer et du sang de dragon (sang de
+feu pour les forges de feu, sang de
+glace pour les forges de glace),
+vous obtiendrez un métal alchimique
+puissant.
+<item><minecraft:iron_ingot 0 110 78 1>
+<item><iceandfire:fire_dragon_blood 0 130 78 1>
+<item><iceandfire:dragonsteel_fire_ingot 0 170 78 1>
+<item><minecraft:iron_ingot 0 110 92 1>
+<item><iceandfire:ice_dragon_blood 0 130 92 1>
+<item><iceandfire:dragonsteel_ice_ingot 0 170 92 1>

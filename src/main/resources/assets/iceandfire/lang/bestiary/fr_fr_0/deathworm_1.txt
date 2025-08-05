@@ -1,0 +1,40 @@
+Les vers de la mort ont deux
+attaques principales. La première,
+et la plus courante, est la saisie
+de la langue. Le ver tire sa langue
+rétractable vers l'avant pour
+attraper et blesser sa proie.
+
+
+
+
+
+
+
+
+La seconde attaque, plus rare,
+consiste pour le ver à faire jaillir
+en l'air des blocs situés à
+proximité. Ceux-ci pousseront vers
+le haut ceux qui se tiennent dessus
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+et les blocs qui tombent peuvent
+blesser la proie du ver. Cette
+attaque est proportionnelle à la
+taille du ver.

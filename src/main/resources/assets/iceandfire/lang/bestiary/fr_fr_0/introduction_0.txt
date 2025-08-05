@@ -1,0 +1,56 @@
+Une petite note en lambeaux est
+accrochée à la reliure du bestiaire.
+Elle se lit comme suit :
+<item><iceandfire:manuscript 0 38 20 1>
+
+
+"Ce manuscrit se veut un guide pour
+ceux qui souhaitent s'informer sur
+les plus grandes merveilles de ce
+royaume surnaturel. Il couvrira
+certaines des bases de la conception
+d'outils, d'armures et d'armes, de
+la traque, de la chasse et de
+l'apprentissage des créatures
+mystérieuses."
+
+Le bestiaire décrit ensuite des
+changements surnaturels dans la
+génération du monde, en commençant
+par des minerais étranges.
+
+
+Minerai aux propriétés mystiques, le
+minerai d'argent peut être trouvé
+aux mêmes endroits que l'or.
+<item><iceandfire:silver_ore 0 115 22 1>
+<item><iceandfire:silver_ingot 0 135 22 1>
+<item><iceandfire:silver_nugget 0 155 22 1>
+
+
+
+
+Il peut être fondu en lingots qui
+ont diverses utilisations.
+<item><iceandfire:silver_sword 0 104 50 1>
+<item><iceandfire:silver_pickaxe 0 120 50 1>
+<item><iceandfire:silver_axe 0 136 50 1>
+<item><iceandfire:silver_shovel 0 152 50 1>
+<item><iceandfire:silver_hoe 0 168 50 1>
+<item><iceandfire:armor_silver_metal_helmet 0 110 70 1>
+<item><iceandfire:armor_silver_metal_chestplate 0 125 70 1>
+<item><iceandfire:armor_silver_metal_leggings 0 140 70 1>
+<item><iceandfire:armor_silver_metal_boots 0 155 70 1>
+
+
+
+
+
+
+
+
+
+Les armes en argent infligent des
+dégâts supplémentaires aux morts-
+vivants en raison de leurs
+propriétés magiques.

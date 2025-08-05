@@ -1,0 +1,44 @@
+Dans les régions les plus froides de
+l'overworld, une force néfaste s'est
+enfermée. Des complexes massifs
+connus sous le nom de Mausolées,
+construits en Dreadstone
+indestructible, enferment un grand
+et ancien mal.
+
+Cependant, leur pouvoir est en train
+de s'effondrer. Des êtres venus d'un
+autre temps et d'un autre lieu ont
+été vus émergeant de ces structures
+et explorant les étendues gelées.
+
+La plus courante est la liche
+redoutable, un nécromancien mort-
+vivant qui invoque des abominations
+mort-vivantes pour se défendre.
+<image><drawings_2.png 230 25 0 0 36 42 1>
+<image><drawings_2.png 300 10 37 0 38 59 1>
+
+
+
+
+
+
+
+
+
+
+Équipé de son bâton, le nécromancien
+tirera un crâne d'âme gelé sur sa
+cible ou invoquera l'un des éléments
+suivants :
+<image><drawings_2.png 250 120 0 60 87 35 1>
+
+
+
+
+Les Dread Thralls sont des
+squelettes lents et faibles invoqués
+par le nécromancien. Ils émergent du
+sol et sont équipés d'épées et
+d'armures brisées.

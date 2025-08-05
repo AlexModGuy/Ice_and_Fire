@@ -1,0 +1,16 @@
+Une fois le lutrin placé, il est
+possible d'interagir avec lui en
+cliquant dessus avec le bouton droit
+de la souris. L'intérieur aura trois
+emplacements, le plus à gauche pour
+un bestiaire d'entrée, le plus bas
+pour les manuscrits, et le plus à
+droite pour le bestiaire de sortie.
+Pour chaque manuscrit, un nouvel
+index apparaîtra dans le bestiaire.
+Ces nouvelles pages peuvent contenir
+des informations sur des créatures
+mythiques, différents types de
+peuples, des guides d'artisanat
+informatifs et même des notions
+d'alchimie.

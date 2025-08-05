@@ -1,0 +1,46 @@
+<recipe><iceandfire:graveyard_soil 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:coarse_dirt 0 iceandfire:ectoplasm 0 minecraft:air 0 iceandfire:ectoplasm 0 minecraft:air 0 5 60 1>
+Les fantômes peuvent également
+apparaître dans le monde lorsqu'un
+être humain est tué de manière
+horrible par une autre personne.
+
+
+
+
+
+
+
+
+
+
+
+Les coffres maudits invoquent un
+fantôme qui peut hanter le jour
+lorsqu'ils sont ouverts. Le sol du
+cimetière génère des fantômes la
+nuit, lorsque tout est sombre.
+<item><iceandfire:ghost_ingot 10 110 4 1.25>
+
+
+
+
+
+
+Les fantômes ont également une
+chance de laisser tomber un lingot
+fantasmagorique, qui peut être
+utilisé pour améliorer une épée en
+os de dragon dans la table de forge
+en une lame fantasmagorique.
+<item><iceandfire:ghost_sword 10 110 55 1.25>
+
+
+
+
+
+
+La lame fantasmagorique est une épée
+puissante en soi, mais elle peut
+aussi tirer des apparitions
+fantomatiques qui traversent les
+blocs.

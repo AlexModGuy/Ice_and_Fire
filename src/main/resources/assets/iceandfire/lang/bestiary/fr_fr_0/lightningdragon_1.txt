@@ -1,0 +1,43 @@
+La capacité la plus frappante du
+dragon de foudre est celle de
+cracher des éclairs crépitants à
+partir de sa gueule. Cependant, il
+dispose également d'un éventail
+d'attaques différentes.
+<image><drawings_lightningdragon_attacks.png 20 130 0 101 270 77 0.65>
+
+
+
+
+
+
+L'attaque de foudre du dragon tire
+un éclair directement de la gueule
+de la bête. Cette attaque n'enflamme
+ni ne gèle la victime, mais elle
+inflige des dégâts bien plus directs
+qu'un éclair de feu ou de glace.
+<image><drawings_lightningdragon_attacks.png 280 10 0 0 220 90 0.75>
+
+
+
+
+
+
+
+L'éclair n'est pas la seule attaque
+élémentaire du dragon. Les anciens
+dragons de foudre peuvent également
+envoyer une charge d'éclairs en
+boule sur leur cible, détruisant le
+terrain et infligeant des dégâts
+dévastateurs.
+<image><drawings_lightningdragon_attacks.png 360 220 262 212 230 78 0.6>
+
+
+
+
+
+L'une des attaques les plus
+courantes des dragons foudroyants
+est la morsure du dragon.

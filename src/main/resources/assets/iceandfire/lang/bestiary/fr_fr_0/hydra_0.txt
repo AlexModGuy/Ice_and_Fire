@@ -1,0 +1,45 @@
+Parmi les marécages et les
+tourbières les plus sales du monde
+se trouve un serpent à plusieurs
+têtes connu sous le nom d'Hydre.
+<image><drawings_2.png 40 60 0 162 108 47 1>
+<image><drawings_2.png 40 110 109 162 108 47 1>
+<image><drawings_2.png 40 160 218 162 108 47 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Enfouie sous sa petite colline,
+cette créature ne doit pas être
+approchée par le voyageur non
+averti. Car même un grand dragon de
+glace ou un cyclope ne pourrait
+abattre cette bête.
+
+L'hydre se caractérise à la fois par
+son souffle et sa morsure
+extrêmement venimeux, mais aussi par
+ses capacités magiques de
+régénération. En effet, lorsqu'une
+tête est coupée, deux autres
+prennent sa place. Et pour chaque
+tête qui pousse, l'hydre acquiert
+des effets régénérateurs de plus en
+plus puissants.
+
+L'hydre peut avoir un maximum de
+neuf têtes et, à moins que la bête
+ne soit en feu, elle se rétablit
+constamment et rapidement.

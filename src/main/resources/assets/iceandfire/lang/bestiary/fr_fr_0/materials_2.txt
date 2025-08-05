@@ -1,0 +1,31 @@
+Les crânes de dragon ne tombent
+qu'une seule fois des corps. Ces
+grands os sont utilisés pour
+fabriquer des bâtons de commandement
+et peuvent être placés sur le sol.
+Ils peuvent également être placés
+sur des bannières pour leur donner
+la forme d'un dragon.
+
+
+
+
+
+Le sang de dragon, qu'il soit de feu
+ou de glace, a certainement des
+propriétés très magiques. Cependant,
+ces propriétés sont certainement
+insaisissables, et je dois faire des
+recherches plus approfondies à ce
+sujet...
+
+Il semble que les os et les écailles
+de dragon puissent désormais être
+compactés en toute sécurité dans de
+grands cubes pour être stockés. Je
+prédis que la consolidation d'une
+telle masse de présence magique dans
+un bloc pourrait avoir des
+utilisations imprévues.
+<recipe><iceandfire:dragonscale_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 iceandfire:dragonscales_red 0 210 80 0.75>
+<recipe><iceandfire:dragon_bone_block 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 iceandfire:dragonbone 0 210 140 0.75>

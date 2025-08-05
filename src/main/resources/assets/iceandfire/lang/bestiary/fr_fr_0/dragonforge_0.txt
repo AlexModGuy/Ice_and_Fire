@@ -1,0 +1,44 @@
+L'aura magique des os et des
+écailles de dragon possède de
+puissantes propriétés, c'est bien
+connu. Combinés à la pierre, ils
+deviennent indestructibles au gel et
+aux flammes des dragons.
+<recipe><iceandfire:dragonforge_fire_brick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 minecraft:stonebrick 0 iceandfire:dragonscale_red 0 5 76 1>
+
+
+
+
+
+
+
+
+
+Il semble qu'il y ait plusieurs
+constructions qui peuvent être
+faites avec des briques de
+dragonforge. On sait également qu'il
+existe des variantes de dragons de
+glace.
+<recipe><iceandfire:dragonforge_fire_core 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:fire_dragon_heart 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 iceandfire:dragonforge_fire_brick 0 190 3 1>
+<recipe><iceandfire:dragonforge_fire_input 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 minecraft:air 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 minecraft:iron_ingot 0 iceandfire:dragonforge_fire_brick 0 190 90 1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Une fois que vous avez acquis un
+noyau de forge de dragon, une entrée
+de forge de dragon, 8 os de dragon

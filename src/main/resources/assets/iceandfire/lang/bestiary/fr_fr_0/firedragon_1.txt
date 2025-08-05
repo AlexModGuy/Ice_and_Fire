@@ -1,0 +1,44 @@
+Créer du feu n'est pas le seul moyen
+qu'ont les dragons de feu de se
+débarrasser de leurs proies. Ils
+disposent également d'un grand
+nombre d'attaques différentes.
+<image><drawings_firedragon_attacks.png 20 110 0 106 264 77 0.65>
+
+
+
+
+
+
+L'attaque du dragon, le souffle de
+feu, projette un flot continu de
+flammes depuis la gueule de la bête.
+Les jeunes dragons sont moins
+efficaces pour cette attaque, tandis
+que les plus grands peuvent brûler
+le terrain avoisinant et infliger
+des dégâts considérables.
+<image><drawings_firedragon_attacks.png 280 10 0 0 210 81 0.75>
+
+
+
+
+
+
+
+Le souffle de feu n'est pas la seule
+attaque élémentaire. Le dragon peut
+également accumuler un jet de
+flammes en un bloc solidifié. Cette
+boule de feu explosive est ensuite
+projetée vers la proie du dragon.
+Seuls les dragons les plus âgés sont
+capables de cette attaque.
+<image><drawings_firedragon_attacks.png 360 242 262 220 213 78 0.6>
+
+
+
+
+L'une des attaques les plus
+courantes du dragon de feu est la
+morsure du dragon.

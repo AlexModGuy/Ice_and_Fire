@@ -1,0 +1,48 @@
+portaient dans leurs vies
+antérieures.
+<image><drawings_2.png 70 30 0 96 58 36 1>
+
+
+
+Les Dread Ghouls sont des zombies
+morts-vivants qui se déplacent
+rapidement et sont dotés de griffes
+extrêmement acérées, prêtes à
+déchirer leur proie.
+<image><drawings_2.png 65 110 0 133 69 28 1>
+
+
+
+Les bêtes redoutables sont les
+restes mutilés d'animaux transformés
+par la liche redoutable. Elles se
+déplacent rapidement et mordent tout
+ce qui leur tombe sous la dent.
+<image><drawings_2.png 275 5 70 111 37 50 1>
+
+
+
+
+
+
+
+Les Scuttlers redoutables sont de
+monstrueux arthropodes morts-
+vivants, prêts à planter leurs
+énormes crocs dans tout ce que leur
+maître leur ordonne.
+<item><iceandfire:dread_shard 0 95 43 1.25>
+<item><iceandfire:dread_key 0 125 43 1.25>
+
+
+
+
+Tous les monstres d'épouvante
+laissent tomber des tessons
+d'épouvante, qui peuvent être
+utilisés pour fabriquer des blocs
+décoratifs. La liche de l'épouvante
+laisse aussi rarement tomber une clé
+de l'épouvante, qui peut être
+utilisée pour ouvrir la porte d'un
+mausolée...

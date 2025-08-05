@@ -1,0 +1,44 @@
+L'haleine de glace n'est pas le seul
+moyen dont disposent les dragons des
+glaces pour se débarrasser de leurs
+proies. Ils disposent également d'un
+grand nombre d'attaques différentes.
+<image><drawings_icedragon_attacks.png 20 110 0 91 264 90 0.65>
+
+
+
+
+
+
+L'attaque de glace du dragon
+projette un flux constant de givre
+depuis la gueule de la bête. Les
+jeunes dragons sont moins efficaces
+pour cette attaque, tandis que les
+plus grands peuvent geler le terrain
+avoisinant et infliger des dégâts
+considérables.
+<image><drawings_icedragon_attacks.png 280 10 0 0 210 81 0.75>
+
+
+
+
+
+
+
+Le souffle de glace n'est pas la
+seule attaque élémentaire. Le dragon
+peut aussi accumuler un souffle de
+glace pour en faire un bloc
+solidifié. Ce glaçon explosif est
+ensuite projeté vers la proie du
+dragon. Seuls les dragons les plus
+âgés sont capables de cette attaque.
+<image><drawings_icedragon_attacks.png 360 242 262 211 213 78 0.6>
+
+
+
+
+L'une des attaques les plus
+courantes des dragons de glace est
+la morsure du dragon.

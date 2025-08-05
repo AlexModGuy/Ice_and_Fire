@@ -1,0 +1,68 @@
+et 17 briques de forge de dragon,
+vous pouvez construire la forge de
+dragon elle-même.
+<block><iceandfire:dragon_bone_block 0 40 30 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 34 1>
+<block><iceandfire:dragon_bone_block 0 56 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 34 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 42 1>
+<block><iceandfire:dragon_bone_block 0 24 38 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 42 1>
+<block><iceandfire:dragon_bone_block 0 40 46 1>
+
+Couche 1
+<block><iceandfire:dragonforge_fire_brick 0 40 70 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 74 1>
+<block><iceandfire:dragonforge_fire_brick 0 56 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 32 74 1>
+<block><iceandfire:dragonforge_fire_core 0 40 78 1>
+<block><iceandfire:dragonforge_fire_brick 0 48 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 24 78 1>
+<block><iceandfire:dragonforge_fire_input 0 32 82 1>
+<block><iceandfire:dragonforge_fire_brick 0 40 86 1>
+
+
+
+
+
+
+
+Couche 2
+<block><iceandfire:dragon_bone_block 0 140 10 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 14 1>
+<block><iceandfire:dragon_bone_block 0 156 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 14 1>
+<block><iceandfire:dragonforge_fire_brick 0 140 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 148 22 1>
+<block><iceandfire:dragon_bone_block 0 124 18 1>
+<block><iceandfire:dragonforge_fire_brick 0 132 22 1>
+<block><iceandfire:dragon_bone_block 0 140 26 1>
+
+
+
+
+
+
+
+
+Couche 3
+
+
+
+
+
+
+Construisez la forge en plaçant la
+couche 1, puis la couche 2 sur la
+couche 1, et enfin la couche 3 sur
+la couche 2. Une fois la forge
+terminée, elle aura besoin d'une
+certaine forme d'énergie.
+
+Pour alimenter la forge, il faut du
+souffle de dragon. Pour ce faire, il
+faut construire la structure à
+proximité d'un dragon apprivoisé ou
+capturer un dragon sauvage à l'aide
+de chaînes.

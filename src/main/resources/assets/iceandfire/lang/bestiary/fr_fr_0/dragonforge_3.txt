@@ -1,0 +1,50 @@
+Le résultat est un métal connu sous
+le nom d'acier de dragon. L'acier de
+dragon est l'un des matériaux les
+plus solides et les plus polyvalents
+connus de l'homme. On peut en faire
+des outils, des armures et des
+armures de dragon.
+<item><iceandfire:dragonsteel_fire_sword 0 10 40 1>
+<item><iceandfire:dragonsteel_fire_pickaxe 0 26 40 1>
+<item><iceandfire:dragonsteel_fire_axe 0 42 40 1>
+<item><iceandfire:dragonsteel_fire_shovel 0 58 40 1>
+<item><iceandfire:dragonsteel_fire_hoe 0 74 40 1>
+<item><iceandfire:dragonsteel_fire_helmet 0 20 60 1>
+<item><iceandfire:dragonsteel_fire_chestplate 0 35 60 1>
+<item><iceandfire:dragonsteel_fire_leggings 0 50 60 1>
+<item><iceandfire:dragonsteel_fire_boots 0 65 60 1>
+
+
+
+
+
+
+
+Gardez à l'esprit que les forges de
+dragons peuvent être construites
+pour les dragons de glace, afin de
+créer de l'acier de dragon de glace
+en utilisant le froid pur de leur
+souffle de givre.
+<item><iceandfire:dragonforge_ice_brick 0 70 4 1.5>
+<item><iceandfire:dragonforge_ice_input 0 90 4 1.5>
+<item><iceandfire:dragonforge_ice_core 0 110 4 1.5>
+
+
+
+
+
+L'acier de dragon de feu enflamme
+les attaquants pendant 15 secondes
+et inflige de nombreux dégâts.
+L'acier de dragon de glace gèle les
+cibles en un gigantesque bloc de
+glace. Les deux types d'armure de
+dragon infligent d'importants dégâts
+et peuvent facilement venir à bout
+d'un dragon de grande taille.
+L'armure d'acier de dragon offre
+également une protection accrue
+contre les attaques de souffle de
+dragon.
