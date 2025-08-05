@@ -44,8 +44,8 @@ public class WorldUtil {
      * @return true if loaded
      */
     public static boolean isChunkLoaded(final LevelAccessor world, final int x, final int z) {
-        if (world.getChunkSource() instanceof ServerChunkCache) {
-            final ChunkHolder holder = ((ServerChunkCache) world.getChunkSource()).chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(x, z));
+        if (world.getChunkSource() instanceof ServerChunkCache serverChunkCache) {
+            final ChunkHolder holder = serverChunkCache.chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(x, z));
             if (holder != null) {
                 return holder.getFullChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left().isPresent();
             }
@@ -111,10 +111,13 @@ public class WorldUtil {
      * @return true if loaded
      */
     public static boolean isEntityChunkLoaded(final LevelAccessor world, final ChunkPos pos) {
-        if (world instanceof ServerLevel) {
-            return isChunkLoaded(world, pos) && ((ServerLevel) world).isPositionEntityTicking(pos.getWorldPosition());
-        }
-        return isChunkLoaded(world, pos);
+        if (!isChunkLoaded(world, pos))
+            return false;
+
+        if (world instanceof ServerLevel serverWorld)
+            return serverWorld.isPositionEntityTicking(pos.getWorldPosition());
+
+        return true;
     }
 
     /**
@@ -229,14 +232,11 @@ public class WorldUtil {
     }
 
     public static boolean canGenerate(int configChance, final WorldGenLevel level, final RandomSource random, final BlockPos origin, final String id, final IafWorldData.FeatureType type, boolean checkFluid) {
-        boolean canGenerate = random.nextInt(configChance) == 0 && IafWorldRegistry.isFarEnoughFromSpawn(level, origin) && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id, type);
+        if (checkFluid && !level.getFluidState(origin).isEmpty())
+            return false;
 
-        if (canGenerate && checkFluid) {
-            if (!level.getFluidState(origin.below()).isEmpty()) {
-                return false;
-            }
-        }
-
-        return canGenerate;
+        return random.nextInt(configChance) == 0
+                && IafWorldRegistry.isFarEnoughFromSpawn(level, origin)
+                && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id, type);
     }
 }
