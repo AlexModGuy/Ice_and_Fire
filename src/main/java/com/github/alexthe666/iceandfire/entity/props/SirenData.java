@@ -39,6 +39,7 @@ public class SirenData {
         }
 
         if (charmedBy == null) {
+            clearCharm();
             return;
         }
 
@@ -100,6 +101,9 @@ public class SirenData {
                 holder.setXRot(updateRotation(holder.getXRot(), xRot, 30F));
                 holder.setYRot(updateRotation(holder.getYRot(), yRot, 30F));
             }
+        }
+        else {
+            clearCharm();
         }
     }
 
