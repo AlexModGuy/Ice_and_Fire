@@ -23,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -44,7 +43,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(IceAndFire.MODID)
-@Mod.EventBusSubscriber(modid = IceAndFire.MODID)
 public class IceAndFire {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "iceandfire";
@@ -80,7 +78,7 @@ public class IceAndFire {
         modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.SERVER_SPEC);
         PROXY.init();
 
-        MinecraftForge.EVENT_BUS.addListener(this::onServerStarted);
+        MinecraftForge.EVENT_BUS.addListener(IceAndFire::onServerStarted);
 
 
         final DeferredRegister<Codec<? extends BiomeModifier>> biomeModifiers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, IceAndFire.MODID);
@@ -107,15 +105,15 @@ public class IceAndFire {
 
         MinecraftForge.EVENT_BUS.register(IafBlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(IafRecipeRegistry.class);
-        modBus.addListener(this::setup);
-        modBus.addListener(this::setupComplete);
-        modBus.addListener(this::setupClient);
+        modBus.addListener(IceAndFire::setup);
+        modBus.addListener(IceAndFire::setupComplete);
+        modBus.addListener(IceAndFire::setupClient);
     }
 
-    @SubscribeEvent
-    public void onServerStarted(ServerStartedEvent event) {
+    public static void onServerStarted(ServerStartedEvent event) {
         LOGGER.info(IafWorldRegistry.LOADED_FEATURES);
         LOGGER.info(IafEntityRegistry.LOADED_ENTITIES);
+        IafWorldRegistry.LOADED_FEATURES.clear();
     }
 
     public static <MSG> void sendMSGToServer(MSG message) {
@@ -132,7 +130,7 @@ public class IceAndFire {
         NETWORK_WRAPPER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    private static void setup(final FMLCommonSetupEvent event) {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDaytime.class, MessageDaytime::write, MessageDaytime::read, MessageHandler.handle(MessageDaytime.Handler::handle));
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDeathWormHitbox.class, MessageDeathWormHitbox::write, MessageDeathWormHitbox::read, MessageHandler.handle(MessageDeathWormHitbox.Handler::handle));
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageDragonControl.class, MessageDragonControl::write, MessageDragonControl::read, MessageHandler.handle(MessageDragonControl.Handler::handle));
@@ -163,11 +161,11 @@ public class IceAndFire {
         });
     }
 
-    private void setupClient(final FMLClientSetupEvent event) {
+    private static void setupClient(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> PROXY.clientInit());
     }
 
-    private void setupComplete(final FMLLoadCompleteEvent event) {
+    private static void setupComplete(final FMLLoadCompleteEvent event) {
         PROXY.postInit();
     }
 

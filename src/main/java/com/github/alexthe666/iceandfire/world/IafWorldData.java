@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.world;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.TypedFeature;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -15,7 +14,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,12 @@ public class IafWorldData extends SavedData {
     }
 
     private static final String IDENTIFIER = IceAndFire.MODID + "_general";
-    private static final Map<FeatureType, List<Pair<String, BlockPos>>> LAST_GENERATED = new HashMap<>();
+    private static final EnumMap<FeatureType, ArrayList<Map.Entry<String, BlockPos>>> LAST_GENERATED = new EnumMap<>(FeatureType.class);
+    static {
+        LAST_GENERATED.put(FeatureType.SURFACE, new ArrayList<>());
+        LAST_GENERATED.put(FeatureType.UNDERGROUND, new ArrayList<>());
+        LAST_GENERATED.put(FeatureType.OCEAN, new ArrayList<>());
+    }
 
     public IafWorldData() { /* Nothing to do */ }
 
@@ -53,24 +57,31 @@ public class IafWorldData extends SavedData {
     }
 
     public boolean check(final FeatureType type, final BlockPos position, final String id) {
-        List<Pair<String, BlockPos>> entries = LAST_GENERATED.computeIfAbsent(type, key -> new ArrayList<>());
+        ArrayList<Map.Entry<String, BlockPos>> entries = LAST_GENERATED.get(type);
 
         boolean canGenerate = true;
-        Pair<String, BlockPos> toRemove = null;
+        List<Map.Entry<String, BlockPos>> toRemove = null;
 
-        for (Pair<String, BlockPos> entry : entries) {
-            if (entry.getFirst().equals(id)) {
-                toRemove = entry;
+        for (Map.Entry<String, BlockPos> entry : entries) {
+            if (entry.getKey().equals(id)) {
+                if (toRemove == null) toRemove = new ArrayList<>();
+                toRemove.add(entry);
             }
 
-            canGenerate = position.distSqr(entry.getSecond()) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
+            canGenerate = position.distSqr(entry.getValue()) > IafConfig.dangerousWorldGenSeparationLimit * IafConfig.dangerousWorldGenSeparationLimit;
         }
 
         if (toRemove != null) {
-            entries.remove(toRemove);
+            entries.removeAll(toRemove);
         }
 
-        entries.add(Pair.of(id, position));
+        if (entries.size() > 5_000) {
+            IceAndFire.LOGGER.debug("Too many BlockPos entries for feature type {} tracked, removing oldest ones", type);
+            entries.subList(0, 1_000).clear();
+            entries.trimToSize();
+        }
+
+        entries.add(Map.entry(id, position));
 
         return canGenerate;
     }
@@ -85,7 +96,7 @@ public class IafWorldData extends SavedData {
                 CompoundTag entry = list.getCompound(i);
                 String id = entry.getString("id");
                 BlockPos position = NbtUtils.readBlockPos(entry.getCompound("position"));
-                LAST_GENERATED.computeIfAbsent(type, key -> new ArrayList<>()).add(Pair.of(id, position));
+                LAST_GENERATED.get(type).add(Map.entry(id, position));
             }
         }
 
@@ -94,19 +105,19 @@ public class IafWorldData extends SavedData {
 
     @Override
     public @NotNull CompoundTag save(@NotNull final CompoundTag tag) {
-        LAST_GENERATED.forEach((key, value) -> {
+        for (var e : LAST_GENERATED.entrySet()) {
             ListTag listTag = new ListTag();
 
-            value.forEach(entry -> {
+            for (Map.Entry<String, BlockPos> entry : e.getValue()) {
                 CompoundTag subTag = new CompoundTag();
-                subTag.putString("id", entry.getFirst());
-                subTag.put("position", NbtUtils.writeBlockPos(entry.getSecond()));
+                subTag.putString("id", entry.getKey());
+                subTag.put("position", NbtUtils.writeBlockPos(entry.getValue()));
 
                 listTag.add(subTag);
-            });
+            }
 
-            tag.put(key.toString(), listTag);
-        });
+            tag.put(e.getKey().toString(), listTag);
+        }
 
         return tag;
     }
