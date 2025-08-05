@@ -229,7 +229,7 @@ public class IafWorldRegistry {
     }
 
 
-    private static boolean safelyTestBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {
+    private static boolean safelyTestBiome(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biomeHolder) {
         try {
             return BiomeConfig.test(entry, biomeHolder);
         } catch (Exception e) {
