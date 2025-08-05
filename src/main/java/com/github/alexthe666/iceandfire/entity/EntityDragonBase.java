@@ -2894,6 +2894,16 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+
+        ItemSummoningCrystal itemSummoningCrystal = ItemSummoningCrystal.DELAYED_SUMMONS.get(this.getUUID());
+        if (itemSummoningCrystal != null) {
+            itemSummoningCrystal.delayedSummon();
+        }
+    }
+
+    @Override
     public int maxSearchNodes() {
         return (int) this.getAttribute(Attributes.FOLLOW_RANGE).getValue();
     }
