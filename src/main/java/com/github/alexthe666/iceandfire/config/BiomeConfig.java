@@ -10,6 +10,7 @@ import net.minecraft.world.level.biome.Biome;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class BiomeConfig {
@@ -59,9 +60,23 @@ public class BiomeConfig {
     public static final Map.Entry<String, SpawnBiomeData> creamyHippogryphBiomes = Map.entry("iceandfire:hippogryph_creamy_biomes", DefaultBiomes.HIPPOGRYPH_CREAMY);
     public static final Map.Entry<String, SpawnBiomeData> darkBrownHippogryphBiomes = Map.entry("iceandfire:hippogryph_dark_brown_biomes", DefaultBiomes.HIPPOGRYPH_DARK_BROWN);
     public static final Map.Entry<String, SpawnBiomeData> whiteHippogryphBiomes = Map.entry("iceandfire:hippogryph_white_biomes", DefaultBiomes.HIPPOGRYPH_WHITE);
-
+    private static boolean init = false;
+    private static final Map<String, SpawnBiomeData> biomeConfigValues = new HashMap<>();
     public static void init() {
-        getBiomeConfigValues();
+        try {
+            for (Field f : BiomeConfig.class.getFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof Map.Entry<?,?> mapObj) {
+                    String id = (String) mapObj.getKey();
+                    SpawnBiomeData data = (SpawnBiomeData) mapObj.getValue();
+                    biomeConfigValues.put(id, SpawnBiomeConfig.create(new ResourceLocation(id), data));
+                }
+            }
+                }catch (Exception e){
+                    IceAndFire.LOGGER.warn("Encountered error building iceandfire biome config .json files");
+                    e.printStackTrace();
+                }
+        init = true;
     }
 
     private static Map<String, SpawnBiomeData> getBiomeConfigValues() {
@@ -95,7 +110,10 @@ public class BiomeConfig {
     }
 
     public static boolean test(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name) {
-        return getBiomeConfigValues().get(entry.getKey()).matches(biome, name);
+        if (!init) {
+            init();
+        }
+        return biomeConfigValues.get(entry.getKey()).matches(biome, name);
     }
 
     public static boolean test(Map.Entry<String, SpawnBiomeData> entry, Holder<Biome> biome) {
