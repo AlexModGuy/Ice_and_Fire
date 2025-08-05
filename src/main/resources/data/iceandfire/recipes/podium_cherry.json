@@ -7,13 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:acacia_slab"
+      "item": "minecraft:cherry_slab"
     },
     "P": {
-      "item": "minecraft:acacia_planks"
+      "item": "minecraft:cherry_planks"
     }
   },
   "result": {
-    "item": "iceandfire:podium_acacia"
+    "item": "iceandfire:podium_cherry"
   }
 }
