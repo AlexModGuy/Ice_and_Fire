@@ -42,6 +42,7 @@ public class BlockDreadBase extends BlockGeneric implements IDragonProof, IDread
 
     public BlockDreadBase(Properties props) {
         super(props);
+        this.registerDefaultState(this.stateDefinition.any().setValue(PLAYER_PLACED, Boolean.FALSE));
     }
 
     @SuppressWarnings("deprecation")
