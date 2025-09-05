@@ -271,6 +271,11 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
+    public boolean isAffectedByPotions() {
+        return false;
+    }
+
+    @Override
     protected void doPush(@NotNull Entity entity) {
     }
 
