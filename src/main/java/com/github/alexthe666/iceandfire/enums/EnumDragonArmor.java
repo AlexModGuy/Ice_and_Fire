@@ -40,7 +40,7 @@ public enum EnumDragonArmor {
 
     public static void initArmors() {
         for (int i = 0; i < EnumDragonArmor.values().length; i++) {
-            EnumDragonArmor.values()[i].armorMaterial = new IafArmorMaterial("iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 7, 9, 5}, 15, SoundEvents.ARMOR_EQUIP_CHAIN, 2);
+            EnumDragonArmor.values()[i].armorMaterial = new IafArmorMaterial("iceandfire:armor_dragon_scales" + (i + 1), 36, new int[]{5, 9, 7, 5}, 15, SoundEvents.ARMOR_EQUIP_CHAIN, 2);
             String sub = EnumDragonArmor.values()[i].name();
 
             int finalI = i;
