@@ -144,7 +144,10 @@ public class EntityDreadMob extends Monster implements IDreadMob {
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            LivingEntity player = uuid == null ? null : this.level().getPlayerByUUID(uuid);
+            if (uuid == null) {
+                return null;
+            }
+            LivingEntity player = this.level().getPlayerByUUID(uuid);
             if (player != null) {
                 return player;
             } else {
