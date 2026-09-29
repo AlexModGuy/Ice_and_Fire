@@ -27,11 +27,12 @@ public class NoLakesInStructuresMixin {
             cancellable = true
     )
     private void iaf_noLakesInMausoleum(FeaturePlaceContext<BlockStateConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
-        if(!(context.level() instanceof WorldGenRegion)) {
+        if(!(context.level() instanceof WorldGenRegion region)) {
             return;
         }
         Registry<Structure> configuredStructureFeatureRegistry = context.level().registryAccess().registryOrThrow(Registries.STRUCTURE);
-        StructureManager structureManager = (context.level()).getLevel().structureManager();
+        // The level's own manager reads from the live world (and loads chunks for it), the region only sees the chunks being generated
+        StructureManager structureManager = region.getLevel().structureManager().forWorldGenRegion(region);
         var availableStructures  = List.of(configuredStructureFeatureRegistry.getOptional(IafStructures.MAUSOLEUM),configuredStructureFeatureRegistry.getOptional(IafStructures.GRAVEYARD),configuredStructureFeatureRegistry.getOptional(IafStructures.GORGON_TEMPLE));
         for (var structure : availableStructures) {
             if (structure.isPresent() && structureManager.getStructureAt(context.origin(), structure.get()).isValid()) {

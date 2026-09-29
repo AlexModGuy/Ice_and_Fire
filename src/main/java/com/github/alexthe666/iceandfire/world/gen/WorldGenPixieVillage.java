@@ -10,7 +10,9 @@ import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -63,7 +65,7 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> impl
                         default -> houseState;
                     };
                     EntityPixie pixie = IafEntityRegistry.PIXIE.get().create(worldIn.getLevel());
-                    pixie.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(buildPosition2.above()), MobSpawnType.SPAWNER, null, null);
+                    pixie.finalizeSpawn(worldIn, getDifficultyAt(worldIn, buildPosition2.above()), MobSpawnType.SPAWNER, null, null);
                     pixie.setPos(buildPosition2.getX(), buildPosition2.getY() + 2, buildPosition2.getZ());
                     pixie.setPersistenceRequired();
                     worldIn.addFreshEntity(pixie);
@@ -80,6 +82,15 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> impl
         }
 
         return true;
+    }
+
+    private static DifficultyInstance getDifficultyAt(final WorldGenLevel level, BlockPos position) {
+        // Regions throw for positions outside of their chunks (roads can lead there) even though the difficulty they return does not depend on the position
+        if (level instanceof WorldGenRegion region && !region.hasChunk(position.getX() >> 4, position.getZ() >> 4)) {
+            position = region.getCenter().getWorldPosition();
+        }
+
+        return level.getCurrentDifficultyAt(position);
     }
 
     @Override
