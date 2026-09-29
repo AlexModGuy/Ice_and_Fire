@@ -147,7 +147,7 @@ public class MiscData {
     }
 
     private void initialize(final Level level) {
-        List<LivingEntity> entities = new ArrayList<>();
+        List<LivingEntity> entities = null;
 
         if (targetedByScepterIds != null) {
             for (int id : targetedByScepterIds) {
@@ -158,17 +158,17 @@ public class MiscData {
                 Entity entity = level.getEntity(id);
 
                 if (entity instanceof LivingEntity livingEntity) {
+                    if (entities == null) {
+                        entities = new ArrayList<>();
+                    }
+
                     entities.add(livingEntity);
                 }
             }
         }
 
-        if (!entities.isEmpty()) {
-            targetedByScepter = entities;
-        } else {
-            targetedByScepter = null;
-        }
-
+        // Only allocated once a target resolved, otherwise stays null
+        targetedByScepter = entities;
         targetedByScepterIds = null;
         isInitialized = true;
     }
