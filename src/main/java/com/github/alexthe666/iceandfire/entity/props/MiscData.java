@@ -102,7 +102,7 @@ public class MiscData {
                 ids[i] = targetedByScepter.get(i).getId();
             }
 
-            tag.putIntArray("targetedByScepterIds", ids);
+            miscData.putIntArray("targetedByScepterIds", ids);
         }
 
         tag.put("miscData", miscData);
