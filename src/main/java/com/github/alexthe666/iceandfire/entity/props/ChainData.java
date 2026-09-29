@@ -90,9 +90,9 @@ public class ChainData {
 
     public void serialize(final CompoundTag tag) {
         CompoundTag chainedData = new CompoundTag();
-        ListTag uuids = new ListTag();
 
         if (chainedTo != null) {
+            ListTag uuids = new ListTag();
             int[] ids = new int[chainedTo.size()];
 
             for (int i = 0; i < chainedTo.size(); i++) {
@@ -147,7 +147,7 @@ public class ChainData {
     }
 
     private void initialize(final Level level) {
-        List<Entity> entities = new ArrayList<>();
+        List<Entity> entities = null;
 
         // Make sure server gets the new entity ids on re-join and syncs it to the client
         if (chainedToUUIDs != null && level instanceof ServerLevel serverLevel) {
@@ -155,6 +155,10 @@ public class ChainData {
                 Entity entity = serverLevel.getEntity(uuid);
 
                 if (entity != null) {
+                    if (entities == null) {
+                        entities = new ArrayList<>();
+                    }
+
                     entities.add(entity);
                 }
             }
@@ -169,17 +173,17 @@ public class ChainData {
                 Entity entity = level.getEntity(id);
 
                 if (entity != null) {
+                    if (entities == null) {
+                        entities = new ArrayList<>();
+                    }
+
                     entities.add(entity);
                 }
             }
         }
 
-        if (!entities.isEmpty()) {
-            chainedTo = entities;
-        } else {
-            chainedTo = null;
-        }
-
+        // Only allocated once an entity resolved, otherwise stays null
+        chainedTo = entities;
         chainedToIds = null;
         chainedToUUIDs = null;
         isInitialized = true;
