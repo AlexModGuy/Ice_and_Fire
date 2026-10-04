@@ -298,7 +298,7 @@ public class DragonUtils {
         var tags =  ForgeRegistries.ENTITY_TYPES.tags();
         if (tags == null)
             return false;
-        return entity.getType().is(tags.createTagKey(IafTagRegistry.VILLAGERS));
+        return entity.getType().is(IafTagRegistry.entityTag(tags, IafTagRegistry.VILLAGERS));
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -306,7 +306,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return entity.getType().is(ForgeRegistries.ENTITY_TYPES.tags().createTagKey(tag));
+        return entity.getType().is(IafTagRegistry.entityTag(ForgeRegistries.ENTITY_TYPES.tags(), tag));
     }
 
     public static String getDimensionName(Level world) {
