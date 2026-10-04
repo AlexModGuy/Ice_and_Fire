@@ -34,6 +34,11 @@ public class WorldEventContext {
     public void renderWorldLastEvent(final RenderLevelStageEvent event)
     {
         bufferSource = WorldRenderMacros.getBufferSource();
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS
+                && event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS)
+        {
+            return;
+        }
         poseStack = event.getPoseStack();
         partialTicks = event.getPartialTick();
         clientLevel = Minecraft.getInstance().level;
