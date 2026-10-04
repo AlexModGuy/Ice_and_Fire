@@ -127,7 +127,7 @@ public class ServerEvents {
     }
 
     private static boolean isInEntityTag(ResourceLocation loc, EntityType<?> type) {
-        return type.is(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.tags()).createTagKey(loc));
+        return type.is(IafTagRegistry.entityTag(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.tags()), loc));
     }
 
     public static boolean isLivestock(Entity entity) {
